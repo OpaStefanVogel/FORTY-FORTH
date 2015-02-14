@@ -13,6 +13,9 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+  <style>
+    
+    </style>
   </head>
   <body>
     <div class="wrapper">
@@ -26,8 +29,43 @@
           <li><a href="https://github.com/OpaStefanVogel/FORTY-FORTH">View On <strong>GitHub</strong></a></li>
         </ul>
       </header>
+
+<p>Ziel ist die Installation eines solchen Programms auf einem FPGA.</p>
+
+<p>Ich verwende dabei git, um schnell auf vorher funktionierende Versionen umschalten zu können, 
+zurück bis zu einer allereinfachsten Anfangsversion.</p>
+
+<p>"FORTH" ist das bekannte Programmierverfahren, "FORTY" steht für die "40" im verwendeten Datenformet:
+Hexadezimalzahlen 
+<br/>- ab 00...H bis 3F...H werden immer als ganze Zahlen interpretiert 
+<br/>- ab 40...H bis BF...H wahlweise als Zeiger auf größere ganze Zahlen oder als Programmcode.
+<br/>- ab C0...H bis FF...H als negative ganze Zahlen.
+</p>
+
+<p>In diesem Sinne für den Anfang ein erstes einfaches Beispiel: 
+Der oberste Stapeleintrag soll beginnend mit 0 fortlaufend um 1 erhöht und auf Adresse 2D04 ausgegeben werden.</p>
+
+<table border="1">
+  <tr>
+    <th>PC=Speicheradresse des Programmschrittes</th>
+    <th>PD=Programmcode, gespeichert auf Adresse PC</th>
+    <th>SP=Stapelhöhe nach Ausführung des Programmschrittes</th>
+    <th>entsprechende FORTH-Funktion</th>
+    </tr>
+  <tr><td>0000</td><td>0000</td><td>1</td><td>0</td></tr>
+  <tr><td>0001</td><td>0001</td><td>2</td><td>BEGIN 1</td></tr>
+  <tr><td>0002</td><td>0000</td><td>1</td><td>+</td></tr>
+  <tr><td>0003</td><td>0000</td><td>2</td><td>DUP</td></tr>
+  <tr><td>0004</td><td>0000</td><td>3</td><td>2D04</td></tr>
+  <tr><td>0005</td><td>0000</td><td>1</td><td>!</td></tr>
+  <tr><td>0006</td><td>0000</td><td>1</td><td>AGAIN</td></tr>
+  </table>    
+
+
+<hr/>
       <section>
         <h3>
+
 <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
 
 <p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
