@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Forty-forth by OpaStefanVogel</title>
+    <title>FORTY-FORTH by OpaStefanVogel</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -14,13 +14,13 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   <style>
-    
+    body { font-family:Courier,monospace; }
     </style>
   </head>
   <body>
     <div class="wrapper">
       <header>
-        <h1>Forty-forth</h1>
+        <h1>FORTY-FORTH</h1>
         <p>Ohne Rundungsfehler Gleichungssysteme lösen</p>
         <p class="view"><a href="https://github.com/OpaStefanVogel/FORTY-FORTH">View the Project on GitHub <small>OpaStefanVogel/FORTY-FORTH</small></a></p>
         <ul>
@@ -29,41 +29,59 @@
           <li><a href="https://github.com/OpaStefanVogel/FORTY-FORTH">View On <strong>GitHub</strong></a></li>
         </ul>
       </header>
+      <section>
 
-<p>Ziel ist die Installation eines solchen Programms auf einem FPGA.</p>
+<p>Ziel ist die Installation eines solchen Programms auf einem FPGA mittels VHDL und FORTH.</p>
 
-<p>Ich verwende dabei git, um schnell auf vorher funktionierende Versionen umschalten zu können, 
-zurück bis zu einer allereinfachsten Anfangsversion.</p>
+<p>Ich verwende dabei git, um schnell auf vorher funktionierende Varianten umschalten zu können, 
+notfalls bis zu einer allereinfachsten Anfangsversion.
+</p>
 
-<p>"FORTH" ist das bekannte Programmierverfahren, "FORTY" steht für die "40" im verwendeten Datenformet:
-Hexadezimalzahlen 
-<br/>- ab 00...H bis 3F...H werden immer als ganze Zahlen interpretiert 
-<br/>- ab 40...H bis BF...H wahlweise als Zeiger auf größere ganze Zahlen oder als Programmcode.
-<br/>- ab C0...H bis FF...H als negative ganze Zahlen.
+<p>"FORTY" steht für die "40" im verwendeten Datenformet:
+Hexadezimalzahlen ab 00...H bis 3F...H werden immer als ganze Zahlen interpretiert, 
+ab 40...H bis BF...H als Zeiger auf größere ganze Zahlen oder Programmcode und ab C0...H bis FF...H als negative ganze Zahlen.
 </p>
 
 <p>In diesem Sinne für den Anfang ein erstes einfaches Beispiel: 
 Der oberste Stapeleintrag soll beginnend mit 0 fortlaufend um 1 erhöht und auf Adresse 2D04 ausgegeben werden.</p>
 
-<table border="1">
+<div>PC = Speicheradresse des Programmschrittes</div>
+<div>PD = Programmcode, gespeichert auf Adresse PC</div>
+<div>SP = Stapelhöhe nach Ausführung des Programmschrittes</div>
+
+<p><table border="1">
   <tr>
-    <th>PC=Speicheradresse des Programmschrittes</th>
-    <th>PD=Programmcode, gespeichert auf Adresse PC</th>
-    <th>SP=Stapelhöhe nach Ausführung des Programmschrittes</th>
-    <th>entsprechende FORTH-Funktion</th>
+    <th>PC</th>
+    <th>PD</th>
+    <th>FORTH-Notation</th>
+    <th>Stapelinhalt</th>
+    <th>SP</th>
     </tr>
-  <tr><td>0000</td><td>0000</td><td>1</td><td>0</td></tr>
-  <tr><td>0001</td><td>0001</td><td>2</td><td>BEGIN 1</td></tr>
-  <tr><td>0002</td><td>0000</td><td>1</td><td>+</td></tr>
-  <tr><td>0003</td><td>0000</td><td>2</td><td>DUP</td></tr>
-  <tr><td>0004</td><td>0000</td><td>3</td><td>2D04</td></tr>
-  <tr><td>0005</td><td>0000</td><td>1</td><td>!</td></tr>
-  <tr><td>0006</td><td>0000</td><td>1</td><td>AGAIN</td></tr>
-  </table>    
+  <tr><td>0000</td><td>0000</td><td>0</td><td>0</td><td>1</td></tr>
+  <tr><td>0001</td><td>0001</td><td>BEGIN 1</td><td>0 1</td><td>2</td></tr>
+  <tr><td>0002</td><td>A007</td><td>+</td><td>1</td><td>1</td></tr>
+  <tr><td>0003</td><td>B501</td><td>DUP</td><td>1 1</td><td>2</td></tr>
+  <tr><td>0004</td><td>2D04</td><td>2D04</td><td>1 1 2D04</td><td>3</td></tr>
+  <tr><td>0005</td><td>A009</td><td>!</td><td>1</td><td>1</td></tr>
+  <tr><td>0006</td><td>8FFA</td><td>AGAIN</td><td>1</td><td>1</td></tr>
+  </table></p>   
+
+<p>Wer sich noch nicht so sehr mit FORTH auskennt: Anfangs werden "0" und "1" als Zahlen 
+auf den Stapel abgelegt, dann mit "+" addiert, mit "DUP" das Ergebnis dupliziert und "!" speichert 
+das Duplizierte auf der zuvor eingegebenen Adresse "2D04". "AGAIN" springt zurück zu "BEGIN". 
+"BEGIN" ist nur eine Markierung und benötigt selbst keinen eigenen Programmcode.</p>
+
+Genug der Worte, das Programm soll endlich laufen, in vivado - simulation behavioral.
+
+<pre><code>$ git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git
+$ cd FORTY-FORTH
+$ git checkout Step1
+$ vivado -mode tcl
+...
+</code></pre>
 
 
 <hr/>
-      <section>
         <h3>
 
 <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
