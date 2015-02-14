@@ -75,9 +75,18 @@ Genug der Worte, das Programm soll endlich laufen, in vivado - simulation behavi
 
 <pre><code>$ git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git
 $ cd FORTY-FORTH
-$ git checkout Step1
+$ git checkout Step_1
 $ vivado -mode tcl
-...
+Vivado% create_project -force project_FFP project_FFP
+Vivado% add_files -norecurse {top.vhd P20_FFP.vhd}
+Vivado% add_files -fileset sim_1 -norecurse testbench.vhd
+Vivado% set_property top top [current_fileset]
+Vivado% update_compile_order -fileset sources_1
+Vivado% update_compile_order -fileset sim_1
+Vivado% start_gui
+Tcl Console: launch_simulation # = Run Behavioral Simulation
+Tcl Console: run 1000 ns
+
 </code></pre>
 
 
