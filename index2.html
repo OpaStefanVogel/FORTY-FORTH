@@ -1,2 +1,46 @@
 Hier Schritt 2 beispielsweise
 
+da muss ganz schön viel rein: u.a.
+
+type STAPELTYPE is array(0 to 31) of STD_LOGIC_VECTOR (15 downto 0);
+signal stap1,stap2,stap3,stap0: STAPELTYPE;
+
+function P(SP : integer) return integer is begin
+  return CONV_INTEGER(CONV_UNSIGNED(SP,2));
+  end;
+
+variable A,B,C,D: STD_LOGIC_VECTOR (15 downto 0);
+variable T: integer range 0 to 4;
+
+R:=HOLE_VOM_STAPEL;
+W:="0000";
+  D:=R(P(SP-1));
+  C:=R(P(SP-2));
+  B:=R(P(SP-3));
+  A:=R(P(SP-4));
+  T:=0;
+  if T>0 then R(P(SP-1)):=D;W(P(SP-1)):='1'; end if;
+  if T>1 then R(P(SP-2)):=C;W(P(SP-2)):='1'; end if;
+  if T>2 then R(P(SP-3)):=B;W(P(SP-3)):='1'; end if;
+  if T>3 then R(P(SP-4)):=A;W(P(SP-4)):='1'; end if;
+  ADRESSE_ZUM_STAPEL(0)<=CONV_STD_LOGIC_VECTOR(SP-1,16) and x"FFFD";
+  ADRESSE_ZUM_STAPEL(1)<=CONV_STD_LOGIC_VECTOR(SP-2,16) and x"FFFD";
+  ADRESSE_ZUM_STAPEL(2)<=CONV_STD_LOGIC_VECTOR(SP-3,16) or x"0002";
+  ADRESSE_ZUM_STAPEL(3)<=CONV_STD_LOGIC_VECTOR(SP-4,16) or x"0002";
+  STORE_ZUM_STAPEL(0)<=R(0);
+  STORE_ZUM_STAPEL(1)<=R(1);
+  STORE_ZUM_STAPEL(2)<=R(2);
+  STORE_ZUM_STAPEL(3)<=R(3);
+  WE_ZUM_STAPEL<=W;
+
+--Stapel: 
+process 
+begin wait until (CLK_I'event and CLK_I='0');
+  if WE_ZUM_STAPEL(1)='1' then 
+    stap1(CONV_INTEGER(ADRESSE_ZUM_STAPEL(1)(11 downto 2)))<=STORE_ZUM_STAPEL(1); 
+    HOLE_VOM_STAPEL(1)<=STORE_ZUM_STAPEL(1); 
+	 else
+      HOLE_VOM_STAPEL(1)<=stap1(CONV_INTEGER(ADRESSE_ZUM_STAPEL(1)(11 downto 2)));
+    end if;
+  end process;
+
