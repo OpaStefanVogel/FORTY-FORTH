@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
+<los>
+Stapel in RAM speichern
+
+da ist noch nix
+
+<term>your-repo$ git pull Step_3
+your-repo$ git checkout Step_3
+your-repo$ git diff Step_3 Step_2</term>
+<term>Tcl Console: launch_simulation # = Run Behavioral Simulation
+Tcl Console: run 1000 ns
+</term>
+
+<p>Weiter mit <a href="R04_StapelRAM.xml">R04 ???</a>, wenn geht.</p>
+
+</los>

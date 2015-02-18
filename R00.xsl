@@ -4,6 +4,10 @@
 <xsl:template match="/">
 <html>
   <head>
+    <!-->
+       ein &msp; ersetzt durch -
+       user-scalable=no in yes umgeschriebenj
+    <!-->
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
     <title>FORTY-FORTH by OpaStefanVogel</title>
@@ -11,7 +15,7 @@
     <link rel="stylesheet" href="stylesheets/styles.css"/>
     <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
     <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes"/>
 
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -49,6 +53,13 @@
   </xsl:template>
 
 
+<xsl:template match="term">
+  <pre><code><xsl:apply-templates /></code></pre>
+  </xsl:template>
+
+<xsl:template match="a">
+  <xsl:copy-of select="." />
+  </xsl:template>
 
 
 </xsl:stylesheet>
