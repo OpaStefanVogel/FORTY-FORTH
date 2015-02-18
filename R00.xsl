@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+<xsl:template match="/">
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
+    <title>FORTY-FORTH by OpaStefanVogel</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css"/>
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="R00.css"/>
+  </head>
+  <body style="white-space: pre-wrap;">
+    <div class="wrapper">
+      <header>
+        <h1>FORTY-FORTH</h1>
+        <p>Ohne Rundungsfehler Gleichungssysteme lösen</p>
+        <p class="view"><a href="https://github.com/OpaStefanVogel/FORTY-FORTH">View the Project on GitHub <small>OpaStefanVogel/FORTY-FORTH</small></a></p>
+        <ul>
+          <li><a href="https://github.com/OpaStefanVogel/FORTY-FORTH/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/OpaStefanVogel/FORTY-FORTH/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/OpaStefanVogel/FORTY-FORTH">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+
+    <section>
+      <xsl:apply-templates />
+      </section>
+      </div>
+
+    <footer>
+      <p>Project maintained by <a href="https://github.com/OpaStefanVogel">OpaStefanVogel</a></p>
+      <p>Hosted on GitHub Pages - Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+
+    </footer>
+
+  </body>
+</html>
+
+  </xsl:template>
+
+
+
+
+</xsl:stylesheet>

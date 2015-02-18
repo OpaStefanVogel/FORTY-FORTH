@@ -1,0 +1,14 @@
+.los { 
+  white-space: pre-wrap;
+  display:inline-block;
+//  top:400px;
+//  left:140px;
+  font-family:Courier,monospace;
+  font-size:100%;
+  outline: solid;
+  background: limegreen;
+//  marging: 777px;
+  padding: 20px;
+  }
+
+    section { font-family:Courier,monospace; }
