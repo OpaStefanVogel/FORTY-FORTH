@@ -1,6 +1,36 @@
-Hier Schritt 2 beispielsweise
+<p style="white-space: pre-wrap;">Benennung der Stapeleinträge
 
-da muss ganz schön viel rein: u.a.
+Für die obersten vier Stapeleinträge verwende ich extra Variablenbezeichnungen A, B, C, D, sowie eine Zählvariable T mit folgender Zuordnung
+
+A := R(SP-1),
+B := R(SP-2),
+C := R(SP-3),
+D := R(SP-4).
+
+Genauso werden sie vor jeder Rechenoperation aus R gelesen. Nach Ausführung der Rechenoperation werden allerdings nur die T obersten in R zurückgespeichert. Beispielsweise entsteht bei der Addition ein einzelner neuer Stapeleintrag A:=A+B, dabei wird der Stapelzeiger SP um 1 vermindert und dann A an die neue Position R(SP-1) zurückgespeichert, also T:=1. Weil SP um 1 vermindert wurde, kann man B, C, D nicht automatisch wieder in R(SP-2), R(SP-3), R(SP-4) zurückspeichern, von woher sie ja gelesen wurden.
+
+Addition:
+A := A + B;
+SP:= SP - 1;
+T := 1;
+R(SP-1) := D;
+R(SP-2) bleibt unverändert B
+R(SP-3) bleibt unverändert A
+R(SP-4) bleibt unverändert
+
+Variable T und das Zurückspeichern sind jetzt zusätzlich hinzugekommen. Der Vorteil soll sein, dass man bei der Programmierung der einzelnen Rechenoperationen nicht immer wieder R(SP-1), R(SP-2)... schreiben muss und letztere eventuell sogar wiederholt compiliert werden. Außerdem wird R(SP) als nächstes weiter in R(P(SP)) umgeschrieben, das kann dann außerhalb der Rechenoperationen erfolgen. Vorher nochmal ein Programmlauf, dabei werden die einzelnen Unterschiede im Quelltext mit ausgegeben. Am Ergebnis sollte sich aber nichts ändern.
+
+Falls das Startterminal aus Step_1 noch offen ist:
+<pre><code>
+your-repo$ git pull Step_2
+your-repo$ git checkout Step_2
+your-repo$ git diff</code></pre>
+und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft, nur nochmal
+<pre><code>Tcl Console: launch_simulation # = Run Behavioral Simulation
+Tcl Console: run 1000 ns
+</code></pre>
+mit gleichem Ergebnis wie in Step_1</p>
+
 
 type STAPELTYPE is array(0 to 31) of STD_LOGIC_VECTOR (15 downto 0);
 signal stap1,stap2,stap3,stap0: STAPELTYPE;
@@ -44,3 +74,4 @@ begin wait until (CLK_I'event and CLK_I='0');
     end if;
   end process;
 
+</p>

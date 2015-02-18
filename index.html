@@ -29,24 +29,18 @@
           <li><a href="https://github.com/OpaStefanVogel/FORTY-FORTH">View On <strong>GitHub</strong></a></li>
         </ul>
       </header>
-      <section>
 
-<p>Ziel ist die Installation eines solchen Programms auf einem 
-<a href="http://de.wikipedia.org/wiki/Field_Programmable_Gate_Array">FPGA</a> mittels 
-<a href="http://de.wikipedia.org/wiki/Very_High_Speed_Integrated_Circuit_Hardware_Description_Language">VHDL</a> 
-und <a href="http://de.wikipedia.org/wiki/Forth_(Programmiersprache)">FORTH</a>.</p>
+      <section> 
+<p>Ziel ist die Installation eines solchen Programms auf einem <a href="http://de.wikipedia.org/wiki/Field_Programmable_Gate_Array">FPGA</a> mittels <a href="http://de.wikipedia.org/wiki/Very_High_Speed_Integrated_Circuit_Hardware_Description_Language">VHDL</a> und <a href="http://de.wikipedia.org/wiki/Forth_(Programmiersprache)">FORTH</a>.</p>
 
-<p>Ich verwende dabei <a href="http://en.wikipedia.org/wiki/Git_(software)">git</a>, um wirklich schnell auf vorher funktionierende Varianten umschalten zu können, 
-notfalls bis zu einer allereinfachsten Anfangsversion.
+<p>Ich verwende dabei <a href="http://en.wikipedia.org/wiki/Git_(software)">git</a>, um bei Fehlersuche wirklich schnell auf vorher funktionierende Varianten umschalten zu können, notfalls bis zu einer allereinfachsten Anfangsversion, sowie <a href="http://en.wikipedia.org/wiki/GitHub">GitHub</a>, um von überall aus tüchtig zu <code>clone</code>(n) und <code>push</code>(en).
 </p>
 
-<p>"FORTY" steht für die "40" im verwendeten Datenformat:
-Hexadezimalzahlen von 0000H bis 3FFFH werden immer als ganze Zahlen interpretiert, 
-von 4000H bis BFFFH wahlweise als Zeiger auf größere ganze Zahlen oder als Programmcode und von C000H bis FFFFH als negative ganze Zahlen.
+<p>"FORTY" steht für englisch <b><u>40</u></b> im verwendeten Datenformat: Hexadezimalzahlen von 0000H bis 3FFFH werden immer als ganze Zahlen interpretiert, von <b><u>40</u></b>00H bis BFFFH wahlweise als Zeiger auf größere ganze Zahlen oder als Programmcode und von C000H bis FFFFH als negative ganze Zahlen.
 </p>
 
 <p>In diesem Sinne für den Anfang ein erstes einfaches Beispiel: 
-Der oberste Stapeleintrag soll beginnend mit 0 fortlaufend um 1 erhöht und auf Adresse 2D04 ausgegeben werden.</p>
+<i>Der oberste Stapeleintrag soll beginnend mit 0 fortlaufend um 1 erhöht und auf Adresse 2D04 ausgegeben werden.</i></p>
 
 <div>PC = Speicheradresse des Programmschrittes</div>
 <div>PD = Programmcode, gespeichert auf Adresse PC</div>
@@ -69,31 +63,39 @@ Der oberste Stapeleintrag soll beginnend mit 0 fortlaufend um 1 erhöht und auf 
   <tr><td>0006</td><td>8FFA</td><td>AGAIN</td><td>1</td><td>1</td></tr>
   </table></p>   
 
-<p>Wer sich noch nicht so sehr mit FORTH auskennt: Anfangs werden "0" und "1" als Zahlen 
-auf den Stapel abgelegt, dann mit "+" addiert, mit "DUP" das Ergebnis dupliziert und "!" speichert 
-das Duplizierte auf der zuvor eingegebenen Adresse "2D04". "AGAIN" springt zurück zu "BEGIN". 
-"BEGIN" ist nur eine Markierung und benötigt selbst keinen eigenen Programmcode.</p>
+<p>Wer sich noch nicht so sehr mit FORTH auskennt: Anfangs werden "0" und "1" als Zahlen auf den Stapel abgelegt, dann mit "+" addiert, mit "DUP" das Ergebnis dupliziert und "!" speichert das Duplizierte auf der zuvor eingegebenen Adresse "2D04". "AGAIN" springt zurück zu "BEGIN". "BEGIN" ist nur eine Markierung und benötigt selbst keinen eigenen Programmcode.</p>
 
-Genug der Worte, das Programm soll endlich laufen, in <a href="http://www.xilinx.com/products/design-tools/vivado/integration/esl-design.html">Vivado</a> - simulation behavioral.
+Genug der Worte, das Programm soll endlich loslaufen, als <a href="http://www.xilinx.com/products/design-tools/vivado/integration/esl-design.html">Vivado</a> - simulation behavioral in <a>Linux</a>. Anstelle <code>your-repo</code> einen eigenen gewünschten Verzeichnisnamen einsetzen.
 
-<pre><code>$ git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git
-$ cd FORTY-FORTH
-$ git checkout Step_1
-$ vivado -mode tcl
-Vivado% create_project -force project_FFP project_FFP
+<pre><code>$ git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git your-repo
+$ cd your-repo
+your-repo$ git checkout Step_1
+your-repo$ vivado -mode tcl &</code></pre>
+<p>Letzte Eingabe setzt in einem extra Terminal fort:</p>
+<pre><code>Vivado% create_project -force project_FFP project_FFP
 Vivado% add_files -norecurse {top.vhd P20_FFP.vhd}
 Vivado% add_files -fileset sim_1 -norecurse testbench.vhd
 Vivado% set_property top top [current_fileset]
 Vivado% update_compile_order -fileset sources_1
 Vivado% update_compile_order -fileset sim_1
-Vivado% start_gui
-Tcl Console: launch_simulation # = Run Behavioral Simulation
+Vivado% start_gui</code></pre>
+<p>Letzte Eingabe startet die graphische Oberfläche von Vivado. Setze dort in der Box "..." die <a>tcl</a>-Eingabe fort:</p>
+<pre><code>Tcl Console: launch_simulation # = Run Behavioral Simulation
 Tcl Console: run 1000 ns
-
 </code></pre>
-<p>So, Schluss für heute.</p>
+<p><img src="favicon.ico"/><xsl:value-of select="." /> Ergebnis: Die Variable LEDS enthält den auf Adresse 2D04 ausgegebenen Hexadezimalwert:</p>
 
-<p>Weiter dann mit <a href="index2.html">Step_2</a>, wenn geht.</p>
+<p  style="white-space: pre-wrap;">ab Zeitpunkt in ns     Wert von LEDS
+     0                  UUUU
+    40                  0001
+    60                  0002
+    80                  0003</p>
+
+<p>oder ähnlich, muss ich selber erst nochmal durchlaufen lassen.</p>
+
+<p>Will man LEDS auf echte <a>LED</a>'s ausgeben, muss natürlich der Takt CLK  passend verringert werden.</p>
+
+<p>Weiter dann mit <a href="index2.html">S02 Stapeleinträge benennen</a>, wenn geht.</p>
 
 
 <hr/>
