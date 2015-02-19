@@ -3,7 +3,7 @@
 <los>
 Stapel in RAM speichern
 
-da ist noch nix
+Der Stapel ist im Array R gespeichert, bestehend aus 4 Speicherplätzen. Für mehr könnte man einfach R als größeres Array definieren. 
 
 <term>your-repo$ git pull Step_3
 your-repo$ git checkout Step_3
