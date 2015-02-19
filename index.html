@@ -73,7 +73,7 @@ your-repo$ git checkout Step_1
 your-repo$ vivado -mode tcl &</code></pre>
 <p>Letzte Eingabe setzt in einem extra Terminal fort:</p>
 <pre><code>Vivado% create_project -force project_FFP project_FFP
-Vivado% add_files -norecurse {top.vhd P20_FFP.vhd}
+Vivado% add_files -norecurse {P01_top.vhd P20_FFP.vhd}
 Vivado% add_files -fileset sim_1 -norecurse testbench.vhd
 Vivado% set_property top top [current_fileset]
 Vivado% update_compile_order -fileset sources_1
