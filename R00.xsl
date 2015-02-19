@@ -4,9 +4,9 @@
 <xsl:template match="/">
 <html>
   <head>
-    <!-->
+    <!--> ursprüngliches layout geändert bei
        ein &msp; ersetzt durch -
-       user-scalable=no in yes umgeschriebenj
+       user-scalable=no in yes umgeschrieben
     <!-->
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
@@ -43,7 +43,7 @@
 
     <footer>
       <p>Project maintained by <a href="https://github.com/OpaStefanVogel">OpaStefanVogel</a></p>
-      <p>Hosted on GitHub Pages - Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+      <p>Hosted on GitHub Pages &#x2226; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
 
     </footer>
 
