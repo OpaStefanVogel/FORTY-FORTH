@@ -3,15 +3,39 @@
 <los>
 Stapel in RAM speichern
 
-Der Stapel ist im Array R gespeichert, bestehend aus 4 Speicherplätzen. Für mehr könnte man einfach R als größeres Array definieren. 
+Momentan ist R ein Array bestehend aus nur 4 Speicherplätzen. Für einen größeren Stapelspeicher könnte man einfach das Array vergrößern. Das funktioniert auch in der Simulation. Beim Synthetisieren war es aber bis jetzt immer so, dass für das Array keine vorhandene RAM-Konstruktionen verwendet wurden und dadurch eine umfangreiche Schaltung entstand. Ich vermute, das ist vor allem wegen der vier gleichzeitigen Speicherzugriffe A:=R(SP-1), B:=R(SP-2), C:=R(SP-3) und D:=R(SP-4). Das lässt sich aber schaltungsmäßig einfach aufteilen auf vier getrennte RAM-Arrays: Das erste Array nimmt alle R(SP) auf, wo SP auf die Bits "00" endet, das zweite Array alle zu den Bits "01" und so weiter. Also so
+
+stap0_RAM:=(R(0),R(4),R(8),R(12)...)
+stap1_RAM:=(R(1),R(5),R(9),R(13)...)
+stap2_RAM:=(R(2),R(6),R(10),R(14)...)
+stap3_RAM:=(R(3),R(7),R(11),R(15)...)
+
+Bei jedem beliebigen Wert von SP können weiterhin A, B, C und D in einem Takt gelesen werden, für jedes einzelne Array stap0 bis stap3 wird aber nur ein einzelner Port benötigt. Die erforderlichen Anpassungen sind wieder ganz praktisch bei <code>git diff</code> zu sehen.
+
+Als Beispielprogramm für den jetzt verfügbaren Stapelspeicher wird eine Zahlenfolge 0, 1, 2, ... 63 auf dem Stapel zwischengespeichert und anschließend in umgekehrter Reihenfolge auf Adresse 2D04 ausgegeben. Weil bei dieser Gelegenheit gerade benötigt, habe ich auch den bedingten Sprung ergänzt: Eine Zahl wird vom Stapel entnommen und nur wenn diese 0 ist, wird der Sprung ausgeführt, sonst wird ohne eine weitere Aktion im nächsten PC fortgesetzt.
+
+<table border="1"><tr><th>PC</th><th>PD</th><th>FORTH-Notation</th><th>Stapelinhalt</th><th>SP</th></tr>
+  <tr><td>0000</td><td>0000</td><td>BEGIN 0</td><td>0</td><td>1</td></tr>
+  <tr><td>0001</td><td>0001</td><td>1</td><td>0 1</td><td>2</td></tr>
+  <tr><td>0002</td><td>0002</td><td>2</td><td>0 1 2</td><td>3</td></tr>
+  <tr><td>0003</td><td>0003</td><td>3</td><td>0 1 2 3</td><td>4</td></tr>
+  <tr><td>...</td><td>...</td><td>...</td><td>0 1 2 3 ...</td><td>...</td></tr>
+  <tr><td>003E</td><td>003E</td><td>62</td><td>0 1 2 3 ... 62</td><td>63</td></tr>
+  <tr><td>003F</td><td>003F</td><td>63</td><td>0 1 2 3 ... 62 63</td><td>64</td></tr>
+  <tr><td>0040</td><td>B501</td><td>BEGIN DUP</td><td>0 1 2 3 ... 62 63 63</td><td>65</td></tr>
+  <tr><td>0041</td><td>2D04</td><td>2D04</td><td>0 1 2 3 ... 62 63 63 2D04</td><td>66</td></tr>
+  <tr><td>0043</td><td>A009</td><td>!</td><td>0 1 2 3 ... 62 63</td><td>64</td></tr>
+  <tr><td>0044</td><td>9FBC</td><td>UNTIL</td><td>0 1 2 3 ... 62</td><td>63</td></tr>
+  <tr><td>0045</td><td>8FFB</td><td>AGAIN</td><td>0 1 2 3 ... 62</td><td>63</td></tr>
+  </table>Nachdem die Zahlen 0..63 auf den Stapel gebracht sind, wird die oberste Zahl 63 wieder dupliziert und auf Adresse 2D04 ausgegeben. Dann holt UNTIL den obersten Stapeleintrag 63 und würde ganz zurück zu BEGIN 0 gehen, falls diese Zahl gleich 0 wäre. Ist nicht der Fall, also geht es weiter zum nachfolgenden AGAIN, welches nur zurück zu BEGIN DUP geht und die nächste Zahl ausgibt. Erst wenn der unterste Stapeleitrag 0 erreicht ist, dann geht UNTIL ganz zurück zu BEGIN 0 und alles beginnt von vorn.
 
 <term>your-repo$ git pull Step_3
 your-repo$ git checkout Step_3
 your-repo$ git diff Step_3 Step_2</term>
 <term>Tcl Console: launch_simulation # = Run Behavioral Simulation
-Tcl Console: run 1000 ns
-</term>
+Tcl Console: run 1000 ns</term>
+<favicon/> Ergebnis: Ab ?? ns werden die Zahlen 63, 62,... hexadezimal auf LEDS ausgeben.
 
-<p>Weiter mit <a href="R04_StapelRAM.xml">R04 ???</a>, wenn geht.</p>
+Weiter mit <a href="R04_Unterprogramm.xml">R04_Unterprogramm</a>, wenn geht.
 
 </los>

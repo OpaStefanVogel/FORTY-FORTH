@@ -11,4 +11,5 @@
   padding: 20px;
   }
 
-    section { font-family:Courier,monospace; }
+section { font-family:Courier,monospace; }
+table { white-space: nowrap; }

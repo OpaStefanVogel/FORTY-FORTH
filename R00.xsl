@@ -4,8 +4,9 @@
 <xsl:template match="/">
 <html>
   <head>
-    <!--> ursprüngliches layout geändert bei
-       ein &msp; ersetzt durch -
+    <!--> ursprüngliches layout geändert bei:
+       Monospace Font für section,
+       ein &mdash; ersetzt durch -
        user-scalable=no in yes umgeschrieben
     <!-->
     <meta charset="utf-8"/>
@@ -57,9 +58,10 @@
   <pre><code><xsl:apply-templates /></code></pre>
   </xsl:template>
 
-<xsl:template match="a">
-  <xsl:copy-of select="." />
-  </xsl:template>
+<xsl:template match="a"><xsl:copy-of select="." /></xsl:template>
+<xsl:template match="table"><xsl:copy-of select="." /></xsl:template>
+<xsl:template match="code"><xsl:copy-of select="." /></xsl:template>
 
+<xsl:template match="favicon"><img src="favicon.ico"/></xsl:template>
 
 </xsl:stylesheet>
