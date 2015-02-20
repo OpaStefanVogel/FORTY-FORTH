@@ -23,10 +23,10 @@ R(SP-4) bleibt unverändert
 
 Variable T und das Zurückspeichern sind jetzt zusätzlich hinzugekommen. Der Vorteil soll sein, dass man bei der Programmierung der einzelnen Rechenoperationen nicht immer wieder R(SP-1), R(SP-2)... schreiben muss und diese Indexberechnungen eventuell sogar wiederholt compiliert werden. Außerdem wird R(SP) als nächstes weiter in R(P(SP)) umgeschrieben, das kann dann einmalig außerhalb der Rechenoperationen erfolgen. Vorher nochmal ein Programmlauf, dabei werden die einzelnen Unterschiede im Quelltext mit ausgegeben. Am Ergebnis sollte sich aber nichts ändern. Damit wenigstens ein Unterschied zu sehen ist, habe ich den Startwert der Zählschleife auf 77 gesetzt.
 
-Sofern das Startterminal aus Step_1 noch offen ist:
+Sofern das Startterminal aus Step_1 noch offen ist: 
 <term>your-repo$ git pull Step_2
 your-repo$ git checkout Step_2
-your-repo$ git diff Step_2 Step_1</term>und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft, nur nochmal
+your-repo$ git diff Step_2 Step_1</term>und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft, in der Tcl Console nur Kursor hoch tippen bis zu
 <term>Tcl Console: launch_simulation # = Run Behavioral Simulation
 Tcl Console: run 1000 ns
 </term>mit gleichem Ergebnis wie in Step_1, jedoch ab LEDS=77.
