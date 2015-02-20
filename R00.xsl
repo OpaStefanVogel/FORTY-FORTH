@@ -44,7 +44,7 @@
 
     <footer>
       <p>Project maintained by <a href="https://github.com/OpaStefanVogel">OpaStefanVogel</a></p>
-      <p>Hosted on GitHub Pages &#x2226; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+      <p>Hosted on GitHub Pages &#x2014; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
 
     </footer>
 
