@@ -20,7 +20,7 @@ type RAMTYPE is array(0 to 15) of STD_LOGIC_VECTOR (15 downto 0);
 
 signal ProgRAM: RAMTYPE:=(
   x"0077",-- 77
-  x"0001",-- 1      <----------------<
+  x"FFFF",-- -1     <----------------<
   x"A007",-- +                       |
   x"B501",-- DUP                     |
   x"2D04",-- 2D04                    |
@@ -28,6 +28,10 @@ signal ProgRAM: RAMTYPE:=(
   x"8FFA",-- JR = jump relative to --^
   others=>x"0000");
 
+--diese Funktion wertet von SP nur die beiden niedrigsten Bits aus
+  function P(SP : integer) return integer is begin
+    return CONV_INTEGER(CONV_UNSIGNED(SP,2));
+    end;
 
 begin
 
@@ -59,12 +63,12 @@ begin wait until (CLK_I'event and CLK_I='0');
     else A:=PD; SP:=SP+1; T:=1; end if;                    -- LIT
     
   -- oberste T Stapeleintraege zurückspeichern
-  if T!=0 then R(P(SP-1)):=A;
-      if T!=1 then R(P(SP-2)):=B;
-        if T!=2 then R(P(SP-3)):=C;
-          if T!=3 then R(P(SP-4)):=D; 
+  if T/=0 then R(P(SP-1)):=A;
+      if T/=1 then R(P(SP-2)):=B;
+        if T/=2 then R(P(SP-3)):=C;
+          if T/=3 then R(P(SP-4)):=D; 
             end if; end if; end if; end if;
-  if WE='1' then ADR_O<=ADR; else ADR_O<=R(SP-1); end if;
+  if WE='1' then ADR_O<=ADR; else ADR_O<=R(P(SP-1)); end if;
   DAT_O<=DAT;
   WE_O<=WE;
   end process;
