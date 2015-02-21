@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
+<!--geht leider nicht mit Raspberry-midori-->
 <los>
 Benennung der Stapeleinträge
 
@@ -21,16 +22,27 @@ R(SP-2) bleibt unverändert C
 R(SP-3) bleibt unverändert D
 R(SP-4) bleibt unverändert
 
-Variable T und das Zurückspeichern sind jetzt zusätzlich hinzugekommen. Der Vorteil soll sein, dass man bei der Programmierung der einzelnen Rechenoperationen nicht immer wieder R(SP-1), R(SP-2)... schreiben muss und diese Indexberechnungen eventuell sogar wiederholt compiliert werden. Außerdem wird R(SP) als nächstes weiter in R(P(SP)) umgeschrieben, das kann dann einmalig außerhalb der Rechenoperationen erfolgen. Vorher nochmal ein Programmlauf, dabei werden die einzelnen Unterschiede im Quelltext mit ausgegeben. Am Ergebnis sollte sich aber nichts ändern. Damit wenigstens ein Unterschied zu sehen ist, habe ich den Startwert der Zählschleife auf 77 gesetzt.
+Variable T und das Zurückspeichern sind jetzt zusätzlich hinzugekommen. Der Vorteil soll sein, dass man bei der Programmierung der einzelnen Rechenoperationen nicht immer wieder R(SP-1), R(SP-2)... schreiben muss und diese Indexberechnungen eventuell sogar wiederholt compiliert werden. Außerdem wird R(SP) mit einer zusätzliche Funktion in R(P(SP)) umgeschrieben, damit an den Array-Grenzen kein Indexüberlauf etwa durch SP-1=-1 entsteht. Nun nochmal ein Programmlauf, dabei werden nach <code>git diff</code> die einzelnen Unterschiede im Quelltext mit ausgegeben. Am Ergebnis sollte sich aber nichts ändern. Um wenigstens einen äußerlichen Unterschied zu sehen, habe ich den <i>Startwert der Zählschleife auf 77 gesetzt und die Schrittweite von 1 auf -1</i>.
 
 Sofern das Startterminal aus Step_1 noch offen ist: 
 <term>your-repo$ git pull Step_2
 your-repo$ git checkout Step_2
-your-repo$ git diff Step_2 Step_1</term>und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft, in der Tcl Console nur Kursor hoch tippen bis zu
+your-repo$ git diff Step_1 Step_2 # mit Q beenden</term>und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft, in der Tcl Console nur "Kursor hoch" tippen bis zu
 <term>Tcl Console: launch_simulation # = Run Behavioral Simulation
 Tcl Console: run 1000 ns
-</term>mit gleichem Ergebnis wie in Step_1, jedoch ab LEDS=77.
+</term><favicon/> gleiches Ergebnis wie in Step_1, jedoch ab LEDS=76 abwärts gezählt.
 
-<p>Weiter mit <a href="R03_StapelRAM.xml">R03 Stapel in RAM speichern</a>, wenn geht.</p>
+ab Zeitpunkt in ns     Wert von LEDS
+     0                  UU
+   130                  76
+   250                  75
+   370                  74
+   490                  73
+   610                  72
+   730                  71
+   850                  70
+   970                  6F
+
+Weiter mit <a href="R03_StapelRAM.xml">R03 Stapel in RAM speichern</a>.
 
 </los>

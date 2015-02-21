@@ -11,31 +11,44 @@ stap3_RAM:=(R(3),R(7),R(11),R(15)...)
 
 Bei jedem beliebigen Wert von SP können weiterhin A, B, C und D in einem Takt gelesen werden, für jedes einzelne Array stap0 bis stap3 wird aber nur ein einzelner Port benötigt. Die einzelnen erforderlichen Anpassungen sind wieder bei <code>git diff</code> zu sehen.
 
-Als Beispielprogramm für den jetzt verfügbaren Stapelspeicher wird eine Zahlenfolge 0, 1, 2, ... 63 auf dem Stapel zwischengespeichert und anschließend in umgekehrter Reihenfolge auf Adresse 2D04 ausgegeben. Weil bei dieser Gelegenheit gerade benötigt, habe ich auch den bedingten Sprung ergänzt: Eine Zahl wird vom Stapel entnommen und nur wenn diese 0 ist, wird der Sprung ausgeführt, sonst wird ohne eine weitere Aktion im nächsten PC fortgesetzt.
+Als Beispielprogramm für den jetzt verfügbaren Stapelspeicher <i>wird die Zahlenfolge 1, 2, 3, 4, 5 auf dem Stapel zwischengespeichert und anschließend in umgekehrter Reihenfolge auf Adresse 2D04 ausgegeben</i>. Obwohl das Array für R nur 4 Elemente hat, werden jetzt auch mehr als 4 Stapeleinträge gespeichert. 
 
 <table border="1"><tr><th>PC</th><th>PD</th><th>FORTH-Notation</th><th>Stapelinhalt</th><th>SP</th></tr>
-  <tr><td>0000</td><td>0000</td><td>BEGIN 0</td><td>0</td><td>1</td></tr>
-  <tr><td>0001</td><td>0001</td><td>1</td><td>0 1</td><td>2</td></tr>
-  <tr><td>0002</td><td>0002</td><td>2</td><td>0 1 2</td><td>3</td></tr>
-  <tr><td>0003</td><td>0003</td><td>3</td><td>0 1 2 3</td><td>4</td></tr>
-  <tr><td>...</td><td>...</td><td>...</td><td>0 1 2 3 ...</td><td>...</td></tr>
-  <tr><td>003E</td><td>003E</td><td>62</td><td>0 1 2 3 ... 62</td><td>63</td></tr>
-  <tr><td>003F</td><td>003F</td><td>63</td><td>0 1 2 3 ... 62 63</td><td>64</td></tr>
-  <tr><td>0040</td><td>B501</td><td>BEGIN DUP</td><td>0 1 2 3 ... 62 63 63</td><td>65</td></tr>
-  <tr><td>0041</td><td>2D04</td><td>2D04</td><td>0 1 2 3 ... 62 63 63 2D04</td><td>66</td></tr>
-  <tr><td>0043</td><td>A009</td><td>!</td><td>0 1 2 3 ... 62 63</td><td>64</td></tr>
-  <tr><td>0044</td><td>A00x</td><td>0=</td><td>0 1 2 3 ... 62 0</td><td>64</td></tr>
-  <tr><td>0044</td><td>9FFB</td><td>UNTIL</td><td>0 1 2 3 ... 62</td><td>63</td></tr>
-  <tr><td>0045</td><td>8FBB</td><td>AGAIN</td><td>0 1 2 3 ... 62</td><td>63</td></tr>
-  </table>Nachdem die Zahlen 0..63 auf den Stapel gebracht sind, wird die oberste Zahl 63 wieder dupliziert und auf Adresse 2D04 ausgegeben. Dann holt 0= UNTIL den obersten Stapeleintrag 63 und geht zurück zu BEGIN DUP, solange dieses Resultat 0 ist. Ist das nicht der Fall, also wenn der unterste Stapeleintrag 0 erreicht ist, dann weiter zum nachfolgenden AGAIN, welches immer ganz zurück zu BEGIN 0 geht und alles beginnt von vorn.
+  <tr><td>0000</td><td>0001</td><td>BEGIN 1</td><td>1</td><td>1</td></tr>
+  <tr><td>0001</td><td>0002</td><td>2</td><td>1 2</td><td>2</td></tr>
+  <tr><td>0002</td><td>0003</td><td>3</td><td>1 2 3</td><td>3</td></tr>
+  <tr><td>0003</td><td>0004</td><td>4</td><td>1 2 3 4</td><td>4</td></tr>
+  <tr><td>0004</td><td>0005</td><td>5</td><td>1 2 3 4 5</td><td>5</td></tr>
+  <tr><td>0005</td><td>2D04</td><td>2D04</td><td>1 2 3 4 5 2D04</td><td>6</td></tr>
+  <tr><td>0006</td><td>A009</td><td>!</td><td>1 2 3 4 </td><td>4</td></tr>
+  <tr><td>0007</td><td>2D04</td><td>2D04</td><td>1 2 3 4 2D04</td><td>5</td></tr>
+  <tr><td>0008</td><td>A009</td><td>!</td><td>1 2 3 </td><td>3</td></tr>
+  <tr><td>0009</td><td>2D04</td><td>2D04</td><td>1 2 3 2D04</td><td>4</td></tr>
+  <tr><td>000A</td><td>A009</td><td>!</td><td>1 2 </td><td>2</td></tr>
+  <tr><td>000B</td><td>2D04</td><td>2D04</td><td>1 2 2D04</td><td>3</td></tr>
+  <tr><td>000C</td><td>A009</td><td>!</td><td>1</td><td>1</td></tr>
+  <tr><td>000D</td><td>2D04</td><td>2D04</td><td>1 2D04</td><td>2</td></tr>
+  <tr><td>000E</td><td>A009</td><td>!</td><td></td><td>0</td></tr>
+  <tr><td>000F</td><td>8FF0</td><td>AGAIN</td><td></td><td>0</td></tr>
+  </table>Nachdem die Zahlen 1, 2, 3, 4, 5 auf den Stapel gebracht sind, wird fünfmal die oberste Zahl Adresse 2D04 ausgegeben. AGAIN gehtz wieder zurück zu BEGIN 0 und alles geht von vorn los.
 
-(geht noch nicht)
 <term>your-repo$ git pull Step_3
 your-repo$ git checkout Step_3
-your-repo$ git diff Step_3 Step_2</term>
+your-repo$ git diff Step_2 Step_3 # mit Q beenden</term>
 <term>Tcl Console: launch_simulation # = Run Behavioral Simulation
-Tcl Console: run 1000 ns</term>
-<favicon/> Ergebnis: Ab ?? ns werden die Zahlen 63, 62,... hexadezimal auf LEDS ausgeben.
+Tcl Console: run 1000 ns</term><favicon/> Ergebnis: 
+
+ab Zeitpunkt in ns     Wert von LEDS
+     0                  UU
+   150                  05
+   190                  04
+   230                  03
+   270                  02
+   310                  01
+
+   470                  05
+   510                  04
+   ...                  ..
 
 Weiter mit <a href="R04_Unterprogramm.xml">R04_Unterprogramm</a>, wenn geht.
 

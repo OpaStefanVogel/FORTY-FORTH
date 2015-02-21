@@ -14,7 +14,8 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   <style>
-    section { font-family:Courier,monospace; }
+    section { font-family:monospace; }
+    code    { font-family:monospace; }
     </style>
   </head>
   <body>
@@ -79,21 +80,24 @@ Vivado% set_property top top [current_fileset]
 Vivado% update_compile_order -fileset sources_1
 Vivado% update_compile_order -fileset sim_1
 Vivado% start_gui</code></pre>
-<p>Letzte Eingabe startet die graphische Oberfläche von Vivado. Setze dort in der Box "..." die <a>tcl</a>-Eingabe fort:</p>
+<p>Letzte Eingabe startet die graphische Oberfläche von Vivado. Setze dort in der Box <i>"Type a Tcl command here"</i> die <a>tcl</a>-Eingabe fort:</p>
 <pre><code>Tcl Console: launch_simulation # = Run Behavioral Simulation
 Tcl Console: run 1000 ns
 </code></pre>
 <p><img src="favicon.ico"/><xsl:value-of select="." /> Ergebnis: Die Variable LEDS enthält den auf Adresse 2D04 ausgegebenen Hexadezimalwert:</p>
 
 <p  style="white-space: pre-wrap;">ab Zeitpunkt in ns     Wert von LEDS
-     0                  UUUU
-    40                  0001
-    60                  0002
-    80                  0003</p>
+     0                  UU
+   130                  01
+   250                  02
+   370                  03
+   490                  04
+   610                  05
+   730                  06
+   850                  07
+   970                  08</p>
 
-<p>oder ähnlich, muss ich selber erst nochmal durchlaufen lassen.</p>
-
-<p>Will man LEDS auf echte <a>LED</a>'s ausgeben, muss natürlich der Takt CLK  passend verringert werden.</p>
+<p>Soll LEDS auf echte <a>LED</a>'s ausgegeben werden, muss natürlich der Takt CLK  passend verringert werden.</p>
 
 <p>Weiter dann mit <a href="R02_Stapelvariablen.xml">R02 Stapeleinträge benennen</a>, wenn geht.</p>
 

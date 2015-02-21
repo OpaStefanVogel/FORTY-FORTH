@@ -5,8 +5,8 @@
 <html>
   <head>
     <!--> ursprüngliches layout geändert bei:
-       Monospace Font für section,
-       ein &mdash; ersetzt durch -
+       Monospace Font für section und code
+       ein mdash ersetzt durch #x2014
        user-scalable=no in yes umgeschrieben
     <!-->
     <meta charset="utf-8"/>
@@ -61,6 +61,7 @@
 <xsl:template match="a"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="table"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="code"><xsl:copy-of select="." /></xsl:template>
+<xsl:template match="i"><xsl:copy-of select="." /></xsl:template>
 
 <xsl:template match="favicon"><img src="favicon.ico"/></xsl:template>
 
