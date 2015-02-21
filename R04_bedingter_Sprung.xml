@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
+<los>
+<table border="1"><tr><th>PC</th><th>PD</th><th>FORTH-Notation</th><th>Stapelinhalt</th><th>SP</th></tr>
+  <tr><td>0000</td><td>0000</td><td>BEGIN 0</td><td>0</td><td>1</td></tr>
+  <tr><td>0001</td><td>0001</td><td>1</td><td>0 1</td><td>2</td></tr>
+  <tr><td>0002</td><td>0002</td><td>2</td><td>0 1 2</td><td>3</td></tr>
+  <tr><td>0003</td><td>0003</td><td>3</td><td>0 1 2 3</td><td>4</td></tr>
+  <tr><td>...</td><td>...</td><td>...</td><td>0 1 2 3 ...</td><td>...</td></tr>
+  <tr><td>003E</td><td>003E</td><td>62</td><td>0 1 2 3 ... 62</td><td>63</td></tr>
+  <tr><td>003F</td><td>003F</td><td>63</td><td>0 1 2 3 ... 62 63</td><td>64</td></tr>
+  <tr><td>0040</td><td>B501</td><td>BEGIN DUP</td><td>0 1 2 3 ... 62 63 63</td><td>65</td></tr>
+  <tr><td>0041</td><td>2D04</td><td>2D04</td><td>0 1 2 3 ... 62 63 63 2D04</td><td>66</td></tr>
+  <tr><td>0043</td><td>A009</td><td>!</td><td>0 1 2 3 ... 62 63</td><td>64</td></tr>
+  <tr><td>0044</td><td>A00x</td><td>0=</td><td>0 1 2 3 ... 62 0</td><td>64</td></tr>
+  <tr><td>0044</td><td>9FFB</td><td>UNTIL</td><td>0 1 2 3 ... 62</td><td>63</td></tr>
+  <tr><td>0045</td><td>8FBB</td><td>AGAIN</td><td>0 1 2 3 ... 62</td><td>63</td></tr>
+  </table>Nachdem die Zahlen 0..63 auf den Stapel gebracht sind, wird die oberste Zahl 63 wieder dupliziert und auf Adresse 2D04 ausgegeben. Dann holt 0= UNTIL den obersten Stapeleintrag 63 und geht zurück zu BEGIN DUP, solange dieses Resultat 0 ist. Ist das nicht der Fall, also wenn der unterste Stapeleintrag 0 erreicht ist, dann weiter zum nachfolgenden AGAIN, welches immer ganz zurück zu BEGIN 0 geht und alles beginnt von vorn.
+
+(geht noch nicht)
+<term>your-repo$ git pull Step_3
+your-repo$ git checkout Step_3
+your-repo$ git diff Step_3 Step_2</term>
+<term>Tcl Console: launch_simulation # = Run Behavioral Simulation
+Tcl Console: run 1000 ns</term><favicon/> Ergebnis: Obwohl das Array für R nur 4 Elemente hat, werden mehr als 4 Stapeleinträge gespeichert. 
+
+ab Zeitpunkt in ns     Wert von LEDS
+
+Weiter mit <a href="R05_Unterprogramm.xml">R05_Unterprogramm</a>, wenn geht.
+
+</los>
