@@ -19,9 +19,9 @@ type REG is array(0 to 3) of STD_LOGIC_VECTOR (15 downto 0);
 type RAMTYPE is array(0 to 15) of STD_LOGIC_VECTOR (15 downto 0);
 
 signal ProgRAM: RAMTYPE:=(
-  x"0001",x"0002",x"0003",x"0004",x"0005",                -- BEGIN 1 2 3 4 5
-  x"2D04",x"A009",x"2D04",x"A009",x"2D04",x"A009",        -- 2D04 ! 2D04 ! 2D04 !
-  x"2D04",x"A009",x"2D04",x"A009",x"8FF0",                -- 2D04 ! 2D04 ! AGAIN
+  x"0001",x"0002",x"0003",x"0004",x"0005",         -- BEGIN 1 2 3 4 5
+  x"2D04",x"A009",x"2D04",x"A009",x"2D04",x"A009", -- 2D04 ! 2D04 ! 2D04 !
+  x"2D04",x"A009",x"2D04",x"A009",x"8FF0",         -- 2D04 ! 2D04 ! AGAIN
   others=>x"0000");
 
 --diese Funktion wertet von SP nur die beiden niedrigsten Bits aus
