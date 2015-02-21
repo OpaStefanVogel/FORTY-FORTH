@@ -68,10 +68,10 @@ begin wait until (CLK_I'event and CLK_I='0');
     
   -- oberste T Stapeleintraege zurückspeichern
   W:="0000";
-  if T/=0 then R(P(SP-1)):=A; W(P(SP-1)):='1'; 
-    if T/=1 then R(P(SP-2)):=B; W(P(SP-2)):='1'; 
-      if T/=2 then R(P(SP-3)):=C; W(P(SP-3)):='1'; 
-        if T/=3 then R(P(SP-4)):=D; W(P(SP-4)):='1'; 
+  if T/=0 then R(P(SP-1)):=A; W(P(SP-1)):='1';
+    if T/=1 then R(P(SP-2)):=B; W(P(SP-2)):='1';
+      if T/=2 then R(P(SP-3)):=C; W(P(SP-3)):='1';
+        if T/=3 then R(P(SP-4)):=D; W(P(SP-4)):='1';
           end if; end if; end if; end if;
   -- Ausgabeadresse zum StapRAM zusammenbasteln
   ADRESSE_ZUM_STAPEL(0)<=CONV_STD_LOGIC_VECTOR(SP-1,16) and x"FFFD";
@@ -89,35 +89,35 @@ begin wait until (CLK_I'event and CLK_I='0');
   WE_O<=WE;
   end process;
 
---StapelRAM: 
+--StapelRAM:
 process begin wait until (CLK_I'event and CLK_I='1');
-  if WE_ZUM_STAPEL(0)='1' then 
-    stap0(CONV_INTEGER(ADRESSE_ZUM_STAPEL(0)(5 downto 2)))<=STORE_ZUM_STAPEL(0); 
-    HOLE_VOM_STAPEL(0)<=STORE_ZUM_STAPEL(0); 
+  if WE_ZUM_STAPEL(0)='1' then
+    stap0(CONV_INTEGER(ADRESSE_ZUM_STAPEL(0)(5 downto 2)))<=STORE_ZUM_STAPEL(0);
+    HOLE_VOM_STAPEL(0)<=STORE_ZUM_STAPEL(0);
      else
       HOLE_VOM_STAPEL(0)<=stap0(CONV_INTEGER(ADRESSE_ZUM_STAPEL(0)(5 downto 2)));
     end if;
   end process;
 process begin wait until (CLK_I'event and CLK_I='1');
-  if WE_ZUM_STAPEL(1)='1' then 
-    stap1(CONV_INTEGER(ADRESSE_ZUM_STAPEL(1)(5 downto 2)))<=STORE_ZUM_STAPEL(1); 
-    HOLE_VOM_STAPEL(1)<=STORE_ZUM_STAPEL(1); 
+  if WE_ZUM_STAPEL(1)='1' then
+    stap1(CONV_INTEGER(ADRESSE_ZUM_STAPEL(1)(5 downto 2)))<=STORE_ZUM_STAPEL(1);
+    HOLE_VOM_STAPEL(1)<=STORE_ZUM_STAPEL(1);
      else
       HOLE_VOM_STAPEL(1)<=stap1(CONV_INTEGER(ADRESSE_ZUM_STAPEL(1)(5 downto 2)));
     end if;
   end process;
 process begin wait until (CLK_I'event and CLK_I='1');
-  if WE_ZUM_STAPEL(2)='1' then 
-    stap2(CONV_INTEGER(ADRESSE_ZUM_STAPEL(2)(5 downto 2)))<=STORE_ZUM_STAPEL(2); 
-    HOLE_VOM_STAPEL(2)<=STORE_ZUM_STAPEL(2); 
+  if WE_ZUM_STAPEL(2)='1' then
+    stap2(CONV_INTEGER(ADRESSE_ZUM_STAPEL(2)(5 downto 2)))<=STORE_ZUM_STAPEL(2);
+    HOLE_VOM_STAPEL(2)<=STORE_ZUM_STAPEL(2);
      else
       HOLE_VOM_STAPEL(2)<=stap2(CONV_INTEGER(ADRESSE_ZUM_STAPEL(2)(5 downto 2)));
     end if;
   end process;
 process begin wait until (CLK_I'event and CLK_I='1');
-  if WE_ZUM_STAPEL(3)='1' then 
-    stap3(CONV_INTEGER(ADRESSE_ZUM_STAPEL(3)(5 downto 2)))<=STORE_ZUM_STAPEL(3); 
-    HOLE_VOM_STAPEL(3)<=STORE_ZUM_STAPEL(3); 
+  if WE_ZUM_STAPEL(3)='1' then
+    stap3(CONV_INTEGER(ADRESSE_ZUM_STAPEL(3)(5 downto 2)))<=STORE_ZUM_STAPEL(3);
+    HOLE_VOM_STAPEL(3)<=STORE_ZUM_STAPEL(3);
      else
       HOLE_VOM_STAPEL(3)<=stap3(CONV_INTEGER(ADRESSE_ZUM_STAPEL(3)(5 downto 2)));
     end if;
