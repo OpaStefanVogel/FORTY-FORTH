@@ -8,6 +8,7 @@
        Monospace Font für section und code
        ein mdash ersetzt durch #x2014
        user-scalable=no in yes umgeschrieben
+       stylesheet R00.css ergänzt
     <!-->
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1"/>

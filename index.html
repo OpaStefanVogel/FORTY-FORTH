@@ -36,77 +36,31 @@
 
 <p>Ich verwende dabei <a href="http://en.wikipedia.org/wiki/Git_(software)">git</a>, um bei Fehlersuche wirklich schnell auf vorher funktionierende Varianten umschalten zu können, notfalls bis zu einer allereinfachsten Anfangsversion, sowie <a href="http://en.wikipedia.org/wiki/GitHub">GitHub</a>, um von überall aus tüchtig zu <code>clone</code>(n) und <code>push</code>(en).
 </p>
+<div>Eingabe im <a href="http://de.wikipedia.org/wiki/Linux">Linux</a> - Terminal: Setze anstelle <code>your-repo</code> einen eigenen gewünschten Verzeichnisnamen ein.</div>
+<pre><code>$ git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git your-repo
+$ cd your-repo
+your-repo$</code></pre>
 
 <p>"FORTY" steht für englisch <b><u>40</u></b> im verwendeten Datenformat: Hexadezimalzahlen von 0000H bis 3FFFH werden immer als ganze Zahlen interpretiert, von <b><u>40</u></b>00H bis BFFFH wahlweise als Zeiger auf größere ganze Zahlen oder als Programmcode und von C000H bis FFFFH als negative ganze Zahlen.
 </p>
 
-<p>In diesem Sinne für den Anfang ein erstes einfaches Beispiel: 
-<i>Der oberste Stapeleintrag soll beginnend mit 0 fortlaufend um 1 erhöht und auf Adresse 2D04 ausgegeben werden.</i></p>
+<p>In diesem Sinne steht am Anfang ein erstes, sehr einfaches Programmbeispiel, welches nach und nach erweitert wird. Es soll laufen als <a href="http://www.xilinx.com/products/design-tools/vivado/integration/esl-design.html">Vivado</a> - <i>simulation behavioral</i>.
 
-<div>PC = Speicheradresse des Programmschrittes</div>
-<div>PD = Programmcode, gespeichert auf Adresse PC</div>
-<div>SP = Stapelhöhe nach Ausführung des Programmschrittes</div>
-
-<p><table border="1">
-  <tr>
-    <th>PC</th>
-    <th>PD</th>
-    <th>FORTH-Notation</th>
-    <th>Stapelinhalt</th>
-    <th>SP</th>
-    </tr>
-  <tr><td>0000</td><td>0000</td><td>0</td><td>0</td><td>1</td></tr>
-  <tr><td>0001</td><td>0001</td><td>BEGIN 1</td><td>0 1</td><td>2</td></tr>
-  <tr><td>0002</td><td>A007</td><td>+</td><td>1</td><td>1</td></tr>
-  <tr><td>0003</td><td>B501</td><td>DUP</td><td>1 1</td><td>2</td></tr>
-  <tr><td>0004</td><td>2D04</td><td>2D04</td><td>1 1 2D04</td><td>3</td></tr>
-  <tr><td>0005</td><td>A009</td><td>!</td><td>1</td><td>1</td></tr>
-  <tr><td>0006</td><td>8FFA</td><td>AGAIN</td><td>1</td><td>1</td></tr>
-  </table></p>   
-
-<p>Wer sich noch nicht so sehr mit FORTH auskennt: Anfangs werden "0" und "1" als Zahlen auf den Stapel abgelegt, dann mit "+" addiert, mit "DUP" das Ergebnis dupliziert und "!" speichert das Duplizierte auf der zuvor eingegebenen Adresse "2D04". "AGAIN" springt zurück zu "BEGIN". "BEGIN" ist nur eine Markierung und benötigt selbst keinen eigenen Programmcode.</p>
-
-Genug der Worte, das Programm soll endlich loslaufen, als <a href="http://www.xilinx.com/products/design-tools/vivado/integration/esl-design.html">Vivado</a> - simulation behavioral in <a href="http://de.wikipedia.org/wiki/Linux">Linux</a>. Anstelle <code>your-repo</code> einen eigenen gewünschten Verzeichnisnamen einsetzen.
-
-<pre><code>$ git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git your-repo
-$ cd your-repo
-your-repo$ git checkout Step_1
-your-repo$ vivado -mode tcl &</code></pre>
-<p>Letzte Eingabe setzt in einem extra Terminal fort:</p>
-<pre><code>Vivado% create_project -force project_FFP project_FFP
+<pre><code>your-repo$ vivado -mode tcl
+Vivado% create_project -force project_FFP project_FFP
 Vivado% add_files -norecurse {P01_top.vhd P20_FFP.vhd}
 Vivado% add_files -fileset sim_1 -norecurse testbench.vhd
 Vivado% set_property top top [current_fileset]
 Vivado% update_compile_order -fileset sources_1
 Vivado% update_compile_order -fileset sim_1
 Vivado% start_gui</code></pre>
-<p>Letzte Eingabe startet die graphische Oberfläche von Vivado. Setze dort in der Box <i>"Type a Tcl command here"</i> die <a href="http://de.wikipedia.org/wiki/Tcl">tcl</a>-Eingabe fort:</p>
-<pre><code>Tcl Console: launch_simulation # = Run Behavioral Simulation
-Tcl Console: run 1000 ns
-</code></pre>
-<p><img src="favicon.ico"/><xsl:value-of select="." /> Ergebnis: Die Variable LEDS enthält den auf Adresse 2D04 ausgegebenen Hexadezimalwert:</p>
 
-<p  style="white-space: pre-wrap;">ab Zeitpunkt in ns     Wert von LEDS
-     0                  UU
-   130                  01
-   250                  02
-   370                  03
-   490                  04
-   610                  05
-   730                  06
-   850                  07
-   970                  08</p>
+<p>Die letzte Eingabe startet die graphische Oberfläche von Vivado. Verwende dort das Eingabefeld <i>"Type a Tcl command here"</i> für die weiteren <a href="http://de.wikipedia.org/wiki/Tcl">tcl</a>-Eingaben.</p>
 
-<p>Soll LEDS auf echte <a href="http://de.wikipedia.org/wiki/Leuchtdiode">LED</a>'s ausgegeben werden, muss natürlich der Takt CLK  passend verringert werden.</p>
-
-<p>Weiter dann mit </p>
+<p><a href="R01_Anfang.xml">R01 ein erstes einfaches Programm</a></p>
 <p><a href="R02_Stapelvariablen.xml">R02 Stapeleinträge benennen</a></p>
 <p><a href="R03_StapelRAM.xml">R03 Stapel in RAM speichern</a></p>
 <p><a href="R04_bedingter_Sprung.xml">R04_bedingter_Sprung</a></p>
-
-
-
-<hr/>
 
       </section>
     </div>
