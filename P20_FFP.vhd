@@ -9,7 +9,16 @@ entity FortyForthProcessor is
     DAT_I: in STD_LOGIC_VECTOR (15 downto 0);
     ADR_O: out STD_LOGIC_VECTOR (15 downto 0);
     DAT_O: out STD_LOGIC_VECTOR (15 downto 0);
-    WE_O: out STD_LOGIC
+    WE_O: out STD_LOGIC;
+    
+    -- nur zur Simulation und Fehlersuche:
+    PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
+    PD_SIM: out STD_LOGIC_VECTOR (15 downto 0);
+    SP_SIM: out integer;
+    A_SIM: out STD_LOGIC_VECTOR (15 downto 0);
+    B_SIM: out STD_LOGIC_VECTOR (15 downto 0);
+    C_SIM: out STD_LOGIC_VECTOR (15 downto 0);
+    D_SIM: out STD_LOGIC_VECTOR (15 downto 0)
     );
 end FortyForthProcessor;
 
@@ -39,21 +48,21 @@ process
 variable PC,PD,ADR,DAT,DIST: STD_LOGIC_VECTOR (15 downto 0):=x"0000";
 variable WE: STD_LOGIC;
 variable SP: integer:=0;
-variable R: REG;
+variable R: REG:=(others=>x"0000");
 -- Stapeleintraege benennen
-variable A,B,C,D: STD_LOGIC_VECTOR (15 downto 0);
+variable A,B,C,D: STD_LOGIC_VECTOR (15 downto 0):=x"0000";
 variable T: integer range 0 to 4;
 
-begin wait until (CLK_I'event and CLK_I='0');
-  PD:=ProgRAM(CONV_INTEGER(PC(3 downto 0)));
-  PC:=PC+1; 
-  WE:='0';
+begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
+  PD:=ProgRAM(CONV_INTEGER(PC(3 downto 0)));            PC_SIM<=PC;
+  PC:=PC+1;                                             PD_SIM<=PD;
+  WE:='0';                                              SP_SIM<=SP;
   DIST:=PD(11)&PD(11)&PD(11)&PD(11)&PD(11 downto 0);
-  -- oberste 4 Stapeleintraege entnehmen
-  A:=R(P(SP-1));
-  B:=R(P(SP-2));
-  C:=R(P(SP-3));
-  D:=R(P(SP-4));
+  -- oberste 4 Stapeleintraege entnehmen                -- Simulation --
+  A:=R(P(SP-1));                                        A_SIM<=A;
+  B:=R(P(SP-2));                                        B_SIM<=B;
+  C:=R(P(SP-3));                                        C_SIM<=C;
+  D:=R(P(SP-4));                                        D_SIM<=D;
   T:=0;
 
   if PD(15 downto 12)=x"8" then PC:=PC+DIST;               -- JR
