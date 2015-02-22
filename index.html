@@ -66,7 +66,7 @@
 
 <p>Wer sich noch nicht so sehr mit FORTH auskennt: Anfangs werden "0" und "1" als Zahlen auf den Stapel abgelegt, dann mit "+" addiert, mit "DUP" das Ergebnis dupliziert und "!" speichert das Duplizierte auf der zuvor eingegebenen Adresse "2D04". "AGAIN" springt zurück zu "BEGIN". "BEGIN" ist nur eine Markierung und benötigt selbst keinen eigenen Programmcode.</p>
 
-Genug der Worte, das Programm soll endlich loslaufen, als <a href="http://www.xilinx.com/products/design-tools/vivado/integration/esl-design.html">Vivado</a> - simulation behavioral in <a>Linux</a>. Anstelle <code>your-repo</code> einen eigenen gewünschten Verzeichnisnamen einsetzen.
+Genug der Worte, das Programm soll endlich loslaufen, als <a href="http://www.xilinx.com/products/design-tools/vivado/integration/esl-design.html">Vivado</a> - simulation behavioral in <a href="http://de.wikipedia.org/wiki/Linux">Linux</a>. Anstelle <code>your-repo</code> einen eigenen gewünschten Verzeichnisnamen einsetzen.
 
 <pre><code>$ git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git your-repo
 $ cd your-repo
@@ -80,7 +80,7 @@ Vivado% set_property top top [current_fileset]
 Vivado% update_compile_order -fileset sources_1
 Vivado% update_compile_order -fileset sim_1
 Vivado% start_gui</code></pre>
-<p>Letzte Eingabe startet die graphische Oberfläche von Vivado. Setze dort in der Box <i>"Type a Tcl command here"</i> die <a>tcl</a>-Eingabe fort:</p>
+<p>Letzte Eingabe startet die graphische Oberfläche von Vivado. Setze dort in der Box <i>"Type a Tcl command here"</i> die <a href="http://de.wikipedia.org/wiki/Tcl">tcl</a>-Eingabe fort:</p>
 <pre><code>Tcl Console: launch_simulation # = Run Behavioral Simulation
 Tcl Console: run 1000 ns
 </code></pre>
@@ -97,9 +97,13 @@ Tcl Console: run 1000 ns
    850                  07
    970                  08</p>
 
-<p>Soll LEDS auf echte <a>LED</a>'s ausgegeben werden, muss natürlich der Takt CLK  passend verringert werden.</p>
+<p>Soll LEDS auf echte <a href="http://de.wikipedia.org/wiki/Leuchtdiode">LED</a>'s ausgegeben werden, muss natürlich der Takt CLK  passend verringert werden.</p>
 
-<p>Weiter dann mit <a href="R02_Stapelvariablen.xml">R02 Stapeleinträge benennen</a>, wenn geht.</p>
+<p>Weiter dann mit </p>
+<p><a href="R02_Stapelvariablen.xml">R02 Stapeleinträge benennen</a></p>
+<p><a href="R03_StapelRAM.xml">R03 Stapel in RAM speichern</a></p>
+<p><a href="R04_bedingter_Sprung.xml">R04_bedingter_Sprung</a></p>
+
 
 
 <hr/>
