@@ -42,7 +42,7 @@ signal ProgRAM: RAMTYPE:=(
 signal HOLE_VOM_STAPEL,STORE_ZUM_STAPEL,ADRESSE_ZUM_STAPEL: REG;
 signal WE_ZUM_STAPEL: STD_LOGIC_VECTOR (3 downto 0);
 type STAPELTYPE is array(0 to 31) of STD_LOGIC_VECTOR (15 downto 0);
-signal stap1,stap2,stap3,stap0: STAPELTYPE;
+signal stap1,stap2,stap3,stap0: STAPELTYPE:=(others=>x"0000");
 
 begin
 
@@ -61,7 +61,8 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
   PC:=PC+1;                                             PD_SIM<=PD;
   WE:='0';                                              SP_SIM<=SP;
   DIST:=PD(11)&PD(11)&PD(11)&PD(11)&PD(11 downto 0);
-  -- oberste 4 Stapeleintraege entnehmen                -- Simulation --
+  -- oberste 4 Stapeleintraege entnehmen
+  R:=HOLE_VOM_STAPEL;                                   -- Simulation --
   A:=R(P(SP-1));                                        A_SIM<=A;
   B:=R(P(SP-2));                                        B_SIM<=B;
   C:=R(P(SP-3));                                        C_SIM<=C;
