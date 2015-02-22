@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
 <!--geht leider nicht mit Raspberry-midori-->
-<los>
-Benennung der Stapeleinträge
+<los>Benennung der Stapeleinträge
 
 Für die obersten vier Stapeleinträge verwende ich extra Variablenbezeichnungen A, B, C, D, sowie eine Zählvariable T mit folgender Zuordnung
 
@@ -17,16 +16,15 @@ Addition:
 A := A + B;
 SP:= SP - 1;
 T := 1;
-R(SP-1) := A;
+R(SP-1) := A; war vorher B
 R(SP-2) bleibt unverändert C
 R(SP-3) bleibt unverändert D
 R(SP-4) bleibt unverändert
 
-Variable T und das Zurückspeichern sind jetzt zusätzlich hinzugekommen. Der Vorteil soll sein, dass man bei der Programmierung der einzelnen Rechenoperationen nicht immer wieder R(SP-1), R(SP-2)... schreiben muss und diese Indexberechnungen eventuell sogar wiederholt compiliert werden. Außerdem wird R(SP) mit einer zusätzliche Funktion in R(P(SP)) umgeschrieben, damit an den Array-Grenzen kein Indexüberlauf etwa durch SP-1=-1 entsteht. Nun nochmal ein Programmlauf, dabei werden nach <code>git diff</code> die einzelnen Unterschiede im Quelltext mit ausgegeben. Am Ergebnis sollte sich aber nichts ändern. Um wenigstens einen äußerlichen Unterschied zu sehen, habe ich den <i>Startwert der Zählschleife auf 77 gesetzt und die Schrittweite von 1 auf -1</i>. Außerdem werden jetzt die lokalen Variablen PC, PD, SP, A, B, C und D zu Beginn jedes Taktes CLK als Signale PC_SIM... bis in das top-Modul durchgereicht, das macht den Programmablauf transparenter.  
+Variable T und das Zurückspeichern sind jetzt zusätzlich hinzugekommen. Der Vorteil soll sein, dass man bei der Programmierung der einzelnen Rechenoperationen nicht immer wieder R(SP-1), R(SP-2)... schreiben muss und diese Indexberechnungen eventuell sogar wiederholt compiliert werden. Außerdem wird R(SP) mit einer zusätzliche Funktion P(SP) umgeschrieben in R(P(SP)), damit an den Array-Grenzen kein Indexüberlauf etwa durch SP-1=-1 entsteht. Nun nochmal ein Programmlauf, dabei werden nach <code>git diff</code> die einzelnen Unterschiede im Quelltext mit ausgegeben. Am Ergebnis sollte sich aber nichts wesentliches ändern. Um wenigstens einen äußerlichen Unterschied zu sehen, habe ich den <i>Startwert der Zählschleife auf 77 gesetzt und die Schrittweite von 1 auf -1</i>. Außerdem werden jetzt die lokalen Variablen PC, PD, SP, A, B, C und D zu Beginn jedes Taktes CLK als Signale PC_SIM... bis in das top-Modul durchgereicht und in der Vivado - Simulation zusätzlich mit ausgegeben, das macht den Programmablauf transparenter.  
 
-Sofern das Startterminal aus Step_1 noch offen ist: 
-<term>your-repo$ git pull Step_2
-your-repo$ git checkout Step_2
+Sofern das Terminal aus Step_1 noch zugänglich ist: 
+<term>your-repo$ git checkout Step_2
 your-repo$ git diff Step_1 Step_2 # mit Q beenden</term>und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft, in der Tcl Console nur "Kursor hoch" tippen bis zu
 <term>Tcl Console: launch_simulation # = Run Behavioral Simulation
 Tcl Console: run 1000 ns

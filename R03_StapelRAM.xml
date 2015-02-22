@@ -30,10 +30,9 @@ Als Beispielprogramm für den jetzt verfügbaren Stapelspeicher <i>wird die Zahl
   <tr><td>000D</td><td>2D04</td><td>2D04</td><td>1 2D04</td><td>2</td></tr>
   <tr><td>000E</td><td>A009</td><td>!</td><td></td><td>0</td></tr>
   <tr><td>000F</td><td>8FF0</td><td>AGAIN</td><td></td><td>0</td></tr>
-  </table>Nachdem die Zahlen 1, 2, 3, 4, 5 auf den Stapel gebracht sind, wird fünfmal die oberste Zahl Adresse 2D04 ausgegeben. AGAIN geht wieder zurück zu BEGIN 0 und alles geht von vorn los.
+  </table>Nachdem die Zahlen 1, 2, 3, 4, 5 auf den Stapel gebracht sind, wird fünfmal die oberste Zahl auf Adresse 2D04 ausgegeben. AGAIN geht wieder zurück zu BEGIN 0 und alles geht von vorn los.
 
-<term>your-repo$ git pull Step_3
-your-repo$ git checkout Step_3
+<term>your-repo$ git checkout Step_3
 your-repo$ git diff Step_2 Step_3 # mit Q beenden</term>
 <term>Tcl Console: launch_simulation # = Run Behavioral Simulation
 Tcl Console: run 1000 ns</term><favicon/> Ergebnis: 
