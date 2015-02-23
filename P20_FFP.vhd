@@ -101,34 +101,34 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
 --StapelRAM:
 process begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_STAPEL(0)='1' then
-    stap0(CONV_INTEGER(ADRESSE_ZUM_STAPEL(0)(5 downto 2)))<=STORE_ZUM_STAPEL(0);
+    stap0(CONV_INTEGER(ADRESSE_ZUM_STAPEL(0)(6 downto 2)))<=STORE_ZUM_STAPEL(0);
     HOLE_VOM_STAPEL(0)<=STORE_ZUM_STAPEL(0);
      else
-      HOLE_VOM_STAPEL(0)<=stap0(CONV_INTEGER(ADRESSE_ZUM_STAPEL(0)(5 downto 2)));
+      HOLE_VOM_STAPEL(0)<=stap0(CONV_INTEGER(ADRESSE_ZUM_STAPEL(0)(6 downto 2)));
     end if;
   end process;
 process begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_STAPEL(1)='1' then
-    stap1(CONV_INTEGER(ADRESSE_ZUM_STAPEL(1)(5 downto 2)))<=STORE_ZUM_STAPEL(1);
+    stap1(CONV_INTEGER(ADRESSE_ZUM_STAPEL(1)(6 downto 2)))<=STORE_ZUM_STAPEL(1);
     HOLE_VOM_STAPEL(1)<=STORE_ZUM_STAPEL(1);
      else
-      HOLE_VOM_STAPEL(1)<=stap1(CONV_INTEGER(ADRESSE_ZUM_STAPEL(1)(5 downto 2)));
+      HOLE_VOM_STAPEL(1)<=stap1(CONV_INTEGER(ADRESSE_ZUM_STAPEL(1)(6 downto 2)));
     end if;
   end process;
 process begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_STAPEL(2)='1' then
-    stap2(CONV_INTEGER(ADRESSE_ZUM_STAPEL(2)(5 downto 2)))<=STORE_ZUM_STAPEL(2);
+    stap2(CONV_INTEGER(ADRESSE_ZUM_STAPEL(2)(6 downto 2)))<=STORE_ZUM_STAPEL(2);
     HOLE_VOM_STAPEL(2)<=STORE_ZUM_STAPEL(2);
      else
-      HOLE_VOM_STAPEL(2)<=stap2(CONV_INTEGER(ADRESSE_ZUM_STAPEL(2)(5 downto 2)));
+      HOLE_VOM_STAPEL(2)<=stap2(CONV_INTEGER(ADRESSE_ZUM_STAPEL(2)(6 downto 2)));
     end if;
   end process;
 process begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_STAPEL(3)='1' then
-    stap3(CONV_INTEGER(ADRESSE_ZUM_STAPEL(3)(5 downto 2)))<=STORE_ZUM_STAPEL(3);
+    stap3(CONV_INTEGER(ADRESSE_ZUM_STAPEL(3)(6 downto 2)))<=STORE_ZUM_STAPEL(3);
     HOLE_VOM_STAPEL(3)<=STORE_ZUM_STAPEL(3);
      else
-      HOLE_VOM_STAPEL(3)<=stap3(CONV_INTEGER(ADRESSE_ZUM_STAPEL(3)(5 downto 2)));
+      HOLE_VOM_STAPEL(3)<=stap3(CONV_INTEGER(ADRESSE_ZUM_STAPEL(3)(6 downto 2)));
     end if;
   end process;
 
