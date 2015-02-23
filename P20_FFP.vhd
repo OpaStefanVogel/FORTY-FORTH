@@ -22,15 +22,24 @@ entity FortyForthProcessor is
     );
 end FortyForthProcessor;
 
-architecture Step_3 of FortyForthProcessor is
+architecture Step_4 of FortyForthProcessor is
 
 type REG is array(0 to 3) of STD_LOGIC_VECTOR (15 downto 0);
 type RAMTYPE is array(0 to 15) of STD_LOGIC_VECTOR (15 downto 0);
 
 signal ProgRAM: RAMTYPE:=(
-  x"0001",x"0002",x"0003",x"0004",x"0005",         -- BEGIN 1 2 3 4 5
-  x"2D04",x"A009",x"2D04",x"A009",x"2D04",x"A009", -- 2D04 ! 2D04 ! 2D04 !
-  x"2D04",x"A009",x"2D04",x"A009",x"8FF0",         -- 2D04 ! 2D04 ! AGAIN
+  x"0003",-- 03
+  x"FFFF",-- -1     <----------------<
+  x"A007",-- +                       |
+  x"B501",-- DUP                     |
+  x"2D04",-- 2D04                    |
+  x"A009",-- !                       |
+  x"B501",-- DUP                     |
+  x"9003",-- IF --------v            |
+  x"0055",-- 0055       |            |
+  x"2D04",-- 2D04       |            |
+  x"A009",-- !          v            |
+  x"8FF5",-- END_IF AGAIN -----------^
   others=>x"0000");
 
 --diese Funktion wertet von SP nur die beiden niedrigsten Bits aus
@@ -69,7 +78,9 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
   D:=R(P(SP-4));                                        D_SIM<=D;
   T:=0;
 
-  if PD(15 downto 12)=x"8" then PC:=PC+DIST;               -- JR
+  if PD(15 downto 12)=x"8" then PC:=PC+DIST;      -- 8000-8FFF relativer Sprung
+    elsif PD(15 downto 12)=x"9" then              -- 9000-9FFF bedingter relativer Sprung
+      if A=x"0000" then PC:=PC+DIST; end if; SP:=SP-1;
     elsif PD=x"B501" then SP:=SP+1; T:=1;                  -- DUP
     elsif PD=x"A007" then A:=A+B; SP:=SP-1;T:=1;           -- +
     elsif PD=x"A009" then ADR:=A;DAT:=B;WE:='1';SP:=SP-2;  -- !
@@ -132,4 +143,4 @@ process begin wait until (CLK_I'event and CLK_I='1');
     end if;
   end process;
 
-end Step_3;
+end Step_4;
