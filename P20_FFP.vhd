@@ -22,7 +22,7 @@ entity FortyForthProcessor is
     );
 end FortyForthProcessor;
 
-architecture Step_4 of FortyForthProcessor is
+architecture Step_5 of FortyForthProcessor is
 
 type REG is array(0 to 3) of STD_LOGIC_VECTOR (15 downto 0);
 type RAMTYPE is array(0 to 15) of STD_LOGIC_VECTOR (15 downto 0);
@@ -165,4 +165,4 @@ process begin wait until (CLK_I'event and CLK_I='1');
     end if;
   end process;
 
-end Step_4;
+end Step_5;
