@@ -9,7 +9,7 @@ end testbench;
 
 -------------------------------------------------------------------------------
 
-architecture test_Step_3 of testbench is
+architecture test_Step_4 of testbench is
 
 component top
   Port ( 
@@ -59,6 +59,6 @@ begin
   -- clock generation
   CLK <= not CLK after 10 ns;
 
-end test_Step_3;
+end test_Step_4;
 
 
