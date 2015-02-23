@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
 <los>Bedingter Sprung
 
-Dieser wird nur ausgeführt, wenn der oberste Stapeleintrag gleich Null ist. Das entspricht der Interpretation Null steht für "false", jeder andere Wert ist "true". Auf ein IF folgende Programmschritte sollen bei "true" ausgeführt werden, bei "false" soll IF diese übersprigen, daher Sprung wenn oberster Stapeleintrag Null. Der Stapeleintrag wird dabei in jedem Fall entfernt.
+Dieser wird nur ausgeführt, wenn der oberste Stapeleintrag gleich Null ist. Das entspricht der Interpretation "Null" steht für "false", jeder andere Wert ist "true". Auf IF folgende Programmschritte sollen bei "true" ausgeführt werden, bei "false" soll IF diese überspringen, daher Sprung wenn oberster Stapeleintrag Null. Der Stapeleintrag wird dabei in jedem Fall entfernt.
  
 <table border="1"><tr><th>PC</th><th>PD</th><th>FORTH-Notation</th><th>Stapelinhalt</th><th>SP</th></tr>
   <tr><td>0000</td><td>0003</td><td>3</td><td>3</td><td>1</td></tr>
@@ -22,7 +22,7 @@ Dieser wird nur ausgeführt, wenn der oberste Stapeleintrag gleich Null ist. Das
 <term>your-repo$ git checkout Step_4
 your-repo$ git diff Step_3 Step_4</term>
 <term>Tcl Console: launch_simulation
-Tcl Console: run 1000 ns</term><favicon/> Ergebnis: Bei LEDS=00 wird ein anschließendes LEDS=aa von IF übersprungen und es geht gleich mit LEDS=-1(=FF) weiter. 
+Tcl Console: run 1000 ns</term><favicon/> Ergebnis: Bei LEDS=00 wird das sonst anschließende LEDS=55 von IF übersprungen und es geht gleich mit LEDS=-1(=FF) weiter. 
 
 ab Zeitpunkt in ns     Wert von LEDS
      0                  UU
@@ -35,6 +35,6 @@ ab Zeitpunkt in ns     Wert von LEDS
    830                   55
    950                  FE
 
-Weiter mit <a href="R05_Unterprogramm.xml">R05_Unterprogramm</a>, wenn geht.
+Weiter mit <a href="R05_Unterprogramm.xml">R05 Unterprogramm</a>.
 
 </los>
