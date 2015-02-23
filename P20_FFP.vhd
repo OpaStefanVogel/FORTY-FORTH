@@ -29,6 +29,8 @@ type RAMTYPE is array(0 to 15) of STD_LOGIC_VECTOR (15 downto 0);
 
 signal ProgRAM: RAMTYPE:=(
   x"0003",-- 03
+  x"4003",
+  x"8FFE",
   x"FFFF",-- -1     <----------------<
   x"A007",-- +                       |
   x"B501",-- DUP                     |
@@ -39,7 +41,7 @@ signal ProgRAM: RAMTYPE:=(
   x"0055",-- 0055       |            |
   x"2D04",-- 2D04       |            |
   x"A009",-- !          v            |
-  x"8FF5",-- END_IF AGAIN -----------^
+  x"A003",
   others=>x"0000");
 
 --diese Funktion wertet von SP nur die beiden niedrigsten Bits aus
@@ -52,6 +54,11 @@ signal HOLE_VOM_STAPEL,STORE_ZUM_STAPEL,ADRESSE_ZUM_STAPEL: REG;
 signal WE_ZUM_STAPEL: STD_LOGIC_VECTOR (3 downto 0);
 type STAPELTYPE is array(0 to 31) of STD_LOGIC_VECTOR (15 downto 0);
 signal stap1,stap2,stap3,stap0: STAPELTYPE:=(others=>x"0000");
+-- Rueckkehrstapel
+signal RPC,RPCC: STD_LOGIC_VECTOR (15 downto 0);
+signal RP: STD_LOGIC_VECTOR (15 downto 0):=x"3000";
+signal RW: STD_LOGIC;
+signal stapR: STAPELTYPE:=(others=>x"0000");
 
 begin
 
@@ -77,10 +84,15 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
   C:=R(P(SP-3));                                        C_SIM<=C;
   D:=R(P(SP-4));                                        D_SIM<=D;
   T:=0;
+  -- Rueckkehrstapel
+  RW<='0';
 
-  if PD(15 downto 12)=x"8" then PC:=PC+DIST;      -- 8000-8FFF relativer Sprung
-    elsif PD(15 downto 12)=x"9" then              -- 9000-9FFF bedingter relativer Sprung
+  if PD(15 downto 13)="010" then                 -- 4000-5FFF Unterprogrammaufruf
+    RPC<=PC;PC:=PD and x"3FFF";RP<=RP-1;RW<='1';
+    elsif PD(15 downto 12)=x"8" then PC:=PC+DIST;-- 8000-8FFF relativer Sprung
+    elsif PD(15 downto 12)=x"9" then             -- 9000-9FFF bedingter relativer Sprung
       if A=x"0000" then PC:=PC+DIST; end if; SP:=SP-1;
+    elsif PD=x"A003" then PC:=RPCC;RP<=RP+1;     -- ; Rückkehr aus Unterprogramm
     elsif PD=x"B501" then SP:=SP+1; T:=1;                  -- DUP
     elsif PD=x"A007" then A:=A+B; SP:=SP-1;T:=1;           -- +
     elsif PD=x"A009" then ADR:=A;DAT:=B;WE:='1';SP:=SP-2;  -- !
@@ -109,37 +121,47 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
   WE_O<=WE;
   end process;
 
+--Rueckkehrstapel:
+process begin wait until (CLK_I'event and CLK_I='1');
+  if RW='1' then
+    stapR(CONV_INTEGER(RP(4 downto 0)))<=RPC;
+    RPCC<=RPC;
+     else
+      RPCC<=stapR(CONV_INTEGER(RP(4 downto 0)));
+    end if;
+  end process;
+
 --StapelRAM:
 process begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_STAPEL(0)='1' then
-    stap0(CONV_INTEGER(ADRESSE_ZUM_STAPEL(0)(5 downto 2)))<=STORE_ZUM_STAPEL(0);
+    stap0(CONV_INTEGER(ADRESSE_ZUM_STAPEL(0)(6 downto 2)))<=STORE_ZUM_STAPEL(0);
     HOLE_VOM_STAPEL(0)<=STORE_ZUM_STAPEL(0);
      else
-      HOLE_VOM_STAPEL(0)<=stap0(CONV_INTEGER(ADRESSE_ZUM_STAPEL(0)(5 downto 2)));
+      HOLE_VOM_STAPEL(0)<=stap0(CONV_INTEGER(ADRESSE_ZUM_STAPEL(0)(6 downto 2)));
     end if;
   end process;
 process begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_STAPEL(1)='1' then
-    stap1(CONV_INTEGER(ADRESSE_ZUM_STAPEL(1)(5 downto 2)))<=STORE_ZUM_STAPEL(1);
+    stap1(CONV_INTEGER(ADRESSE_ZUM_STAPEL(1)(6 downto 2)))<=STORE_ZUM_STAPEL(1);
     HOLE_VOM_STAPEL(1)<=STORE_ZUM_STAPEL(1);
      else
-      HOLE_VOM_STAPEL(1)<=stap1(CONV_INTEGER(ADRESSE_ZUM_STAPEL(1)(5 downto 2)));
+      HOLE_VOM_STAPEL(1)<=stap1(CONV_INTEGER(ADRESSE_ZUM_STAPEL(1)(6 downto 2)));
     end if;
   end process;
 process begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_STAPEL(2)='1' then
-    stap2(CONV_INTEGER(ADRESSE_ZUM_STAPEL(2)(5 downto 2)))<=STORE_ZUM_STAPEL(2);
+    stap2(CONV_INTEGER(ADRESSE_ZUM_STAPEL(2)(6 downto 2)))<=STORE_ZUM_STAPEL(2);
     HOLE_VOM_STAPEL(2)<=STORE_ZUM_STAPEL(2);
      else
-      HOLE_VOM_STAPEL(2)<=stap2(CONV_INTEGER(ADRESSE_ZUM_STAPEL(2)(5 downto 2)));
+      HOLE_VOM_STAPEL(2)<=stap2(CONV_INTEGER(ADRESSE_ZUM_STAPEL(2)(6 downto 2)));
     end if;
   end process;
 process begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_STAPEL(3)='1' then
-    stap3(CONV_INTEGER(ADRESSE_ZUM_STAPEL(3)(5 downto 2)))<=STORE_ZUM_STAPEL(3);
+    stap3(CONV_INTEGER(ADRESSE_ZUM_STAPEL(3)(6 downto 2)))<=STORE_ZUM_STAPEL(3);
     HOLE_VOM_STAPEL(3)<=STORE_ZUM_STAPEL(3);
      else
-      HOLE_VOM_STAPEL(3)<=stap3(CONV_INTEGER(ADRESSE_ZUM_STAPEL(3)(5 downto 2)));
+      HOLE_VOM_STAPEL(3)<=stap3(CONV_INTEGER(ADRESSE_ZUM_STAPEL(3)(6 downto 2)));
     end if;
   end process;
 
