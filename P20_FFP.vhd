@@ -78,8 +78,8 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
   D:=R(P(SP-4));                                        D_SIM<=D;
   T:=0;
 
-  if PD(15 downto 12)=x"8" then PC:=PC+DIST;  -- 8000-8FFF relativer Sprung
-    elsif PD(15 downto 12)=x"9" then          -- 9000-9FFF bedingter relativer Sprung
+  if PD(15 downto 12)=x"8" then PC:=PC+DIST;      -- 8000-8FFF relativer Sprung
+    elsif PD(15 downto 12)=x"9" then              -- 9000-9FFF bedingter relativer Sprung
       if A=x"0000" then PC:=PC+DIST; end if; SP:=SP-1;
     elsif PD=x"B501" then SP:=SP+1; T:=1;                  -- DUP
     elsif PD=x"A007" then A:=A+B; SP:=SP-1;T:=1;           -- +
