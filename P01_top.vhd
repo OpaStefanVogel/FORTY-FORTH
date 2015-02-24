@@ -55,11 +55,11 @@ DUT0: FortyForthProcessor
       -- nur fuer Simulation
     PC_SIM => PC_SIM,
     PD_SIM => PD_SIM,
-    SP_SIM => SP_SIM,
     A_SIM => A_SIM,
     B_SIM => B_SIM,
     C_SIM => C_SIM,
-    D_SIM => D_SIM      
+    D_SIM => D_SIM,  
+    SP_SIM => SP_SIM
     );
 
 process begin wait until (CLK'event and CLK='1');

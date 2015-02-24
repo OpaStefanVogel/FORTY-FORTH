@@ -22,28 +22,28 @@ entity FortyForthProcessor is
     );
 end FortyForthProcessor;
 
-architecture Step_6 of FortyForthProcessor is
+architecture Step_7 of FortyForthProcessor is
 
 type REG is array(0 to 3) of STD_LOGIC_VECTOR (15 downto 0);
 type RAMTYPE is array(0 to 15) of STD_LOGIC_VECTOR (15 downto 0);
 
 signal ProgRAM: RAMTYPE:=(
-  x"0004", -- 4
-  x"0003", -- 3
-  x"0002", -- 2
-  x"0001", -- 1 
-  x"B412", -- BEGIN SWAP 
-  x"B502", -- OVER
-  x"B501", -- DUP 
+  x"1234", -- BEGIN 1234
+  x"A000", -- MINUS
+  x"A00B", -- NOT
+  x"00FF", -- 00FF 
+  x"A008", -- AND
+  x"1200", -- 1200 
+  x"A00E", -- OR
+  x"2323", -- 2323
+  x"F4F4", -- 3434
+  x"A001", -- U+ 
+  x"1111", -- 1111 
+  x"A002", -- U* 
+  x"A00F", -- 0<
+  x"A00D", -- 0=
   x"B200", -- 2DROP
-  x"B434", -- ROT
-  x"B43C", -- 2SWAP 
-  x"B60C", -- 2OVER 
-  x"B603", -- 2DUP 
-  x"B200", -- 2DROP
-  x"B300", -- DROP
-  x"B300", -- DROP
-  x"8FF4", -- AGAIN --> BEGIN
+  x"8FF0", -- AGAIN --> BEGIN
   others=>x"0000");
 
 --diese Funktion wertet von SP nur die beiden niedrigsten Bits aus
@@ -75,6 +75,8 @@ variable T: integer range 0 to 4;
 variable W: STD_LOGIC_VECTOR (3 downto 0);
 -- fuer Umstapeln 
 variable STAK: STD_LOGIC_VECTOR (7 downto 0);
+-- fuer Rechenoperationen mit Uebertrag
+variable U: STD_LOGIC_VECTOR (31 downto 0);
 
 begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
   PD:=ProgRAM(CONV_INTEGER(PC(3 downto 0)));            PC_SIM<=PC;
@@ -97,8 +99,45 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
     elsif PD(15 downto 12)=x"9" then             -- 9000-9FFF bedingter relativer Sprung
       if A=x"0000" then PC:=PC+DIST; end if; SP:=SP-1;
     elsif PD=x"A003" then PC:=RPCC;RP<=RP+1;     -- ; Rückkehr aus Unterprogramm
-    elsif PD=x"A007" then A:=A+B; SP:=SP-1;T:=1;           -- +
     elsif PD=x"A009" then ADR:=A;DAT:=B;WE:='1';SP:=SP-2;  -- !
+    elsif PD=x"A00D" then -- 0= Vergleich ob gleich Null
+      if A=x"0000" then A:=x"FFFF"; 
+        else A:=x"0000"; end if;
+      T:=1;
+    elsif PD=x"A00F" then -- 0< Vergleich ob kleiner Null
+      if A>=x"8000" then A:=x"FFFF";
+        else A:=x"0000"; end if;
+      T:=1;
+    elsif PD=x"A000" then -- MINUS Vorzeichen wechseln
+      A:=(not A)+1;
+      T:=1;
+    elsif PD=x"A00B" then -- NOT Bitweises Komplement
+      A:=not A;
+      T:=1;
+    elsif PD=x"A008" then -- AND Bitweises Und
+      A:=B and A; 
+      T:=1;
+      SP:=SP-1;
+    elsif PD=x"A00E" then -- OR Bitweises Oder
+      A:=B or A; 
+      T:=1;
+      SP:=SP-1;
+    elsif PD=x"A007" then -- + Addition
+      A:=B+A; 
+      T:=1;
+      SP:=SP-1;
+    elsif PD=x"A001" then -- U+ Addition mit Übertrag
+      U:=(x"0000"&C)+(x"0000"&B)+(x"0000"&A);
+      B:=U(31 downto 16);
+      A:=U(15 downto 0);
+      T:=2;
+      SP:=SP-1;
+    elsif PD=x"A002" then -- U* Multiplikation mit Übertrag
+      U:=(x"0000"&C)+B*A;
+      B:=U(31 downto 16);
+      A:=U(15 downto 0);
+      T:=2;
+      SP:=SP-1;
     elsif PD(15 downto 12)=x"B" then           -- B000-BFFF Umstapeln
       STAK:="00000000";
       if PD(7)='1' then STAK:=STAK(5 downto 0)&"11"; T:=T+1; end if;
@@ -183,4 +222,4 @@ process begin wait until (CLK_I'event and CLK_I='1');
     end if;
   end process;
 
-end Step_6;
+end Step_7;

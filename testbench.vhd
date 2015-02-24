@@ -9,7 +9,7 @@ end testbench;
 
 -------------------------------------------------------------------------------
 
-architecture test_Step_6 of testbench is
+architecture test_Step_7 of testbench is
 
 component top
   Port ( 
@@ -19,11 +19,11 @@ component top
     -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     PD_SIM: out STD_LOGIC_VECTOR (15 downto 0);
-    SP_SIM: out integer;
     A_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     B_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     C_SIM: out STD_LOGIC_VECTOR (15 downto 0);
-    D_SIM: out STD_LOGIC_VECTOR (15 downto 0)
+    D_SIM: out STD_LOGIC_VECTOR (15 downto 0);
+    SP_SIM: out integer
     );
   end component;      
 
@@ -44,16 +44,16 @@ begin
   DUT: top
     port map (
       CLK      => CLK,
-      LEDS      => open,--LEDS,
+      LEDS     => open,--LEDS,
       
       -- nur fuer Simulation
       PC_SIM => PC_SIM,
       PD_SIM => PD_SIM,
-      SP_SIM => SP_SIM,
       A_SIM => A_SIM,
       B_SIM => B_SIM,
       C_SIM => C_SIM,
-      D_SIM => D_SIM      
+      D_SIM => D_SIM,    
+      SP_SIM => SP_SIM
       );
 
   -- clock generation
@@ -61,6 +61,6 @@ begin
   
   LEDS <= A_SIM(7 downto 0);
 
-end test_Step_6;
+end test_Step_7;
 
 
