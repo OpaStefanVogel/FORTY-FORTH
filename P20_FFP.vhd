@@ -22,21 +22,28 @@ entity FortyForthProcessor is
     );
 end FortyForthProcessor;
 
-architecture Step_5 of FortyForthProcessor is
+architecture Step_6 of FortyForthProcessor is
 
 type REG is array(0 to 3) of STD_LOGIC_VECTOR (15 downto 0);
 type RAMTYPE is array(0 to 15) of STD_LOGIC_VECTOR (15 downto 0);
 
 signal ProgRAM: RAMTYPE:=(
-  x"0001",-- 1
-  x"4003",-- Unterprogramm ab PC=0003
-  x"8FFE",-------^                |
-  x"B501",-- DUP      <------------
-  x"2D04",-- 2D04
-  x"A009",-- !
-  x"0002",-- 2
-  x"A007",-- +
-  x"A003",-- Return
+  x"0004", -- BEGIN 4
+  x"0003", -- 3
+  x"0002", -- 2
+  x"0001", -- 1 
+  x"B412", -- SWAP 
+  x"B502", -- OVER
+  x"B501", -- DUP 
+  x"B200", -- 2DROP
+  x"B434", -- ROT
+  x"B43C", -- 2SWAP 
+  x"B60C", -- 2OVER 
+  x"B603", -- 2DUP 
+  x"B200", -- 2DROP
+  x"B300", -- DROP
+  x"B300", -- DROP
+  x"8FF0", -- AGAIN 
   others=>x"0000");
 
 --diese Funktion wertet von SP nur die beiden niedrigsten Bits aus
@@ -66,6 +73,8 @@ variable R: REG:=(others=>x"0000");
 variable A,B,C,D: STD_LOGIC_VECTOR (15 downto 0):=x"0000";
 variable T: integer range 0 to 4;
 variable W: STD_LOGIC_VECTOR (3 downto 0);
+-- fuer Umstapeln 
+variable STAK: STD_LOGIC_VECTOR (7 downto 0);
 
 begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
   PD:=ProgRAM(CONV_INTEGER(PC(3 downto 0)));            PC_SIM<=PC;
@@ -88,9 +97,23 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
     elsif PD(15 downto 12)=x"9" then             -- 9000-9FFF bedingter relativer Sprung
       if A=x"0000" then PC:=PC+DIST; end if; SP:=SP-1;
     elsif PD=x"A003" then PC:=RPCC;RP<=RP+1;     -- ; Rückkehr aus Unterprogramm
-    elsif PD=x"B501" then SP:=SP+1; T:=1;                  -- DUP
     elsif PD=x"A007" then A:=A+B; SP:=SP-1;T:=1;           -- +
     elsif PD=x"A009" then ADR:=A;DAT:=B;WE:='1';SP:=SP-2;  -- !
+    elsif PD(15 downto 12)=x"B" then           -- B000-BFFF Umstapeln
+      STAK:="00000000";
+      if PD(7)='1' then STAK:=STAK(5 downto 0)&"11"; T:=T+1; end if;
+      if PD(6)='1' then STAK:=STAK(5 downto 0)&"10"; T:=T+1; end if;
+      if PD(5)='1' then STAK:=STAK(5 downto 0)&"01"; T:=T+1; end if;
+      if PD(4)='1' then STAK:=STAK(5 downto 0)&"00"; T:=T+1; end if;
+      if PD(3)='1' then STAK:=STAK(5 downto 0)&"11"; T:=T+1; end if;
+      if PD(2)='1' then STAK:=STAK(5 downto 0)&"10"; T:=T+1; end if;
+      if PD(1)='1' then STAK:=STAK(5 downto 0)&"01"; T:=T+1; end if;
+      if PD(0)='1' then STAK:=STAK(5 downto 0)&"00"; T:=T+1; end if;
+      A:=R(P(SP-1-CONV_INTEGER(STAK(1 downto 0))));
+      B:=R(P(SP-1-CONV_INTEGER(STAK(3 downto 2))));
+      C:=R(P(SP-1-CONV_INTEGER(STAK(5 downto 4))));
+      D:=R(P(SP-1-CONV_INTEGER(STAK(7 downto 6))));
+      SP:=SP+CONV_INTEGER(PD(11 downto 8))-4;
     else A:=PD; SP:=SP+1; T:=1; end if;                    -- LIT
     
   -- oberste T Stapeleintraege zurückspeichern
@@ -160,4 +183,4 @@ process begin wait until (CLK_I'event and CLK_I='1');
     end if;
   end process;
 
-end Step_5;
+end Step_6;
