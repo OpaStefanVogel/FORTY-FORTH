@@ -9,7 +9,7 @@ end testbench;
 
 -------------------------------------------------------------------------------
 
-architecture test_Step_7 of testbench is
+architecture test_Step_8 of testbench is
 
 component top
   Port ( 
@@ -44,7 +44,7 @@ begin
   DUT: top
     port map (
       CLK      => CLK,
-      LEDS     => open,--LEDS,
+      LEDS     => LEDS,
       
       -- nur fuer Simulation
       PC_SIM => PC_SIM,
@@ -58,9 +58,7 @@ begin
 
   -- clock generation
   CLK <= not CLK after 10 ns;
-  
-  LEDS <= A_SIM(7 downto 0);
 
-end test_Step_7;
+end test_Step_8;
 
 

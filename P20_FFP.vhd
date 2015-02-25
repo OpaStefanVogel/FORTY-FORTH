@@ -22,24 +22,33 @@ entity FortyForthProcessor is
     );
 end FortyForthProcessor;
 
-architecture Step_7 of FortyForthProcessor is
+architecture Step_8 of FortyForthProcessor is
 
 type REG is array(0 to 3) of STD_LOGIC_VECTOR (15 downto 0);
 type RAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (15 downto 0);
   signal ProgRAM: RAMTYPE:=(
-  x"1234", -- BEGIN 1234
-  x"2D00", -- 0100
-  x"A009", -- !
-  x"2D00", -- 0100 
-  x"A00A", -- @
-  x"B300", -- DROP
-  x"3210", -- BEGIN 3210
-  x"2D00", -- 0100
-  x"A009", -- !
-  x"2D00", -- 0100 
-  x"A00A", -- @
-  x"B300", -- DROP
-  x"8FF1", -- AGAIN
+  x"0100", -- BEGIN 0100
+  x"4007", -- 7 EXEUTE
+  x"2D00", -- 2D00
+  x"4007", -- 7 EXEUTE
+  x"E100", -- E100
+  x"4007", -- 7 EXEUTE
+  x"8FF9", -- AGAIN
+    x"B501", -- DUP
+    x"FFFF", -- FFFF
+    x"400F", -- EXECUTE
+    x"B501", -- DUP
+    x"0000", -- 0000
+    x"400F", -- EXECUTE
+    x"B300", -- DROP
+    x"A003", -- RETURN 
+      x"B502", -- OVER
+      x"A009", -- !
+      x"8000", -- NOOP
+      x"A00A", -- @
+      x"2D04", -- 2D04
+      x"A009", -- !
+      x"A003", -- RETURN
   others=>x"0000");
 type ByteRAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (7 downto 0);
 signal ByteRAM: ByteRAMTYPE:=(
@@ -290,4 +299,4 @@ process begin wait until (CLK_I'event and CLK_I='1');
     end if;
   end process;
 
-end Step_7;
+end Step_8;
