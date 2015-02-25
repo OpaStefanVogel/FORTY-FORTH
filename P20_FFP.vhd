@@ -28,15 +28,15 @@ type REG is array(0 to 3) of STD_LOGIC_VECTOR (15 downto 0);
 type RAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (15 downto 0);
   signal ProgRAM: RAMTYPE:=(
   x"1234", -- BEGIN 1234
-  x"E100", -- 0100
+  x"2D00", -- 0100
   x"A009", -- !
-  x"E100", -- 0100 
+  x"2D00", -- 0100 
   x"A00A", -- @
   x"B300", -- DROP
   x"3210", -- BEGIN 3210
-  x"E100", -- 0100
+  x"2D00", -- 0100
   x"A009", -- !
-  x"E100", -- 0100 
+  x"2D00", -- 0100 
   x"A00A", -- @
   x"B300", -- DROP
   x"8FF1", -- AGAIN
@@ -44,8 +44,8 @@ type RAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (15 downto 0);
 type ByteRAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (7 downto 0);
 signal ByteRAM: ByteRAMTYPE:=(
   others=>x"00");
-type RXTYPE is array(0 to 1024-1) of STD_LOGIC_VECTOR (15 downto 0);
-shared variable ram2C00bis2FFF: RXTYPE:=(
+type stapRAMTYPE is array(0 to 1024-1) of STD_LOGIC_VECTOR (15 downto 0);
+shared variable stapR: stapRAMTYPE:=(
   others=>x"0000");
 
 --diese Funktion wertet von SP nur die beiden niedrigsten Bits aus
@@ -62,12 +62,12 @@ signal stap1,stap2,stap3,stap0: STAPELTYPE:=(others=>x"0000");
 signal RPC,RPCC: STD_LOGIC_VECTOR (15 downto 0);
 signal RP: STD_LOGIC_VECTOR (15 downto 0):=x"3000";
 signal RW: STD_LOGIC;
-signal stapR: STAPELTYPE:=(others=>x"0000");
+--signal stapR: STAPELTYPE:=(others=>x"0000");
 -- kompletten Speicher anschliessen
 signal PC_ZUM_ProgRAM,PD_VOM_ProgRAM: STD_LOGIC_VECTOR (15 downto 0);
-signal FETCH_VOM_ProgRAM,STORE_ZUM_RAM,EXFET,ADRESSE_ZUM_RAM: STD_LOGIC_VECTOR (15 downto 0);
-signal FETCH_VOM_ByteRAM: STD_LOGIC_VECTOR (15 downto 0);
-signal WE_ZUM_RAM,WE_ZUM_ProgRAM,WE_ZUM_ByteRAM: STD_LOGIC;
+signal STORE_ZUM_RAM,EXFET,ADRESSE_ZUM_RAM: STD_LOGIC_VECTOR (15 downto 0);
+signal FETCH_VOM_ProgRAM,FETCH_VOM_ByteRAM,FETCH_VOM_stapR: STD_LOGIC_VECTOR (15 downto 0);
+signal WE_ZUM_RAM,WE_ZUM_ProgRAM,WE_ZUM_ByteRAM,WE_ZUM_stapR: STD_LOGIC;
 
 
 begin
@@ -209,12 +209,12 @@ DAT_O<=STORE_ZUM_RAM;
 WE_O<=WE_ZUM_RAM;
 
 EXFET<=FETCH_VOM_ProgRAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else
---       FETCH_VOM_RAM(7) when ADRESSE_ZUM_RAM(15 downto 10)="001011" else
+       FETCH_VOM_stapR when ADRESSE_ZUM_RAM(15 downto 10)="001011" else
        x"00"&FETCH_VOM_ByteRAM(7 downto 0) when ADRESSE_ZUM_RAM(15 downto 13)="111" else
        DAT_I;
 
 WE_ZUM_ProgRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else '0';
---WE_ZUM_RAM(07)<=WSTORE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001011" else '0';
+WE_ZUM_stapR  <=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001011" else '0';
 WE_ZUM_ByteRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="111" else '0';
 
 
@@ -223,7 +223,7 @@ begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_ProgRAM='1' then 
     ProgRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(12 downto 0)))<=STORE_ZUM_RAM; 
     FETCH_VOM_ProgRAM<=STORE_ZUM_RAM; 
-	 else
+	  else
       FETCH_VOM_ProgRAM<=ProgRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(12 downto 0)));
       end if;
   PD_VOM_ProgRAM<=ProgRAM(CONV_INTEGER(PC_ZUM_ProgRAM(12 downto 0)));
@@ -239,28 +239,20 @@ begin wait until (CLK_I'event and CLK_I='1');
       end if;
   end process;
 
---Rueckkehrstapel:
---process 
---begin wait until (CLK_I'event and CLK_I='1');
---  if WE_ZUM_RAM(7)='1' then 
---    ram2C00bis2FFF(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0))):=STORE_ZUM_RAM; 
---    end if;
---  FETCH_VOM_RAM(7)<=ram2C00bis2FFF(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0)));
---  end process;
---process 
---begin wait until (CLK_I'event and CLK_I='1');
---  if RW_ZUM_RAM='1' then 
---    ram2C00bis2FFF(CONV_INTEGER(RP_ZUM_RAM(9 downto 0))):=RPC_ZUM_RAM; 
---    end if;
---  RPCC_VOM_RAM<=ram2C00bis2FFF(CONV_INTEGER(RP_ZUM_RAM(9 downto 0)));
---  end process;
-
+Rueckkehrstapel:
+process 
+begin wait until (CLK_I'event and CLK_I='1');
+  if WE_ZUM_StapR='1' then 
+    stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(7 downto 0))):=STORE_ZUM_RAM; 
+    end if;
+  FETCH_VOM_stapR<=stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(7 downto 0)));
+  end process;
 process begin wait until (CLK_I'event and CLK_I='1');
   if RW='1' then
-    stapR(CONV_INTEGER(RP(4 downto 0)))<=RPC;
+    stapR(CONV_INTEGER(RP(7 downto 0))):=RPC;
     RPCC<=RPC;
      else
-      RPCC<=stapR(CONV_INTEGER(RP(4 downto 0)));
+      RPCC<=stapR(CONV_INTEGER(RP(7 downto 0)));
     end if;
   end process;
 
