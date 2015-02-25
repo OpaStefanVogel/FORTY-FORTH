@@ -28,21 +28,21 @@ type REG is array(0 to 3) of STD_LOGIC_VECTOR (15 downto 0);
 type RAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (15 downto 0);
   signal ProgRAM: RAMTYPE:=(
   x"1234", -- BEGIN 1234
-  x"0100", -- 0100
+  x"E100", -- 0100
   x"A009", -- !
-  x"0100", -- 0100 
+  x"E100", -- 0100 
   x"A00A", -- @
   x"B300", -- DROP
   x"3210", -- BEGIN 3210
-  x"0100", -- 0100
+  x"E100", -- 0100
   x"A009", -- !
-  x"0100", -- 0100 
+  x"E100", -- 0100 
   x"A00A", -- @
   x"B300", -- DROP
   x"8FF1", -- AGAIN
   others=>x"0000");
-type RBBTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (7 downto 0);
-signal ramE000bisFFFF: RBBTYPE:=(
+type ByteRAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (7 downto 0);
+signal ByteRAM: ByteRAMTYPE:=(
   others=>x"00");
 type RXTYPE is array(0 to 1024-1) of STD_LOGIC_VECTOR (15 downto 0);
 shared variable ram2C00bis2FFF: RXTYPE:=(
@@ -66,7 +66,8 @@ signal stapR: STAPELTYPE:=(others=>x"0000");
 -- kompletten Speicher anschliessen
 signal PC_ZUM_ProgRAM,PD_VOM_ProgRAM: STD_LOGIC_VECTOR (15 downto 0);
 signal FETCH_VOM_ProgRAM,STORE_ZUM_RAM,EXFET,ADRESSE_ZUM_RAM: STD_LOGIC_VECTOR (15 downto 0);
-signal WE_ZUM_RAM,WE_ZUM_ProgRAM: STD_LOGIC;
+signal FETCH_VOM_ByteRAM: STD_LOGIC_VECTOR (15 downto 0);
+signal WE_ZUM_RAM,WE_ZUM_ProgRAM,WE_ZUM_ByteRAM: STD_LOGIC;
 
 
 begin
@@ -209,34 +210,34 @@ WE_O<=WE_ZUM_RAM;
 
 EXFET<=FETCH_VOM_ProgRAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else
 --       FETCH_VOM_RAM(7) when ADRESSE_ZUM_RAM(15 downto 10)="001011" else
---       x"00"&FETCH_VOM_RAM(13)(7 downto 0) when ADRESSE_ZUM_RAM(15 downto 13)="111" else
+       x"00"&FETCH_VOM_ByteRAM(7 downto 0) when ADRESSE_ZUM_RAM(15 downto 13)="111" else
        DAT_I;
 
 WE_ZUM_ProgRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else '0';
 --WE_ZUM_RAM(07)<=WSTORE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001011" else '0';
---WE_ZUM_RAM(13)<=WSTORE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="111" else '0';
+WE_ZUM_ByteRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="111" else '0';
 
 
 process 
 begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_ProgRAM='1' then 
-    ProgRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(10 downto 0)))<=STORE_ZUM_RAM; 
+    ProgRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(12 downto 0)))<=STORE_ZUM_RAM; 
     FETCH_VOM_ProgRAM<=STORE_ZUM_RAM; 
 	 else
-      FETCH_VOM_ProgRAM<=ProgRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(10 downto 0)));
+      FETCH_VOM_ProgRAM<=ProgRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(12 downto 0)));
       end if;
-  PD_VOM_ProgRAM<=ProgRAM(CONV_INTEGER(PC_ZUM_ProgRAM(10 downto 0)));
+  PD_VOM_ProgRAM<=ProgRAM(CONV_INTEGER(PC_ZUM_ProgRAM(12 downto 0)));
   end process;
 
---process 
---begin wait until (CLK_I'event and CLK_I='1');
---  if WE_ZUM_RAM(13)='1' then 
---    ramE000bisFFFF(CONV_INTEGER(ADRESSE_ZUM_RAM(12 downto 0)))<=STORE_ZUM_RAM(7 downto 0); 
---    FETCH_VOM_RAM(13)<=STORE_ZUM_RAM; 
---	 else
---      FETCH_VOM_RAM(13)<=x"00"&ramE000bisFFFF(CONV_INTEGER(ADRESSE_ZUM_RAM(12 downto 0)));
---      end if;
---  end process;
+process 
+begin wait until (CLK_I'event and CLK_I='1');
+  if WE_ZUM_ByteRAM='1' then 
+    ByteRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(12 downto 0)))<=STORE_ZUM_RAM(7 downto 0); 
+    FETCH_VOM_ByteRAM<=STORE_ZUM_RAM; 
+	 else
+      FETCH_VOM_ByteRAM<=x"00"&ByteRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(12 downto 0)));
+      end if;
+  end process;
 
 --Rueckkehrstapel:
 --process 
