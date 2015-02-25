@@ -26,7 +26,8 @@ architecture Step_8 of FortyForthProcessor is
 
 type REG is array(0 to 3) of STD_LOGIC_VECTOR (15 downto 0);
 type RAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (15 downto 0);
-  signal ProgRAM: RAMTYPE:=(
+-- Programmspeicher 0000H-1FFFH
+signal ProgRAM: RAMTYPE:=(
   x"0100", -- BEGIN 0100
   x"4007", -- 7 EXEUTE
   x"2D00", -- 2D00
@@ -50,9 +51,13 @@ type RAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (15 downto 0);
       x"A009", -- !
       x"A003", -- RETURN
   others=>x"0000");
+
+-- Rückkehrstapel
 type ByteRAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (7 downto 0);
 signal ByteRAM: ByteRAMTYPE:=(
   others=>x"00");
+
+-- Textspeicher
 type stapRAMTYPE is array(0 to 1024-1) of STD_LOGIC_VECTOR (15 downto 0);
 shared variable stapR: stapRAMTYPE:=(
   others=>x"0000");
@@ -71,7 +76,6 @@ signal stap1,stap2,stap3,stap0: STAPELTYPE:=(others=>x"0000");
 signal RPC,RPCC: STD_LOGIC_VECTOR (15 downto 0);
 signal RP: STD_LOGIC_VECTOR (15 downto 0):=x"3000";
 signal RW: STD_LOGIC;
---signal stapR: STAPELTYPE:=(others=>x"0000");
 -- kompletten Speicher anschliessen
 signal PC_ZUM_ProgRAM,PD_VOM_ProgRAM: STD_LOGIC_VECTOR (15 downto 0);
 signal STORE_ZUM_RAM,EXFET,ADRESSE_ZUM_RAM: STD_LOGIC_VECTOR (15 downto 0);
@@ -205,11 +209,10 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
   STORE_ZUM_STAPEL(2)<=R(2);
   STORE_ZUM_STAPEL(3)<=R(3);
   WE_ZUM_STAPEL<=W;
-  -- ADR_O, DAT_O, WE_O
+  -- ADR, DAT, WE, PC
   if WE='1' then ADRESSE_ZUM_RAM<=ADR; else ADRESSE_ZUM_RAM<=R(P(SP-1)); end if;
   STORE_ZUM_RAM<=DAT;
   WE_ZUM_RAM<=WE;
-  -- PC 
   PC_ZUM_ProgRAM<=PC;
   end process;
 
@@ -217,17 +220,19 @@ ADR_O<=ADRESSE_ZUM_RAM;
 DAT_O<=STORE_ZUM_RAM;
 WE_O<=WE_ZUM_RAM;
 
+-- hier werden die Lesedaten der unterschiedlichen Speicher zusammengefuehrt
 EXFET<=FETCH_VOM_ProgRAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else
        FETCH_VOM_stapR when ADRESSE_ZUM_RAM(15 downto 10)="001011" else
        x"00"&FETCH_VOM_ByteRAM(7 downto 0) when ADRESSE_ZUM_RAM(15 downto 13)="111" else
        DAT_I;
 
+-- hier wird WE auf die unterschiedlichen Speicher aufgeteilt
 WE_ZUM_ProgRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else '0';
 WE_ZUM_stapR  <=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001011" else '0';
 WE_ZUM_ByteRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="111" else '0';
 
 
-process 
+process -- Programmspeicher 0000H-1FFFH,
 begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_ProgRAM='1' then 
     ProgRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(12 downto 0)))<=STORE_ZUM_RAM; 
@@ -238,7 +243,7 @@ begin wait until (CLK_I'event and CLK_I='1');
   PD_VOM_ProgRAM<=ProgRAM(CONV_INTEGER(PC_ZUM_ProgRAM(12 downto 0)));
   end process;
 
-process 
+process -- Textspeicher E000H-FFFFH
 begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_ByteRAM='1' then 
     ByteRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(12 downto 0)))<=STORE_ZUM_RAM(7 downto 0); 
@@ -248,8 +253,7 @@ begin wait until (CLK_I'event and CLK_I='1');
       end if;
   end process;
 
-Rueckkehrstapel:
-process 
+process --Rueckkehrstapel, TRUE_DUAL_PORT
 begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_StapR='1' then 
     stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(7 downto 0))):=STORE_ZUM_RAM; 
