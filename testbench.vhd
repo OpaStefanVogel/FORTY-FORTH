@@ -73,6 +73,8 @@ begin
   -- clock generation
   CLK <= not CLK after 10 ns;
 
+
+EMIT_EMPFANGEN<=EMIT_GESENDET;
 end test_Step_8;
 
 
