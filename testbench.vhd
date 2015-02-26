@@ -9,7 +9,7 @@ end testbench;
 
 -------------------------------------------------------------------------------
 
-architecture test_Step_8 of testbench is
+architecture test_Step_9 of testbench is
 
 component top
   Port ( 
@@ -46,6 +46,7 @@ signal D_SIM: STD_LOGIC_VECTOR (15 downto 0);
 signal EMIT_GESENDET: STD_LOGIC;
 signal EMIT: STD_LOGIC_VECTOR (7 downto 0);
 signal EMIT_EMPFANGEN: STD_LOGIC:='0';
+signal emitcount: STD_LOGIC_VECTOR (15 downto 0);
 
 begin
 
@@ -72,9 +73,18 @@ begin
 
   -- clock generation
   CLK <= not CLK after 10 ns;
+  EMIT_EMPFANGEN<=EMIT_GESENDET after 200 ns;
 
 
-EMIT_EMPFANGEN<=EMIT_GESENDET;
-end test_Step_8;
+
+-- simuliert eine Verzögerung bis EMIT_BYTE empfangen ist
+--process begin
+--  if EMIT_EMPFANGEN/=EMIT_GESENDET then
+--    wait for 200 ns;
+--    EMIT_EMPFANGEN<=EMIT_GESENDET;
+--    end if;
+--  end process;
+
+end test_Step_9;
 
 
