@@ -15,6 +15,6 @@
 .. auch die libarys mal neu sondieren was nötig und was richtig
 .. Zoomtasten
 .. P01_top kann vorerst raus, 2D04 mit in testbench
-
+.. SP_SIM kann wieder unter PD_SIM in den Ports
 
 

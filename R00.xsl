@@ -12,7 +12,7 @@
     <!-->
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
-    <title>FORTY-FORTH by OpaStefanVogel</title>
+    <title>Step ?</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css"/>
     <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
@@ -65,5 +65,9 @@
 <xsl:template match="i"><xsl:copy-of select="." /></xsl:template>
 
 <xsl:template match="favicon"><img src="favicon.ico"/></xsl:template>
+<xsl:template match="ffterm">
+  <img src="favicon.ico" style="vertical-align:top"/>
+  <div class="ffterm"><xsl:apply-templates /></div>
+  </xsl:template>
 
 </xsl:stylesheet>

@@ -6,3 +6,13 @@ code { font-family:monospace;
        font-size: 110%; 
        #border: solid;
        }
+
+.ffterm {
+  display: inline-block;
+  padding: 4px;
+  margin-left: 2px;
+  border: solid;
+  background-color: lightyellow;
+  min-width: 300px;
+  min-height: 120px;
+  }
