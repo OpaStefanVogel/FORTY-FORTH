@@ -11,6 +11,11 @@ entity FortyForthProcessor is
     DAT_O: out STD_LOGIC_VECTOR (15 downto 0);
     WE_O: out STD_LOGIC;
     
+    -- EMIT --
+    EMIT_GESENDET: out STD_LOGIC;
+    EMIT: out STD_LOGIC_VECTOR (7 downto 0);
+    EMIT_EMPFANGEN: in STD_LOGIC;
+    
     -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     PD_SIM: out STD_LOGIC_VECTOR (15 downto 0);
@@ -253,13 +258,17 @@ signal STORE_ZUM_RAM,EXFET,ADRESSE_ZUM_RAM: STD_LOGIC_VECTOR (15 downto 0);
 signal FETCH_VOM_ProgRAM,FETCH_VOM_ByteRAM,FETCH_VOM_stapR: STD_LOGIC_VECTOR (15 downto 0);
 signal WE_ZUM_RAM,WE_ZUM_ProgRAM,WE_ZUM_ByteRAM,WE_ZUM_stapR: STD_LOGIC;
 -- fuer EMIT-Ausgabe
-signal SCHREIBBIT1,SCHREIBBIT2,XOFF_INPUT_L: STD_LOGIC:='0';
-signal EMIT: STD_LOGIC_VECTOR (15 downto 0);
+signal EMIT_GESENDET_L,EMIT_EMPFANGEN_R,XOFF_INPUT_L: STD_LOGIC:='0';
 
 
 begin
 
-process
+process begin wait until (CLK_I'event and CLK_I='1'); --ruhende Eingangsdaten für FortyForthprocessor
+  EMIT_EMPFANGEN_R<=EMIT_EMPFANGEN;
+  end process;
+  
+
+process -- FortyForthProcessor
 variable PC,PD,ADR,DAT,DIST: STD_LOGIC_VECTOR (15 downto 0):=x"0000";
 variable WE: STD_LOGIC;
 variable SP: integer:=0;
@@ -333,9 +342,9 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
       T:=2;
       SP:=SP-1;
     elsif PD=x"A005" then -- EMIT Zeichen ausgeben
-      if (SCHREIBBIT1=SCHREIBBIT2) and XOFF_INPUT_L='0' then
-        EMIT<=A;
-        SCHREIBBIT1<=not SCHREIBBIT2;
+      if (EMIT_GESENDET_L=EMIT_EMPFANGEN_R) and XOFF_INPUT_L='0' then
+        EMIT<=A(7 downto 0);
+        EMIT_GESENDET_L<=not EMIT_EMPFANGEN_R;
         T:=0;
         SP:=SP-1;
         else PC:=PC-1; end if; -- warten
@@ -400,6 +409,7 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
 ADR_O<=ADRESSE_ZUM_RAM;
 DAT_O<=STORE_ZUM_RAM;
 WE_O<=WE_ZUM_RAM;
+EMIT_GESENDET<=EMIT_GESENDET_L;
 
 -- hier werden die Lesedaten der unterschiedlichen Speicher zusammengefuehrt
 EXFET<=FETCH_VOM_ProgRAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else
