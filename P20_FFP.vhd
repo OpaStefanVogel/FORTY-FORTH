@@ -238,9 +238,10 @@ type stapRAMTYPE is array(0 to 1024-1) of STD_LOGIC_VECTOR (15 downto 0);
 shared variable stapR: stapRAMTYPE:=(
   others=>x"0000");
 
---diese Funktion wertet von SP nur die beiden niedrigsten Bits aus
+--diese Funktion übernimmt von SP nur die beiden niedrigsten Bits
   function P(SP : integer) return integer is begin
-    return CONV_INTEGER(CONV_UNSIGNED(SP,2));
+--    return CONV_INTEGER(CONV_UNSIGNED(SP,2));
+    return SP mod 4;
     end;
 
 -- alles Signale um die Stapel-RAM's zu machen.
