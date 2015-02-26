@@ -9,6 +9,12 @@
 .. alle CONV_UNSIGNED wieder in STD_LOGIC_VECTOR machen
 .. ob 0-0FFF oder 1FFF, ebenso E000-EFFF oder FFFF
 .. write-first oder UNCHANGED...
-.. vorherige Simulation bereits in TZcl-Console beenden
+.. vorherige Simulation bereits in Tcl-Console beenden
 .. stapR und stapRAM besser unterscheiden
+.. SP mod 4 mal versuchen
+.. auch die libarys mal neu sondieren was nötig und was richtig
+.. Zoomtasten
+.. P01_top kann vorerst raus, 2D04 mit in testbench
+
+
 

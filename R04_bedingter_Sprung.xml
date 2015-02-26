@@ -21,7 +21,8 @@ Dieser wird nur ausgeführt, wenn der oberste Stapeleintrag gleich Null ist. Das
 
 <term>your-repo$ git checkout Step_4
 your-repo$ git diff Step_3 Step_4</term>
-<term>Tcl Console: launch_simulation
+<term>Tcl Console: close_sim
+Tcl Console: launch_simulation
 Tcl Console: run 1000 ns</term><favicon/> Ergebnis: Bei LEDS=00 wird das sonst anschließende LEDS=55 von IF übersprungen und es geht gleich mit LEDS=-1(=FF) weiter. 
 
 ab Zeitpunkt in ns     Wert von LEDS

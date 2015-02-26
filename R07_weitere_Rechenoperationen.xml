@@ -33,7 +33,8 @@ Beispielprogramm <i>willkürlich zusammengestellte Rechenoperationen</i>
 
 <term>your-repo$ git checkout Step_7
 your-repo$ git diff Step_6 Step_7</term>
-<term>Tcl Console: launch_simulation
+<term>Tcl Console: close_sim
+Tcl Console: launch_simulation
 Tcl Console: run 340 ns</term><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     Wert von C,    B,    A=LEDS, 
      0                          UUUU  UUUU  UUUU

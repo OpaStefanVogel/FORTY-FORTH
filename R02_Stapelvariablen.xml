@@ -26,7 +26,8 @@ Variable T und das Zurückspeichern sind jetzt zusätzlich hinzugekommen. Der Vo
 Sofern das Terminal aus Step_1 noch zugänglich ist: 
 <term>your-repo$ git checkout Step_2
 your-repo$ git diff Step_1 Step_2 # mit Q beenden</term>und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft, in der Tcl Console nur "Kursor hoch" tippen bis zu
-<term>Tcl Console: launch_simulation # = Run Behavioral Simulation
+<term>Tcl Console: close_sim
+Tcl Console: launch_simulation
 Tcl Console: run 1000 ns
 </term><favicon/> gleiches Ergebnis wie in Step_1, jedoch ab LEDS=76 abwärts gezählt.
 

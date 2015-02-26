@@ -49,7 +49,8 @@ Beispielprogramm <i></i>
  
 <term>your-repo$ git checkout Step_8
 your-repo$ git diff Step_7 Step_8</term>
-<term>Tcl Console: launch_simulation
+<term>Tcl Console: close_sim
+Tcl Console: launch_simulation
 Tcl Console: run 1500 ns</term><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     LEDS,
        0                UU 

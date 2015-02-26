@@ -41,7 +41,8 @@ Hier ein Beispielprogramm, <i>auf den Stapel 4, 3, 2, 1 der Reihe nach alle Wort
 
 <term>your-repo$ git checkout Step_6
 your-repo$ git diff Step_5 Step_6</term>
-<term>Tcl Console: launch_simulation
+<term>Tcl Console: close_sim
+Tcl Console: launch_simulation
 Tcl Console: run 340 ns</term><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     Wert von D,  C,  B,  A=LEDS
      0                          U   U   U   U
