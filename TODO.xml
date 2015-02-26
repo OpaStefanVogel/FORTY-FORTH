@@ -16,5 +16,11 @@
 .. Zoomtasten
 .. P01_top kann vorerst raus, 2D04 mit in testbench
 .. SP_SIM kann wieder unter PD_SIM in den Ports
-
+.. mach läuft wieder: Vergleiche
+   .. XON XOFF über !
+   .. paar NOOP's sind zusätzlich drin
+   .. das neue R<... muss ich wohl aus S3 holen
+   das ist das wesentliche aus diff
+.. Step ? noch füllen
+.. und doch gleich Vivado &
 
