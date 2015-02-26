@@ -37,11 +37,11 @@ signal LEDS : STD_LOGIC_VECTOR (7 downto 0);
 
 signal PC_SIM: STD_LOGIC_VECTOR (15 downto 0);
 signal PD_SIM: STD_LOGIC_VECTOR (15 downto 0);
-signal SP_SIM: integer;
 signal A_SIM: STD_LOGIC_VECTOR (15 downto 0);
 signal B_SIM: STD_LOGIC_VECTOR (15 downto 0);
 signal C_SIM: STD_LOGIC_VECTOR (15 downto 0);
 signal D_SIM: STD_LOGIC_VECTOR (15 downto 0);
+signal SP_SIM: integer;
     -- EMIT --
 signal EMIT_GESENDET: STD_LOGIC;
 signal EMIT: STD_LOGIC_VECTOR (7 downto 0);
@@ -73,7 +73,7 @@ begin
 
   -- clock generation
   CLK <= not CLK after 10 ns;
-  EMIT_EMPFANGEN<=EMIT_GESENDET after 200 ns;
+  EMIT_EMPFANGEN<=EMIT_GESENDET after 800 ns;
 
 
 
