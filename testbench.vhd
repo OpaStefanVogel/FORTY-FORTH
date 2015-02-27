@@ -89,9 +89,37 @@ begin
 
   -- simuliert eine Tastatureingabe
   process begin
-    wait for 20000 ns;
+    wait for 100000 ns;
     KEY_GESENDET<=not KEY_GESENDET;
-    KEY_BYTE<=x"37";
+    KEY_BYTE<=x"35";
+    wait for 30000 ns;
+    KEY_GESENDET<=not KEY_GESENDET;
+    KEY_BYTE<=x"36";
+    wait for 30000 ns;
+    KEY_GESENDET<=not KEY_GESENDET;
+    KEY_BYTE<=x"20";
+    wait for 30000 ns;
+    KEY_GESENDET<=not KEY_GESENDET;
+    KEY_BYTE<=x"38";
+    wait for 30000 ns;
+    KEY_GESENDET<=not KEY_GESENDET;
+    KEY_BYTE<=x"39";
+    wait for 30000 ns;
+    KEY_GESENDET<=not KEY_GESENDET;
+    KEY_BYTE<=x"20";
+    wait for 30000 ns;
+    KEY_GESENDET<=not KEY_GESENDET;
+    KEY_BYTE<=x"2A";
+    wait for 30000 ns;
+    KEY_GESENDET<=not KEY_GESENDET;
+    KEY_BYTE<=x"20";
+    wait for 30000 ns;
+    KEY_GESENDET<=not KEY_GESENDET;
+    KEY_BYTE<=x"2E";
+    wait for 30000 ns;
+    KEY_GESENDET<=not KEY_GESENDET;
+    KEY_BYTE<=x"0A";
+    wait for 1000 ms;
   end process;
 
 end test_Step_9;
