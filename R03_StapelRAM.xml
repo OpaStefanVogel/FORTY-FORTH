@@ -32,11 +32,11 @@ Als Beispielprogramm für den jetzt verfügbaren Stapelspeicher <i>wird die Zahl
   <tr><td>000F</td><td>8FF0</td><td>AGAIN</td><td></td><td>0</td></tr>
   </table>Nachdem die Zahlen 1, 2, 3, 4, 5 auf den Stapel gebracht sind, wird fünfmal die oberste Zahl auf Adresse 2D04 ausgegeben. AGAIN geht wieder zurück zu BEGIN 0 und alles geht von vorn los.
 
-<term>your-repo$ git checkout Step_3
-your-repo$ git diff Step_2 Step_3 # mit Q beenden</term>
-<term>Tcl Console: close_sim
-Tcl Console: launch_simulation
-Tcl Console: run 1000 ns</term><favicon/> Ergebnis: 
+<term>git checkout Step_3
+git diff Step_2 Step_3 # mit Q beenden</term>
+<tterm>close_sim
+launch_simulation
+run 1000 ns</tterm><favicon/> Ergebnis: 
 
 ab Zeitpunkt in ns     Wert von LEDS
      0                  UU

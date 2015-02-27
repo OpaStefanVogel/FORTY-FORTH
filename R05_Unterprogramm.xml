@@ -27,9 +27,9 @@ RW    = "write enable" für stapR
 
 <term>your-repo$ git checkout Step_5
 your-repo$ git diff Step_4 Step_5</term>
-<term>Tcl Console: close_sim
-Tcl Console: launch_simulation
-Tcl Console: run 1000 ns</term><favicon/> Ergebnis: 
+<tterm>close_sim
+launch_simulation
+run 1000 ns</tterm><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     Wert von LEDS
      0                  UU
    110                  01

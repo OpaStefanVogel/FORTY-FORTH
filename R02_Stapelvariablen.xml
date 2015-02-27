@@ -23,13 +23,15 @@ R(SP-4) bleibt unverändert
 
 Variable T und das Zurückspeichern sind jetzt zusätzlich hinzugekommen. Der Vorteil soll sein, dass man bei der Programmierung der einzelnen Rechenoperationen nicht immer wieder R(SP-1), R(SP-2)... schreiben muss und diese Indexberechnungen eventuell sogar wiederholt compiliert werden. Außerdem wird R(SP) mit einer zusätzliche Funktion P(SP) umgeschrieben in R(P(SP)), damit an den Array-Grenzen kein Indexüberlauf etwa durch SP-1=-1 entsteht. Nun nochmal ein Programmlauf, dabei werden nach <code>git diff</code> die einzelnen Unterschiede im Quelltext mit ausgegeben. Am Ergebnis sollte sich aber nichts wesentliches ändern. Um wenigstens einen äußerlichen Unterschied zu sehen, habe ich den <i>Startwert der Zählschleife auf 77 gesetzt und die Schrittweite von 1 auf -1</i>. Außerdem werden jetzt die lokalen Variablen PC, PD, SP, A, B, C und D zu Beginn jedes Taktes CLK als Signale PC_SIM... bis in das top-Modul durchgereicht und in der Vivado - Simulation zusätzlich mit ausgegeben, das macht den Programmablauf transparenter.  
 
-Sofern das Terminal aus Step_1 noch zugänglich ist: 
-<term>your-repo$ git checkout Step_2
-your-repo$ git diff Step_1 Step_2 # mit Q beenden</term>und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft, in der Tcl Console nur "Kursor hoch" tippen bis zu
-<term>Tcl Console: close_sim
-Tcl Console: launch_simulation
-Tcl Console: run 1000 ns
-</term><favicon/> gleiches Ergebnis wie in Step_1, jedoch ab LEDS=76 abwärts gezählt.
+Sofern das Startterminal aus Step_1 noch zugänglich ist:
+ 
+<term>git checkout Step_2
+git diff Step_1 Step_2 # mit Q beenden</term>und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft:
+
+<tterm>close_sim # falls Step_1 noch offen ist
+launch_simulation
+run 1000 ns
+</tterm><favicon/> gleiches Ergebnis wie in Step_1, jedoch ab LEDS=76 abwärts gezählt.
 
 ab Zeitpunkt in ns     Wert von LEDS
      0                  UU

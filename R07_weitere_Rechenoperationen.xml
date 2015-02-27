@@ -31,11 +31,11 @@ Beispielprogramm <i>willkürlich zusammengestellte Rechenoperationen</i>
   <tr><td>000F</td><td>8FF0</td><td>AGAIN</td><td></td><td>0</td></tr>
   </table>Auch hier keine extra Ausgabe, Ausgabeport LEDS ist immernoch direkt mit der Ausgabe des obersten Stapeleintrages A_SIM verknüpft.
 
-<term>your-repo$ git checkout Step_7
-your-repo$ git diff Step_6 Step_7</term>
-<term>Tcl Console: close_sim
-Tcl Console: launch_simulation
-Tcl Console: run 340 ns</term><favicon/> Ergebnis: 
+<term>git checkout Step_7
+git diff Step_6 Step_7</term>
+<tterm>close_sim
+launch_simulation
+run 340 ns</tterm><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     Wert von C,    B,    A=LEDS, 
      0                          UUUU  UUUU  UUUU
     40                          0000  0000  1234

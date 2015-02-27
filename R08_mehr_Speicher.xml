@@ -47,11 +47,11 @@ Beispielprogramm <i></i>
   <tr><td>0015</td><td>A003</td><td>RETURN</td><td>0100</td><td>1</td></tr>
   </table>LEDS ist wieder an Ausgabeadresse 2D04 angeschlossen. Jede der neu verwendbaren Speicheradressen 0100, 2D00 und E100 wird je einmal mit FFFF beschrieben und einmal mit 0000. Jedesmal gleich wieder ausgelesen und das Ergebnis auf Adresse 2D04 ausgegeben, um zu sehen, ob das Umspeichern auf die verschiedenen Werte FFFF und 0000 funktioniert hat. Das erfolgt alles im Unterprogramm ab Adresse 7, welches ein weiteres Unterprogramm ab Adresse 000F aufruft. 
  
-<term>your-repo$ git checkout Step_8
-your-repo$ git diff Step_7 Step_8</term>
-<term>Tcl Console: close_sim
-Tcl Console: launch_simulation
-Tcl Console: run 1500 ns</term><favicon/> Ergebnis: 
+<term>git checkout Step_8
+git diff Step_7 Step_8</term>
+<tterm>close_sim
+launch_simulation
+run 1500 ns</tterm><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     LEDS,
        0                UU 
      230                FF

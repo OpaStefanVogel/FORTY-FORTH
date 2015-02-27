@@ -55,7 +55,10 @@
   </xsl:template>
 
 
-<xsl:template match="term">
+<xsl:template match="term">Terminal: <i>your-repo&amp; ...</i>
+<pre><code><xsl:apply-templates /></code></pre>
+  </xsl:template>
+<xsl:template match="tterm">Tcl Console: <i>"Type a Tcl command here"</i>
   <pre><code><xsl:apply-templates /></code></pre>
   </xsl:template>
 
