@@ -26,10 +26,10 @@ SP = Stapelhöhe nach Ausführung des Programmschrittes
   <tr><td>0006</td><td>8FFA</td><td>AGAIN</td><td>1</td><td>1</td></tr>
 </table>Wer sich noch nicht so sehr mit FORTH auskennt: Anfangs werden "0" und "1" als Zahlen auf den Stapel abgelegt, dann mit "+" addiert, mit "DUP" das Ergebnis dupliziert und "!" speichert das Duplizierte auf der zuvor eingegebenen Adresse "2D04". "AGAIN" springt zurück zu "BEGIN". "BEGIN" ist nur eine Markierung und benötigt selbst keinen eigenen Programmcode.
 
-Genug der Worte, das Programm soll endlich loslaufen. In einem (neuen) Terminal die Programmversion auswählen:
+Genug der Worte, das Programm soll endlich loslaufen. Im Startterminal die Programmversion auswählen:
 
 <term>git checkout Step_1
-git diff # mit Taste Q beenden</term>anschließend in der Vivado - Tcl Console: <i>"Type a Tcl command here"</i> die Simulation starten:
+git diff # mit Taste Q beenden</term>anschließend in Vivado die Simulation starten:
 
 <tterm>launch_simulation # entspricht Button "Run Behavioral Simulation"
 run 1000 ns</tterm><favicon/> Ergebnis: Die Variable LEDS enthält den auf Adresse 2D04 ausgegebenen Hexadezimalwert
