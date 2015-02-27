@@ -28,7 +28,7 @@ Sofern das Startterminal aus Step_1 noch zugänglich ist:
 <term>git checkout Step_2
 git diff Step_1 Step_2 # mit Q beenden</term>und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft:
 
-<tterm>close_sim # falls Step_1 noch offen ist
+<tterm>close_sim -force -quiet
 launch_simulation
 run 1000 ns
 </tterm><favicon/> gleiches Ergebnis wie in Step_1, jedoch ab LEDS=76 abwärts gezählt.

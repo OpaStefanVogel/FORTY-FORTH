@@ -33,7 +33,7 @@ Beispielprogramm <i>willkürlich zusammengestellte Rechenoperationen</i>
 
 <term>git checkout Step_7
 git diff Step_6 Step_7</term>
-<tterm>close_sim
+<tterm>close_sim -force -quiet
 launch_simulation
 run 340 ns</tterm><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     Wert von C,    B,    A=LEDS, 

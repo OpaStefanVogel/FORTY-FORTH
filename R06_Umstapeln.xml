@@ -41,7 +41,7 @@ Hier ein Beispielprogramm, <i>auf den Stapel 4, 3, 2, 1 der Reihe nach alle Wort
 
 <term>git checkout Step_6
 git diff Step_5 Step_6</term>
-<tterm>close_sim
+<tterm>close_sim -force -quiet
 launch_simulation
 run 340 ns</tterm><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     Wert von D,  C,  B,  A=LEDS

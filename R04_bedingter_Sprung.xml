@@ -21,7 +21,7 @@ Dieser wird nur ausgeführt, wenn der oberste Stapeleintrag gleich Null ist. Das
 
 <term>git checkout Step_4
 git diff Step_3 Step_4</term>
-<tterm>close_sim
+<tterm>close_sim -force -quiet
 launch_simulation
 run 1000 ns</tterm><favicon/> Ergebnis: Bei LEDS=00 wird das sonst anschließende LEDS=55 von IF übersprungen und es geht gleich mit LEDS=-1(=FF) weiter. 
 

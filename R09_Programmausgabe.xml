@@ -21,7 +21,7 @@ Ein Beispielprogramm wie etwa
 
 <term>git checkout Step_9
 git diff Step_8 Step_9</term>
-<tterm>close_sim
+<tterm>close_sim -force -quiet
 launch_simulation
 run 20000 ns</tterm>Beginnend ab 360 ns wird alle 820 ns auf EMIT ein weiteres Zeichen der Hexadezimalfolge 46-4F-52-54-59-2d-46-4f-52-54-48-0A-0A-6F-6B-0A ausgegeben. In einem echten Terminal würde das etwa so aussehen:
 

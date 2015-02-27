@@ -34,7 +34,7 @@ Als Beispielprogramm für den jetzt verfügbaren Stapelspeicher <i>wird die Zahl
 
 <term>git checkout Step_3
 git diff Step_2 Step_3 # mit Q beenden</term>
-<tterm>close_sim
+<tterm>close_sim -force -quiet
 launch_simulation
 run 1000 ns</tterm><favicon/> Ergebnis: 
 

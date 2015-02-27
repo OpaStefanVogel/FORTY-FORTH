@@ -49,7 +49,7 @@ Beispielprogramm <i></i>
  
 <term>git checkout Step_8
 git diff Step_7 Step_8</term>
-<tterm>close_sim
+<tterm>close_sim -force -quiet
 launch_simulation
 run 1500 ns</tterm><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     LEDS,

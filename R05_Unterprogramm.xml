@@ -27,7 +27,7 @@ RW    = "write enable" für stapR
 
 <term>your-repo$ git checkout Step_5
 your-repo$ git diff Step_4 Step_5</term>
-<tterm>close_sim
+<tterm>close_sim -force -quiet
 launch_simulation
 run 1000 ns</tterm><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     Wert von LEDS
