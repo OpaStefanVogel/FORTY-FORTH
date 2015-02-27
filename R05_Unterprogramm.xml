@@ -25,8 +25,8 @@ RW    = "write enable" für stapR
   <tr><td>0008</td><td>A003</td><td>; ( RETURN )</td><td>3</td><td>1</td></tr>
   </table>Das Unterprogramm geht von PC=0003 bis PC=0008. Es wird in der Programmschleife PC=0001 bis PC=0002 wiederholt aufgerufen. 
 
-<term>your-repo$ git checkout Step_5
-your-repo$ git diff Step_4 Step_5</term>
+<term>git checkout Step_5
+git diff Step_4 Step_5</term>
 <tterm>close_sim -force -quiet
 launch_simulation
 run 1000 ns</tterm><favicon/> Ergebnis: 
