@@ -21,6 +21,10 @@ component top
     EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
     EMIT_EMPFANGEN: in STD_LOGIC;
             
+     -- EMIT --
+   KEY_GESENDET: in STD_LOGIC;
+   KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0);
+
     -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     PD_SIM: out STD_LOGIC_VECTOR (15 downto 0);
@@ -46,7 +50,9 @@ signal SP_SIM: integer;
 signal EMIT_GESENDET: STD_LOGIC;
 signal EMIT_BYTE: STD_LOGIC_VECTOR (7 downto 0);
 signal EMIT_EMPFANGEN: STD_LOGIC:='0';
-signal emitcount: STD_LOGIC_VECTOR (15 downto 0);
+-- KEY --
+signal KEY_GESENDET: STD_LOGIC:='0';
+signal KEY_BYTE: STD_LOGIC_VECTOR (7 downto 0);
 
 begin
 
@@ -60,6 +66,10 @@ begin
       EMIT_GESENDET => EMIT_GESENDET,
       EMIT_BYTE => EMIT_BYTE,
       EMIT_EMPFANGEN => EMIT_EMPFANGEN,
+
+      -- KEY --
+      KEY_GESENDET => KEY_GESENDET,
+      KEY_BYTE => KEY_BYTE,
 
       -- nur fuer Simulation
       PC_SIM => PC_SIM,
@@ -77,13 +87,12 @@ begin
 
 
 
--- simuliert eine Verzögerung bis EMIT_BYTE empfangen ist
---process begin
---  if EMIT_EMPFANGEN/=EMIT_GESENDET then
---    wait for 200 ns;
---    EMIT_EMPFANGEN<=EMIT_GESENDET;
---    end if;
---  end process;
+  -- simuliert eine Tastatureingabe
+  process begin
+    wait for 20000 ns;
+    KEY_GESENDET<=not KEY_GESENDET;
+    KEY_BYTE<=x"37";
+  end process;
 
 end test_Step_9;
 

@@ -16,7 +16,11 @@ entity FortyForthProcessor is
     EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
     EMIT_EMPFANGEN: in STD_LOGIC;
     
-    -- nur zur Simulation und Fehlersuche:
+     -- EMIT --
+    KEY_GESENDET: in STD_LOGIC;
+    KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0);
+
+   -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     PD_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     SP_SIM: out integer;
@@ -260,12 +264,16 @@ signal FETCH_VOM_ProgRAM,FETCH_VOM_ByteRAM,FETCH_VOM_stapR: STD_LOGIC_VECTOR (15
 signal WE_ZUM_RAM,WE_ZUM_ProgRAM,WE_ZUM_ByteRAM,WE_ZUM_stapR: STD_LOGIC;
 -- fuer EMIT-Ausgabe
 signal EMIT_GESENDET_LOCAL,EMIT_EMPFANGEN_RUHEND,XOFF_INPUT_L: STD_LOGIC:='0';
+signal KEY_EMPFANGEN_LOCAL,KEY_GESENDET_RUHEND: STD_LOGIC:='0';
+signal KEY_BYTE_RUHEND: STD_LOGIC_VECTOR (7 downto 0);
 
 
 begin
 
 process begin wait until (CLK_I'event and CLK_I='1'); --ruhende Eingangsdaten für FortyForthprocessor
   EMIT_EMPFANGEN_RUHEND<=EMIT_EMPFANGEN;
+  KEY_BYTE_RUHEND<=KEY_BYTE;
+  KEY_GESENDET_RUHEND<=KEY_GESENDET;
   end process;
   
 
@@ -297,7 +305,12 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
   T:=0;
   -- Rueckkehrstapel
   RW<='0';
-
+  -- KEY --
+  if KEY_EMPFANGEN_LOCAL/=KEY_GESENDET_RUHEND then 
+    PD:=x"4016";
+    KEY_EMPFANGEN_LOCAL<=KEY_GESENDET_RUHEND;
+    end if;
+ 
   if PD(15 downto 13)="010" then                 -- 4000-5FFF Unterprogrammaufruf
     RPC<=PC;PC:=PD and x"3FFF";RP<=RP-1;RW<='1';
     elsif PD(15 downto 12)=x"8" then PC:=PC+DIST;-- 8000-8FFF relativer Sprung
@@ -360,6 +373,7 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
       SP:=SP-2;
     elsif PD=x"A00A" then -- FETCH Speicheradresse lesen
       case A is
+        when x"D000" => D:=x"00"&KEY_BYTE_RUHEND;
         when x"D001" => A:=CONV_STD_LOGIC_VECTOR(SP,16);
         when x"D002" => A:=RP;
         when x"D003" => A:=PC;
