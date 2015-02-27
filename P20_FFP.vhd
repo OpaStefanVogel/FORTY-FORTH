@@ -291,11 +291,18 @@ variable STAK: STD_LOGIC_VECTOR (7 downto 0);
 -- fuer Rechenoperationen mit Uebertrag
 variable U: STD_LOGIC_VECTOR (31 downto 0);
 
-begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
-  PD:=PD_VOM_ProgRAM;                                   PC_SIM<=PC;
-  PC:=PC+1;                                             PD_SIM<=PD;
-  WE:='0';                                              SP_SIM<=SP;
-  DIST:=PD(11)&PD(11)&PD(11)&PD(11)&PD(11 downto 0);
+begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
+  -- ob ein KEY aingetroffen ist --
+  if KEY_EMPFANGEN_LOCAL/=KEY_GESENDET_RUHEND then 
+    KEY_EMPFANGEN_LOCAL<=KEY_GESENDET_RUHEND;
+    PD:=x"4016";
+    PC:=PC;
+    else
+      PD:=PD_VOM_ProgRAM;
+      PC:=PC+1;
+      end if;                                           -- Simulation --
+  WE:='0';                                              PD_SIM<=PD;
+  DIST:=PD(11)&PD(11)&PD(11)&PD(11)&PD(11 downto 0);    SP_SIM<=SP;
   -- oberste 4 Stapeleintraege entnehmen
   R:=HOLE_VOM_STAPEL;                                   -- Simulation --
   A:=R(P(SP-1));                                        A_SIM<=A;
@@ -305,11 +312,6 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
   T:=0;
   -- Rueckkehrstapel
   RW<='0';
-  -- KEY --
-  if KEY_EMPFANGEN_LOCAL/=KEY_GESENDET_RUHEND then 
-    PD:=x"4016";
-    KEY_EMPFANGEN_LOCAL<=KEY_GESENDET_RUHEND;
-    end if;
  
   if PD(15 downto 13)="010" then                 -- 4000-5FFF Unterprogrammaufruf
     RPC<=PC;PC:=PD and x"3FFF";RP<=RP-1;RW<='1';
@@ -373,7 +375,7 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
       SP:=SP-2;
     elsif PD=x"A00A" then -- FETCH Speicheradresse lesen
       case A is
-        when x"D000" => D:=x"00"&KEY_BYTE_RUHEND;
+        when x"D000" => A:=x"00"&KEY_BYTE_RUHEND;
         when x"D001" => A:=CONV_STD_LOGIC_VECTOR(SP,16);
         when x"D002" => A:=RP;
         when x"D003" => A:=PC;
