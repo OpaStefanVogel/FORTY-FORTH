@@ -66,6 +66,7 @@
 <xsl:template match="table"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="code"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="i"><xsl:copy-of select="." /></xsl:template>
+<xsl:template match="u"><xsl:copy-of select="." /></xsl:template>
 
 <xsl:template match="favicon"><img src="favicon.ico"/></xsl:template>
 <xsl:template match="ffterm">
