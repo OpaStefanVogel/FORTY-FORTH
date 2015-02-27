@@ -4,8 +4,8 @@
 
 Variablen:
 KEY_BYTE      = enthält das vom Nutzer eingegebene Byte
-KEY_GESENDET  = wird negiert, wenn dieses Byte abgeschickt wurde
-Es fehlt eine Variable KEY_EMPFANGEN mit der gleichen Funktion wie EMIT_EMPFSNGEN, ich hatte sie bisher nicht gebraucht.
+KEY_GESENDET  = wird invertiert, wenn dieses Byte abgeschickt wurde
+Es fehlt eine Variable KEY_EMPFANGEN mit der gleichen Funktion wie EMIT_EMPFANGEN, ich hatte sie bisher nicht gebraucht.
 
 KEY  ( --> n ) wartet auf Nutzereingabe eines Zeichens und gibt es als n auf dem Stapel zurück.
 *    ( a b --> a*b ) Multiplikation

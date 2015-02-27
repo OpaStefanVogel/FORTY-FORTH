@@ -4,8 +4,8 @@
 
 Variablen:
 EMIT           = enthält das auszugebende Byte
-EMIT_GESENDET  = wird negiert, wenn ein Byte gesendet wurde,
-EMIT_EMPFANGEN = muss vom Empfänger negiert werden. Das Programm wartet solange mit dem Absenden des nächsten Bytes.
+EMIT_GESENDET  = wird invertiert, wenn ein Byte gesendet wurde,
+EMIT_EMPFANGEN = muss vom Empfänger invertiert werden. Das Programm wartet solange mit dem Absenden des nächsten Bytes.
 
 EMIT  ( n --> ) gibt n auf Port EMIT aus.
 
