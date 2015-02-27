@@ -18,7 +18,7 @@ component top
 
     -- EMIT --
     EMIT_GESENDET: out STD_LOGIC;
-    EMIT: out STD_LOGIC_VECTOR (7 downto 0);
+    EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
     EMIT_EMPFANGEN: in STD_LOGIC;
             
     -- nur zur Simulation und Fehlersuche:
@@ -44,7 +44,7 @@ signal D_SIM: STD_LOGIC_VECTOR (15 downto 0);
 signal SP_SIM: integer;
     -- EMIT --
 signal EMIT_GESENDET: STD_LOGIC;
-signal EMIT: STD_LOGIC_VECTOR (7 downto 0);
+signal EMIT_BYTE: STD_LOGIC_VECTOR (7 downto 0);
 signal EMIT_EMPFANGEN: STD_LOGIC:='0';
 signal emitcount: STD_LOGIC_VECTOR (15 downto 0);
 
@@ -58,7 +58,7 @@ begin
 
       -- EMIT --
       EMIT_GESENDET => EMIT_GESENDET,
-      EMIT => EMIT,
+      EMIT_BYTE => EMIT_BYTE,
       EMIT_EMPFANGEN => EMIT_EMPFANGEN,
 
       -- nur fuer Simulation

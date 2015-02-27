@@ -13,7 +13,7 @@ entity FortyForthProcessor is
     
     -- EMIT --
     EMIT_GESENDET: out STD_LOGIC;
-    EMIT: out STD_LOGIC_VECTOR (7 downto 0);
+    EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
     EMIT_EMPFANGEN: in STD_LOGIC;
     
     -- nur zur Simulation und Fehlersuche:
@@ -344,7 +344,7 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
       SP:=SP-1;
     elsif PD=x"A005" then -- EMIT Zeichen ausgeben
       if (EMIT_GESENDET_LOCAL=EMIT_EMPFANGEN_RUHEND) and XOFF_INPUT_L='0' then
-        EMIT<=A(7 downto 0);
+        EMIT_BYTE<=A(7 downto 0);
         EMIT_GESENDET_LOCAL<=not EMIT_EMPFANGEN_RUHEND;
         T:=0;
         SP:=SP-1;
