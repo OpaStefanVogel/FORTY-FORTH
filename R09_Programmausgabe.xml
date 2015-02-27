@@ -3,11 +3,11 @@
 <los>Programmausgabe
 
 Variablen:
-EMIT           = enthält das auszugebende Byte
+EMIT_BYTE      = enthält das auszugebende Byte
 EMIT_GESENDET  = wird invertiert, wenn ein Byte gesendet wurde,
 EMIT_EMPFANGEN = muss vom Empfänger invertiert werden. Das Programm wartet solange mit dem Absenden des nächsten Bytes.
 
-EMIT  ( n --> ) gibt n auf Port EMIT aus.
+EMIT  ( n --> ) gibt n auf Port EMIT_BYTE aus.
 
 Ein Beispielprogramm wie etwa
 <table border="1"><tr><th>PC</th><th>PD</th><th>FORTH-Notation</th><th>Stapelinhalt</th><th>SP</th></tr>

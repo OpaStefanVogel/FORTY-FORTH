@@ -9,7 +9,7 @@ OR     ( a b --> c )
 U+     ( a b c --> d e )
 U*     ( a b c --> d e )
 
-MINUS wechselt das Vorzeichen des obersten Stapeleintrages und not bildet das bitweise Komplement. AND und OR verknüpfen die beiden oberen Stapeleinträge bitweise. U+ und U* sind Rechenoperationen mit Übertrag. U+ addiert die drei obersten Stapeleinträge und gibt das 16-Bit Ergebnis in e und einen eventuell entstehenden Übertrag in d zurück. U* rechnet a+b*c und gibt ebenfalls die untersten 16 Bit vom Ergebnis in e und den verbleibenden Übertrag in d zurück. 
+MINUS wechselt das Vorzeichen des obersten Stapeleintrages und NOT bildet das bitweise Komplement. AND und OR verknüpfen die beiden oberen Stapeleinträge bitweise. U+ und U* sind Rechenoperationen mit Übertrag. U+ addiert die drei obersten Stapeleinträge und gibt das 16-Bit Ergebnis in e und einen eventuell entstehenden Übertrag in d zurück. U* rechnet a+b*c und gibt ebenfalls die untersten 16 Bit vom Ergebnis in e und den verbleibenden Übertrag in d zurück. 
 
 Beispielprogramm <i>willkürlich zusammengestellte Rechenoperationen</i>
 <table border="1"><tr><th>PC</th><th>PD</th><th>FORTH-Notation</th><th>Stapelinhalt</th><th>SP</th></tr>
