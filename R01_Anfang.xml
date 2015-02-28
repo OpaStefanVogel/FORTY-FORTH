@@ -29,7 +29,8 @@ SP = Stapelhöhe nach Ausführung des Programmschrittes
 Genug der Worte, das Programm soll endlich loslaufen. Im Startterminal die Programmversion auswählen:
 
 <term>git checkout Step_1
-git diff # mit Taste Q beenden</term>anschließend in Vivado die Simulation starten:
+git diff Step_0 Step_1# mit Taste Q beenden
+</term>anschließend in Vivado die Simulation starten:
 
 <tterm>launch_simulation; # entspricht Button "Run Behavioral Simulation"
 run 1000 ns</tterm><favicon/> Ergebnis: Die Variable LEDS enthält den auf Adresse 2D04 ausgegebenen Hexadezimalwert
