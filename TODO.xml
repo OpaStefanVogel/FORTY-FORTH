@@ -1,4 +1,4 @@
-.. am Anfang doch gleich vivado ohne -mode tcl
+o. am Anfang doch gleich vivado ohne -mode tcl
 .. noch diff-Verweis zu GitHub machen
 .. FLOAT die Stapeldiagramme
 .. den epiphany - Fehler
@@ -9,20 +9,20 @@
 .. alle CONV_UNSIGNED wieder in STD_LOGIC_VECTOR machen
 .. ob 0-0FFF oder 1FFF, ebenso E000-EFFF oder FFFF
 .. write-first oder UNCHANGED...
-.. vorherige Simulation bereits in Tcl-Console beenden
+ok vorherige Simulation bereits in Tcl-Console beenden ok
 .. stapR und stapRAM besser unterscheiden
-.. SP mod 4 mal versuchen
+ok SP mod 4 mal versuchen
 .. auch die libarys mal neu sondieren was nötig und was richtig
-.. Zoomtasten
+.. Verweis auf Zoomtasten
 .. P01_top kann vorerst raus, 2D04 mit in testbench
-.. SP_SIM kann wieder unter PD_SIM in den Ports
-.. mach läuft wieder: Vergleiche
+ok SP_SIM kann wieder unter PD_SIM in den Ports
+ok mach läuft wieder: Vergleiche nochmal mit S3:
    .. XON XOFF über !
    .. paar NOOP's sind zusätzlich drin
-   .. das neue R<... muss ich wohl aus S3 holen
+   .. das neue R&lt;... muss ich wohl aus S3 holen
    das ist das wesentliche aus diff
 .. Step ? noch füllen
-o. und doch gleich Vivado &
-.. S3 Step_1 läuft, aber nochmal den Wechsel überlegen.
-
+.. S3 Step_1 läuft, aber nochmal den Wechsel bis Step_10 überlegen.
+.. KEY_EMPFANGEN noch beschalten
+.. den benötigten Langsamtakt einfach an KEY(0) anschalten.
 
