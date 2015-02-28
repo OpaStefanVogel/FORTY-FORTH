@@ -23,3 +23,7 @@ code { font-family:monospace;
 .Nutzereingabe {
   color: black;
   }
+
+.zurueck {
+  float:right;
+  }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
-<los>Programmausgabe
+<los><step>9</step>Programmausgabe
 
 Variablen:
 EMIT_BYTE      = enthält das auszugebende Byte
@@ -32,6 +32,6 @@ ok
 
 Von 880 ns bis 1200 ns wartet der Programmzähler PC darauf, dass von testbench.vhd aus EMIT_EMPFANGEN negiert wird, und so auch bei jedem weiteren ausgegebenen Zeichen. Schließlich ab 15500 ns wiederholt sich endlos eine 420 ns lange Progammschleife - ja weil noch eine Nutzereingabe fehlt...
 
-Weiter mit <a href="R10_Nutzereingabe.xml">R10 Nutzereingabe</a>.
+<weiter /><a href="R10_Nutzereingabe.xml">R10 Nutzereingabe</a>
 
 </los>

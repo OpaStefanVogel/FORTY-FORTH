@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
 <!--geht leider nicht mit Raspberry-midori-->
-<los>Benennung der Stapeleinträge
+<los><step>2</step>Benennung der Stapeleinträge
 
 Für die obersten vier Stapeleinträge verwende ich extra Variablenbezeichnungen A, B, C, D, sowie eine Zählvariable T mit folgender Zuordnung
 
@@ -44,6 +44,6 @@ ab Zeitpunkt in ns     Wert von LEDS
    850                  70
    970                  6F
 
-Weiter mit <a href="R03_StapelRAM.xml">R03 Stapel in RAM speichern</a>.
+<weiter /><a href="R03_StapelRAM.xml">R03 Stapel in RAM speichern</a>.
 
 </los>

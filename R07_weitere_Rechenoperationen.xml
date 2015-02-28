@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
-<los>weitere Rechenoperationen
+<los><step>7</step>weitere Rechenoperationen
 
 MINUS  ( a --> -a )
 NOT    ( a --> a' )
@@ -55,7 +55,6 @@ ab Zeitpunkt in ns     Wert von C,    B,    A=LEDS,
    320                          0000  0000  0000
    
    
-
-Weiter mit <a href="R08_mehr_Speicher.xml">R08 mehr Speicher</a>.
+<weiter /><a href="R08_mehr_Speicher.xml">R08 mehr Speicher</a>.
 
 </los>

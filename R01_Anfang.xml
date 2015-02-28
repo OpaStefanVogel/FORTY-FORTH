@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
 <!--geht leider nicht mit Raspberry-midori-->
-<los>Als Anfang ein sehr einfaches Programm.
+<los><step>1</step>Als Anfang ein sehr einfaches Programm.
 
 <i>Der oberste Stapeleintrag soll beginnend mit 0 fortlaufend um 1 erhöht und auf Adresse 2D04 ausgegeben werden.</i>
 
@@ -47,5 +47,5 @@ ab Zeitpunkt in ns     Wert von LEDS
 
 Soll LEDS auf echte <a href="http://de.wikipedia.org/wiki/Leuchtdiode">LED</a>'s ausgegeben werden, muss natürlich der Takt CLK passend verringert werden.
 
-Weiter mit <a href="R02_Stapelvariablen.xml">R02 Stapeleinträge benennen</a>.
+<weiter /><a href="R02_Stapelvariablen.xml">R02 Stapeleinträge benennen</a>
 </los>

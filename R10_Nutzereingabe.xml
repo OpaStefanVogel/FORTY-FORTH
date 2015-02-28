@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
-<los>Nutzereingabe
+<los><step>10</step>Nutzereingabe
 
 Variablen:
 KEY_BYTE      = enthält das vom Nutzer eingegebene Byte
@@ -28,6 +28,7 @@ ok
 <u>56 89 * .</u> 2E06 ok
 </ffterm>
 
-Die Nutzereingabe ist farblich von der Programmausgabe unterschieden. Sie wurde mit Enter=0A abgeschlossen und erscheint ab 100000 ns in KEY_BYTE. Das Ergebnis wird ab 2378760 ns in EMIT_BYTE ausgegeben.  
+Die Nutzereingabe unterscheidet sich farblich von der Programmausgabe, sie wurde mit Enter=0A abgeschlossen und erscheint ab 100000 ns in KEY_BYTE. Das Ergebnis wird ab 2378760 ns in EMIT_BYTE ausgegeben.  
 
+<weiter />Pause
 </los>

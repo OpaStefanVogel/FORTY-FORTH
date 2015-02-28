@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
-<los>mehr Speicher
+<los><step>8</step>mehr Speicher
 
 Bisher je 16 Byte Programmspeicher und Rückkehrstapel werden ersetzt durch
 
@@ -62,7 +62,6 @@ ab Zeitpunkt in ns     LEDS,
     1390                00
    
    
-
-Weiter mit <a href="R09_Programmausgabe.xml">R09 Programmausgabe</a>.
+<weiter /><a href="R09_Programmausgabe.xml">R09 Programmausgabe</a>.
 
 </los>

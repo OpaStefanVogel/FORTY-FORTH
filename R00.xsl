@@ -12,7 +12,7 @@
     <!-->
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
-    <title>Step ?</title>
+    <title><xsl:value-of select="los/step" /></title>
 
     <link rel="stylesheet" href="stylesheets/styles.css"/>
     <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
@@ -66,6 +66,9 @@
 <xsl:template match="table"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="code"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="i"><xsl:copy-of select="." /></xsl:template>
+<xsl:template match="step"><span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inhalt</a></span></xsl:template>
+<xsl:template match="weiter">Das war Step <xsl:value-of select="/los/step" />,
+weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inhalt.</a></span></xsl:template>
 
 <xsl:template match="favicon"><img src="favicon.ico"/></xsl:template>
 <xsl:template match="ffterm">
