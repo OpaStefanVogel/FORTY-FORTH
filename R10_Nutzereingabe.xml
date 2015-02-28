@@ -7,6 +7,9 @@ KEY_BYTE      = enthält das vom Nutzer eingegebene Byte
 KEY_GESENDET  = wird invertiert, wenn dieses Byte abgeschickt wurde
 Es fehlt eine Variable KEY_EMPFANGEN mit der gleichen Funktion wie EMIT_EMPFANGEN, ich hatte sie bisher nicht gebraucht.
 
+Das Invertieren von EMIT_GESENDET ruft im darauffolgenden Takt das Unterprogramm ab Adresse 0016 auf (Interrupt). Dort wird EMIT_BYTE gelesen und im Eingabepuffer zwischengespeichert, anschließend das unterbrochene Programm fortgesetzt. Also muss generell beim Programmieren berücksichtigt werden, jederzeit an jeder Stelle kann eine solche Unterbrechung erfolgen.
+
+Verwendete FORTH-Worte:
 KEY  ( --> n ) wartet auf Nutzereingabe eines Zeichens und gibt es als n auf dem Stapel zurück.
 *    ( a b --> a*b ) Multiplikation
 .    ( n --> ) gibt n als Zeichenkette ins Terminal aus.
@@ -25,6 +28,6 @@ ok
 <u>56 89 * .</u> 2E06 ok
 </ffterm>
 
-Die Nutzereingabe ist zur Unterscheidung von der Programmausgabe unterstrichen. Sie wurde mit Enter=0A abgeschlossen und erscheint ab 100000 ns in KEY_BYTE. Das Ergebnis wird ab 2378760 ns in EMIT_BYTE ausgegeben.  
+Die Nutzereingabe ist farblich von der Programmausgabe unterschieden. Sie wurde mit Enter=0A abgeschlossen und erscheint ab 100000 ns in KEY_BYTE. Das Ergebnis wird ab 2378760 ns in EMIT_BYTE ausgegeben.  
 
 </los>

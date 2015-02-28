@@ -15,4 +15,11 @@ code { font-family:monospace;
   background-color: lightyellow;
   min-width: 300px;
   min-height: 120px;
+  color: blue;
+  #border-color: blue;
+  border-width: 1px;
+  }
+  
+.Nutzereingabe {
+  color: black;
   }
