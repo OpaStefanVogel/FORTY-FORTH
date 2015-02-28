@@ -55,7 +55,7 @@
   </xsl:template>
 
 
-<xsl:template match="term">Terminal: <i>your-repo&amp; ...</i>
+<xsl:template match="term"><span id="Terminal">Terminal: <i>your-repo&amp; ...</i></span>
 <pre><code><xsl:apply-templates /></code></pre>
   </xsl:template>
 <xsl:template match="tterm">Tcl Console: <i>"Type a Tcl command here"</i>
@@ -66,7 +66,7 @@
 <xsl:template match="table"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="code"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="i"><xsl:copy-of select="." /></xsl:template>
-<xsl:template match="step"><span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inhalt</a></span></xsl:template>
+<xsl:template match="step"><span class="zurueck">gleich <a href="#Terminal">Terminal</a> oder <a href="index.html#Inhalt">zurück zu Inhalt</a></span></xsl:template>
 <xsl:template match="weiter">Das war Step <xsl:value-of select="/los/step" />,
 weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inhalt.</a></span></xsl:template>
 
