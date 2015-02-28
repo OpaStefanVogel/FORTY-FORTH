@@ -18,6 +18,7 @@ code { font-family:monospace;
   color: blue;
   #border-color: blue;
   border-width: 1px;
+  border-radius: 4px;
   }
   
 .Nutzereingabe {
