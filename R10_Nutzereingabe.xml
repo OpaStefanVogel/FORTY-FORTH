@@ -28,7 +28,7 @@ ok
 <u>56 89 * .</u> 2E06 ok
 </ffterm>
 
-Die Nutzereingabe ist farblich unterschiedlich gegenüber der Programmausgabe dargestellt, sie wurde mit Enter=0A abgeschlossen und erscheint ab 100000 ns in KEY_BYTE. Das Ergebnis wird ab 2378760 ns in EMIT_BYTE ausgegeben.  
+Die Nutzereingabe ist farblich unterschiedlich dargestellt gegenüber der Programmausgabe. Die Nutzereingabe wurde mit Enter=0A abgeschlossen. Sie erscheint ab 100000 ns in KEY_BYTE. Das Ergebnis wird beginnend ab 2378760 ns in EMIT_BYTE ausgegeben.  
 
 <weiter />Pause
 </los>
