@@ -31,7 +31,7 @@ Genug der Worte, das Programm soll endlich loslaufen. Im Startterminal die Progr
 <term>git checkout Step_1
 git diff # mit Taste Q beenden</term>anschließend in Vivado die Simulation starten:
 
-<tterm>launch_simulation # entspricht Button "Run Behavioral Simulation"
+<tterm>launch_simulation; # entspricht Button "Run Behavioral Simulation"
 run 1000 ns</tterm><favicon/> Ergebnis: Die Variable LEDS enthält den auf Adresse 2D04 ausgegebenen Hexadezimalwert
 
 ab Zeitpunkt in ns     Wert von LEDS
