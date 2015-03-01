@@ -9,10 +9,11 @@
        ein mdash ersetzt durch #x2014
        user-scalable=no in yes umgeschrieben
        stylesheet R00.css ergänzt
+       title auch automatisch select="los/step"
     <!-->
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
-    <title><xsl:value-of select="los/step" /></title>
+    <title>Step <xsl:value-of select="los/step" /></title>
 
     <link rel="stylesheet" href="stylesheets/styles.css"/>
     <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
