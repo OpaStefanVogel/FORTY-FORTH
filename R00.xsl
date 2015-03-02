@@ -41,6 +41,7 @@
       </header>
 
     <section><div class="section">
+    <section style="white-space: pre-wrap;">
       <xsl:apply-templates />
       </div></section>
       
