@@ -1,7 +1,7 @@
-o. am Anfang doch gleich vivado ohne -mode tcl
+ok am Anfang doch gleich vivado ohne -mode tcl
 .. noch diff-Verweis zu GitHub machen
 .. FLOAT die Stapeldiagramme
-.. den epiphany - Fehler
+o. den epiphany - Fehler
 .. ja und natürlich unbedingt Kleinerzeichen in &x...; oder ganz raus
 .. Ergebnis auch noch als Tabelle mit xml
 .. nach P11 dann Vivado ausdrehen
@@ -21,8 +21,10 @@ ok mach läuft wieder: Vergleiche nochmal mit S3:
    .. paar NOOP's sind zusätzlich drin
    .. das neue R&lt;... muss ich wohl aus S3 holen
    das ist das wesentliche aus diff
-.. Step ? noch füllen
+ok Step ? noch füllen, ok ist jetzt Step 1
 .. S3 Step_1 läuft, aber nochmal den Wechsel bis Step_10 überlegen.
 .. KEY_EMPFANGEN noch beschalten
-.. den benötigten Langsamtakt einfach an KEY(0) anschalten.
+.. den benötigten Langsamtakt einfach an KEY(0) anschalten eventuell???
+.. "neue vhdl-Variablen" in P05
+.. Terminal: ganz raus und alles mit in Tcl-Console rein.
 
