@@ -26,7 +26,7 @@
 
     <link rel="stylesheet" href="R00.css"/>
   </head>
-  <body style="white-space: pre-wrap;">
+  <body>
     <div class="wrapper">
       <header>
         <h1>FORTY-FORTH</h1>
@@ -39,7 +39,7 @@
         </ul>
       </header>
 
-    <section>
+    <section style="white-space: pre-wrap;">
       <xsl:apply-templates />
       </section>
       </div>
