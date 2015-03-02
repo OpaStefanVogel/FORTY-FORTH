@@ -5,6 +5,7 @@
 <html>
   <head>
     <!--> ursprüngliches layout geändert bei:
+       <meta..> in <meta.../> geändert und so.
        Monospace Font für section und code
        ein mdash ersetzt durch #x2014
        user-scalable=no in yes umgeschrieben
@@ -26,7 +27,7 @@
 
     <link rel="stylesheet" href="R00.css"/>
   </head>
-  <body style="white-space: pre-wrap;">
+  <body>
     <div class="wrapper">
       <header>
         <h1>FORTY-FORTH</h1>
@@ -39,9 +40,10 @@
         </ul>
       </header>
 
-    <section>
+    <section><div class="section">
       <xsl:apply-templates />
-      </section>
+      </div></section>
+      
       </div>
 
     <footer>
@@ -68,7 +70,7 @@
 <xsl:template match="code"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="i"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="step"><span class="zurueck">zum <a href="#Terminal">Terminal</a> oder <a href="index.html#Inhalt">zurück zu Inhalt</a></span></xsl:template>
-<xsl:template match="weiter">Das war Step <xsl:value-of select="/los/step" />,
+<xsl:template match="weiter">Das war Step <xsl:value-of select="/los/step" />
 weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inhalt.</a></span></xsl:template>
 
 <xsl:template match="favicon"><img src="favicon.ico"/></xsl:template>

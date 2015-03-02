@@ -27,4 +27,4 @@ ok Step ? noch füllen, ok ist jetzt Step 1
 .. den benötigten Langsamtakt einfach an KEY(0) anschalten eventuell???
 .. "neue vhdl-Variablen" in P05
 .. Terminal: ganz raus und alles mit in Tcl-Console rein.
-
+.. noch ein R00 mit nur I-O-Check oder auch nicht.
