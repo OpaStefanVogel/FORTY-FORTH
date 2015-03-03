@@ -71,8 +71,10 @@ architecture Step_1_bis_5 of TopSpartan3fuerGitHub is
   port (
  
     CLK: in STD_LOGIC;
-    LEDS: out STD_LOGIC_VECTOR (7 downto 0)
+    LEDS: out STD_LOGIC_VECTOR (7 downto 0);
 
+    -- nur zur Simulation und Fehlersuche:
+    A_SIM: out STD_LOGIC_VECTOR (15 downto 0)
 
     );
 end component;
@@ -87,12 +89,15 @@ begin
 DUT: top
   port map (
     CLK      => CLK_I,
-    LEDS     => led
+    LEDS     => open, --led,
+	 
+	 A_SIM(7 downto 0)    => led, 
+	 A_SIM(15 downto 8)   => open
     );
 
 process(CLK) begin if CLK'event and CLK='1' then
   TAKTZAEHLER<=TAKTZAEHLER+1;
-  CLK_I<=TAKTZAEHLER(21);
+  CLK_I<=TAKTZAEHLER(24);
   end if; end process;
 
 TXD <= '1';
