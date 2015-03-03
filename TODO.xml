@@ -28,3 +28,6 @@ ok Step ? noch füllen, ok ist jetzt Step 1
 .. "neue vhdl-Variablen" in P05
 .. Terminal: ganz raus und alles mit in Tcl-Console rein.
 .. noch ein R00 mit nur I-O-Check oder auch nicht.
+.. EMIT durchgängig in EMIT_BYTE umbenennen, nicht nur R10, SP runter
+.. doch das .wcfg File mit rein in Step_1 bis 10?
+.. xmlns= nochmal versuchen
