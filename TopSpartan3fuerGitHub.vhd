@@ -65,7 +65,7 @@ SPI_SCSN: in STD_LOGIC
 );
 end TopSpartan3fuerGitHub;
 
-architecture Step_6_und_7 of TopSpartan3fuerGitHub is
+architecture Step_9 of TopSpartan3fuerGitHub is
 
   component top
   port (
@@ -73,8 +73,10 @@ architecture Step_6_und_7 of TopSpartan3fuerGitHub is
     CLK: in STD_LOGIC;
     LEDS: out STD_LOGIC_VECTOR (7 downto 0);
 
-    -- nur zur Simulation und Fehlersuche:
-    A_SIM: out STD_LOGIC_VECTOR (15 downto 0)
+    -- EMIT --
+    EMIT_GESENDET: out STD_LOGIC;
+    EMIT: out STD_LOGIC_VECTOR (7 downto 0);
+    EMIT_EMPFANGEN: in STD_LOGIC
 
     );
 end component;
@@ -84,23 +86,67 @@ end component;
 signal CLK_I: STD_LOGIC;
 signal TAKTZAEHLER: STD_LOGIC_VECTOR (55 downto 0):="00000000000000000000000000000000000000000000000000000000";
 
+--RXD --
+signal CLK_6_MHz,STRG,RxDI: STD_LOGIC;
+signal dbInput: STD_LOGIC_VECTOR (7 downto 0);
+
 begin
 
-DUT: top
-  port map (
-    CLK      => CLK_I,
-    LEDS     => open, --led,
-	 
-	 A_SIM(7 downto 0)    => led, 
-	 A_SIM(15 downto 8)   => open
-    );
+--DUT: top
+--  port map (
+--    CLK      => CLK_I,
+--    LEDS     => open, --led,
+--	 
+--    -- EMIT --
+--    EMIT_GESENDET   => open,
+--    EMIT   => open, --led,
+--    EMIT_EMPFANGEN   => '0'
+--    );
 
 process(CLK) begin if CLK'event and CLK='1' then
   TAKTZAEHLER<=TAKTZAEHLER+1;
-  CLK_I<=TAKTZAEHLER(24);
+  CLK_I<=TAKTZAEHLER(3);
+  CLK_6_MHz<=TAKTZAEHLER(2);
   end if; end process;
 
-TXD <= '1';
+TXD <= RXD;
+
+process
+variable scount: STD_LOGIC_VECTOR (31 downto 0):=x"00000000";
+variable dbInput_L: STD_LOGIC_VECTOR (7 downto 0);
+begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
+  if (RxDI='0' and scount=x"00000000") then scount:=x"00000001"; else
+    if scount>x"00001100" then scount:=x"00000000";
+          dbInput<=dbInput_L;
+--          STRG<=not STRG_MERK_RUHEND; 
+          STRG<=not STRG; 
+      else 
+--        if scount>0 then scount:=scount+2; -- D0000, D000 statt 1100
+        if scount>0 then scount:=scount+8;
+          end if; end if; end if;
+-- 115200:
+  if scount(11 downto 4)=x"28" then dbInput_L(0):=RxDI;
+  elsif scount(11 downto 4)=x"43" then dbInput_L(1):=RxDI;
+  elsif scount(11 downto 4)=x"5E" then dbInput_L(2):=RxDI;
+  elsif scount(11 downto 4)=x"7A" then dbInput_L(3):=RxDI;
+  elsif scount(11 downto 4)=x"95" then dbInput_L(4):=RxDI;
+  elsif scount(11 downto 4)=x"B0" then dbInput_L(5):=RxDI;
+  elsif scount(11 downto 4)=x"CB" then dbInput_L(6):=RxDI;
+  elsif scount(11 downto 4)=x"E6" then dbInput_L(7):=RxDI;
+    end if; 
+  end process;
+
+process
+begin wait until (CLK_6_MHz'event and CLK_6_MHz='0');
+--  STRG_MERK_RUHEND<=STRG_MERK;
+  RXDI<=RXD;
+  end process;
+
+
+
+--led(0) <= not RXD;
+--led(7 downto 1) <= "1000000";
+led <= dbInput;
 
     AL <= "000000000000000000";
     DL <= x"00000000";
@@ -120,5 +166,4 @@ PS2_DATA <= '0';
 A2_TXD <= '0';
 SPI_MISO <= '0';
 
-end Step_6_und_7;
-
+end Step_9;
