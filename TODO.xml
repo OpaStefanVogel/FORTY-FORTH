@@ -31,3 +31,4 @@ ok Step ? noch füllen, ok ist jetzt Step 1
 .. EMIT durchgängig in EMIT_BYTE umbenennen, nicht nur R10, SP runter
 .. doch das .wcfg File mit rein in Step_1 bis 10?
 .. xmlns= nochmal versuchen
+.. jetzt hab ich doch noch die compare-Funktion gefunden. Rein damit.
