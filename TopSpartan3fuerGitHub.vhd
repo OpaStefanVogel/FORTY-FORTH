@@ -143,9 +143,6 @@ begin wait until (CLK_6_MHz'event and CLK_6_MHz='0');
   end process;
 
 
-
---led(0) <= not RXD;
---led(7 downto 1) <= "1000000";
 led <= dbInput;
 
     AL <= "000000000000000000";
