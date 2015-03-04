@@ -164,14 +164,14 @@ process
 variable scount: STD_LOGIC_VECTOR (31 downto 0):=x"00000000";
 variable dbInput_L: STD_LOGIC_VECTOR (7 downto 0);
 begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
-  if (RxDI='0' and scount=x"00000000") then scount:=x"00000001"; else
-    if scount>x"00001100" then scount:=x"00000000";
+  if (RxDI='0' and scount=x"00000000") then scount:=x"00000008"; else
+    if scount=x"00001000" then scount:=x"00000000";
           dbInput<=dbInput_L;
 --          STRG<=not STRG_MERK_RUHEND; 
           STRG<=not STRG; 
       else 
 --        if scount>0 then scount:=scount+2; -- D0000, D000 statt 1100
-        if scount>0 then scount:=scount+8;
+        if scount/=0 then scount:=scount+8;
           end if; end if; end if;
 -- 115200:
   if scount(11 downto 4)=x"28" then dbInput_L(0):=RxDI;
