@@ -103,7 +103,7 @@ begin
 DUT: top
   port map (
     CLK      => CLK_I,
-    LEDS     => open, --led,
+    LEDS     => led,
 	 
     -- EMIT --
     EMIT_GESENDET   => SCHREIBBIT1_ZUR_AUSGABE,
@@ -193,8 +193,6 @@ begin wait until (CLK_6_MHz'event and CLK_6_MHz='0');
   end process;
 
 
-
-led <= dbInput;
 
     AL <= "000000000000000000";
     DL <= x"00000000";
