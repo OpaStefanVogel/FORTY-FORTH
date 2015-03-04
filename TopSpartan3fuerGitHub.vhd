@@ -90,6 +90,10 @@ signal TAKTZAEHLER: STD_LOGIC_VECTOR (55 downto 0):="000000000000000000000000000
 signal CLK_6_MHz,STRG,RxDI: STD_LOGIC;
 signal dbInput: STD_LOGIC_VECTOR (7 downto 0);
 
+--TXD --
+signal P19SCHREIBBIT1,SCHREIBBIT2_X,SCHREIBBIT1_ZUR_AUSGABE: STD_LOGIC;
+signal dbOutput,HIN_ZUR_AUSGABE: STD_LOGIC_VECTOR (7 downto 0);
+
 begin
 
 --DUT: top
@@ -109,7 +113,43 @@ process(CLK) begin if CLK'event and CLK='1' then
   CLK_6_MHz<=TAKTZAEHLER(2);
   end if; end process;
 
-TXD <= RXD;
+--TXD <= RXD; -- nicht mehr, jetzt:
+
+process 
+variable xcount1: STD_LOGIC_VECTOR (15 downto 0);
+variable xcount2: STD_LOGIC_VECTOR (3 downto 0);
+variable OutBit: STD_LOGIC_VECTOR (18 downto 9):="1111111111";
+variable XOFFOutput: STD_LOGIC;
+begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
+  if xcount1<x"01B2" then xcount1:=xcount1+8; else --D9+D9=1B2
+    -- ganz neu 01B2 bei 112500, 1458H bei 9600, 14585H bei 600
+   xcount1:=x"0000";
+    if xcount2<x"A" then 
+      TxD<=OutBit(9);
+      OutBit:='0'&OutBit(18 downto 10);
+      xcount2:=xcount2+1;
+      elsif xcount2=x"A" then
+        TxD<='1'; --Stop-Bit
+        if P19SCHREIBBIT1/=SCHREIBBIT2_X then
+          OutBit:="1"&dbOutput&'0';
+          SCHREIBBIT2_X<=P19SCHREIBBIT1;
+          else OutBit:="1111111111"; 
+            end if;
+        xcount2:=xcount2+1;
+        else xcount2:=x"0";
+        end if;
+    end if;
+  end process;
+
+process
+begin wait until (CLK_I'event and CLK_I='0');
+  dbOutput<=HIN_ZUR_AUSGABE;
+  P19SCHREIBBIT1<=SCHREIBBIT1_ZUR_AUSGABE;
+--  XOBIT_R<=XOBIT;
+  end process;
+
+HIN_ZUR_AUSGABE <= dbInput;
+SCHREIBBIT1_ZUR_AUSGABE <= STRG;
 
 process
 variable scount: STD_LOGIC_VECTOR (31 downto 0):=x"00000000";
@@ -141,6 +181,7 @@ begin wait until (CLK_6_MHz'event and CLK_6_MHz='0');
 --  STRG_MERK_RUHEND<=STRG_MERK;
   RXDI<=RXD;
   end process;
+
 
 
 led <= dbInput;
