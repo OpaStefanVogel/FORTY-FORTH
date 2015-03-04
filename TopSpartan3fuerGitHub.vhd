@@ -65,7 +65,7 @@ SPI_SCSN: in STD_LOGIC
 );
 end TopSpartan3fuerGitHub;
 
-architecture Step_9 of TopSpartan3fuerGitHub is
+architecture Step_9_und_10 of TopSpartan3fuerGitHub is
 
   component top
   port (
@@ -214,4 +214,4 @@ PS2_DATA <= '0';
 A2_TXD <= '0';
 SPI_MISO <= '0';
 
-end Step_9;
+end Step_9_und_10;
