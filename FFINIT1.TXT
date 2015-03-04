@@ -14,7 +14,7 @@
 ( und schließlich DUMPY
 ( SPOOL.TXT-->Pxx.vhd
 
--1 2C23 ! ( schaltet RX_ aus !!!
+( -1 2C23 ! ( schaltet RX_ aus !!!
 DPMERK @ DP ! BANF @ BZEIG ! -1 CRBIT ! 8000 6 ! ( 1B EMIT 63 EMIT 
 
 ( Forth Axiome:
@@ -122,15 +122,13 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 : 1+ ( a --> a+1 ) 1 + ;
 : - MINUS + ;
 : = - 0= ;
-: < ( a b --> r ) 
-  8000 + SWAP NOT 8000 + 0 U+ DROP 0= NOT ;
-: > ( a b --> r ) 
-  SWAP < ;
+: < ( a b --> r ) 8000 + SWAP NOT 8000 + 0 U+ DROP 0= NOT ;
+: > ( a b --> r ) SWAP < ;
 : * ( a b --> a*b ) 0 ROT ROT U* SWAP DROP ;
 : BYE BEGIN ." BYE " AGAIN ;
 : +! ( a adr --> adr+1 ) SWAP OVER @ + SWAP ! ;
-: R> RP @ 1+ @ RP @ @ RP @ 1+ DUP RP ! ! NOOP ; ( NOOP wegen RP ! vor ;
-: >R RP @ @ SWAP RP @ ! -1 RP @ + DUP RP ! ! NOOP ; ( ebenso 
+: R> RP @ 1+ @ RP @ 1+ RP 2DUP @ @ SWAP ! ! ;
+: >R RP @ DUP -1 + RP 2DUP @ @ SWAP DUP -1 + RP ! ! ! ! ; ( nicht unterhalb RP speichern wegen INTXY )
 : R RP @ 1+ @ ;
 : , DP @ ! 1 DP +! ;
 : EXECUTE PC ! ;
@@ -451,10 +449,11 @@ START
   ;
 
 0 CRBIT !
-  
+
+( 800 0 0 DUMPZ
+( E400 E000 -1 DUMPZ
+
 ( 2000 0000 0 DUMPZ ( IRAMADR=JRAMADR von Hand setzen )
 ( 2800 2000 0 DUMPZ
 ( F800 E000 -1 DUMPZ
 ( 3000 2C00 0 DUMPZ
-
-
