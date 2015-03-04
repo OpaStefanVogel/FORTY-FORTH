@@ -1,7 +1,7 @@
 ok am Anfang doch gleich vivado ohne -mode tcl
-.. noch diff-Verweis zu GitHub machen
+ok noch diff-Verweis zu GitHub machen ok, perfekt als <diff></diff>
 .. FLOAT die Stapeldiagramme
-o. den epiphany - Fehler
+ok den epiphany - Fehler ok war eigener Fehler
 .. ja und natürlich unbedingt Kleinerzeichen in &x...; oder ganz raus
 .. Ergebnis auch noch als Tabelle mit xml
 .. nach P11 dann Vivado ausdrehen
@@ -17,18 +17,19 @@ ok SP mod 4 mal versuchen
 .. P01_top kann vorerst raus, 2D04 mit in testbench
 ok SP_SIM kann wieder unter PD_SIM in den Ports
 ok mach läuft wieder: Vergleiche nochmal mit S3:
-   .. XON XOFF über !
-   .. paar NOOP's sind zusätzlich drin
-   .. das neue R&lt;... muss ich wohl aus S3 holen
+   ok XON XOFF über !
+   ok paar NOOP's sind zusätzlich drin ok gar nicht erst übernommen
+   ok das neue R&lt;... muss ich wohl aus S3 holen ok ja 
    das ist das wesentliche aus diff
 ok Step ? noch füllen, ok ist jetzt Step 1
 .. S3 Step_1 läuft, aber nochmal den Wechsel bis Step_10 überlegen.
 .. KEY_EMPFANGEN noch beschalten
 .. den benötigten Langsamtakt einfach an KEY(0) anschalten eventuell???
 .. "neue vhdl-Variablen" in P05
-.. Terminal: ganz raus und alles mit in Tcl-Console rein.
+nö Terminal: ganz raus und alles mit in Tcl-Console rein. nö geht danach nicht weiter
 .. noch ein R00 mit nur I-O-Check oder auch nicht.
 .. EMIT durchgängig in EMIT_BYTE umbenennen, nicht nur R10, SP runter
 .. doch das .wcfg File mit rein in Step_1 bis 10?
 .. xmlns= nochmal versuchen
-.. jetzt hab ich doch noch die compare-Funktion gefunden. Rein damit.
+ok jetzt hab ich doch noch die compare-Funktion gefunden. Rein damit.
+.. R00.DTD noch mit
