@@ -48,7 +48,7 @@ Beispielprogramm <i></i>
   </table>LEDS ist wieder an Ausgabeadresse 2D04 angeschlossen. Jede der neu verwendbaren Speicheradressen 0100, 2D00 und E100 wird je einmal mit FFFF beschrieben und einmal mit 0000. Jedesmal gleich wieder ausgelesen und das Ergebnis auf Adresse 2D04 ausgegeben, um zu sehen, ob das Umspeichern auf die verschiedenen Werte FFFF und 0000 funktioniert hat. Das erfolgt alles im Unterprogramm ab Adresse 7, welches ein weiteres Unterprogramm ab Adresse 000F aufruft. Das NOOP steht, weil nach ! nicht gleich @ folgen darf, dies tritt aber normalerweise auch nicht auf.
  
 <term>git checkout Step_8
-git diff Step_7 Step_8</term>
+git diff <diff>Step_7...Step_8</diff></term>
 <tterm>close_sim -force -quiet
 launch_simulation
 run 1500 ns</tterm><favicon/> Ergebnis: 

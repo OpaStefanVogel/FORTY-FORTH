@@ -20,7 +20,7 @@ Dieser wird nur ausgeführt, wenn der oberste Stapeleintrag gleich Null ist. Das
   </table>Beginnend mit 3 wird in einer Schleife von BEGIN bis AGAIN der oberste Stapeleintrag um 1 verringert und dupliziert auf Adresse 2D04 ausgegeben. Außerdem wird dazwischen ein 0055 mit ausgegeben, falls der Stapeleintrag ungleich Null ist. Bei Null jedoch springt IF gleich weiter zu END_IF. END_IF ist nur eine Markierung ohne eigenen Programmcode. 
 
 <term>git checkout Step_4
-git diff Step_3 Step_4</term>
+git diff <diff>Step_3...Step_4</diff></term>
 <tterm>close_sim -force -quiet
 launch_simulation
 run 1000 ns</tterm><favicon/> Ergebnis: Bei LEDS=00 wird das sonst anschließende LEDS=55 von IF übersprungen und es geht gleich mit LEDS=-1(=FF) weiter. 

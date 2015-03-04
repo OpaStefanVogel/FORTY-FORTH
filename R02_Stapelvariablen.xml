@@ -26,7 +26,7 @@ Variable T und das Zurückspeichern sind jetzt zusätzlich hinzugekommen. Der Vo
 Sofern das Startterminal aus Step_1 noch zugänglich ist:
  
 <term>git checkout Step_2
-git diff Step_1 Step_2 # mit Q beenden</term>und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft:
+git diff <diff>Step_1...Step_2</diff> # mit Q beenden</term>und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft:
 
 <tterm>close_sim -force -quiet
 launch_simulation

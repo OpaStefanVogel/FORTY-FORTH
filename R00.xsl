@@ -87,4 +87,10 @@ weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inh
   <span class="Nutzereingabe"><xsl:apply-templates /></span>
   </xsl:template>
 
+<xsl:template match="diff"><span><a><xsl:attribute name="href">https://github.com/OpaStefanVogel/FORTY-FORTH/compare/<xsl:value-of select="." />
+</xsl:attribute><xsl:value-of select="." /></a></span></xsl:template>
+
+
+
+
 </xsl:stylesheet>

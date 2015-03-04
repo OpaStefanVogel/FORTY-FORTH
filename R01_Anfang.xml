@@ -29,7 +29,7 @@ SP = Stapelhöhe nach Ausführung des Programmschrittes
 Genug der Worte, das Programm soll endlich loslaufen. Im Startterminal die Programmversion auswählen:
 
 <term>git checkout Step_1
-git diff Step_0 Step_1 # mit Taste Q beenden
+git diff <diff>Step_0...Step_1</diff> # mit Taste Q beenden
 </term>anschließend in Vivado die Simulation starten:
 
 <tterm>launch_simulation; # entspricht Button "Run Behavioral Simulation"

@@ -32,7 +32,7 @@ Beispielprogramm <i>willkürlich zusammengestellte Rechenoperationen</i>
   </table>Auch hier keine extra Ausgabe, Ausgabeport LEDS ist immernoch direkt mit der Ausgabe des obersten Stapeleintrages A_SIM verknüpft.
 
 <term>git checkout Step_7
-git diff Step_6 Step_7</term>
+git diff <diff>Step_6...Step_7</diff></term>
 <tterm>close_sim -force -quiet
 launch_simulation
 run 340 ns</tterm><favicon/> Ergebnis: 
