@@ -96,16 +96,16 @@ signal dbOutput,HIN_ZUR_AUSGABE: STD_LOGIC_VECTOR (7 downto 0);
 
 begin
 
---DUT: top
---  port map (
---    CLK      => CLK_I,
---    LEDS     => open, --led,
---	 
---    -- EMIT --
---    EMIT_GESENDET   => open,
---    EMIT   => open, --led,
---    EMIT_EMPFANGEN   => '0'
---    );
+DUT: top
+  port map (
+    CLK      => CLK_I,
+    LEDS     => open, --led,
+	 
+    -- EMIT --
+    EMIT_GESENDET   => SCHREIBBIT1_ZUR_AUSGABE,
+    EMIT   => HIN_ZUR_AUSGABE,
+    EMIT_EMPFANGEN   => SCHREIBBIT2_X
+    );
 
 process(CLK) begin if CLK'event and CLK='1' then
   TAKTZAEHLER<=TAKTZAEHLER+1;
@@ -148,8 +148,8 @@ begin wait until (CLK_I'event and CLK_I='0');
 --  XOBIT_R<=XOBIT;
   end process;
 
-HIN_ZUR_AUSGABE <= dbInput;
-SCHREIBBIT1_ZUR_AUSGABE <= STRG;
+--HIN_ZUR_AUSGABE <= dbInput;
+--SCHREIBBIT1_ZUR_AUSGABE <= STRG;
 
 process
 variable scount: STD_LOGIC_VECTOR (31 downto 0):=x"00000000";
