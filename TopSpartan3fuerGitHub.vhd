@@ -132,7 +132,8 @@ variable XOFFOutput: STD_LOGIC;
 begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
   if xcount1<x"01B2" then xcount1:=xcount1+8; else --D9+D9=1B2
     -- ganz neu 01B2 bei 112500, 1458H bei 9600, 14585H bei 600
-   xcount1:=x"0000";
+	 -- endlich mal merken, 1B2 entsteht aus 50000000/115200.
+    xcount1:=x"0000";
     if xcount2<x"A" then 
       TxD<=OutBit(9);
       OutBit:='0'&OutBit(18 downto 10);
@@ -173,7 +174,7 @@ begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
 --        if scount>0 then scount:=scount+2; -- D0000, D000 statt 1100
         if scount/=0 then scount:=scount+8;
           end if; end if; end if;
--- 115200:
+-- 115200: 43x-28x=1B2, 1B2 von TXD
   if scount(11 downto 4)=x"28" then dbInput_L(0):=RxDI;
   elsif scount(11 downto 4)=x"43" then dbInput_L(1):=RxDI;
   elsif scount(11 downto 4)=x"5E" then dbInput_L(2):=RxDI;
