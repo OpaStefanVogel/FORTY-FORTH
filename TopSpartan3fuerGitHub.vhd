@@ -75,8 +75,12 @@ architecture Step_9 of TopSpartan3fuerGitHub is
 
     -- EMIT --
     EMIT_GESENDET: out STD_LOGIC;
-    EMIT: out STD_LOGIC_VECTOR (7 downto 0);
-    EMIT_EMPFANGEN: in STD_LOGIC
+    EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
+    EMIT_EMPFANGEN: in STD_LOGIC;
+
+     -- KEY --
+    KEY_GESENDET: in STD_LOGIC;
+    KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0)
 
     );
 end component;
@@ -103,13 +107,18 @@ DUT: top
 	 
     -- EMIT --
     EMIT_GESENDET   => SCHREIBBIT1_ZUR_AUSGABE,
-    EMIT   => HIN_ZUR_AUSGABE,
-    EMIT_EMPFANGEN   => SCHREIBBIT2_X
+    EMIT_BYTE       => HIN_ZUR_AUSGABE,
+    EMIT_EMPFANGEN  => SCHREIBBIT2_X,
+
+     -- KEY --
+    KEY_GESENDET  => STRG,
+    KEY_BYTE      => dbInput
+
     );
 
 process(CLK) begin if CLK'event and CLK='1' then
   TAKTZAEHLER<=TAKTZAEHLER+1;
-  CLK_I<=TAKTZAEHLER(3);
+  CLK_I<=TAKTZAEHLER(1); --0: 25 MHz, 1: 12,5 MHz, 2: 6,25 MHz...
   CLK_6_MHz<=TAKTZAEHLER(2);
   end if; end process;
 
