@@ -3,18 +3,18 @@
 <los><step>10</step>Nutzereingabe
 
 Variablen:
-KEY_BYTE      = enthält das vom Nutzer eingegebene Byte
-KEY_GESENDET  = wird invertiert, wenn dieses Byte abgeschickt wurde
-Es fehlt eine Variable KEY_EMPFANGEN mit der gleichen Funktion wie EMIT_EMPFANGEN, ich hatte sie bisher nicht gebraucht.
+KEY_BYTE        = enthält das vom Nutzer eingegebene Byte
+KEY_ABGESCHICKT = wurde invertiert, als KEY_BYTE abgeschickt,
+KEY_ANGEKOMMEN  = wird invertiert, wenn KEY_BYTE ausgewertet und das Programm bereit zum Empfang des nächsten Bytes ist.
 
-Das Invertieren von EMIT_GESENDET ruft im darauffolgenden Takt das Unterprogramm ab Adresse 0016 auf (Interrupt). Dort wird EMIT_BYTE gelesen und im Eingabepuffer zwischengespeichert, anschließend das unterbrochene Programm fortgesetzt. Also muss generell beim Programmieren berücksichtigt werden, jederzeit an jeder Stelle kann eine solche Unterbrechung erfolgen.
+Invertieren von KEY_ABGESCHICKT bewirkt im darauffolgenden Takt eine Unterbrechung des laufenden Programms und Aufruf von Unterprogramm ab Adresse 0016 (Interrupt). Dort wird KEY_BYTE gelesen und im Eingabepuffer zwischengespeichert sowie zuletzt KEY_ANGEKOMMEN invertiert, anschließend das unterbrochene Programm fortgesetzt. Also muss generell beim Programmieren berücksichtigt werden, jederzeit an jeder Stelle kann eine solche Unterbrechung erfolgen.
 
 Verwendete FORTH-Worte:
-KEY  ( --> n ) wartet auf Nutzereingabe eines Zeichens und gibt es als n auf dem Stapel zurück.
+KEY  ( --> n ) wartet auf Nutzereingabe eines Zeichens und übergibt es als n auf dem Stapel.
 *    ( a b --> a*b ) Multiplikation
 .    ( n --> ) gibt n als Zeichenkette ins Terminal aus.
  
-Beispiel: Rechne 56*89 
+Beispiel: <i>Rechne 56*89</i> 
 
 <term>git checkout Step_10
 git diff <diff>Step_9...Step_10</diff></term>

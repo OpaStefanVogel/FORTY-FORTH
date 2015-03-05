@@ -3,9 +3,9 @@
 <los><step>9</step>Programmausgabe
 
 Variablen:
-EMIT_BYTE      = enthält das auszugebende Byte
-EMIT_GESENDET  = wird invertiert, wenn ein Byte gesendet wurde,
-EMIT_EMPFANGEN = muss vom Empfänger invertiert werden. Das Programm wartet solange mit dem Absenden des nächsten Bytes.
+EMIT_BYTE        = enthält das auszugebende Byte
+EMIT_ABGESCHICKT = wird invertiert, wenn ein Byte gesendet wurde,
+EMIT_ANGEKOMMEN  = muss vom Empfänger invertiert werden. Das Programm wartet solange mit dem Absenden des nächsten Bytes.
 
 EMIT  ( n --> ) gibt n auf Port EMIT_BYTE aus.
 
