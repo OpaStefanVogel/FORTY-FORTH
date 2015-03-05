@@ -74,14 +74,14 @@ architecture Step_9_und_10 of TopSpartan3fuerGitHub is
     LEDS: out STD_LOGIC_VECTOR (7 downto 0);
 
     -- EMIT --
-    EMIT_GESENDET: out STD_LOGIC;
+    EMIT_ABGESCHICKT: out STD_LOGIC;
     EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
-    EMIT_EMPFANGEN: in STD_LOGIC;
+    EMIT_ANGEKOMMEN: in STD_LOGIC;
 
      -- KEY --
-    KEY_GESENDET: in STD_LOGIC;
+    KEY_ABGESCHICKT: in STD_LOGIC;
     KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0);
-    KEY_EMPFANGEN: out STD_LOGIC
+    KEY_ANGEKOMMEN: out STD_LOGIC
 
     );
 end component;
@@ -107,14 +107,14 @@ DUT: top
     LEDS     => led,
 	 
     -- EMIT --
-    EMIT_GESENDET   => SCHREIBBIT1_ZUR_AUSGABE,
+    EMIT_ABGESCHICKT   => SCHREIBBIT1_ZUR_AUSGABE,
     EMIT_BYTE       => HIN_ZUR_AUSGABE,
-    EMIT_EMPFANGEN  => SCHREIBBIT2_X,
+    EMIT_ANGEKOMMEN  => SCHREIBBIT2_X,
 
      -- KEY --
-    KEY_GESENDET  => STRG,
+    KEY_ABGESCHICKT  => STRG,
     KEY_BYTE      => dbInput,
-    KEY_EMPFANGEN => open
+    KEY_ANGEKOMMEN => open
 
 
     );
