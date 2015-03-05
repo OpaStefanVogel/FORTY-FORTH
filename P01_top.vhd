@@ -14,6 +14,7 @@ entity top is
      -- KEY --
     KEY_GESENDET: in STD_LOGIC;
     KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0);
+    KEY_EMPFANGEN: out STD_LOGIC;
 
     -- nur zur Simulation und Fehlersuche:
     CLK_SIM : out STD_LOGIC;
@@ -45,6 +46,7 @@ component FortyForthProcessor
      -- KEY --
     KEY_GESENDET: in STD_LOGIC;
     KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0);
+    KEY_EMPFANGEN: out STD_LOGIC;
 
     -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
@@ -78,6 +80,8 @@ DUT0: FortyForthProcessor
      -- KEY --
     KEY_GESENDET => KEY_GESENDET,
     KEY_BYTE => KEY_BYTE,
+    KEY_EMPFANGEN =>  KEY_EMPFANGEN,
+
 
     -- nur fuer Simulation
     PC_SIM => PC_SIM,
