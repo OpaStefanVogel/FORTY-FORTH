@@ -122,7 +122,6 @@ process(CLK) begin if CLK'event and CLK='1' then
   CLK_6_MHz<=TAKTZAEHLER(2);
   end if; end process;
 
---TXD <= RXD; -- nicht mehr, jetzt:
 
 process 
 variable xcount1: STD_LOGIC_VECTOR (15 downto 0);
@@ -157,9 +156,6 @@ begin wait until (CLK_I'event and CLK_I='0');
   P19SCHREIBBIT1<=SCHREIBBIT1_ZUR_AUSGABE;
 --  XOBIT_R<=XOBIT;
   end process;
-
---HIN_ZUR_AUSGABE <= dbInput;
---SCHREIBBIT1_ZUR_AUSGABE <= STRG;
 
 process
 variable scount: STD_LOGIC_VECTOR (31 downto 0):=x"00000000";
