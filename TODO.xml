@@ -23,20 +23,21 @@ ok mach läuft wieder: Vergleiche nochmal mit S3:
    das ist das wesentliche aus diff
 ok Step ? noch füllen, ok ist jetzt Step 1
 .. S3 Step_1 läuft, aber nochmal den Wechsel bis Step_10 überlegen.
-.. KEY_EMPFANGEN noch beschalten
+ok KEY_EMPFANGEN noch beschalten ok jetzt mit 0 D000 !
 .. den benötigten Langsamtakt einfach an KEY(0) anschalten eventuell???
 .. "neue vhdl-Variablen" in P05
 nö Terminal: ganz raus und alles mit in Tcl-Console rein. nö geht danach nicht weiter
 .. noch ein R00 mit nur I-O-Check oder auch nicht.
 .. EMIT durchgängig in EMIT_BYTE umbenennen, nicht nur R10, SP runter
 .. doch das .wcfg File mit rein in Step_1 bis 10?
-.. xmlns= nochmal versuchen
+ok xmlns= nochmal versuchen ok geht echt nur mit /xsl:attribute/
 ok jetzt hab ich doch noch die compare-Funktion gefunden. Rein damit.
-.. R00.DTD noch mit
+ok R00.DTD noch mit ok
 .. Spartan3 startet mit je einem ? bei EMIT und KEY...
 .. R00.xsl mit Haltbarkeitsdatum versehen
 .. in RXD noch STRG umsetzen auf nach dbInput, aber wie?
 .. na vielleicht doch ein kleiner Minifehler bei <section><div> statt <span>
 .. FFPINIT1.TXT gehört in master mit rein
+.. alle .xml auch so anordnen, dass sie ohne xslt lesbar sind.
 
 
