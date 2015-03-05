@@ -213,6 +213,7 @@ IMMEDIATE: ' ( <NAME> --> --> pfa )
       IRAMADR @ JRAMADR @ - 3FF AND 
       100 > IF XOFF @ 0= IF -1 XOFF ! 13 EMIT END_IF END_IF 
       END_IF
+  0 D000 !
   ;
 
 : KEYCODE2 ( --> c f )
@@ -450,6 +451,7 @@ START
 
 0 CRBIT !
 
+( screen ^A H fuer log-file
 ( 800 0 0 DUMPZ
 ( E400 E000 -1 DUMPZ
 

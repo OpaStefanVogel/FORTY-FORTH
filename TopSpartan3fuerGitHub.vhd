@@ -6,8 +6,6 @@
 -- Design Name: 
 -- Module Name:    Platine95 - jetzt24Bit 
 -- Project Name: 
--- Target Devices: 
--- Tool versions: 
 -- Description: 
 --
 -- Dependencies: 
@@ -22,6 +20,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
+-- Target Devices: 
+-- Tool versions: 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx primitives in this code.
 library UNISIM;
@@ -80,8 +80,8 @@ architecture Step_9_und_10 of TopSpartan3fuerGitHub is
 
      -- KEY --
     KEY_GESENDET: in STD_LOGIC;
-    KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0)
-    KEY_EMPFANGEN: out STD_LOGIC;
+    KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0);
+    KEY_EMPFANGEN: out STD_LOGIC
 
     );
 end component;
