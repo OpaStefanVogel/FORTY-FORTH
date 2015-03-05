@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
 <los><step>Step 6</step>Umstapeln
 
-Üblichen FORTH-Worte zum Umstapeln sind 
+Übliche FORTH-Worte zum Umstapeln sind 
 
 Code   FORTH-Wort   Stapeldiagramm
 B412   SWAP         ( a b --> b a )
