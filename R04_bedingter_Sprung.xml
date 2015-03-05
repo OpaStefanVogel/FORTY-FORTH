@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
-<los><step>4</step>Bedingter Sprung
+<los><step>Step 4</step>Bedingter Sprung
 
 Dieser wird nur ausgeführt, wenn der oberste Stapeleintrag gleich Null ist. Das entspricht der Interpretation "Null" steht für "false", jeder andere Wert ist "true". Auf IF folgende Programmschritte sollen bei "true" ausgeführt werden, bei "false" soll IF diese überspringen, daher Sprung wenn oberster Stapeleintrag Null. Der Stapeleintrag wird dabei in jedem Fall entfernt.
  

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
-<los><step>10</step>Nutzereingabe
+<los><step>Step 10</step>Nutzereingabe
 
 Variablen:
 KEY_BYTE        = enthält das vom Nutzer eingegebene Byte
@@ -30,5 +30,5 @@ ok
 
 Die Nutzereingabe <u>56 89 * .</u> ist farblich unterschiedlich dargestellt gegenüber der Programmausgabe. Die Nutzereingabe wurde mit Enter=0A abgeschlossen (nicht dargestellt). Sie erscheint ab 100000 ns in KEY_BYTE. Das Ergebnis wird beginnend ab 2378760 ns in EMIT_BYTE ausgegeben.  
 
-<weiter />Pause
+<weiter /><a href="Spartan3.xml">Installation Spartan3 Board</a>
 </los>

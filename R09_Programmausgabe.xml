@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
-<los><step>9</step>Programmausgabe
+<los><step>Step 9</step>Programmausgabe
 
 Variablen:
 EMIT_BYTE        = enthält das auszugebende Byte

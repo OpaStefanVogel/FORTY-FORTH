@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
-<los><step>5</step>Unterprogramm
+<los><step>Step 5</step>Unterprogramm
 
 Zusätzlich zum Sprung an die neue Fortsetzungsadresse muss die normale Fortsetzungsadresse PC+1 in einem Rückkehrstapel zwischengespeichert und bei Rückkehr aus dem Unterprogramm wieder hergestellt werden. 
 

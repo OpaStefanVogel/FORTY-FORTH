@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
-<los><step>3</step>Stapel in RAM speichern
+<los><step>Step 3</step>Stapel in RAM speichern
 
 Momentan ist R ein Array bestehend aus nur 4 Speicherplätzen. Für einen größeren Stapelspeicher könnte man einfach das Array vergrößern. Das funktioniert auch in der Simulation. Beim Synthetisieren war es aber bis jetzt immer so, dass für das Array keine vorhandene RAM-Konstruktionen verwendet wurden und dadurch eine umfangreiche Schaltung entstand. Ich vermute, das ist vor allem wegen der vier gleichzeitigen Speicherzugriffe A:=R(SP-1), B:=R(SP-2), C:=R(SP-3) und D:=R(SP-4). Das lässt sich aber schaltungsmäßig einfach aufteilen auf vier getrennte RAM-Arrays: Das erste Array nimmt alle R(SP) auf, wo SP auf die Bits "00" endet, das zweite Array alle zu den Bits "01" und so weiter. Also so
 
