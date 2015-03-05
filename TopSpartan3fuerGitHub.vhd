@@ -81,6 +81,7 @@ architecture Step_9_und_10 of TopSpartan3fuerGitHub is
      -- KEY --
     KEY_GESENDET: in STD_LOGIC;
     KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0)
+    KEY_EMPFANGEN: out STD_LOGIC;
 
     );
 end component;
@@ -112,7 +113,9 @@ DUT: top
 
      -- KEY --
     KEY_GESENDET  => STRG,
-    KEY_BYTE      => dbInput
+    KEY_BYTE      => dbInput,
+    KEY_EMPFANGEN => open
+
 
     );
 
