@@ -12,14 +12,14 @@ entity FortyForthProcessor is
     WE_O: out STD_LOGIC;
     
     -- EMIT --
-    EMIT_GESENDET: out STD_LOGIC;
+    EMIT_ABGESCHICKT: out STD_LOGIC;
     EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
-    EMIT_EMPFANGEN: in STD_LOGIC;
+    EMIT_ANGEKOMMEN: in STD_LOGIC;
     
      -- EMIT --
-    KEY_GESENDET: in STD_LOGIC;
+    KEY_ABGESCHICKT: in STD_LOGIC;
     KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0);
-    KEY_EMPFANGEN: out STD_LOGIC;
+    KEY_ANGEKOMMEN: out STD_LOGIC;
 
    -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
@@ -263,17 +263,17 @@ signal STORE_ZUM_RAM,EXFET,ADRESSE_ZUM_RAM: STD_LOGIC_VECTOR (15 downto 0);
 signal FETCH_VOM_ProgRAM,FETCH_VOM_ByteRAM,FETCH_VOM_stapR: STD_LOGIC_VECTOR (15 downto 0);
 signal WE_ZUM_RAM,WE_ZUM_ProgRAM,WE_ZUM_ByteRAM,WE_ZUM_stapR: STD_LOGIC;
 -- fuer EMIT-Ausgabe
-signal EMIT_GESENDET_LOCAL,EMIT_EMPFANGEN_RUHEND,XOFF_INPUT_L: STD_LOGIC:='0';
-signal KEY_EMPFANGEN_LOCAL,KEY_GESENDET_RUHEND,KEY_GESENDET_MERK: STD_LOGIC:='0';
+signal EMIT_ABGESCHICKT_LOCAL,EMIT_ANGEKOMMEN_RUHEND,XOFF_INPUT_L: STD_LOGIC:='0';
+signal KEY_ANGEKOMMEN_LOCAL,KEY_ABGESCHICKT_RUHEND,KEY_ABGESCHICKT_MERK: STD_LOGIC:='0';
 signal KEY_BYTE_RUHEND: STD_LOGIC_VECTOR (7 downto 0);
 
 
 begin
 
 process begin wait until (CLK_I'event and CLK_I='1'); --ruhende Eingangsdaten für FortyForthprocessor
-  EMIT_EMPFANGEN_RUHEND<=EMIT_EMPFANGEN;
+  EMIT_ANGEKOMMEN_RUHEND<=EMIT_ANGEKOMMEN;
   KEY_BYTE_RUHEND<=KEY_BYTE;
-  KEY_GESENDET_RUHEND<=KEY_GESENDET;
+  KEY_ABGESCHICKT_RUHEND<=KEY_ABGESCHICKT;
   end process;
   
 
@@ -293,8 +293,8 @@ variable U: STD_LOGIC_VECTOR (31 downto 0);
 
 begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
   -- ob ein KEY aingetroffen ist --
-  if KEY_GESENDET_MERK/=KEY_GESENDET_RUHEND then 
-    KEY_GESENDET_MERK<=KEY_GESENDET_RUHEND;
+  if KEY_ABGESCHICKT_MERK/=KEY_ABGESCHICKT_RUHEND then 
+    KEY_ABGESCHICKT_MERK<=KEY_ABGESCHICKT_RUHEND;
     PD:=x"4016";
     PC:=PC;
     else
@@ -358,15 +358,15 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
       T:=2;
       SP:=SP-1;
     elsif PD=x"A005" then -- EMIT Zeichen ausgeben
-      if (EMIT_GESENDET_LOCAL=EMIT_EMPFANGEN_RUHEND) and XOFF_INPUT_L='0' then
+      if (EMIT_ABGESCHICKT_LOCAL=EMIT_ANGEKOMMEN_RUHEND) and XOFF_INPUT_L='0' then
         EMIT_BYTE<=A(7 downto 0);
-        EMIT_GESENDET_LOCAL<=not EMIT_EMPFANGEN_RUHEND;
+        EMIT_ABGESCHICKT_LOCAL<=not EMIT_ANGEKOMMEN_RUHEND;
         T:=0;
         SP:=SP-1;
         else PC:=PC-1; end if; -- warten
     elsif PD=x"A009" then -- STORE Speicheradresse beschreiben
       case A is
-        when x"D000" => KEY_EMPFANGEN_LOCAL<=not KEY_EMPFANGEN_LOCAL;
+        when x"D000" => KEY_ANGEKOMMEN_LOCAL<=not KEY_ANGEKOMMEN_LOCAL;
         when x"D001" => SP:=CONV_INTEGER(B);
         when x"D002" => RP<=B;
         when x"D003" => PC:=B;
@@ -427,8 +427,8 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
 ADR_O<=ADRESSE_ZUM_RAM;
 DAT_O<=STORE_ZUM_RAM;
 WE_O<=WE_ZUM_RAM;
-EMIT_GESENDET<=EMIT_GESENDET_LOCAL;
-KEY_EMPFANGEN<=KEY_EMPFANGEN_LOCAL;
+EMIT_ABGESCHICKT<=EMIT_ABGESCHICKT_LOCAL;
+KEY_ANGEKOMMEN<=KEY_ANGEKOMMEN_LOCAL;
 
 -- hier werden die Lesedaten der unterschiedlichen Speicher zusammengefuehrt
 EXFET<=FETCH_VOM_ProgRAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else
