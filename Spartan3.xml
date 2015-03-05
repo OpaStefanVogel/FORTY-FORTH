@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
+<los><step>Spartan3</step>Spartan3
+
+Letzte Schritt war
+
+<term>git checkout Step_10</term>Alle Dateien, welche speziell nur für das Spartan3-Board benötigt werden, befinden sich in einem extra Branch, um das alles etwas auseinanderzuhalten. Deshalb in einem neuen Terminal-2 irgendwie irgendwo ein neues leeres Verzeichnis mit selbstgewählten Namen <i>your-Spartan3-repo</i> anlegen. Dann in dieses Verzeichnis wechseln und nochmal klonen (den einzelnen Punkt nach .git nicht übersehen)
+
+<sterm>git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git .
+git checkout Spartan3_Step_9_und_10</sterm>Ein weiteres Terminal-3 wird für die serielle Ein- und Ausgabe benötigt. Welches Verzeichnis ist egal. Eingabe von
+
+<yterm>stty -F /dev/ttyS0 115200 raw -cstopb -parenb -crtscts -echo ixon -ixoff
+stty raw -echo opost quit ^C isig ixon -ixoff #hiernach ist es finster!!!
+cp /dev/ttyS0 /dev/tty &amp; cp /dev/tty /dev/ttyS0
+</yterm>(alles mit Enter abschließen, man sieht nach dem zweiten stty keine Bildschirmausgabe mehr)
+
+So, jetzt muss mit <a href="https://en.wikipedia.org/wiki/Xilinx_ISE">Xilinx_ISE</a> ein Projekt mit den Dateien
+
+<i>your-master-repo</i>/P01_top.vhd
+<i>your-master-repo</i>/P20_FFP.vhd
+<i>your-Spartan3-repo</i>/TopSpartan3.vhd
+<i>your-Spartan3-repo</i>/Platine95S3.ucf
+
+angelegt werden, das .bit File erzeugt und auf den Spartan3 ausgegeben werden. Dann sollte in Terminal-3 wieder
+
+<ffterm>FORTY-FORTH
+
+ok</ffterm>
+
+zu sehen sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, ob sich da nur was verheddert hat. Sonst bleibt nur, in Terminal 1 und 2 mit <code>git checkout</code> auf vorherige Versionen umschalten. Dabei gilt momentan folgende Zuordnung
+
+<table border="1">
+  <tr><th><i>your-master-repo&amp;</i></th><th><i>your-Spartan3-repo&amp;</i></th><th>Ausgabe</th></tr>
+  <tr><td>Step_1</td><td>Spartan_Step_1_bis_5_und_8</td><td>LED's</td></tr>
+  <tr><td>Step_2</td><td>Spartan_Step_1_bis_5_und_8</td><td>LED's</td></tr>
+  <tr><td>Step_3</td><td>Spartan_Step_1_bis_5_und_8</td><td>LED's</td></tr>
+  <tr><td>Step_4</td><td>Spartan_Step_1_bis_5_und_8</td><td>LED's</td></tr>
+  <tr><td>Step_5</td><td>Spartan_Step_1_bis_5_und_8</td><td>LED's</td></tr>
+  <tr><td>Step_6</td><td>Spartan_Step_6_und_7</td><td>LED's</td></tr>
+  <tr><td>Step_7</td><td>Spartan_Step_6_und_7</td><td>LED's</td></tr>
+  <tr><td>Step_8</td><td>Spartan_Step_1_bis_5_und_8</td><td>LED's</td></tr>
+  <tr><td>Step_9</td><td>Spartan_Step_9_und_10</td><td>serieller Ausgang</td></tr>
+  <tr><td>Step_10</td><td>Spartan_Step_9_und_10</td><td>serieller Ausgang</td></tr>
+  </table>
+
+
+
+</los>

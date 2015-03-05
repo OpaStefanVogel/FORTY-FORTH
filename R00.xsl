@@ -19,7 +19,7 @@
     <!-->
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
-    <title>Step <xsl:value-of select="los/step" /></title>
+    <title><xsl:value-of select="los/step" /></title>
 
     <link rel="stylesheet" href="stylesheets/styles.css"/>
     <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
@@ -44,10 +44,8 @@
           <li><a href="https://github.com/OpaStefanVogel/FORTY-FORTH">View On <strong>GitHub</strong></a></li>
         </ul>
       </header>
-
-    <section><div class="section">
-      <xsl:apply-templates />
-      </div></section>
+      
+      <section><span class="section"><xsl:apply-templates /></span></section>
       
       </div>
 
@@ -63,12 +61,11 @@
   </xsl:template>
 
 
-<xsl:template match="term"><span id="Terminal">Terminal: <i>your-repo&amp; ...</i></span>
-<pre><code><xsl:apply-templates /></code></pre>
-  </xsl:template>
-<xsl:template match="tterm">Tcl Console: <i>"Type a Tcl command here"</i>
-  <pre><code><xsl:apply-templates /></code></pre>
-  </xsl:template>
+<xsl:template match="term0">Terminal: <i>&amp;</i><pre><code><xsl:apply-templates /></code></pre></xsl:template>
+<xsl:template match="term"><span id="Terminal">Terminal-1: <i>your-master-repo&amp; </i></span><pre><code><xsl:apply-templates /></code></pre></xsl:template>
+<xsl:template match="sterm">Terminal-2: <i>your-Spartan3-repo&amp; </i><pre><code><xsl:apply-templates /></code></pre></xsl:template>
+<xsl:template match="yterm">Terminal-3: <i>&amp; </i><pre><code><xsl:apply-templates /></code></pre></xsl:template>
+<xsl:template match="tterm">Tcl Console: <i>"Type a Tcl command here"</i><pre><code><xsl:apply-templates /></code></pre></xsl:template>
 
 <xsl:template match="a"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="table"><xsl:copy-of select="." /></xsl:template>

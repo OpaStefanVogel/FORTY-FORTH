@@ -36,3 +36,5 @@ ok jetzt hab ich doch noch die compare-Funktion gefunden. Rein damit.
 .. Spartan3 startet mit je einem ? bei EMIT und KEY...
 .. R00.xsl mit Haltbarkeitsdatum versehen
 .. in RXD noch STRG umsetzen auf nach dbInput, aber wie?
+.. na vielleicht doch ein kleiner Minifehler bei <section><div> statt <span>
+

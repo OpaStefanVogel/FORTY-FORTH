@@ -36,20 +36,19 @@
 
 <p>Ich verwende dabei <a href="http://en.wikipedia.org/wiki/Git_(software)">git</a>, um bei Fehlersuche wirklich schnell auf vorher funktionierende Varianten umschalten zu können, notfalls bis zu einer allereinfachsten Anfangsversion, sowie <a href="http://en.wikipedia.org/wiki/GitHub">GitHub</a>, um von überall aus tüchtig zu <code>clone</code>(n) und <code>push</code>(en).
 </p>
-<p>Erste Eingaben erfolgen im <a href="http://de.wikipedia.org/wiki/Linux">Linux</a>-Terminal. Setze anstelle <code>your-repo</code> einen eigenen gewünschten Verzeichnisnamen ein.</p>
+<p>Erste Eingaben erfolgen in einem <a href="http://de.wikipedia.org/wiki/Linux">Linux</a>-Terminal. Bilde einen eigenen Verzeichnisnamen <i>your-master-repo</i>, erzeuge ein leeres Verzeichnis mit diesem Namen und wechsle in dieses Verzeichnis. Dann klone (den einzelnen Punkt nach .git nicht übersehen, dadurch wird in das schon angelegte Verzeichnis geklont) und starte aus diesem Verzeichnis heraus zusätzlich <a href="http://www.xilinx.com/products/design-tools/vivado/integration/esl-design.html">Vivado</a>.</p>
 
-<div>Terminal:</div>
-<pre><code>$ git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git your-repo
-$ cd your-repo
-your-repo$ vivado &</code></pre>
+<div>Terminal-1: <i>your-master-repo&amp;</i></div>
+<pre><code>git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git your-master-repo .
+vivado &</code></pre>
 <p>Während vivado startet...</p>
 
 <p>"FORTY" steht für englisch <b><u>40</u></b> im verwendeten Datenformat: Hexadezimalzahlen von 0000H bis 3FFFH werden immer als ganze Zahlen interpretiert, von <b><u>40</u></b>00H bis BFFFH wahlweise als Zeiger auf größere ganze Zahlen oder als Programmcode und von C000H bis FFFFH als negative ganze Zahlen.
 </p>
 
-<p>In diesem Sinne steht am Anfang ein erstes, sehr einfaches Programmbeispiel, welches nach und nach erweitert wird. Es soll laufen als <a href="http://www.xilinx.com/products/design-tools/vivado/integration/esl-design.html">Vivado</a> - <i>simulation behavioral</i>.
+<p>In diesem Sinne steht am Anfang ein erstes, sehr einfaches Programmbeispiel, welches nach und nach erweitert wird. Es soll laufen als <i>vivado - simulation behavioral</i>.
 
-<p>...nach Erscheinen der Start- und später der Projektseite von vivado kann mit <a href="http://de.wikipedia.org/wiki/Tcl">tcl</a>-Eingaben fortgesetzt werden im Eingabefeld</p>
+<p>...Nach Erscheinen der Start- und später der Projektseite von vivado kann schließlich mit <a href="http://de.wikipedia.org/wiki/Tcl">tcl</a>-Eingaben fortgesetzt werden im Eingabefeld</p>
 
 <div>Tcl Console: <i>"Type a Tcl command here"</i><div>
 <pre><code>create_project -force project_FFP project_FFP
@@ -57,7 +56,7 @@ add_files -norecurse {P01_top.vhd P20_FFP.vhd}
 add_files -fileset sim_1 -norecurse testbench.vhd
 </code></pre>
 
-<p>Am einfachsten ist Copy&Paste aller drei Eingabezeilen zusammen hinein in <i>"Type a Tcl command here"</i>, gefolgt von Enter. Jede diese Eingaben braucht etwas Zeit zur Ausführung. Weitere Eingaben dann je nach ausgewählter Programmvariante:</p>
+<p>Am einfachsten ist Copy&Paste aller drei Eingabezeilen zusammen hinein in <i>"Type a Tcl command here"</i>, gefolgt von Enter. Jede diese Eingaben braucht ihre Zeit zur Ausführung. Weitere Eingaben dann je nach ausgewählter Programmvariante:</p>
 
 <div id="Inhalt">
 <p><a href="R01_Anfang.xml">R01 ein erstes einfaches Programm</a></p>
@@ -71,7 +70,12 @@ add_files -fileset sim_1 -norecurse testbench.vhd
 <p><a href="R09_Programmausgabe.xml">R09 Programmausgabe</a></p>
 <p><a href="R10_Nutzereingabe.xml">R10 Nutzereingabe</a></p>
 </div>
-<p>Pause.</p>
+
+<p>Falls zufällig ein nicht mehr benötigtes <a href="http://www.digilentinc.com/Products/Detail.cfm?Prod=S3BOARD">Spartan3 Board</a> herumliegt, versuche auch eine
+
+<p><a href="Spartan3.xml">Installation auf dem Spartan3 Board</a>.</p>
+
+<p>Danach aber schon eine wirklich verdiente Pause, auch wenn rein gar nichts funktionieren will.</p>
 
       </section>
     </div>
