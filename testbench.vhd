@@ -21,9 +21,10 @@ component top
     EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
     EMIT_EMPFANGEN: in STD_LOGIC;
             
-     -- EMIT --
-   KEY_GESENDET: in STD_LOGIC;
-   KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0);
+    -- KEY --
+    KEY_GESENDET: in STD_LOGIC;
+    KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0);
+    KEY_EMPFANGEN: out STD_LOGIC;
 
     -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
@@ -53,6 +54,7 @@ signal EMIT_EMPFANGEN: STD_LOGIC:='0';
 -- KEY --
 signal KEY_GESENDET: STD_LOGIC:='0';
 signal KEY_BYTE: STD_LOGIC_VECTOR (7 downto 0);
+signal KEY_EMPFANGEN: STD_LOGIC:='0';
 
 begin
 
@@ -70,6 +72,7 @@ begin
       -- KEY --
       KEY_GESENDET => KEY_GESENDET,
       KEY_BYTE => KEY_BYTE,
+      KEY_EMPFANGEN => KEY_EMPFANGEN,
 
       -- nur fuer Simulation
       PC_SIM => PC_SIM,

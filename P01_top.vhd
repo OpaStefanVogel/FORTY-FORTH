@@ -80,7 +80,7 @@ DUT0: FortyForthProcessor
      -- KEY --
     KEY_GESENDET => KEY_GESENDET,
     KEY_BYTE => KEY_BYTE,
-    KEY_EMPFANGEN =>  KEY_EMPFANGEN,
+    KEY_EMPFANGEN => KEY_EMPFANGEN,
 
 
     -- nur fuer Simulation
