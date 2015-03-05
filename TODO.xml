@@ -37,4 +37,6 @@ ok jetzt hab ich doch noch die compare-Funktion gefunden. Rein damit.
 .. R00.xsl mit Haltbarkeitsdatum versehen
 .. in RXD noch STRG umsetzen auf nach dbInput, aber wie?
 .. na vielleicht doch ein kleiner Minifehler bei <section><div> statt <span>
+.. FFPINIT1.TXT gehört in master mit rein
+
 

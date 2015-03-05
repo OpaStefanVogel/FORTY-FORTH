@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
-<!--geht leider nicht mit Raspberry-midori-->
+<!DOCTYPE los SYSTEM "R00.dtd">
 <los><step>Step 1</step>Als Anfang ein sehr einfaches Programm.
 
 <i>Der oberste Stapeleintrag soll beginnend mit 0 fortlaufend um 1 erhöht und auf Adresse 2D04 ausgegeben werden.</i>

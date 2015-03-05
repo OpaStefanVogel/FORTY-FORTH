@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
+<!DOCTYPE los SYSTEM "R00.dtd">
 <los><step>Spartan3</step>Spartan3
 
 Letzter Schritt war
 
-<term>git checkout Step_10</term>Alle Dateien, welche speziell nur für das Spartan3-Board benötigt werden, befinden sich in einem extra Branch. Deshalb in einem neuen Terminal-2 ein neues leeres Verzeichnis mit selbstgewählten Namen <i>your-Spartan3-repo</i> anlegen, in dieses Verzeichnis wechseln und nochmal klonen (wieder den einzelnen Punkt nach .git nicht übersehen)
+<term>git checkout Step_10</term>Alle Dateien, welche speziell nur für das Spartan3-Board benötigt werden, befinden sich in einem extra Branch. Deshalb in einem neuen Terminal-2 ein neues leeres Verzeichnis mit einem selbstgewählten Namen <i>your-Spartan3-repo</i> anlegen, in dieses Verzeichnis wechseln und nochmal klonen.
 
 <sterm>git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git .
-git checkout Spartan3_Step_9_und_10</sterm>Ein weiteres Terminal-3 wird für die serielle Ein- und Ausgabe benötigt. Welches Verzeichnis ist egal. Eingabe von
+git checkout Spartan3_Step_9_und_10</sterm>Ein weiteres Terminal-3 wird für die serielle Ein- und Ausgabe benötigt, welches Verzeichnis ist egal. Eingabe von
 
 <yterm>stty -F /dev/ttyS0 115200 raw -cstopb -parenb -crtscts -echo ixon -ixoff
 stty raw -echo opost quit ^C isig ixon -ixoff #hiernach ist es finster!!!
@@ -27,7 +28,7 @@ angelegt werden, das .bit File erzeugt und auf den Spartan3 ausgegeben werden. D
 
 ok</ffterm>
 
-zu sehen sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, ob sich da nur was verheddert hat. Sonst bleibt nur, in Terminal 1 und 2 mit <code>git checkout</code> auf vorherige Versionen umzuschalten. Dabei gilt momentan folgende Zuordnung
+zu sehen sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, ob sich da nur was verheddert hat. Sonst bleibt nur, in Terminal 1 und 2 mit <code>git checkout</code> auf vorherige Versionen umzuschalten und .bit nochmal zu erzeugen. Dabei gilt momentan folgende Zuordnung
 
 <table border="1">
   <tr><th><i>your-master-repo&amp;</i></th><th><i>your-Spartan3-repo&amp;</i></th><th>Ausgabe</th></tr>
