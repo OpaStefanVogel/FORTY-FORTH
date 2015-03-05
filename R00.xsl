@@ -15,10 +15,13 @@
        user-scalable=no in yes umgeschrieben
        stylesheet R00.css ergänzt
        title auch automatisch select="los/step"
-       DOCTYPE HTML5 in XHTML 1.1, aber ohne xmlns=...
+       DOCTYPE HTML5 in XHTML 1.1, xmlns mittels xsl:attribute
+       meta Cache-Control und ETag ergänzt
     <!-->
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
+    <meta http-equiv="Cache-Control" content="max-age=600"/>
+    <meta http-equiv="ETag" content="x234dff"/>
     <title><xsl:value-of select="los/step" /></title>
 
     <link rel="stylesheet" href="stylesheets/styles.css"/>
