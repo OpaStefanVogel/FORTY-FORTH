@@ -33,7 +33,9 @@ nö Terminal: ganz raus und alles mit in Tcl-Console rein. nö geht danach nicht
 ok xmlns= nochmal versuchen ok geht echt nur mit /xsl:attribute/
 ok jetzt hab ich doch noch die compare-Funktion gefunden. Rein damit.
 ok R00.DTD noch mit ok
-.. Spartan3 startet mit je einem ? bei EMIT und KEY...
+ok Spartan3 startet mit je einem ? bei EMIT und KEY... ok super beide weg
+   ok bei TXT mit TXT:='1' initialisieren
+   ok bei RXD mit xcount:="FFFF0000" starten, wartet paar ms beim Start
 ok R00.xsl mit Haltbarkeitsdatum versehen ok wunderbar, 2xmeta reicht
 .. in RXD noch STRG umsetzen auf nach dbInput, aber wie?
 .. na vielleicht doch ein kleiner Minifehler bei /section//div/ statt /span/
