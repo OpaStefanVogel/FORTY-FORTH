@@ -33,7 +33,7 @@ entity TopSpartan3fuerGitHub is
 CLK: in  STD_LOGIC;
 -- ==== RS-232 Serial Ports  (RS232) ====
 RXD: in  STD_LOGIC;
-TXD: out STD_LOGIC;
+TXD: out STD_LOGIC:='1';
 -- SRAM
     AL:  out STD_LOGIC_VECTOR (17 downto 0):="000000000000000000";      -- Adressbus SRAM
     DL:  inout STD_LOGIC_VECTOR (31 downto 0):=x"00000000";    -- Datenbus SRAM
@@ -92,12 +92,12 @@ signal CLK_I: STD_LOGIC;
 signal TAKTZAEHLER: STD_LOGIC_VECTOR (55 downto 0):="00000000000000000000000000000000000000000000000000000000";
 
 --RXD --
-signal CLK_6_MHz,STRG,RxDI: STD_LOGIC;
-signal dbInput: STD_LOGIC_VECTOR (7 downto 0);
+signal CLK_6_MHz,KEY_ABGESCHICKT,RxDI: STD_LOGIC;
+signal KEY_BYTE: STD_LOGIC_VECTOR (7 downto 0);
 
 --TXD --
-signal P19SCHREIBBIT1,SCHREIBBIT2_X,SCHREIBBIT1_ZUR_AUSGABE: STD_LOGIC;
-signal dbOutput,HIN_ZUR_AUSGABE: STD_LOGIC_VECTOR (7 downto 0);
+signal EMIT_ABGESCHICKT_RUHEND,EMIT_ANGEKOMMEN,EMIT_ABGESCHICKT: STD_LOGIC;
+signal EMIT_BYTE_RUHEND,EMIT_BYTE: STD_LOGIC_VECTOR (7 downto 0);
 
 begin
 
@@ -107,13 +107,13 @@ DUT: top
     LEDS     => led,
 	 
     -- EMIT --
-    EMIT_ABGESCHICKT   => SCHREIBBIT1_ZUR_AUSGABE,
-    EMIT_BYTE       => HIN_ZUR_AUSGABE,
-    EMIT_ANGEKOMMEN  => SCHREIBBIT2_X,
+    EMIT_ABGESCHICKT   => EMIT_ABGESCHICKT,
+    EMIT_BYTE       => EMIT_BYTE,
+    EMIT_ANGEKOMMEN  => EMIT_ANGEKOMMEN,
 
      -- KEY --
-    KEY_ABGESCHICKT  => STRG,
-    KEY_BYTE      => dbInput,
+    KEY_ABGESCHICKT  => KEY_ABGESCHICKT,
+    KEY_BYTE      => KEY_BYTE,
     KEY_ANGEKOMMEN => open
 
 
@@ -127,8 +127,8 @@ process(CLK) begin if CLK'event and CLK='1' then
 
 
 process 
-variable xcount1: STD_LOGIC_VECTOR (15 downto 0);
-variable xcount2: STD_LOGIC_VECTOR (3 downto 0);
+variable xcount1: STD_LOGIC_VECTOR (15 downto 0):=x"0000";
+variable xcount2: STD_LOGIC_VECTOR (3 downto 0):="0000";
 variable OutBit: STD_LOGIC_VECTOR (18 downto 9):="1111111111";
 variable XOFFOutput: STD_LOGIC;
 begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
@@ -142,9 +142,9 @@ begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
       xcount2:=xcount2+1;
       elsif xcount2=x"A" then
         TxD<='1'; --Stop-Bit
-        if P19SCHREIBBIT1/=SCHREIBBIT2_X then
-          OutBit:="1"&dbOutput&'0';
-          SCHREIBBIT2_X<=P19SCHREIBBIT1;
+        if EMIT_ABGESCHICKT_RUHEND/=EMIT_ANGEKOMMEN then
+          OutBit:="1"&EMIT_BYTE_RUHEND&'0';
+          EMIT_ANGEKOMMEN<=EMIT_ABGESCHICKT_RUHEND;
           else OutBit:="1111111111"; 
             end if;
         xcount2:=xcount2+1;
@@ -155,33 +155,33 @@ begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
 
 process
 begin wait until (CLK_I'event and CLK_I='0');
-  dbOutput<=HIN_ZUR_AUSGABE;
-  P19SCHREIBBIT1<=SCHREIBBIT1_ZUR_AUSGABE;
+  EMIT_BYTE_RUHEND<=EMIT_BYTE;
+  EMIT_ABGESCHICKT_RUHEND<=EMIT_ABGESCHICKT;
 --  XOBIT_R<=XOBIT;
   end process;
 
 process
-variable scount: STD_LOGIC_VECTOR (31 downto 0):=x"00000000";
-variable dbInput_L: STD_LOGIC_VECTOR (7 downto 0);
+variable scount: STD_LOGIC_VECTOR (31 downto 0):=x"FFFF0000"; --wartet paar ms
+variable KEY_BYTE_L: STD_LOGIC_VECTOR (7 downto 0);
 begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
   if (RxDI='0' and scount=x"00000000") then scount:=x"00000008"; else
-    if scount=x"00001000" then scount:=x"00000000";
-          dbInput<=dbInput_L;
+    if scount=x"00001100" then scount:=x"00000000";
+          KEY_BYTE<=KEY_BYTE_L;
 --          STRG<=not STRG_MERK_RUHEND; 
-          STRG<=not STRG; 
+          KEY_ABGESCHICKT<=not KEY_ABGESCHICKT; 
       else 
 --        if scount>0 then scount:=scount+2; -- D0000, D000 statt 1100
         if scount/=0 then scount:=scount+8;
           end if; end if; end if;
 -- 115200: 43x-28x=1B2, 1B2 von TXD
-  if scount(11 downto 4)=x"28" then dbInput_L(0):=RxDI;
-  elsif scount(11 downto 4)=x"43" then dbInput_L(1):=RxDI;
-  elsif scount(11 downto 4)=x"5E" then dbInput_L(2):=RxDI;
-  elsif scount(11 downto 4)=x"7A" then dbInput_L(3):=RxDI;
-  elsif scount(11 downto 4)=x"95" then dbInput_L(4):=RxDI;
-  elsif scount(11 downto 4)=x"B0" then dbInput_L(5):=RxDI;
-  elsif scount(11 downto 4)=x"CB" then dbInput_L(6):=RxDI;
-  elsif scount(11 downto 4)=x"E6" then dbInput_L(7):=RxDI;
+  if scount(11 downto 4)=x"28" then KEY_BYTE_L(0):=RxDI;
+  elsif scount(11 downto 4)=x"43" then KEY_BYTE_L(1):=RxDI;
+  elsif scount(11 downto 4)=x"5E" then KEY_BYTE_L(2):=RxDI;
+  elsif scount(11 downto 4)=x"7A" then KEY_BYTE_L(3):=RxDI;
+  elsif scount(11 downto 4)=x"95" then KEY_BYTE_L(4):=RxDI;
+  elsif scount(11 downto 4)=x"B0" then KEY_BYTE_L(5):=RxDI;
+  elsif scount(11 downto 4)=x"CB" then KEY_BYTE_L(6):=RxDI;
+  elsif scount(11 downto 4)=x"E6" then KEY_BYTE_L(7):=RxDI;
     end if; 
   end process;
 
