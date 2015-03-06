@@ -17,10 +17,10 @@ ok SP mod 4 mal versuchen
 .. P01_top kann vorerst raus, 2D04 mit in testbench
 ok SP_SIM kann wieder unter PD_SIM in den Ports
 ok mach läuft wieder: Vergleiche nochmal mit S3:
-   ok XON XOFF über !
+   ok XON XOFF über EMIT OK
    ok paar NOOP's sind zusätzlich drin ok gar nicht erst übernommen
-   ok das neue R&lt;... muss ich wohl aus S3 holen ok ja 
-   das ist das wesentliche aus diff
+   ok das neue R&lt;... muss ich wohl aus S3 holen ok ja ist drin ok
+   ok das war das wesentliche aus diff ok
 ok Step ? noch füllen, ok ist jetzt Step 1
 .. S3 Step_1 läuft, aber nochmal den Wechsel bis Step_10 überlegen.
 ok KEY_EMPFANGEN noch beschalten ok jetzt mit 0 D000 !
@@ -34,10 +34,14 @@ ok xmlns= nochmal versuchen ok geht echt nur mit /xsl:attribute/
 ok jetzt hab ich doch noch die compare-Funktion gefunden. Rein damit.
 ok R00.DTD noch mit ok
 .. Spartan3 startet mit je einem ? bei EMIT und KEY...
-.. R00.xsl mit Haltbarkeitsdatum versehen
+ok R00.xsl mit Haltbarkeitsdatum versehen ok wunderbar, 2xmeta reicht
 .. in RXD noch STRG umsetzen auf nach dbInput, aber wie?
-.. na vielleicht doch ein kleiner Minifehler bei <section><div> statt <span>
-.. FFPINIT1.TXT gehört in master mit rein
+.. na vielleicht doch ein kleiner Minifehler bei /section//div/ statt /span/
+ok FFPINIT1.TXT und 2 gehören in master mit rein ok
 .. alle .xml auch so anordnen, dass sie ohne xslt lesbar sind.
+.. auch noch einen Weiterhupf
+.. README.md dann auch mit vorrichten
+.. das .ucf File auch noch weng zurechtmachen.
+.. und da war noch...
 
 
