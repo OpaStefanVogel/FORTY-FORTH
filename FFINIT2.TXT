@@ -230,6 +230,25 @@ IMMEDIATE: <; 0 STAT ! CSP? HERE 1 - @ 800 OR HERE 1 - ! SMUDGE [ SMUDGE ] ;
 ( : W PAUSENBIT ! <;
 ( ' W 8 DUMP
 
+
+( Ausgabe von ESCAPE-Sequenzen:
+
+20 WORD: ESC 1B EMIT 0 DO DUP C@ EMIT 1+ LOOP DROP ;
+ESC ]0;FORTY-FORTH 07 EMIT ( 07 EMIT schließt ]
+: FESTPOSITION ESC [s ESC [1;1H ESC [31m ; ( saveC Pos1,1 redcolor
+: RUCKPOSITION ESC [u ESC [39m ; ( restoreC defaultcolor
+
+: QUIT2 
+  RP0 @ RP !
+  BEGIN 
+    STAT @ 0= IF ESC [34m ." ok" END_IF CR ESC [39m 
+    TIB @ 100 EXPECT ESC [36m INTERPRET 
+    AGAIN ;
+
+REPLACE: QUIT QUIT2 ;
+QUIT
+
+
 : IOSTART
   2C40 2C00 DO I @ I ! LOOP
   2D30 2D14 DO I @ I ! LOOP
@@ -237,6 +256,3 @@ IMMEDIATE: <; 0 STAT ! CSP? HERE 1 - @ 800 OR HERE 1 - ! SMUDGE [ SMUDGE ] ;
 IOSTART
 
 0 CRBIT !
-
-
-
