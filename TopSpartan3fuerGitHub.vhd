@@ -165,7 +165,7 @@ variable scount: STD_LOGIC_VECTOR (31 downto 0):=x"FFFF0000"; --wartet paar ms
 variable KEY_BYTE_L: STD_LOGIC_VECTOR (7 downto 0);
 begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
   if (RxDI='0' and scount=x"00000000") then scount:=x"00000008"; else
-    if scount=x"00001100" then scount:=x"00000000";
+    if scount=x"00001000" then scount:=x"00000000";
           KEY_BYTE<=KEY_BYTE_L;
 --          STRG<=not STRG_MERK_RUHEND; 
           KEY_ABGESCHICKT<=not KEY_ABGESCHICKT; 
