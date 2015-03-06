@@ -21,7 +21,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
     <meta http-equiv="Cache-Control" content="max-age=86400"/>
-    <meta http-equiv="ETag" content="x234dff"/>
+    <meta http-equiv="ETag" content="201503061543"/>
     <title><xsl:value-of select="los/step" /></title>
 
     <link rel="stylesheet" href="stylesheets/styles.css"/>
