@@ -46,15 +46,22 @@ H
 
 ( Programmschleife
 
-: Y ( n --> )
+: X ( n --> )
   0 DO I . LOOP ;
   
+13 X
+
+( oder
+
+: Y ( n -->
+  0 BEGIN DUP . 1+ 2DUP = UNTIL 2DROP ;
+
 13 Y
 
 ( oder
 
 : Z ( n -->
-  0 BEGIN DUP . 1+ 2DUP = UNTIL 2DROP ;
+  0 BEGIN 2DUP > WHILE DUP . 1+ REPEAT 2DROP ;
 
 13 Z
 
