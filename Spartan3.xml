@@ -42,9 +42,9 @@ zu sehen sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, o
   <tr><td>Step_8</td><td>Spartan_Step_1_bis_5_und_8</td><td>LED's</td></tr>
   <tr><td>Step_9</td><td>Spartan_Step_9_und_10</td><td>serieller Ausgang</td></tr>
   <tr><td>Step_10</td><td>Spartan_Step_9_und_10</td><td>serieller Ausgang</td></tr>
-  </table>
+  </table>Anstelle von Tastatureingaben in Terminal-3 hinein geht auch in Terminal-1
 
-<weiter />Pause
-
-
+<term>cp FFINIT1.TXT /dev/ttyS0 # recompiliert den vorhandenen FORTH-Interpreter 
+cp FFINIT2.TXT /dev/ttyS0 # erste Erweiterungen
+cp DEMO.TXT /dev/ttyS0 # DEMO-File</term><weiter />Pause
 </los>
