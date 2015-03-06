@@ -3,17 +3,15 @@
 <!DOCTYPE los SYSTEM "R00.dtd">
 <los><step>Spartan3</step>Spartan3
 
-Letzter Schritt war
-
-<term>git checkout Step_10</term>Alle Dateien, welche speziell nur für das Spartan3-Board benötigt werden, befinden sich in einem extra Branch. Deshalb in einem neuen Terminal-2 ein neues leeres Verzeichnis mit einem selbstgewählten Namen <i>your-Spartan3-repo</i> anlegen, in dieses Verzeichnis wechseln und nochmal klonen.
+Letzter Schritt war <code>git checkout Step_10</code> in Terminal-1. Alle für das Spartan3 Board benötigt Dateien befinden sich in einem extra Branch <code>Spartan3_Step_9_und_10</code>, welcher nicht gleichzeitig mit <code>Step_10</code> in Terminal-1 eingestellt werden kann. Deshalb in einem neuen Terminal-2 ein neues leeres Verzeichnis mit einem selbstgewählten Namen <i>your-Spartan3-repo</i> anlegen, in dieses Verzeichnis wechseln und nochmal klonen.
 
 <sterm>git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git .
-git checkout Spartan3_Step_9_und_10</sterm>Ein weiteres Terminal-3 wird für die serielle Ein- und Ausgabe benötigt, welches Verzeichnis ist egal. Eingabe von
+git checkout Spartan3_Step_9_und_10</sterm>Die Ein- und Ausgabe soll über die serielle Verbindung zum Spartan3 Board erfolgen. Dafür wird ein weiteres Terminal-3 benötigt. Welches Verzeichnis darin eigestellt ist, ist dafür egal. Jedoch kann anstelle <code>/ttyS0</code> auch <code>/ttyS1</code> oder eine andere Eingabe erforderlich sein.
 
 <yterm>stty -F /dev/ttyS0 115200 raw -cstopb -parenb -crtscts -echo ixon -ixoff
 stty raw -echo opost quit ^C isig ixon -ixoff #hiernach ist es finster!!!
 cp /dev/ttyS0 /dev/tty &amp; cp /dev/tty /dev/ttyS0
-</yterm>(alles mit Enter abschließen, man sieht nach dem zweiten stty keine Bildschirmausgabe mehr)
+</yterm>(alles mit Enter abschließen, man sieht nach dem zweiten stty keine Bildschirmausgabe mehr, im Moment ist auch noch nicht erkennbar, ob es funktioniert)
 
 So, jetzt muss mit <a href="https://en.wikipedia.org/wiki/Xilinx_ISE">Xilinx_ISE</a> ein Projekt mit den Dateien
 
@@ -28,7 +26,7 @@ angelegt werden, das .bit File generiert und auf den Spartan3 ausgegeben werden.
 
 ok</ffterm>
 
-zu sehen sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, ob sich da nur was verheddert hat. Sonst bleibt nur, in Terminal 1 und 2 mit <code>git checkout</code> auf vorherige Versionen umzuschalten und .bit erneut zu generieren und auf Spartan3 auszugeben. Dabei gilt momentan folgende Zuordnung
+zu sehen sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, ob sich da nur was verheddert hat. Sonst bleibt nur, in Terminal 1 und 2 mit <code>git checkout</code> auf vorherige Versionen umzuschalten, .bit erneut zu generieren und auf den Spartan3 auszugeben. Dabei gilt momentan folgende Zuordnung
 
 <table border="1">
   <tr><th><i>your-master-repo&amp;</i></th><th><i>your-Spartan3-repo&amp;</i></th><th>Ausgabe</th></tr>
@@ -42,7 +40,7 @@ zu sehen sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, o
   <tr><td>Step_8</td><td>Spartan_Step_1_bis_5_und_8</td><td>LED's</td></tr>
   <tr><td>Step_9</td><td>Spartan_Step_9_und_10</td><td>serieller Ausgang</td></tr>
   <tr><td>Step_10</td><td>Spartan_Step_9_und_10</td><td>serieller Ausgang</td></tr>
-  </table>Anstelle von Tastatureingaben in Terminal-3 hinein geht auch in Terminal-1
+  </table>Anstelle oder nach einigen Tastatureingaben in Terminal-3 hinein geht auch in Terminal-1
 
 <term>cp FFINIT1.TXT /dev/ttyS0 # recompiliert den vorhandenen FORTH-Interpreter 
 cp FFINIT2.TXT /dev/ttyS0 # erste Erweiterungen

@@ -29,7 +29,7 @@ ok KEY_EMPFANGEN noch beschalten ok jetzt mit 0 D000 !
 nö Terminal: ganz raus und alles mit in Tcl-Console rein. nö geht danach nicht weiter
 .. noch ein R00 mit nur I-O-Check oder auch nicht.
 .. EMIT durchgängig in EMIT_BYTE umbenennen, nicht nur R10, SP runter
-.. doch das .wcfg File mit rein in Step_1 bis 10?
+nö doch das .wcfg File mit rein in Step_1 bis 10? nö, aber habe es geschafft. geht ok
 ok xmlns= nochmal versuchen ok geht echt nur mit /xsl:attribute/
 ok jetzt hab ich doch noch die compare-Funktion gefunden. Rein damit.
 ok R00.DTD noch mit ok
@@ -37,13 +37,15 @@ ok Spartan3 startet mit je einem ? bei EMIT und KEY... ok super beide weg
    ok bei TXT mit TXT:='1' initialisieren
    ok bei RXD mit xcount:="FFFF0000" starten, wartet paar ms beim Start
 ok R00.xsl mit Haltbarkeitsdatum versehen ok wunderbar, 2xmeta reicht
-.. in RXD noch STRG umsetzen auf nach dbInput, aber wie?
+.. in RXD noch STRG umsetzen auf nach dbInput, aber wie? aha mit STRG_2
 .. na vielleicht doch ein kleiner Minifehler bei /section//div/ statt /span/
 ok FFPINIT1.TXT und 2 gehören in master mit rein ok
 .. alle .xml auch so anordnen, dass sie ohne xslt lesbar sind.
 .. auch noch einen Weiterhupf
 .. README.md dann auch mit vorrichten
 .. das .ucf File auch noch weng zurechtmachen.
-.. colorisierte Ausgabe --- in FFINIT2.TXT mit reinmach erstmal
+ok colorisierte Ausgabe --- in FFINIT2.TXT mit reinmach erstmal ok
 .. na inzwischen kann auch das pre-wrap langsam ganz raus
+nö ProgRAM aus P20.vhd herausziehen damit unterschiedlich machbar??? nö lieber nicht
+
 

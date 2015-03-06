@@ -67,7 +67,7 @@
 <xsl:template match="term0">Terminal: <i>&amp;</i><pre><code><xsl:apply-templates /></code></pre></xsl:template>
 <xsl:template match="term"><span id="Terminal">Terminal-1: <i>your-master-repo&amp; </i></span><pre><code><xsl:apply-templates /></code></pre></xsl:template>
 <xsl:template match="sterm">Terminal-2: <i>your-Spartan3-repo&amp; </i><pre><code><xsl:apply-templates /></code></pre></xsl:template>
-<xsl:template match="yterm">Terminal-3: <i>&amp; </i><pre><code><xsl:apply-templates /></code></pre></xsl:template>
+<xsl:template match="yterm">Terminal-3: <i>beliebig&amp; </i><pre><code><xsl:apply-templates /></code></pre></xsl:template>
 <xsl:template match="tterm">Tcl Console: <i>"Type a Tcl command here"</i><pre><code><xsl:apply-templates /></code></pre></xsl:template>
 
 <xsl:template match="a"><xsl:copy-of select="." /></xsl:template>
