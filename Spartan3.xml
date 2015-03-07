@@ -37,17 +37,19 @@ ok</ffterm>
 <pr>zu sehen sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, ob sich da nur was verheddert hat. Sonst bleibt nur, in Terminal 1 und 2 mit <code>git checkout</code> auf vorherige Versionen umzuschalten, .bit erneut zu generieren und auf den Spartan3 auszugeben. Dabei gilt momentan folgende Zuordnung</pr>
 
 <table border="1">
-  <tr><th><i>your-master-repo&amp;</i></th><th><i>your-Spartan3-repo&amp;</i></th><th>Ausgabe</th></tr>
-  <tr><td>Step_1</td><td>Spartan_Step_1_bis_5_und_8</td><td>LED's</td></tr>
-  <tr><td>Step_2</td><td>Spartan_Step_1_bis_5_und_8</td><td>LED's</td></tr>
-  <tr><td>Step_3</td><td>Spartan_Step_1_bis_5_und_8</td><td>LED's</td></tr>
-  <tr><td>Step_4</td><td>Spartan_Step_1_bis_5_und_8</td><td>LED's</td></tr>
-  <tr><td>Step_5</td><td>Spartan_Step_1_bis_5_und_8</td><td>LED's</td></tr>
-  <tr><td>Step_6</td><td>Spartan_Step_6_und_7</td><td>LED's</td></tr>
-  <tr><td>Step_7</td><td>Spartan_Step_6_und_7</td><td>LED's</td></tr>
-  <tr><td>Step_8</td><td>Spartan_Step_1_bis_5_und_8</td><td>LED's</td></tr>
-  <tr><td>Step_9</td><td>Spartan_Step_9_und_10</td><td>serieller Ausgang</td></tr>
-  <tr><td>Step_10</td><td>Spartan_Step_9_und_10</td><td>serieller Ausgang</td></tr>
+  <tr><th> <i>your-master-repo&amp;</i>
+                   </th><th> <i>your-Spartan3-repo&amp;</i>
+                                                        </th><th>Ausgabe</th></tr>
+  <tr><td> Step_1  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_2  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_3  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_4  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_5  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_6  </td><td> Spartan_Step_6_und_7       </td><td> LED's             </td></tr>
+  <tr><td> Step_7  </td><td> Spartan_Step_6_und_7       </td><td> LED's             </td></tr>
+  <tr><td> Step_8  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_9  </td><td> Spartan_Step_9_und_10      </td><td> serieller Ausgang </td></tr>
+  <tr><td> Step_10 </td><td> Spartan_Step_9_und_10      </td><td> serieller Ausgang </td></tr>
   </table>
   
 <pr>Anstelle oder nach einigen Tastatureingaben in Terminal-3 hinein geht auch in Terminal-1</pr>

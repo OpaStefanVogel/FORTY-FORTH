@@ -17,24 +17,28 @@ U*     ( a b c --> d e )
 MINUS wechselt das Vorzeichen des obersten Stapeleintrages und NOT bildet das bitweise Komplement. AND und OR verknüpfen die beiden oberen Stapeleinträge bitweise. U+ und U* sind Rechenoperationen mit Übertrag. U+ addiert die drei obersten Stapeleinträge und gibt das 16-Bit Ergebnis in e und einen eventuell entstehenden Übertrag in d zurück. U* rechnet a+b*c und gibt ebenfalls die untersten 16 Bit vom Ergebnis in e und den verbleibenden Übertrag in d zurück. 
 
 Beispielprogramm <i>willkürlich zusammengestellte Rechenoperationen</i></pr>
-<table border="1"><tr><th>PC</th><th>PD</th><th>FORTH-Notation</th><th>Stapelinhalt</th><th>SP</th></tr>
-  <tr><td>0000</td><td>1234</td><td>BEGIN 1234</td><td>1234</td><td>1</td></tr>
-  <tr><td>0001</td><td>A000</td><td>MINUS</td><td>EDCC</td><td>1</td></tr>
-  <tr><td>0002</td><td>A00B</td><td>NOT</td><td>1233</td><td>1</td></tr>
-  <tr><td>0003</td><td>00FF</td><td>00FF</td><td>1233 00FF</td><td>2</td></tr>
-  <tr><td>0004</td><td>A008</td><td>AND</td><td>0033</td><td>1</td></tr>
-  <tr><td>0005</td><td>1200</td><td>1200</td><td>0033 1200</td><td>2</td></tr>
-  <tr><td>0006</td><td>A00E</td><td>OR</td><td>1233</td><td>1</td></tr>
-  <tr><td>0007</td><td>2323</td><td>2323</td><td>1233 2323</td><td>2</td></tr>
-  <tr><td>0008</td><td>F4F4</td><td>F4F4</td><td>1233 2323 F4F4</td><td>3</td></tr>
-  <tr><td>0009</td><td>A001</td><td>U+</td><td>0001 2A4A</td><td>2</td></tr>
-  <tr><td>000A</td><td>1111</td><td>1111</td><td>0001 2A4A 1111</td><td>3</td></tr>
-  <tr><td>000B</td><td>A002</td><td>U*</td><td>02D1 B8EB</td><td>2</td></tr>
-  <tr><td>000C</td><td>A00F</td><td>0&lt;</td><td>02D1 FFFF</td><td>2</td></tr>
-  <tr><td>000D</td><td>A00D</td><td>0=</td><td>02D1 0000</td><td>2</td></tr>
-  <tr><td>000E</td><td>B200</td><td>2DROP</td><td></td><td>0</td></tr>
-  <tr><td>000F</td><td>8FF0</td><td>AGAIN</td><td></td><td>0</td></tr>
-  </table>
+<table border="1"><tr>
+<th> PC             </th><th>PD</th>
+<th> FORTH-Notation </th>
+<th> Stapelinhalt   </th>
+<th> SP             </th></tr>
+  <tr><td> 0000 </td><td> 1234 </td><td> BEGIN 1234 </td><td> 1234          </td><td>1</td></tr>
+  <tr><td> 0001 </td><td> A000 </td><td> MINUS      </td><td> EDCC          </td><td>1</td></tr>
+  <tr><td> 0002 </td><td> A00B </td><td> NOT        </td><td> 1233          </td><td>1</td></tr>
+  <tr><td> 0003 </td><td> 00FF </td><td> 00FF       </td><td> 1233 00FF     </td><td>2</td></tr>
+  <tr><td> 0004 </td><td> A008 </td><td> AND        </td><td> 0033          </td><td>1</td></tr>
+  <tr><td> 0005 </td><td> 1200 </td><td> 1200       </td><td> 0033 1200     </td><td>2</td></tr>
+  <tr><td> 0006 </td><td> A00E </td><td> OR         </td><td> 1233          </td><td>1</td></tr>
+  <tr><td> 0007 </td><td> 2323 </td><td> 2323       </td><td> 1233 2323     </td><td>2</td></tr>
+  <tr><td> 0008 </td><td> F4F4 </td><td> F4F4       </td><td> 1233 2323 F4F4</td><td>3</td></tr>
+  <tr><td> 0009 </td><td> A001 </td><td> U+         </td><td> 0001 2A4A     </td><td>2</td></tr>
+  <tr><td> 000A </td><td> 1111 </td><td> 1111       </td><td> 0001 2A4A 1111</td><td>3</td></tr>
+  <tr><td> 000B </td><td> A002 </td><td> U*         </td><td> 02D1 B8EB     </td><td>2</td></tr>
+  <tr><td> 000C </td><td> A00F </td><td> 0&lt;      </td><td> 02D1 FFFF     </td><td>2</td></tr>
+  <tr><td> 000D </td><td> A00D </td><td> 0=         </td><td> 02D1 0000     </td><td>2</td></tr>
+  <tr><td> 000E </td><td> B200 </td><td> 2DROP      </td><td>               </td><td>0</td></tr>
+  <tr><td> 000F </td><td> 8FF0 </td><td> AGAIN      </td><td>               </td><td>0</td></tr>
+  </table >
   
 <pr>Auch hier keine extra Ausgabe, Ausgabeport LEDS ist immernoch direkt mit der Ausgabe des obersten Stapeleintrages A_SIM verknüpft.</pr>
 

@@ -9,19 +9,24 @@
 
 Dieser wird nur ausgeführt, wenn der oberste Stapeleintrag gleich Null ist. Das entspricht der Interpretation "Null" steht für "false", jeder andere Wert ist "true". Auf IF folgende Programmschritte sollen bei "true" ausgeführt werden, bei "false" soll IF diese überspringen, daher Sprung wenn oberster Stapeleintrag Null. Der Stapeleintrag wird dabei in jedem Fall entfernt.</pr>
  
-<table border="1"><tr><th>PC</th><th>PD</th><th>FORTH-Notation</th><th>Stapelinhalt</th><th>SP</th></tr>
-  <tr><td>0000</td><td>0003</td><td>3</td><td>3</td><td>1</td></tr>
-  <tr><td>0001</td><td>FFFF</td><td>BEGIN -1</td><td>3 -1</td><td>2</td></tr>
-  <tr><td>0002</td><td>A007</td><td>+</td><td>1</td><td>1</td></tr>
-  <tr><td>0003</td><td>B501</td><td>DUP</td><td>2 2</td><td>2</td></tr>
-  <tr><td>0004</td><td>2D04</td><td>2D04</td><td>2 2 2D04</td><td>3</td></tr>
-  <tr><td>0005</td><td>A009</td><td>!</td><td>2</td><td>1</td></tr>
-  <tr><td>0006</td><td>B501</td><td>DUP</td><td>2 2</td><td>2</td></tr>
-  <tr><td>0007</td><td>9003</td><td>IF</td><td>2</td><td>1</td></tr>
-  <tr><td>0008</td><td>0055</td><td>0055</td><td>2 0055</td><td>2</td></tr>
-  <tr><td>0009</td><td>2D04</td><td>2D04</td><td>2 0055 2D04</td><td>3</td></tr>
-  <tr><td>000A</td><td>A009</td><td>!</td><td>2</td><td>1</td></tr>
-  <tr><td>000B</td><td>8FF5</td><td>END_IF AGAIN</td><td>2</td><td>1</td></tr>
+<table border="1"><tr>
+<th>PC</th>
+<th>PD</th>
+<th>FORTH-Notation</th>
+<th>Stapelinhalt</th>
+<th>SP</th></tr>
+  <tr><td> 0000 </td><td> 0003 </td><td> 3           </td><td> 3       </td><td>1</td></tr>
+  <tr><td> 0001 </td><td> FFFF </td><td> BEGIN -1    </td><td> 3 -1    </td><td>2</td></tr>
+  <tr><td> 0002 </td><td> A007 </td><td> +           </td><td> 1       </td><td>1</td></tr>
+  <tr><td> 0003 </td><td> B501 </td><td> DUP         </td><td> 2 2     </td><td>2</td></tr>
+  <tr><td> 0004 </td><td> 2D04 </td><td> 2D04        </td><td> 2 2 2D04</td><td>3</td></tr>
+  <tr><td> 0005 </td><td> A009 </td><td> !           </td><td> 2       </td><td>1</td></tr>
+  <tr><td> 0006 </td><td> B501 </td><td> DUP         </td><td> 2 2     </td><td>2</td></tr>
+  <tr><td> 0007 </td><td> 9003 </td><td> IF          </td><td> 2       </td><td>1</td></tr>
+  <tr><td> 0008 </td><td> 0055 </td><td> 0055        </td><td> 2 0055  </td><td>2</td></tr>
+  <tr><td> 0009 </td><td> 2D04 </td><td> 2D04        </td><td> 2 0055 2D04</td><td>3</td></tr>
+  <tr><td> 000A </td><td> A009 </td><td> !           </td><td> 2       </td><td>1</td></tr>
+  <tr><td> 000B </td><td> 8FF5 </td><td> END_IF AGAIN</td><td> 2       </td><td>1</td></tr>
   </table>
   
 <pr>Beginnend mit 3 wird in einer Schleife von BEGIN bis AGAIN der oberste Stapeleintrag um 1 verringert und dupliziert auf Adresse 2D04 ausgegeben. Außerdem wird dazwischen ein 0055 mit ausgegeben, falls der Stapeleintrag ungleich Null ist. Bei Null jedoch springt IF gleich weiter zu END_IF. END_IF ist nur eine Markierung ohne eigenen Programmcode.</pr>

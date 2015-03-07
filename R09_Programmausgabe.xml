@@ -15,13 +15,16 @@ EMIT_ANGEKOMMEN  = muss vom Empfänger invertiert werden. Das Programm wartet so
 EMIT  ( n --> ) gibt n auf Port EMIT_BYTE aus.
 
 Ein Beispielprogramm wie etwa</pr>
-<table border="1"><tr><th>PC</th><th>PD</th><th>FORTH-Notation</th><th>Stapelinhalt</th><th>SP</th></tr>
-  <tr><td>0000</td><td>0041</td><td>41</td><td>41</td><td>1</td></tr>
-  <tr><td>0000</td><td>B501</td><td>BEGIN DUP</td><td>41 41</td><td>2</td></tr>
-  <tr><td>0001</td><td>4005</td><td>EMIT</td><td>41</td><td>1</td></tr>
-  <tr><td>0001</td><td>0001</td><td>1</td><td>41 1</td><td>2</td></tr>
-  <tr><td>0001</td><td>4007</td><td>+</td><td>42</td><td>1</td></tr>
-  <tr><td>0001</td><td>8FFB</td><td>AGAIN</td><td>42</td><td>1</td></tr>
+<table border="1">
+  <tr><th>  PC  </th><th>  PD  </th><th> FORTH-Notation </th>
+                                                        <th> Stapelinhalt </th>
+                                                                        <th> SP </th></tr>
+  <tr><td> 0000 </td><td> 0041 </td><td> 41        </td><td> 41    </td><td> 1 </td></tr>
+  <tr><td> 0000 </td><td> B501 </td><td> BEGIN DUP </td><td> 41 41 </td><td> 2 </td></tr>
+  <tr><td> 0001 </td><td> 4005 </td><td> EMIT      </td><td> 41    </td><td> 1 </td></tr>
+  <tr><td> 0001 </td><td> 0001 </td><td> 1         </td><td> 41 1  </td><td> 2 </td></tr>
+  <tr><td> 0001 </td><td> 4007 </td><td> +         </td><td> 42    </td><td> 1 </td></tr>
+  <tr><td> 0001 </td><td> 8FFB </td><td> AGAIN     </td><td> 42    </td><td> 1 </td></tr>
   </table>
   
 <pr>ist inzwischen etwas dürftig, ich habe deshalb einen FORTH-Interpreter in ProgRAM und ByteRAM gepackt, eine Minimalversion, die sich gerade so selbst zum Laufen bringt. Mal sehen, ob da schon was gescheites passiert.</pr>
