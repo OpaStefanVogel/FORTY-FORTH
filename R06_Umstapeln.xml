@@ -25,12 +25,7 @@ B200   2DROP        ( a b --> )
 B6A9   für          ( a b c d --> a b a c a d ). 
 
 Hier ein Beispielprogramm, <i>auf den Stapel 4, 3, 2, 1 der Reihe nach alle Worte zum Umstapeln anwenden.</i></pr>
-<table border="1"><tr>
-<th> PC </th>
-<th> PD</th>
-<th> FORTH-Notation</th>
-<th> Stapelinhalt </th>
-<th> SP </th></tr>
+<ptable>
   <tr><td> 0000 </td><td> 0004 </td><td> 4         </td><td> 4          </td><td>1</td></tr>
   <tr><td> 0001 </td><td> 0003 </td><td> 3         </td><td> 4 3        </td><td>2</td></tr>
   <tr><td> 0002 </td><td> 0002 </td><td> 2         </td><td> 4 3 2      </td><td>3</td></tr>
@@ -47,7 +42,7 @@ Hier ein Beispielprogramm, <i>auf den Stapel 4, 3, 2, 1 der Reihe nach alle Wort
   <tr><td> 000D </td><td> B300 </td><td> DROP      </td><td> 2 3 4 1 2  </td><td>5</td></tr>
   <tr><td> 000E </td><td> B300 </td><td> DROP      </td><td> 2 3 4 1    </td><td>4</td></tr>
   <tr><td> 000F </td><td> 8FF4 </td><td> AGAIN     </td><td> 2 3 4 1    </td><td>4</td></tr>
-  </table>
+  </ptable>
 
 <pr>Da dieses Programm keine extra Ausgabe enthält, ist ausnahmsweise der Ausgabeport LEDS direkt mit der Ausgabe des obersten Stapeleintrages A_SIM verknüpft.</pr>
 

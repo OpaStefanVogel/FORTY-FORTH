@@ -13,14 +13,7 @@ PC = Speicheradresse des Programmschrittes
 PD = Programmcode, gespeichert auf Adresse PC
 SP = Stapelhöhe nach Ausführung des Programmschrittes</pr>
 
-<table border="1">
-  <tr>
-    <th>PC</th>
-    <th>PD</th>
-    <th>FORTH-Notation</th>
-    <th>Stapelinhalt</th>
-    <th>SP</th>
-    </tr>
+<ptable>
   <tr><td> 0000 </td><td> 0000 </td><td> 0       </td><td> 0     </td><td>1</td></tr>
   <tr><td> 0001 </td><td> 0001 </td><td> BEGIN 1 </td><td> 0 1   </td><td>2</td></tr>
   <tr><td> 0002 </td><td> A007 </td><td> +       </td><td> 1     </td><td>1</td></tr>
@@ -28,7 +21,7 @@ SP = Stapelhöhe nach Ausführung des Programmschrittes</pr>
   <tr><td> 0004 </td><td> 2D04 </td><td> 2D04    </td><td> 1 1 2D04 </td><td>3</td></tr>
   <tr><td> 0005 </td><td> A009 </td><td> !       </td><td> 1     </td><td>1</td></tr>
   <tr><td> 0006 </td><td> 8FFA </td><td> AGAIN   </td><td> 1     </td><td>1</td></tr>
-</table>
+</ptable>
 
 <pr>Wer sich noch nicht so sehr mit FORTH auskennt: Anfangs werden "0" und "1" als Zahlen auf den Stapel abgelegt, dann mit "+" addiert, mit "DUP" das Ergebnis dupliziert und "!" speichert das Duplizierte auf der zuvor eingegebenen Adresse "2D04". "AGAIN" springt zurück zu "BEGIN". "BEGIN" ist nur eine Markierung und benötigt selbst keinen eigenen Programmcode.
 

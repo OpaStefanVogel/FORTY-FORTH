@@ -91,6 +91,15 @@ weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inh
 <xsl:template match="pr"><p class="pr"><xsl:apply-templates /></p></xsl:template>
 <xsl:template match="p"><xsl:copy-of select="." /></xsl:template>
 
+<xsl:template match="ptable">
+  <table border="1" class="ptable"><tr>
+    <th> PC             </th><th>PD</th>
+    <th> FORTH-Notation </th>
+    <th> Stapelinhalt   </th>
+    <th> SP             </th></tr>
+    <xsl:copy-of select="." />
+    </table>
+  </xsl:template>
 
 
 
