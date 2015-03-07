@@ -26,12 +26,16 @@ Ein Beispielprogramm wie etwa</pr>
   
 <pr>ist inzwischen etwas dürftig, ich habe deshalb einen FORTH-Interpreter in ProgRAM und ByteRAM gepackt, eine Minimalversion, die sich gerade so selbst zum Laufen bringt. Mal sehen, ob da schon was gescheites passiert.</pr>
 
-<term>git checkout Step_9
-git diff <diff>Step_8...Step_9</diff></term>
+<Terminal_1>
+  <li> git checkout Step_9 </li>
+  <li> git diff <diff>Step_8...Step_9</diff> </li>
+  </Terminal_1>
 
-<tterm>close_sim -force -quiet
-launch_simulation
-run 20000 ns</tterm>
+<Terminal_2>
+  <li> close_sim -force -quiet </li>
+  <li> launch_simulation </li>
+  <li> run 20000 ns </li>
+  </Terminal_2>
 
 <pr>Beginnend ab 360 ns wird alle 820 ns auf EMIT ein weiteres Zeichen der Hexadezimalfolge 46-4F-52-54-59-2d-46-4f-52-54-48-0A-0A-6F-6B-0A ausgegeben. In einem echten Terminal würde das etwa so aussehen:</pr>
 

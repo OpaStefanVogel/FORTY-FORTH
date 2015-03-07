@@ -21,12 +21,16 @@ KEY  ( --> n ) wartet auf Nutzereingabe eines Zeichens und übergibt es als n au
  
 Beispiel: <i>Rechne 56*89</i></pr>
 
-<term>git checkout Step_10
-git diff <diff>Step_9...Step_10</diff></term>
+<Terminal_1>
+  <li> git checkout Step_10 </li>
+  <li> git diff <diff>Step_9...Step_10</diff> </li>
+  </Terminal_1>
 
-<tterm>close_sim -force -quiet
-launch_simulation
-run 3 ms</tterm>
+<Terminal_2>
+  <li> close_sim -force -quiet </li>
+  <li> launch_simulation </li>
+  <li> run 3 ms </li>
+  </Terminal_2>
 
 <pr>Der jetzige FORTH-Interpreter rechnet allerdings nur 16 Bit hexadezimal, das soll für den Moment auch reichen. Ergebnis:</pr>
 

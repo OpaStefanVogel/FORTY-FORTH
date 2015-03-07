@@ -29,15 +29,18 @@ Variable T und das Zurückspeichern sind jetzt zusätzlich hinzugekommen. Der Vo
 
 Sofern das Startterminal aus Step_1 noch zugänglich ist:</pr>
  
-<term>git checkout Step_2
-git diff <diff>Step_1...Step_2</diff> # mit Q beenden</term>
+<Terminal_1>
+  <li> git checkout Step_2 </li>
+  <li> git diff <diff>Step_1...Step_2</diff> # mit Taste Q beenden </li>
+  </Terminal_1>
 
 <pr>und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft:</pr>
 
-<tterm>close_sim -force -quiet
-launch_simulation
-run 1000 ns
-</tterm>
+<Terminal_2>
+  <li> close_sim -force -quiet </li>
+  <li> launch_simulation </li>
+  <li> run 1000 ns </li>
+  </Terminal_2>
 
 <pr><favicon/> gleiches Ergebnis wie in Step_1, jedoch ab LEDS=76 abwärts gezählt.
 

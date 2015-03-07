@@ -40,3 +40,8 @@ code { font-family:monospace;
   white-space: pre-wrap; 
   }
 
+.Terminal {
+  white-space: nowrap;
+  list-style-type: none;
+  }
+

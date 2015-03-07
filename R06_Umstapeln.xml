@@ -46,12 +46,16 @@ Hier ein Beispielprogramm, <i>auf den Stapel 4, 3, 2, 1 der Reihe nach alle Wort
 
 <pr>Da dieses Programm keine extra Ausgabe enthält, ist ausnahmsweise der Ausgabeport LEDS direkt mit der Ausgabe des obersten Stapeleintrages A_SIM verknüpft.</pr>
 
-<term>git checkout Step_6
-git diff <diff>Step_5...Step_6</diff></term>
+<Terminal_1>
+  <li> git checkout Step_6 </li>
+  <li> git diff <diff>Step_5...Step_6</diff> </li>
+  </Terminal_1>
 
-<tterm>close_sim -force -quiet
-launch_simulation
-run 340 ns</tterm>
+<Terminal_2>
+  <li> close_sim -force -quiet </li>
+  <li> launch_simulation </li>
+  <li> run 340 ns </li>
+  </Terminal_2>
 
 <pr><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     Wert von D,  C,  B,  A=LEDS

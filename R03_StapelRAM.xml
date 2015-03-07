@@ -39,12 +39,17 @@ Als Beispielprogramm für den jetzt verfügbaren Stapelspeicher <i>wird die Zahl
 
 <pr>Nachdem die Zahlen 1, 2, 3, 4, 5 auf den Stapel gebracht sind, wird fünfmal die oberste Zahl auf Adresse 2D04 ausgegeben. AGAIN geht wieder zurück zu BEGIN 0 und alles geht von vorn los.</pr>
 
-<term>git checkout Step_3
-git diff <diff>Step_2...Step_3</diff> # mit Q beenden</term>
 
-<tterm>close_sim -force -quiet
-launch_simulation
-run 1000 ns</tterm>
+<Terminal_1>
+  <li> git checkout Step_3 </li>
+  <li> git diff <diff>Step_2...Step_3</diff> # mit Taste Q beenden </li>
+  </Terminal_1>
+
+<Terminal_2>
+  <li> close_sim -force -quiet </li>
+  <li> launch_simulation </li>
+  <li> run 1000 ns </li>
+  </Terminal_2>
 
 <pr><favicon/> Ergebnis: 
 

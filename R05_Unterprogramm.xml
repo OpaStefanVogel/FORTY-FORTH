@@ -32,12 +32,16 @@ RW    = "write enable" für stapR
 
 <pr>Das Unterprogramm geht von PC=0003 bis PC=0008. Es wird in der Programmschleife PC=0001 bis PC=0002 wiederholt aufgerufen.</pr>
 
-<term>git checkout Step_5
-git diff <diff>Step_4...Step_5</diff></term>
+<Terminal_1>
+  <li> git checkout Step_5 </li>
+  <li> git diff <diff>Step_4...Step_5</diff> </li>
+  </Terminal_1>
 
-<tterm>close_sim -force -quiet
-launch_simulation
-run 1000 ns</tterm>
+<Terminal_2>
+  <li> close_sim -force -quiet </li>
+  <li> launch_simulation </li>
+  <li> run 1000 ns </li>
+  </Terminal_2>
 
 <pr><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     Wert von LEDS
