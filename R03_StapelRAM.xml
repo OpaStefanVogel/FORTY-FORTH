@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
 <!DOCTYPE los SYSTEM "R00.dtd">
-<los><step>Step 3</step>Stapel in RAM speichern
+<los>
+
+<step>Step 3</step>
+
+<pr>Stapel in RAM speichern
 
 Momentan ist R ein Array bestehend aus nur 4 Speicherplätzen. Für einen größeren Stapelspeicher könnte man einfach das Array vergrößern. Das funktioniert auch in der Simulation. Beim Synthetisieren war es aber bis jetzt immer so, dass für das Array keine vorhandene RAM-Konstruktionen verwendet wurden und dadurch eine umfangreiche Schaltung entstand. Ich vermute, das ist vor allem wegen der vier gleichzeitigen Speicherzugriffe A:=R(SP-1), B:=R(SP-2), C:=R(SP-3) und D:=R(SP-4). Das lässt sich aber schaltungsmäßig einfach aufteilen auf vier getrennte RAM-Arrays: Das erste Array nimmt alle R(SP) auf, wo SP auf die Bits "00" endet, das zweite Array alle zu den Bits "01" und so weiter. Also so
 
@@ -12,7 +16,7 @@ stap3_RAM:=(R(3),R(7),R(11),R(15)...)
 
 Bei jedem beliebigen Wert von SP können weiterhin A, B, C und D in einem Takt gelesen werden, für jedes einzelne Array stap0 bis stap3 wird aber nur ein einzelner Port benötigt. Die einzelnen erforderlichen Anpassungen sind wieder bei <code>git diff</code> zu sehen.
 
-Als Beispielprogramm für den jetzt verfügbaren Stapelspeicher <i>wird die Zahlenfolge 1, 2, 3, 4, 5 auf dem Stapel zwischengespeichert und anschließend in umgekehrter Reihenfolge auf Adresse 2D04 ausgegeben</i>. Obwohl das Array für R nur 4 Elemente hat, werden jetzt auch mehr als 4 Stapeleinträge gespeichert. 
+Als Beispielprogramm für den jetzt verfügbaren Stapelspeicher <i>wird die Zahlenfolge 1, 2, 3, 4, 5 auf dem Stapel zwischengespeichert und anschließend in umgekehrter Reihenfolge auf Adresse 2D04 ausgegeben</i>. Obwohl das Array für R nur 4 Elemente hat, werden jetzt auch mehr als 4 Stapeleinträge gespeichert.</pr>
 
 <table border="1"><tr><th>PC</th><th>PD</th><th>FORTH-Notation</th><th>Stapelinhalt</th><th>SP</th></tr>
   <tr><td>0000</td><td>0001</td><td>BEGIN 1</td><td>1</td><td>1</td></tr>
@@ -31,13 +35,18 @@ Als Beispielprogramm für den jetzt verfügbaren Stapelspeicher <i>wird die Zahl
   <tr><td>000D</td><td>2D04</td><td>2D04</td><td>1 2D04</td><td>2</td></tr>
   <tr><td>000E</td><td>A009</td><td>!</td><td></td><td>0</td></tr>
   <tr><td>000F</td><td>8FF0</td><td>AGAIN</td><td></td><td>0</td></tr>
-  </table>Nachdem die Zahlen 1, 2, 3, 4, 5 auf den Stapel gebracht sind, wird fünfmal die oberste Zahl auf Adresse 2D04 ausgegeben. AGAIN geht wieder zurück zu BEGIN 0 und alles geht von vorn los.
+  </table>
+
+<pr>Nachdem die Zahlen 1, 2, 3, 4, 5 auf den Stapel gebracht sind, wird fünfmal die oberste Zahl auf Adresse 2D04 ausgegeben. AGAIN geht wieder zurück zu BEGIN 0 und alles geht von vorn los.</pr>
 
 <term>git checkout Step_3
 git diff <diff>Step_2...Step_3</diff> # mit Q beenden</term>
+
 <tterm>close_sim -force -quiet
 launch_simulation
-run 1000 ns</tterm><favicon/> Ergebnis: 
+run 1000 ns</tterm>
+
+<pr><favicon/> Ergebnis: 
 
 ab Zeitpunkt in ns     Wert von LEDS
      0                  UU
@@ -50,6 +59,7 @@ ab Zeitpunkt in ns     Wert von LEDS
    470                  05
    510                  04
    ...                  ..
+</pr>
 
 <weiter /><a href="R04_bedingter_Sprung.xml">R04 bedingter Sprung</a>.
 

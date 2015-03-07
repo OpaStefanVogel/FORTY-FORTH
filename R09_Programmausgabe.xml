@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
 <!DOCTYPE los SYSTEM "R00.dtd">
-<los><step>Step 9</step>Programmausgabe
+<los>
+
+<step>Step 9</step>
+
+<pr>Programmausgabe
 
 Variablen:
 EMIT_BYTE        = enthält das auszugebende Byte
@@ -10,7 +14,7 @@ EMIT_ANGEKOMMEN  = muss vom Empfänger invertiert werden. Das Programm wartet so
 
 EMIT  ( n --> ) gibt n auf Port EMIT_BYTE aus.
 
-Ein Beispielprogramm wie etwa
+Ein Beispielprogramm wie etwa</pr>
 <table border="1"><tr><th>PC</th><th>PD</th><th>FORTH-Notation</th><th>Stapelinhalt</th><th>SP</th></tr>
   <tr><td>0000</td><td>0041</td><td>41</td><td>41</td><td>1</td></tr>
   <tr><td>0000</td><td>B501</td><td>BEGIN DUP</td><td>41 41</td><td>2</td></tr>
@@ -18,20 +22,25 @@ Ein Beispielprogramm wie etwa
   <tr><td>0001</td><td>0001</td><td>1</td><td>41 1</td><td>2</td></tr>
   <tr><td>0001</td><td>4007</td><td>+</td><td>42</td><td>1</td></tr>
   <tr><td>0001</td><td>8FFB</td><td>AGAIN</td><td>42</td><td>1</td></tr>
-  </table>ist inzwischen etwas dürftig, ich habe deshalb einen FORTH-Interpreter in ProgRAM und ByteRAM gepackt, eine Minimalversion, die sich gerade so selbst zum Laufen bringt. Mal sehen, ob da schon was gescheites passiert.
+  </table>
+  
+<pr>ist inzwischen etwas dürftig, ich habe deshalb einen FORTH-Interpreter in ProgRAM und ByteRAM gepackt, eine Minimalversion, die sich gerade so selbst zum Laufen bringt. Mal sehen, ob da schon was gescheites passiert.</pr>
 
 <term>git checkout Step_9
 git diff <diff>Step_8...Step_9</diff></term>
+
 <tterm>close_sim -force -quiet
 launch_simulation
-run 20000 ns</tterm>Beginnend ab 360 ns wird alle 820 ns auf EMIT ein weiteres Zeichen der Hexadezimalfolge 46-4F-52-54-59-2d-46-4f-52-54-48-0A-0A-6F-6B-0A ausgegeben. In einem echten Terminal würde das etwa so aussehen:
+run 20000 ns</tterm>
+
+<pr>Beginnend ab 360 ns wird alle 820 ns auf EMIT ein weiteres Zeichen der Hexadezimalfolge 46-4F-52-54-59-2d-46-4f-52-54-48-0A-0A-6F-6B-0A ausgegeben. In einem echten Terminal würde das etwa so aussehen:</pr>
 
 <ffterm>FORTY-FORTH
 
 ok
 </ffterm>
 
-Von 880 ns bis 1200 ns wartet der Programmzähler PC darauf, dass von testbench.vhd aus EMIT_EMPFANGEN negiert wird, und so auch bei jedem weiteren ausgegebenen Zeichen. Schließlich ab 15500 ns wiederholt sich endlos eine 420 ns lange Progammschleife - ja weil noch eine Nutzereingabe fehlt...
+<pr>Von 880 ns bis 1200 ns wartet der Programmzähler PC darauf, dass von testbench.vhd aus EMIT_EMPFANGEN negiert wird, und so auch bei jedem weiteren ausgegebenen Zeichen. Schließlich ab 15500 ns wiederholt sich endlos eine 420 ns lange Progammschleife - ja weil noch eine Nutzereingabe fehlt...</pr>
 
 <weiter /><a href="R10_Nutzereingabe.xml">R10 Nutzereingabe</a>
 

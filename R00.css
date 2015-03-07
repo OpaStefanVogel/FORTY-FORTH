@@ -1,9 +1,10 @@
 .section { 
   font-family:monospace;
-  white-space: pre-wrap; 
+  #white-space: pre-wrap; 
   }
 
-table { white-space: nowrap; }
+table { #white-space: nowrap;
+  }
 
 code { font-family:monospace; 
        font-size: 110%; 
@@ -12,6 +13,7 @@ code { font-family:monospace;
 
 .ffterm {
   display: inline-block;
+  white-space: pre-wrap; 
   padding: 4px;
   margin-left: 2px;
   border: solid;
@@ -33,3 +35,8 @@ code { font-family:monospace;
 .zurueck {
   float:right;
   }
+
+.pr { 
+  white-space: pre-wrap; 
+  }
+

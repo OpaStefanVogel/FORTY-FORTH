@@ -21,7 +21,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
     <meta http-equiv="Cache-Control" content="max-age=86400"/>
-    <meta http-equiv="ETag" content="201503061543"/>
+    <meta http-equiv="ETag" content="201503071653"/>
     <title><xsl:value-of select="los/step" /></title>
 
     <link rel="stylesheet" href="stylesheets/styles.css"/>
@@ -64,24 +64,22 @@
   </xsl:template>
 
 
-<xsl:template match="term0">Terminal: <i>&amp;</i><pre><code><xsl:apply-templates /></code></pre></xsl:template>
-<xsl:template match="term"><span id="Terminal">Terminal-1: <i>your-master-repo&amp; </i></span><pre><code><xsl:apply-templates /></code></pre></xsl:template>
-<xsl:template match="sterm">Terminal-2: <i>your-Spartan3-repo&amp; </i><pre><code><xsl:apply-templates /></code></pre></xsl:template>
-<xsl:template match="yterm">Terminal-3: <i>beliebig&amp; </i><pre><code><xsl:apply-templates /></code></pre></xsl:template>
-<xsl:template match="tterm">Tcl Console: <i>"Type a Tcl command here"</i><pre><code><xsl:apply-templates /></code></pre></xsl:template>
+<xsl:template match="term0"><p>Terminal: <i>&amp;</i><pre><code><xsl:apply-templates /></code></pre></p></xsl:template>
+<xsl:template match="term"><p><div id="Terminal">Terminal-1: <i>your-master-repo&amp; </i></div><pre><code><xsl:apply-templates /></code></pre></p></xsl:template>
+<xsl:template match="sterm"><p><div>Terminal-2: <i>your-Spartan3-repo&amp; </i></div><pre><code><xsl:apply-templates /></code></pre></p></xsl:template>
+<xsl:template match="yterm"><p><div>Terminal-3: <i>beliebig&amp; </i></div><pre><code><xsl:apply-templates /></code></pre></p></xsl:template>
+<xsl:template match="tterm"><p><div>Tcl Console: <i>"Type a Tcl command here"</i><pre><code><xsl:apply-templates /></code></pre></div></p></xsl:template>
 
 <xsl:template match="a"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="table"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="code"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="i"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="step"><span class="zurueck">zum <a href="#Terminal">Terminal</a> oder <a href="index.html#Inhalt">zurück zu Inhalt</a></span></xsl:template>
-<xsl:template match="weiter">Das war Step <xsl:value-of select="/los/step" />
+<xsl:template match="weiter">Das war <xsl:value-of select="/los/step" /><br />
 weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inhalt.</a></span></xsl:template>
 
 <xsl:template match="favicon"><img src="favicon.ico"/></xsl:template>
-<xsl:template match="ffterm">
-  <img src="favicon.ico" style="vertical-align:top"/>
-  <div class="ffterm"><xsl:apply-templates /></div>
+<xsl:template match="ffterm"><img src="favicon.ico" style="vertical-align:top"/><div class="ffterm"><xsl:apply-templates /></div>
   </xsl:template>
 <xsl:template match="u">
   <span class="Nutzereingabe"><xsl:apply-templates /></span>
@@ -89,6 +87,9 @@ weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inh
 
 <xsl:template match="diff"><span><a><xsl:attribute name="href">https://github.com/OpaStefanVogel/FORTY-FORTH/compare/<xsl:value-of select="." />
 </xsl:attribute><xsl:value-of select="." /></a></span></xsl:template>
+
+<xsl:template match="pr"><p class="pr"><xsl:apply-templates /></p></xsl:template>
+<xsl:template match="p"><xsl:copy-of select="." /></xsl:template>
 
 
 

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
 <!DOCTYPE los SYSTEM "R00.dtd">
-<los><step>Step 4</step>Bedingter Sprung
+<los>
 
-Dieser wird nur ausgeführt, wenn der oberste Stapeleintrag gleich Null ist. Das entspricht der Interpretation "Null" steht für "false", jeder andere Wert ist "true". Auf IF folgende Programmschritte sollen bei "true" ausgeführt werden, bei "false" soll IF diese überspringen, daher Sprung wenn oberster Stapeleintrag Null. Der Stapeleintrag wird dabei in jedem Fall entfernt.
+<step>Step 4</step>
+
+<pr>Bedingter Sprung
+
+Dieser wird nur ausgeführt, wenn der oberste Stapeleintrag gleich Null ist. Das entspricht der Interpretation "Null" steht für "false", jeder andere Wert ist "true". Auf IF folgende Programmschritte sollen bei "true" ausgeführt werden, bei "false" soll IF diese überspringen, daher Sprung wenn oberster Stapeleintrag Null. Der Stapeleintrag wird dabei in jedem Fall entfernt.</pr>
  
 <table border="1"><tr><th>PC</th><th>PD</th><th>FORTH-Notation</th><th>Stapelinhalt</th><th>SP</th></tr>
   <tr><td>0000</td><td>0003</td><td>3</td><td>3</td><td>1</td></tr>
@@ -18,13 +22,18 @@ Dieser wird nur ausgeführt, wenn der oberste Stapeleintrag gleich Null ist. Das
   <tr><td>0009</td><td>2D04</td><td>2D04</td><td>2 0055 2D04</td><td>3</td></tr>
   <tr><td>000A</td><td>A009</td><td>!</td><td>2</td><td>1</td></tr>
   <tr><td>000B</td><td>8FF5</td><td>END_IF AGAIN</td><td>2</td><td>1</td></tr>
-  </table>Beginnend mit 3 wird in einer Schleife von BEGIN bis AGAIN der oberste Stapeleintrag um 1 verringert und dupliziert auf Adresse 2D04 ausgegeben. Außerdem wird dazwischen ein 0055 mit ausgegeben, falls der Stapeleintrag ungleich Null ist. Bei Null jedoch springt IF gleich weiter zu END_IF. END_IF ist nur eine Markierung ohne eigenen Programmcode. 
+  </table>
+  
+<pr>Beginnend mit 3 wird in einer Schleife von BEGIN bis AGAIN der oberste Stapeleintrag um 1 verringert und dupliziert auf Adresse 2D04 ausgegeben. Außerdem wird dazwischen ein 0055 mit ausgegeben, falls der Stapeleintrag ungleich Null ist. Bei Null jedoch springt IF gleich weiter zu END_IF. END_IF ist nur eine Markierung ohne eigenen Programmcode.</pr>
 
 <term>git checkout Step_4
 git diff <diff>Step_3...Step_4</diff></term>
+
 <tterm>close_sim -force -quiet
 launch_simulation
-run 1000 ns</tterm><favicon/> Ergebnis: Bei LEDS=00 wird das sonst anschließende LEDS=55 von IF übersprungen und es geht gleich mit LEDS=-1(=FF) weiter. 
+run 1000 ns</tterm>
+
+<pr><favicon/> Ergebnis: Bei LEDS=00 wird das sonst anschließende LEDS=55 von IF übersprungen und es geht gleich mit LEDS=-1(=FF) weiter. 
 
 ab Zeitpunkt in ns     Wert von LEDS
      0                  UU
@@ -36,6 +45,7 @@ ab Zeitpunkt in ns     Wert von LEDS
    730                  FF
    830                   55
    950                  FE
+</pr>
 
 <weiter /><a href="R05_Unterprogramm.xml">R05 Unterprogramm</a>.
 
