@@ -34,13 +34,13 @@ Sofern das Startterminal aus Step_1 noch zugänglich ist:</pr>
   <li> git diff <diff>Step_1...Step_2</diff> # mit Taste Q beenden </li>
   </Terminal_1>
 
-<pr>und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft:</pr>
+<p>und wenn die graphische Oberfläche von Vivado ebenfalls noch läuft:</p>
 
-<Terminal_2>
+<Tcl_Console>
   <li> close_sim -force -quiet </li>
   <li> launch_simulation </li>
   <li> run 1000 ns </li>
-  </Terminal_2>
+  </Tcl_Console>
 
 <pr><favicon/> gleiches Ergebnis wie in Step_1, jedoch ab LEDS=76 abwärts gezählt.
 

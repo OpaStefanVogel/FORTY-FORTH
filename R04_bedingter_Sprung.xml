@@ -24,7 +24,7 @@ Dieser wird nur ausgeführt, wenn der oberste Stapeleintrag gleich Null ist. Das
   <tr><td> 000B </td><td> 8FF5 </td><td> END_IF AGAIN</td><td> 2       </td><td>1</td></tr>
   </ptable>
   
-<pr>Beginnend mit 3 wird in einer Schleife von BEGIN bis AGAIN der oberste Stapeleintrag um 1 verringert und dupliziert auf Adresse 2D04 ausgegeben. Außerdem wird dazwischen ein 0055 mit ausgegeben, falls der Stapeleintrag ungleich Null ist. Bei Null jedoch springt IF gleich weiter zu END_IF. END_IF ist nur eine Markierung ohne eigenen Programmcode.</pr>
+<p>Beginnend mit 3 wird in einer Schleife von BEGIN bis AGAIN der oberste Stapeleintrag um 1 verringert und dupliziert auf Adresse 2D04 ausgegeben. Außerdem wird dazwischen ein 0055 mit ausgegeben, falls der Stapeleintrag ungleich Null ist. Bei Null jedoch springt IF gleich weiter zu END_IF. END_IF ist nur eine Markierung ohne eigenen Programmcode.</p>
 
 
 <Terminal_1>
@@ -32,11 +32,11 @@ Dieser wird nur ausgeführt, wenn der oberste Stapeleintrag gleich Null ist. Das
   <li> git diff <diff>Step_3...Step_4</diff> </li>
   </Terminal_1>
 
-<Terminal_2>
+<Tcl_Console>
   <li> close_sim -force -quiet </li>
   <li> launch_simulation </li>
   <li> run 1000 ns </li>
-  </Terminal_2>
+  </Tcl_Console>
 
 <pr><favicon/> Ergebnis: Bei LEDS=00 wird das sonst anschließende LEDS=55 von IF übersprungen und es geht gleich mit LEDS=-1(=FF) weiter. 
 

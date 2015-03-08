@@ -52,18 +52,18 @@ Beispielprogramm <i></i></pr>
   <tr><td> 0015 </td><td> A003 </td><td> RETURN     </td><td> 0100           </td><td>1</td></tr>
   </ptable>
   
-<pr>LEDS ist wieder an Ausgabeadresse 2D04 angeschlossen. Jede der neu verwendbaren Speicheradressen 0100, 2D00 und E100 wird je einmal mit FFFF beschrieben und einmal mit 0000. Jedesmal gleich wieder ausgelesen und das Ergebnis auf Adresse 2D04 ausgegeben, um zu sehen, ob das Umspeichern auf die verschiedenen Werte FFFF und 0000 funktioniert hat. Das erfolgt alles im Unterprogramm ab Adresse 7, welches ein weiteres Unterprogramm ab Adresse 000F aufruft. Das NOOP steht, weil nach ! nicht gleich @ folgen darf, dies tritt aber normalerweise auch nicht auf.</pr>
+<p>LEDS ist wieder an Ausgabeadresse 2D04 angeschlossen. Jede der neu verwendbaren Speicheradressen 0100, 2D00 und E100 wird je einmal mit FFFF beschrieben und einmal mit 0000. Jedesmal gleich wieder ausgelesen und das Ergebnis auf Adresse 2D04 ausgegeben, um zu sehen, ob das Umspeichern auf die verschiedenen Werte FFFF und 0000 funktioniert hat. Das erfolgt alles im Unterprogramm ab Adresse 7, welches ein weiteres Unterprogramm ab Adresse 000F aufruft. Das NOOP steht, weil nach ! nicht gleich @ folgen darf, dies tritt aber normalerweise auch nicht auf.</p>
  
 <Terminal_1>
   <li> git checkout Step_8 </li>
   <li> git diff <diff>Step_7...Step_8</diff> </li>
   </Terminal_1>
 
-<Terminal_2>
+<Tcl_Console>
   <li> close_sim -force -quiet </li>
   <li> launch_simulation </li>
   <li> run 1500 ns </li>
-  </Terminal_2>
+  </Tcl_Console>
 
 <pr><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     LEDS,

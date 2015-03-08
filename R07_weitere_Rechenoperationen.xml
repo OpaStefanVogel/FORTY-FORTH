@@ -44,11 +44,11 @@ Beispielprogramm <i>willkürlich zusammengestellte Rechenoperationen</i></pr>
   <li> git diff <diff>Step_6...Step_7</diff> </li>
   </Terminal_1>
 
-<Terminal_2>
+<Tcl_Console>
   <li> close_sim -force -quiet </li>
   <li> launch_simulation </li>
   <li> run 340 ns </li>
-  </Terminal_2>
+  </Tcl_Console>
 
 <pr><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     Wert von C,    B,    A=LEDS, 

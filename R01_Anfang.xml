@@ -23,9 +23,9 @@ SP = Stapelhöhe nach Ausführung des Programmschrittes</pr>
   <tr><td> 0006 </td><td> 8FFA </td><td> AGAIN   </td><td> 1     </td><td>1</td></tr>
 </ptable>
 
-<pr>Wer sich noch nicht so sehr mit FORTH auskennt: Anfangs werden "0" und "1" als Zahlen auf den Stapel abgelegt, dann mit "+" addiert, mit "DUP" das Ergebnis dupliziert und "!" speichert das Duplizierte auf der zuvor eingegebenen Adresse "2D04". "AGAIN" springt zurück zu "BEGIN". "BEGIN" ist nur eine Markierung und benötigt selbst keinen eigenen Programmcode.
+<p>Wer sich noch nicht so sehr mit FORTH auskennt: Anfangs werden "0" und "1" als Zahlen auf den Stapel abgelegt, dann mit "+" addiert, mit "DUP" das Ergebnis dupliziert und "!" speichert das Duplizierte auf der zuvor eingegebenen Adresse "2D04". "AGAIN" springt zurück zu "BEGIN". "BEGIN" ist nur eine Markierung und benötigt selbst keinen eigenen Programmcode.</p>
 
-Genug der Worte, das Programm soll endlich loslaufen. Im Startterminal die Programmversion auswählen:</pr>
+<p>Genug der Worte, das Programm soll endlich loslaufen. Im Startterminal die Programmversion auswählen:</p>
 
 <Terminal_1>
   <li> git checkout Step_1 </li>
@@ -34,11 +34,11 @@ Genug der Worte, das Programm soll endlich loslaufen. Im Startterminal die Progr
 
 anschließend in Vivado die Simulation starten:
 
-<Terminal_2>
+<Tcl_Console>
   <li> close_sim -force -quiet </li>
   <li> launch_simulation # auch Button "Run Behavioral Simulation" geht </li>
   <li> run 1000 ns </li>
-  </Terminal_2>
+  </Tcl_Console>
 
 <pr><favicon/> Ergebnis: Die Variable LEDS enthält den auf Adresse 2D04 ausgegebenen Hexadezimalwert
 

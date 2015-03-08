@@ -64,22 +64,19 @@
   </xsl:template>
 
 
-<xsl:template match="term0"><p>Terminal: <i>&amp;</i><pre><code><xsl:apply-templates /></code></pre></p></xsl:template>
-<xsl:template match="term"><p><div id="Terminal">Terminal-1: <i>your-master-repo&amp; </i></div><pre><code><xsl:apply-templates /></code></pre></p></xsl:template>
-<xsl:template match="sterm"><p><div>Terminal-2: <i>your-Spartan3-repo&amp; </i></div><pre><code><xsl:apply-templates /></code></pre></p></xsl:template>
-<xsl:template match="yterm"><p><div>Terminal-3: <i>beliebig&amp; </i></div><pre><code><xsl:apply-templates /></code></pre></p></xsl:template>
-<xsl:template match="tterm"><p><div>Tcl Console: <i>"Type a Tcl command here"</i><pre><code><xsl:apply-templates /></code></pre></div></p></xsl:template>
-
 <xsl:template match="a"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="table"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="code"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="i"><xsl:copy-of select="." /></xsl:template>
+
 <xsl:template match="step"><span class="zurueck">zum <a href="#Terminal">Terminal</a> oder <a href="index.html#Inhalt">zurück zu Inhalt</a></span></xsl:template>
 <xsl:template match="weiter">Das war <xsl:value-of select="/los/step" /><br />
 weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inhalt.</a></span></xsl:template>
 
 <xsl:template match="favicon"><img src="favicon.ico"/></xsl:template>
-<xsl:template match="ffterm"><img src="favicon.ico" style="vertical-align:top"/><div class="ffterm"><xsl:apply-templates /></div>
+<xsl:template match="DEMO">
+  <p><img src="favicon.ico" style="vertical-align:top"/>
+    <span class="ffterm"><xsl:apply-templates /></span></p>
   </xsl:template>
 <xsl:template match="u">
   <span class="Nutzereingabe"><xsl:apply-templates /></span>
@@ -102,14 +99,22 @@ weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inh
     </table>
   </xsl:template>
 
-<xsl:template match="Terminal_1"><p id="Terminal"><div>Terminal_1: <i>your-master-repo&amp; </i></div>
-  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p></xsl:template>
-<xsl:template match="Terminal_2"><p><div>Tcl Console: <i>"Type a Tcl command here"</i></div>
-  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p></xsl:template>
-<xsl:template match="Terminal_2korr"><p><div>Terminal_2: <i>your-Spartan3-repo&amp; </i></div>
-  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p></xsl:template>
-<xsl:template match="Terminal_3"><p><div>Terminal_3: <i>beliebig&amp; </i></div>
-  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p></xsl:template>
+<xsl:template match="Terminal_1">
+  <p id="Terminal"><div>Terminal_1: <i>your-master-repo&amp; </i></div>
+  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p>
+  </xsl:template>
+<xsl:template match="Tcl_Console">
+  <p><div>Tcl Console: <i>"Type a Tcl command here"</i></div>
+  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p>
+  </xsl:template>
+<xsl:template match="Terminal_2">
+  <p><div>Terminal_2: <i>your-Spartan3-repo&amp; </i></div>
+  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p>
+  </xsl:template>
+<xsl:template match="Terminal_3">
+  <p><div>Terminal_3: <i>beliebig&amp; </i></div>
+  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p>
+  </xsl:template>
 
 <xsl:template match="li"><li><xsl:apply-templates /></li></xsl:template>
 

@@ -26,21 +26,21 @@ Beispiel: <i>Rechne 56*89</i></pr>
   <li> git diff <diff>Step_9...Step_10</diff> </li>
   </Terminal_1>
 
-<Terminal_2>
+<Tcl_Console>
   <li> close_sim -force -quiet </li>
   <li> launch_simulation </li>
   <li> run 3 ms </li>
-  </Terminal_2>
+  </Tcl_Console>
 
-<pr>Der jetzige FORTH-Interpreter rechnet allerdings nur 16 Bit hexadezimal, das soll für den Moment auch reichen. Ergebnis:</pr>
+<p>Der jetzige FORTH-Interpreter rechnet allerdings nur 16 Bit hexadezimal, das soll für den Moment auch reichen. Ergebnis:</p>
 
-<ffterm>FORTY-FORTH
+<DEMO>FORTY-FORTH
 
 ok
 <u>56 89 * .</u> 2E06 ok
-</ffterm>
+</DEMO>
 
-<pr>Die Nutzereingabe <u>56 89 * .</u> ist farblich unterschiedlich dargestellt gegenüber der Programmausgabe. Die Nutzereingabe wurde mit Enter=0A abgeschlossen (nicht dargestellt). Sie erscheint ab 100000 ns in KEY_BYTE. Das Ergebnis wird beginnend ab 2378760 ns in EMIT_BYTE ausgegeben.</pr>  
+<p>Die Nutzereingabe <u>56 89 * .</u> ist farblich unterschiedlich dargestellt gegenüber der Programmausgabe. Die Nutzereingabe wurde mit Enter=0A abgeschlossen (nicht dargestellt). Sie erscheint ab 100000 ns in KEY_BYTE. Das Ergebnis wird beginnend ab 2378760 ns in EMIT_BYTE ausgegeben.</p>  
 
 <weiter /><a href="Spartan3.xml">Installation Spartan3 Board</a>
 </los>

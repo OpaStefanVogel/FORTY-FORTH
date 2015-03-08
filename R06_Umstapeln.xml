@@ -44,18 +44,18 @@ Hier ein Beispielprogramm, <i>auf den Stapel 4, 3, 2, 1 der Reihe nach alle Wort
   <tr><td> 000F </td><td> 8FF4 </td><td> AGAIN     </td><td> 2 3 4 1    </td><td>4</td></tr>
   </ptable>
 
-<pr>Da dieses Programm keine extra Ausgabe enthält, ist ausnahmsweise der Ausgabeport LEDS direkt mit der Ausgabe des obersten Stapeleintrages A_SIM verknüpft.</pr>
+<p>Da dieses Programm keine extra Ausgabe enthält, ist ausnahmsweise der Ausgabeport LEDS direkt mit der Ausgabe des obersten Stapeleintrages A_SIM verknüpft.</p>
 
 <Terminal_1>
   <li> git checkout Step_6 </li>
   <li> git diff <diff>Step_5...Step_6</diff> </li>
   </Terminal_1>
 
-<Terminal_2>
+<Tcl_Console>
   <li> close_sim -force -quiet </li>
   <li> launch_simulation </li>
   <li> run 340 ns </li>
-  </Terminal_2>
+  </Tcl_Console>
 
 <pr><favicon/> Ergebnis: 
 ab Zeitpunkt in ns     Wert von D,  C,  B,  A=LEDS
