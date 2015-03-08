@@ -26,11 +26,11 @@
 
 <p> So, jetzt muss mit <a href="https://en.wikipedia.org/wiki/Xilinx_ISE">Xilinx_ISE</a> ein Projekt mit den Dateien </p>
 
-<div> <i>your-master-repo</i>/P01_top.vhd </div>
+<p><div> <i>your-master-repo</i>/P01_top.vhd </div>
 <div> <i>your-master-repo</i>/P20_FFP.vhd </div>
 <div> <i>your-Spartan3-repo</i>/TopSpartan3.vhd </div>
 <div> <i>your-Spartan3-repo</i>/Platine95S3.ucf </div>
-
+</p>
 <p> angelegt werden, das .bit File generiert und auf den Spartan3 ausgegeben werden. Dann sollte in Terminal-3 wieder </p>
 
 <ffterm>FORTY-FORTH

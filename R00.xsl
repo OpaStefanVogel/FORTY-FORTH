@@ -89,8 +89,8 @@ weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inh
 </xsl:attribute><xsl:value-of select="." /></a></span></xsl:template>
 
 <xsl:template match="pr"><p class="pr"><xsl:apply-templates /></p></xsl:template>
-<xsl:template match="p"><xsl:copy-of select="." /></xsl:template>
-<xsl:template match="div"><xsl:copy-of select="." /></xsl:template>
+<xsl:template match="p"><p><xsl:apply-templates /></p></xsl:template>
+<xsl:template match="div"><div><xsl:apply-templates /></div></xsl:template>
 
 <xsl:template match="ptable">
   <table border="1" class="ptable"><tr>
@@ -102,14 +102,14 @@ weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inh
     </table>
   </xsl:template>
 
-<xsl:template match="Terminal_1"><div id="Terminal">Terminal_1: <i>your-master-repo&amp; </i></div>
-  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></xsl:template>
-<xsl:template match="Terminal_2"><div>Tcl Console: <i>"Type a Tcl command here"</i></div>
-  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></xsl:template>
-<xsl:template match="Terminal_2korr"><div>Terminal_2: <i>your-Spartan3-repo&amp; </i></div>
-  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></xsl:template>
-<xsl:template match="Terminal_3"><div>Terminal_3: <i>beliebig&amp; </i></div>
-  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></xsl:template>
+<xsl:template match="Terminal_1"><p id="Terminal"><div>Terminal_1: <i>your-master-repo&amp; </i></div>
+  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p></xsl:template>
+<xsl:template match="Terminal_2"><p><div>Tcl Console: <i>"Type a Tcl command here"</i></div>
+  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p></xsl:template>
+<xsl:template match="Terminal_2korr"><p><div>Terminal_2: <i>your-Spartan3-repo&amp; </i></div>
+  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p></xsl:template>
+<xsl:template match="Terminal_3"><p><div>Terminal_3: <i>beliebig&amp; </i></div>
+  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p></xsl:template>
 
 <xsl:template match="li"><li><xsl:apply-templates /></li></xsl:template>
 
