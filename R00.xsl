@@ -21,7 +21,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
     <meta http-equiv="Cache-Control" content="max-age=86400"/>
-    <meta http-equiv="ETag" content="201503072229"/>
+    <meta http-equiv="ETag" content="201503080920"/>
     <title><xsl:value-of select="los/step" /></title>
 
     <link rel="stylesheet" href="stylesheets/styles.css"/>
@@ -90,6 +90,7 @@ weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inh
 
 <xsl:template match="pr"><p class="pr"><xsl:apply-templates /></p></xsl:template>
 <xsl:template match="p"><xsl:copy-of select="." /></xsl:template>
+<xsl:template match="div"><xsl:copy-of select="." /></xsl:template>
 
 <xsl:template match="ptable">
   <table border="1" class="ptable"><tr>
@@ -103,7 +104,9 @@ weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inh
 
 <xsl:template match="Terminal_1"><div id="Terminal">Terminal_1: <i>your-master-repo&amp; </i></div>
   <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></xsl:template>
-<xsl:template match="Terminal_2"><div>Terminal_2: <i>your-Spartan3-repo&amp; </i></div>
+<xsl:template match="Terminal_2"><div>Tcl Console: <i>"Type a Tcl command here"</i></div>
+  <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></xsl:template>
+<xsl:template match="Terminal_2korr"><div>Terminal_2: <i>your-Spartan3-repo&amp; </i></div>
   <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></xsl:template>
 <xsl:template match="Terminal_3"><div>Terminal_3: <i>beliebig&amp; </i></div>
   <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></xsl:template>

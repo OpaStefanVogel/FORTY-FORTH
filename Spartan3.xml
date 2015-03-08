@@ -3,18 +3,18 @@
 <!DOCTYPE los SYSTEM "R00.dtd">
 <los>
 
-<step>Spartan3 Board</step>
+<step> Spartan3 Board </step>
 
-<pr>Spartan3 Board
+<p> Spartan3 Board </p>
 
-Zuletzt war branch <code>Step_10</code> eingestellt in Terminal_1. Alle extra für das Spartan3 Board benötigten Dateien befinden sich in einem extra Branch, welcher nicht gleichzeitig mit in Terminal_1 eingestellt werden kann. Deshalb in einem neuen Terminal_2 ein neues leeres Verzeichnis mit einem selbstgewählten Namen <i>your-Spartan3-repo</i> anlegen, in dieses Verzeichnis wechseln und nochmal klonen.</pr>
+<p> Zuletzt war branch <code>Step_10</code> eingestellt in Terminal_1. Alle extra für das Spartan3 Board benötigten Dateien befinden sich in einem extra Branch, welcher nicht gleichzeitig mit in Terminal_1 eingestellt werden kann. Deshalb in einem neuen Terminal_2 ein neues leeres Verzeichnis mit einem selbstgewählten Namen <i>your-Spartan3-repo</i> anlegen, in dieses Verzeichnis wechseln und nochmal klonen. </p>
 
-<Terminal_2>
+<Terminal_2korr>
   <li> git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git . </li>
   <li> git checkout Spartan3_Step_9_und_10 </li>
-  </Terminal_2>
+  </Terminal_2korr>
 
-<pr>Die Ein- und Ausgabe soll über die serielle Verbindung zum Spartan3 Board erfolgen. Dafür wird ein weiteres Terminal_3 benötigt. Welches Verzeichnis darin eigestellt ist, ist egal. Jedoch kann anstelle <code>/ttyS0</code> auch <code>/ttyS1</code> oder eine andere Eingabe erforderlich sein.</pr>
+<p> Die Ein- und Ausgabe soll über die serielle Verbindung zum Spartan3 Board erfolgen. Dafür wird ein weiteres Terminal_3 benötigt. Welches Verzeichnis darin eigestellt ist, ist egal. Jedoch kann anstelle <code>/ttyS0</code> auch <code>/ttyS1</code> oder eine andere Eingabe erforderlich sein. </p>
 
 <Terminal_3>
   <li> stty -F /dev/ttyS0 115200 raw -cstopb -parenb -crtscts -echo ixon -ixoff </li>
@@ -22,22 +22,22 @@ Zuletzt war branch <code>Step_10</code> eingestellt in Terminal_1. Alle extra f�
   <li> cp /dev/ttyS0 /dev/tty &amp; cp /dev/tty /dev/ttyS0 </li>
   </Terminal_3>
 
-<pr>(alles mit Enter abschließen, man sieht nach dem zweiten stty keine Bildschirmausgabe mehr, in dem Moment ist nicht erkennbar, ob es funktioniert)
+<p> (alles mit Enter abschließen, man sieht nach dem zweiten stty keine Bildschirmausgabe mehr, in dem Moment ist nicht erkennbar, ob es funktioniert)  </p>
 
-So, jetzt muss mit <a href="https://en.wikipedia.org/wiki/Xilinx_ISE">Xilinx_ISE</a> ein Projekt mit den Dateien
+<p> So, jetzt muss mit <a href="https://en.wikipedia.org/wiki/Xilinx_ISE">Xilinx_ISE</a> ein Projekt mit den Dateien </p>
 
-<i>your-master-repo</i>/P01_top.vhd
-<i>your-master-repo</i>/P20_FFP.vhd
-<i>your-Spartan3-repo</i>/TopSpartan3.vhd
-<i>your-Spartan3-repo</i>/Platine95S3.ucf
+<div> <i>your-master-repo</i>/P01_top.vhd </div>
+<div> <i>your-master-repo</i>/P20_FFP.vhd </div>
+<div> <i>your-Spartan3-repo</i>/TopSpartan3.vhd </div>
+<div> <i>your-Spartan3-repo</i>/Platine95S3.ucf </div>
 
-angelegt werden, das .bit File generiert und auf den Spartan3 ausgegeben werden. Dann sollte in Terminal-3 wieder</pr>
+<p> angelegt werden, das .bit File generiert und auf den Spartan3 ausgegeben werden. Dann sollte in Terminal-3 wieder </p>
 
 <ffterm>FORTY-FORTH
 
 ok</ffterm>
 
-<pr>zu sehen sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, ob sich da nur was verheddert hat. Sonst bleibt nur, in Terminal_1 und _2 mit <code>git checkout</code> auf vorherige Versionen umzuschalten, .bit erneut zu generieren und auf den Spartan3 auszugeben. Dabei gilt momentan folgende Zuordnung</pr>
+<p> zu sehen sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, ob sich da nur was verheddert hat. Sonst bleibt nur, in Terminal_1 und _2 mit <code>git checkout</code> auf vorherige Versionen umzuschalten, .bit erneut zu generieren und auf den Spartan3 auszugeben. Dabei gilt momentan folgende Zuordnung </p>
 
 <table border="1"><tr>
   <th> <i>your-master-repo&amp;</i>   </th>
@@ -55,7 +55,7 @@ ok</ffterm>
   <tr><td> Step_10 </td><td> Spartan_Step_9_und_10      </td><td> serieller Ausgang </td></tr>
   </table>
   
-<pr>Anstelle oder nach einigen Tastatureingaben in Terminal_3 hinein geht auch in Terminal_1</pr>
+<p> Anstelle oder nach einigen Tastatureingaben in Terminal_3 hinein geht auch in Terminal_1</p>
 
 <Terminal_1>
   <li> cp FFINIT1.TXT /dev/ttyS0 # recompiliert den vorhandenen FORTH-Interpreter </li>
