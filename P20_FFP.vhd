@@ -290,6 +290,10 @@ variable W: STD_LOGIC_VECTOR (3 downto 0);
 variable STAK: STD_LOGIC_VECTOR (7 downto 0);
 -- fuer Rechenoperationen mit Uebertrag
 variable U: STD_LOGIC_VECTOR (31 downto 0);
+-- fuer Division
+variable UBIT: STD_LOGIC;
+-- fuer Supermult
+variable SUMME: STD_LOGIC_VECTOR (31 downto 0);
 
 begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
   -- ob ein KEY aingetroffen ist --
@@ -383,6 +387,40 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
         when others => A:=EXFET;
         end case;
       T:=1;
+    elsif PD=x"A014" then -- DIVISION_MIT_REST 32B/16B=16R/16Q
+      UBIT:=B(15);
+      B:=B(14 downto 0)&C(15);
+      C:=C(14 downto 0)&'0';
+      if (UBIT&B)>=('0'&D) then
+        B:=B-D;
+        C(0):='1';
+        end if;
+      T:=3;
+    elsif PD=x"A017" then -- SuperMULT I
+      --     A    B    C    D        R
+      --     D    C    B    A        R
+      --     c    ü   adr1 adr2      i
+      -- c   ü   erg1 adr2 adr1      i-1
+      SUMME:=(D*EXFET)+(x"0000"&C);
+      C:=A;A:=B;B:=C;
+      D:=SUMME(31 downto 16); 
+      C:=SUMME(15 downto 0);
+      RPC:=RPCC-1; RW:='1';
+      T:=4; SP:=SP+1;
+    elsif PD=x"A018" then -- SuperMULT II
+      --     A    B     C      D         R
+      --     D    C     B      A         R
+      -- c   ü1  erg1   adr2   adr1      i-1
+      -- c   ü2  adr1+1 adr2+1 i-1       i-1
+      SUMME:=(D&C)+(x"0000"&EXFET);
+      D:=SUMME(31 downto 16); 
+      DAT:=SUMME(15 downto 0);
+      ADR:=A;
+      WE:='1';
+      C:=A+1;
+      B:=B+1;
+      if RPCC=x"0000" then A:=x"FFFF"; else A:=x"0000"; end if;
+      T:=4;
     elsif PD(15 downto 12)=x"B" then           -- B000-BFFF Umstapeln
       STAK:="00000000";
       if PD(7)='1' then STAK:=STAK(5 downto 0)&"11"; T:=T+1; end if;
