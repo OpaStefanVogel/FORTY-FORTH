@@ -14,17 +14,27 @@ EMIT_ANGEKOMMEN  = muss vom Empfänger invertiert werden. Das Programm wartet so
 
 EMIT  ( n --> ) gibt n auf Port EMIT_BYTE aus.
 
-Ein Beispielprogramm wie etwa</pr>
+Nur ein Beispielprogramm wie etwa</pr>
 <ptable>
-  <tr><td> 0000 </td><td> 0041 </td><td> 41        </td><td> 41    </td><td> 1 </td></tr>
-  <tr><td> 0000 </td><td> B501 </td><td> BEGIN DUP </td><td> 41 41 </td><td> 2 </td></tr>
-  <tr><td> 0001 </td><td> 4005 </td><td> EMIT      </td><td> 41    </td><td> 1 </td></tr>
-  <tr><td> 0001 </td><td> 0001 </td><td> 1         </td><td> 41 1  </td><td> 2 </td></tr>
-  <tr><td> 0001 </td><td> 4007 </td><td> +         </td><td> 42    </td><td> 1 </td></tr>
-  <tr><td> 0001 </td><td> 8FFB </td><td> AGAIN     </td><td> 42    </td><td> 1 </td></tr>
+  <tr><td> 0000 </td><td> 0031 </td><td> 54 ( '1' )</td><td> 31    </td><td> 1 </td></tr>
+  <tr><td> 0001 </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
+  <tr><td> 0002 </td><td> 002E </td><td> 45 ( '.' )</td><td> 2E    </td><td> 1 </td></tr>
+  <tr><td> 0003 </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
+  <tr><td> 0004 </td><td> 0020 </td><td> 53 ( ' ' )</td><td> 20    </td><td> 1 </td></tr>
+  <tr><td> 0005 </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
+  <tr><td> 0006 </td><td> 0054 </td><td> 54 ( 'T' )</td><td> 54    </td><td> 1 </td></tr>
+  <tr><td> 0007 </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
+  <tr><td> 0008 </td><td> 0054 </td><td> 45 ( 'E' )</td><td> 45    </td><td> 1 </td></tr>
+  <tr><td> 0009 </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
+  <tr><td> 000A </td><td> 0054 </td><td> 53 ( 'S' )</td><td> 53    </td><td> 1 </td></tr>
+  <tr><td> 000B </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
+  <tr><td> 000C </td><td> 0054 </td><td> 54 ( 'T' )</td><td> 54    </td><td> 1 </td></tr>
+  <tr><td> 000D </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
+  <tr><td> 000E </td><td> 0054 </td><td> 20 ( ' ' )</td><td> 20    </td><td> 1 </td></tr>
+  <tr><td> 000F </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
   </ptable>
   
-<pr>ist inzwischen etwas dürftig, ich habe deshalb einen FORTH-Interpreter in ProgRAM und ByteRAM gepackt, eine Minimalversion, die sich gerade so selbst zum Laufen bringt. Mal sehen, ob da schon was gescheites passiert.</pr>
+<pr>ist inzwischen etwas dürftig. Ich habe deshalb ab Adresse PC=0010 einen FORTH-Interpreter angefügt, eine Minimalversion, die sich gerade so selbst zum Laufen bringt. Mal sehen, ob da schon was gescheites passiert.</pr>
 
 <Terminal_1>
   <li> git checkout Step_9 </li>
@@ -37,14 +47,14 @@ Ein Beispielprogramm wie etwa</pr>
   <li> run 20000 ns </li>
   </Tcl_Console>
 
-<p>Beginnend ab 360 ns wird alle 820 ns auf EMIT ein weiteres Zeichen der Hexadezimalfolge 46-4F-52-54-59-2d-46-4f-52-54-48-0A-0A-6F-6B-0A ausgegeben. In einem echten Terminal würde das etwa so aussehen:</p>
+<p>Beginnend ab 40 ns wird auf EMIT_BYTE ein weiteres Zeichen der Hexadezimalfolge 31-2E-20-54-45-53-20-46-4F-52-54-59-2d-46-4f-52-54-48-0A-0A-6F-6B-0A ausgegeben. In einem echten Terminal würde das etwa so aussehen:</p>
 
-<DEMO>FORTY-FORTH
+<DEMO>1. TEST FORTY-FORTH
 
 ok
 </DEMO>
 
-<p>Von 880 ns bis 1200 ns wartet der Programmzähler PC darauf, dass von testbench.vhd aus EMIT_EMPFANGEN negiert wird, und so auch bei jedem weiteren ausgegebenen Zeichen. Schließlich ab 15500 ns wiederholt sich endlos eine 420 ns lange Progammschleife - ja weil noch eine Nutzereingabe fehlt...</p>
+<p>Von 80 ns bis 880 ns wartet der Programmzähler PC darauf, dass von testbench.vhd aus EMIT_EMPFANGEN negiert wird, und so auch bei jedem weiteren ausgegebenen Zeichen. Schließlich ab 22160 ns wiederholt sich endlos eine 420 ns lange Progammschleife - ja weil noch eine Nutzereingabe fehlt...</p>
 
 <weiter /><a href="R10_Nutzereingabe.xml">R10 Nutzereingabe</a>
 

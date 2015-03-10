@@ -40,7 +40,7 @@ ok
 <u>56 89 * .</u> 2E06 ok
 </DEMO>
 
-<p>Die Nutzereingabe <u>56 89 * .</u> ist farblich unterschiedlich dargestellt gegenüber der Programmausgabe. Die Nutzereingabe wurde mit Enter=0A abgeschlossen (nicht dargestellt). Sie erscheint ab 100000 ns in KEY_BYTE. Das Ergebnis wird beginnend ab 2378760 ns in EMIT_BYTE ausgegeben.</p>  
+<p>Die Nutzereingabe <u>56 89 * .</u> ist farblich unterschiedlich dargestellt gegenüber der Programmausgabe. Die Nutzereingabe wurde mit Enter=0A abgeschlossen (nicht dargestellt). Sie erscheint ab 100000 ns in KEY_BYTE. Das Ergebnis wird beginnend ab 2391120 ns in EMIT_BYTE ausgegeben.</p>  
 
 <weiter /><a href="Spartan3.xml">Installation Spartan3 Board</a>
 </los>
