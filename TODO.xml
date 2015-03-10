@@ -50,5 +50,9 @@ ok colorisierte Ausgabe --- in FFINIT2.TXT mit reinmach erstmal ok
 nö ProgRAM aus P20.vhd herausziehen damit unterschiedlich machbar??? nö lieber nicht
 .. aber in DUMPZ < NOT statt = damit HERE 0 0 DUMPZ zu machen geht
 .. was auch nicht geht, letztes <p> in R10 vor <Terminal_1> hinsetzen
+.. Spartan3_Step_9 hat KEY drin, soll raus
+.. dann wohl doch alle + * . in M+ M* M. umbenennen
+.. da in R00.DTD das ANY für valide nicht ausreicht, muss ich doch noch weng füllen.
+.. bei SMUL und so díe DO LOOP noch in BEGIN UNTIL umschreiben
 
 

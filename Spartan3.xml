@@ -59,7 +59,8 @@ zu sehen und auch eine Nutzereingabe möglich sein. Wenn nicht, erstmal mit Eing
 
 <Terminal_1>
   <li> cp FFINIT1.TXT /dev/ttyS0 # recompiliert den vorhandenen FORTH-Interpreter </li>
-  <li> cp FFINIT2.TXT /dev/ttyS0 # erste Erweiterungen </li>
+  <li> cp FFINIT1SMUL1.TXT /dev/ttyS0 # Division und schnelle Multiplikation, aber erst ab Step_11 </li>
+  <li> cp FFINIT2.TXT /dev/ttyS0 # nützliche Erweiterungen, wenn Platz dafuer </li>
   <li> cp DEMO.TXT /dev/ttyS0 # DEMO-File </li>
   </Terminal_1>
 
