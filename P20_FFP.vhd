@@ -39,7 +39,7 @@ type RAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (15 downto 0);
 -- Programmspeicher 0000H-1FFFH
 signal ProgRAM: RAMTYPE:=(
   x"0031",x"A005",x"002E",x"A005",x"0020",x"A005",x"0054",x"A005",x"0045",x"A005",x"0053",x"A005",x"0054",x"A005",x"0020",x"A005", -- 0000-000F 
-  x"4719",x"A003",x"449E",x"9001",x"A003",x"B300",x"8000",x"8FFA",x"0000",x"09E4",x"0000",x"0000",x"0000",x"0000",x"09D9",x"09CF", -- 0010-001F 
+  x"472D",x"A003",x"449E",x"9001",x"A003",x"B300",x"8000",x"8FFA",x"0000",x"09E4",x"0000",x"0000",x"0000",x"0000",x"09D9",x"09CF", -- 0010-001F 
   x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4478",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003", -- 0020-002F 
   x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003", -- 0030-003F 
   x"3F00",x"0000",x"3000",x"FD1E",x"FD1E",x"0000",x"0000",x"0000",x"0010",x"FB00",x"FB00",x"FB08",x"FB0E",x"FB0D",x"0000",x"07E2", -- 0040-004F 
@@ -295,7 +295,7 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
   -- ob ein KEY aingetroffen ist --
   if KEY_ABGESCHICKT_MERK/=KEY_ABGESCHICKT_RUHEND then 
     KEY_ABGESCHICKT_MERK<=KEY_ABGESCHICKT_RUHEND;
-    PD:=x"4016";
+    PD:=x"4026";
     PC:=PC;
     else
       PD:=PD_VOM_ProgRAM;

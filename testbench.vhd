@@ -50,15 +50,11 @@ signal SP_SIM: integer;
     -- EMIT --
 signal EMIT_ABGESCHICKT: STD_LOGIC;
 signal EMIT_BYTE: STD_LOGIC_VECTOR (7 downto 0);
-<<<<<<< HEAD
 signal EMIT_ANGEKOMMEN: STD_LOGIC:='0';
 -- KEY --
 signal KEY_ABGESCHICKT: STD_LOGIC:='0';
 signal KEY_BYTE: STD_LOGIC_VECTOR (7 downto 0);
 signal KEY_ANGEKOMMEN: STD_LOGIC:='0';
-=======
-signal EMIT_EMPFANGEN: STD_LOGIC:='0';
->>>>>>> Step_9
 
 begin
 
@@ -90,7 +86,6 @@ begin
 
   -- clock generation
   CLK <= not CLK after 10 ns;
-<<<<<<< HEAD
   EMIT_ANGEKOMMEN<=EMIT_ABGESCHICKT after 800 ns;
 
 
@@ -130,12 +125,6 @@ begin
     wait for 1000 ms;
   end process;
 
-=======
-  EMIT_EMPFANGEN<=EMIT_GESENDET after 800 ns;
-
-
-
->>>>>>> Step_9
 end test_Step_9;
 
 
