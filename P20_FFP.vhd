@@ -388,12 +388,12 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
         end case;
       T:=1;
     elsif PD=x"A014" then -- DIVISION_MIT_REST 32B/16B=16R/16Q
-      UBIT:=B(15);
-      B:=B(14 downto 0)&C(15);
-      C:=C(14 downto 0)&'0';
-      if (UBIT&B)>=('0'&D) then
-        B:=B-D;
-        C(0):='1';
+      UBIT:=C(15);
+      C:=C(14 downto 0)&B(15);
+      B:=B(14 downto 0)&'0';
+      if (UBIT&C)>=('0'&A) then
+        C:=C-A;
+        B(0):='1';
         end if;
       T:=3;
     elsif PD=x"A017" then -- SuperMULT I
