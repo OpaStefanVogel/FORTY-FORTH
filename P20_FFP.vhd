@@ -405,7 +405,7 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
       C:=A;A:=B;B:=C;
       D:=SUMME(31 downto 16); 
       C:=SUMME(15 downto 0);
-      RPC:=RPCC-1; RW:='1';
+      RPC<=RPCC-1; RW<='1';
       T:=4; SP:=SP+1;
     elsif PD=x"A018" then -- SuperMULT II
       --     A    B     C      D         R
