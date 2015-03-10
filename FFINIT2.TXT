@@ -1,43 +1,3 @@
-( - LOOP's
-: I RP @ 1 + @ ;
-: J RP @ 3 + @ ;
-: K RP @ 5 + @ ;
-: (DO) SWAP R> ROT ROT >R >R >R ;
-: (LOOP) R> R> 1+ DUP R < IF >R 0 
-  ELSE R> DROP DROP -1 END_IF SWAP >R ;
-: (+LOOP) R> R>  ROT DUP  0< IF + R OVER
-  ELSE + DUP R END_IF < IF >R 0 
-  ELSE R> DROP DROP -1 END_IF SWAP >R  ;
-IMMEDIATE: DO COMPILE (DO) HERE ;
-IMMEDIATE: LOOP COMPILE (LOOP) 0BRANCH, ;
-IMMEDIATE: +LOOP COMPILE (+LOOP) 0BRANCH, ;
-( : LL 0 DO I . LOOP ; 7 LL ( ok geht
-
-( - Variablen
-2F00 CONSTANT RAMP1
-RAMP1 1+ RAMP1 !
-: VARIABLE RAMP1 @ DUP CONSTANT DUP 1+ RAMP1 ! ! ;
-RAMP1 VARIABLE RAMP3 ( RAMP3 TIB RAMP1
-: RAMBUF ( <name>  n --> )
-  MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her )
-
-
-( - noch paar hilfreiche Funktionen:
-: DUMP ( addr n --> )
-  0 DO ( CR DUP . ) DUP @ . 1+ LOOP DROP ;
-
-: VLIST
-  LFA @ BEGIN 
-    DUP 1+ @ OVER 2 + @ TYPE 20 EMIT 
-    DUP @ WHILE DUP @ + REPEAT
-  DROP ;
-
-: WLIST
-  LFA @ BEGIN ( CR ) DUP .
-    DUP 1+ @ OVER 2 + @ TYPE 20 EMIT 
-    DUP @ WHILE DUP @ + REPEAT
-  DROP
-  ;
 
 A003 CONSTANT RETURN
 : REPLACE: ( <name > ) 
@@ -59,9 +19,6 @@ A003 CONSTANT RETURN
 
 : MOVE ( adr1 adr2 n --> )
   BEGIN DUP WHILE >R OVER @ OVER ! SWAP 1+ SWAP 1+ R> 1 - REPEAT DROP 2DROP ;
-
-: FILL ( adr n b --> )
-  ROT ROT 0 DO 2DUP ! 1+ LOOP 2DROP ;
 
 : LDUMP LFA @ HERE OVER - DUMP ;
 
@@ -88,14 +45,6 @@ IMMEDIATE: () 0 WORD 2DROP ;
 A012 MCODE D+
 A013 MCODE D-
 
-( Divisionen
-A014 MCODE DI32 ( 
-: DIV32 ( a b d --> r q )
-  10 0 DO DI32 LOOP DROP ;
-(  10 DI32 ;
-: /MOD ( b d --> r q ) 0 ROT ROT DIV32 ;
-: / ( b d --> q ) /MOD SWAP DROP ;
-: MOD ( b d --> r ) /MOD DROP ;
 
 ( ganz neu: Steuerungstasten: ^A bis ^G, weiter ^H=^A ^L=^B ...
 18 8 0 FILL
@@ -232,7 +181,6 @@ IMMEDIATE: <; 0 STAT ! CSP? HERE 1 - @ 800 OR HERE 1 - ! SMUDGE [ SMUDGE ] ;
 
 
 ( Ausgabe von ESCAPE-Sequenzen:
-
 20 WORD: ESC 1B EMIT 0 DO DUP C@ EMIT 1+ LOOP DROP ;
 ESC ]0;FORTY-FORTH 07 EMIT ( 07 EMIT schließt ]
 : FESTPOSITION ESC [s ESC [1;1H ESC [31m ; ( saveC Pos1,1 redcolor
