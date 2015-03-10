@@ -46,7 +46,6 @@ signal SP_SIM: integer;
 signal EMIT_GESENDET: STD_LOGIC;
 signal EMIT_BYTE: STD_LOGIC_VECTOR (7 downto 0);
 signal EMIT_EMPFANGEN: STD_LOGIC:='0';
-signal emitcount: STD_LOGIC_VECTOR (15 downto 0);
 
 begin
 
@@ -76,14 +75,6 @@ begin
   EMIT_EMPFANGEN<=EMIT_GESENDET after 800 ns;
 
 
-
--- simuliert eine Verzögerung bis EMIT_BYTE empfangen ist
---process begin
---  if EMIT_EMPFANGEN/=EMIT_GESENDET then
---    wait for 200 ns;
---    EMIT_EMPFANGEN<=EMIT_GESENDET;
---    end if;
---  end process;
 
 end test_Step_9;
 
