@@ -34,7 +34,7 @@ Nur ein Beispielprogramm wie etwa</pr>
   <tr><td> 000F </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
   </ptable>
   
-<pr>ist inzwischen etwas dürftig. Ich habe deshalb ab Adresse PC=0010 einen FORTH-Interpreter angefügt, eine Minimalversion, die sich gerade so selbst zum Laufen bringt. Mal sehen, ob da schon was gescheites passiert.</pr>
+<pr>ist inzwischen etwas dürftig. Ich habe deshalb ab Adresse PC=0010 einen FORTH-Interpreter angefügt, eine Minimalversion, die sich gerade so selbst zum Laufen bringt. Mal sehen, ob da schon was Gescheites passiert.</pr>
 
 <Terminal_1>
   <li> git checkout Step_9 </li>
