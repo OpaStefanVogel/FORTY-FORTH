@@ -132,7 +132,7 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 : R RP @ 1+ @ ;
 : , DP @ ! 1 DP +! ;
 : EXECUTE PC ! ;
-: KEY 2 EXECUTE ;
+: KEY 12 EXECUTE ;
 : EMIT ' EMITCODE EXECUTE ;
 : SHL16 ( a --> t a' )
   0 SWAP 10 U* SWAP ; ( t&a'=SHL a )
@@ -225,8 +225,8 @@ IMMEDIATE: ' ( <NAME> --> --> pfa )
     END_IF
   ;
 
-' KEY_INT 4000 + 16 !
-' KEYCODE2 4000 + 2 !
+' KEY_INT 4000 + 26 !
+' KEYCODE2 4000 + 12 !
 
 
 
@@ -440,7 +440,7 @@ START
   ." x" 22 EMIT LG. 22 EMIT ." ," ; 
 : DUMPZ ( bis+1 von dubit --> )
   DUBIT !
-  " ' START " INTERPRET ( 1 - 6000 OR ) 4000 + 0 !
+  " ' START " INTERPRET ( 1 - 6000 OR ) 4000 + 10 !
   BEGIN
     CR ."   
     0000 BEGIN 2DUP + @ NG. 1+ DUP 10 = UNTIL DROP
