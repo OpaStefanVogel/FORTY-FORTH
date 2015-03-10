@@ -98,8 +98,8 @@ A014 MCODE DI32 (
 : MOD ( b d --> r ) /MOD DROP ;
 
 ( ganz neu: Steuerungstasten: ^A bis ^G, weiter ^H=^A ^L=^B ...
-8 8 0 FILL
-: STRG: : HERE 3 - DUP . @ 1+ DUP . @ DUP . 40 - HERE SWAP 7 AND 8 + ! ;
+18 8 0 FILL
+: STRG: : HERE 3 - DUP . @ 1+ DUP . @ DUP . 40 - HERE SWAP 7 AND 18 + ! ;
 STRG: ^G 7 EMIT ." <1xPIEP>" ;
 STRG: ^F 7 EMIT ." QUIT" QUIT ;
 STRG: ^A ." Angehalten für genau eine Eingabezeile: " CR 3600 100 EXPECT INTERPRET ." ok";
@@ -135,7 +135,7 @@ TLISTE VARIABLE TLISTENZEIGER
   UHRL @ R> - EXXIUHR ! 
   ;
 ( ' EXXI 6 1+ - 6000 OR 6 !
-' EXXI 4000 + 6 ! ( CR geht momentan +F9XX
+' EXXI 4000 + 16 ! ( CR geht momentan +F9XX
 
 : ENTFERNE 
   20 WORD FIND LCFA DROP 1+
@@ -221,8 +221,8 @@ IMMEDIATE: ELSEOF ( --> )
 IMMEDIATE: END_OF ( --> )
   " END_IF" INTERPRET ;
 : ERR ." keine gültige RAM-Adresse" QUIT ;
-' ERR 4000 OR 12 !
-' ERR 4000 OR 10 !
+' ERR 4000 OR 22 !
+' ERR 4000 OR 20 !
 
 IMMEDIATE: <; 0 STAT ! CSP? HERE 1 - @ 800 OR HERE 1 - ! SMUDGE [ SMUDGE ] ; 
 ( : T 77 88 DROP <; 
