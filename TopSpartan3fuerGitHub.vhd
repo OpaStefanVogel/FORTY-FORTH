@@ -29,41 +29,15 @@ use UNISIM.VComponents.all;
 
 entity TopSpartan3fuerGitHub is
   Port ( --hierzu Platine95S3.ucf--
--- ==== Clock inputs (CLK) ====
-CLK: in  STD_LOGIC;
--- ==== RS-232 Serial Ports  (RS232) ====
-RXD: in  STD_LOGIC;
-TXD: out STD_LOGIC:='1';
--- SRAM
-    AL:  out STD_LOGIC_VECTOR (17 downto 0):="000000000000000000";      -- Adressbus SRAM
-    DL:  inout STD_LOGIC_VECTOR (31 downto 0):=x"00000000";    -- Datenbus SRAM
-    WE,OE,CE1,UB1,LB1,CE2,UB2,LB2: out STD_LOGIC; -- Steuersignale SRAM (low-aktiv)
--- ==== PS2
-PS2_CLK:  inout STD_LOGIC;
-PS2_DATA: inout STD_LOGIC;
-
--- LED's+Buttons
-    btn: in  STD_LOGIC_VECTOR (3 downto 0);  -- 4 Tasten
-    swt: in  STD_LOGIC_VECTOR (7 downto 0);  -- 8 Schalter
-    led: out STD_LOGIC_VECTOR (7 downto 0);  -- 8 Leuchtdioden
-    an:  out STD_LOGIC_VECTOR (3 downto 0);  -- 4 Siebensegmentanzeigen
-    ssg: out STD_LOGIC_VECTOR (7 downto 0);  -- zu je 7 Segmente (low-aktiv)
--- Port B
-    MB1: inout STD_LOGIC_VECTOR (13 downto 0):="ZZZZZZZZZZ1Z1Z"; --"1ZZ1111Z1Z1Z1Z"   -- Port B, alle MB1-Anschlüsse
- 
-
--- neu RPI:
-A2_TXD: inout STD_LOGIC;
-A2_RXD: in STD_LOGIC;
-
--- neu SPIS:
-SPI_CLK: in STD_LOGIC;
-SPI_MOSI: in STD_LOGIC;
-SPI_MISO: out STD_LOGIC;
-SPI_SCSN: in STD_LOGIC
-
-);
-end TopSpartan3fuerGitHub;
+    -- ==== Clock inputs (CLK) ====
+    CLK: in  STD_LOGIC; -- 50 MHz 
+    -- ==== RS-232 Serial Ports  (RS232) ====
+    RXD: in  STD_LOGIC;
+    TXD: out STD_LOGIC:='1';
+    -- ==== LED's ====
+    led: out STD_LOGIC_VECTOR (7 downto 0)
+    );	 
+  end TopSpartan3fuerGitHub;
 
 architecture Step_9_und_10 of TopSpartan3fuerGitHub is
 
@@ -92,7 +66,7 @@ signal CLK_I: STD_LOGIC;
 signal TAKTZAEHLER: STD_LOGIC_VECTOR (55 downto 0):="00000000000000000000000000000000000000000000000000000000";
 
 --RXD --
-signal CLK_6_MHz,KEY_ABGESCHICKT,RxDI: STD_LOGIC;
+signal CLK_6_MHz,KEY_ABGESCHICKT,RxD_RUHEND: STD_LOGIC;
 signal KEY_ABGESCHICKT_LOCAL: STD_LOGIC;
 signal KEY_BYTE: STD_LOGIC_VECTOR (7 downto 0);
 signal scount: STD_LOGIC_VECTOR (31 downto 0):=x"FFFF0000"; --wartet paar ms
@@ -163,49 +137,28 @@ begin wait until (CLK_I'event and CLK_I='0');
 
 process
 begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
-  if (RxDI='0' and scount=x"00000000") then scount<=x"00000008"; else
+  if (RxD_RUHEND='0' and scount=x"00000000") then scount<=x"00000008"; else
     if scount=x"00001000" then scount<=x"00000000";
       KEY_BYTE<=KEY_BYTE_LOCAL;
       KEY_ABGESCHICKT_LOCAL<=not KEY_ABGESCHICKT; 
       else 
         if scount/=0 then scount<=scount+8; -- +1 bei 50 MHz
           end if; end if; end if;
-  if scount(11 downto 4)=x"28" then KEY_BYTE_LOCAL(0)<=RxDI;
-    elsif scount(11 downto 4)=x"43" then KEY_BYTE_LOCAL(1)<=RxDI;
-    elsif scount(11 downto 4)=x"5E" then KEY_BYTE_LOCAL(2)<=RxDI;
-    elsif scount(11 downto 4)=x"7A" then KEY_BYTE_LOCAL(3)<=RxDI;
-    elsif scount(11 downto 4)=x"95" then KEY_BYTE_LOCAL(4)<=RxDI;
-    elsif scount(11 downto 4)=x"B0" then KEY_BYTE_LOCAL(5)<=RxDI;
-    elsif scount(11 downto 4)=x"CB" then KEY_BYTE_LOCAL(6)<=RxDI;
-    elsif scount(11 downto 4)=x"E6" then KEY_BYTE_LOCAL(7)<=RxDI;
+  if scount(11 downto 4)=x"28" then KEY_BYTE_LOCAL(0)<=RxD_RUHEND;
+    elsif scount(11 downto 4)=x"43" then KEY_BYTE_LOCAL(1)<=RxD_RUHEND;
+    elsif scount(11 downto 4)=x"5E" then KEY_BYTE_LOCAL(2)<=RxD_RUHEND;
+    elsif scount(11 downto 4)=x"7A" then KEY_BYTE_LOCAL(3)<=RxD_RUHEND;
+    elsif scount(11 downto 4)=x"95" then KEY_BYTE_LOCAL(4)<=RxD_RUHEND;
+    elsif scount(11 downto 4)=x"B0" then KEY_BYTE_LOCAL(5)<=RxD_RUHEND;
+    elsif scount(11 downto 4)=x"CB" then KEY_BYTE_LOCAL(6)<=RxD_RUHEND;
+    elsif scount(11 downto 4)=x"E6" then KEY_BYTE_LOCAL(7)<=RxD_RUHEND;
       end if; 
   KEY_ABGESCHICKT <= KEY_ABGESCHICKT_LOCAL; 
   end process;
 
 process
 begin wait until (CLK_6_MHz'event and CLK_6_MHz='0');
---  STRG_MERK_RUHEND<=STRG_MERK;
-  RXDI<=RXD;
+  RXD_RUHEND<=RXD;
   end process;
-
-
-
-    AL <= "000000000000000000";
-    DL <= x"00000000";
-    WE <= '0';
-	 OE <= '0';
-	 CE1 <= '0';
-	 UB1 <= '0';
-	 LB1 <= '0';
-	 CE2 <= '0';
-	 UB2 <= '0';
-	 LB2 <= '0';
-PS2_CLK <= '0';
-PS2_DATA <= '0';
-    an <= "1111";
-    ssg <= "11111111";
-    MB1 <= "ZZZZZZZZZZ1Z1Z";
-A2_TXD <= '0';
-SPI_MISO <= '0';
 
 end Step_9_und_10;
