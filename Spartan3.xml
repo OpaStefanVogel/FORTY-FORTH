@@ -51,10 +51,11 @@ zu sehen und auch eine Nutzereingabe möglich sein. Wenn nicht, erstmal mit Eing
   <tr><td> Step_6  </td><td> Spartan_Step_6_und_7       </td><td> LED's             </td></tr>
   <tr><td> Step_7  </td><td> Spartan_Step_6_und_7       </td><td> LED's             </td></tr>
   <tr><td> Step_8  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
-  <tr><td> Step_9  </td><td> Spartan_Step_9_und_10      </td><td> serieller Ausgang </td></tr>
-  <tr><td> Step_10 </td><td> Spartan_Step_9_und_10      </td><td> serieller Ausgang </td></tr>
+  <tr><td> Step_9  </td><td> Spartan_Step_9             </td><td> serieller Ausgang </td></tr>
+  <tr><td> Step_10 </td><td> Spartan_ab_Step_10         </td><td> serieller Ausgang </td></tr>
+  <tr><td> Step_11 </td><td> Spartan_ab_Step_10         </td><td> serieller Ausgang </td></tr>
   </table>
-  
+
 <p> Anstelle oder nach einigen Tastatureingaben in Terminal_3 hinein geht auch in Terminal_1</p>
 
 <Terminal_1>
