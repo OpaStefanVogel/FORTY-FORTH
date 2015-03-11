@@ -7,7 +7,7 @@
 
 <p> Spartan3 Board </p>
 
-<p> Zuletzt war in Terminal_1 branch <code>Step_10</code> eingestellt. Alle extra für das Spartan3 Board benötigten Dateien befinden sich in einem extra Branch, welcher nicht gleichzeitig in Terminal_1 mit eingestellt werden kann. Deshalb in einem neuen Terminal_2 ein neues leeres Verzeichnis mit einem selbstgewählten Namen <i>your-Spartan3-repo</i> anlegen, in dieses Verzeichnis wechseln und nochmal klonen. </p>
+<p> Zuletzt war in Terminal_1 branch <code>Step_10</code> eingestellt. Alle speziell auf das Spartan3 Board bezogene Dateien befinden sich in einem extra Branch, welcher nicht gleichzeitig in Terminal_1 mit eingestellt werden kann. Deshalb in einem neuen Terminal_2 ein neues leeres Verzeichnis mit einem selbstgewählten Namen <i>your-Spartan3-repo</i> anlegen, in dieses Verzeichnis wechseln und nochmal klonen. </p>
 
 <Terminal_2>
   <li> git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git . </li>
@@ -22,7 +22,7 @@
   <li> cp /dev/ttyS0 /dev/tty &amp; cp /dev/tty /dev/ttyS0 </li>
   </Terminal_3>
 
-<p> (alles mit Enter abschließen, man sieht nach dem zweiten stty keine Bildschirmausgabe mehr, in dem Moment ist nicht erkennbar, ob es funktioniert)  </p>
+<p> (Alles mit Enter abschließen. Man sieht nach dem zweiten stty keine Bildschirmausgabe mehr. In dem Moment ist nicht erkennbar, ob alles funktioniert)  </p>
 
 <p> So, jetzt muss mit <a href="https://en.wikipedia.org/wiki/Xilinx_ISE">Xilinx_ISE</a> ein Projekt mit den Dateien </p>
 
@@ -31,13 +31,13 @@
 <div> <i>your-Spartan3-repo</i>/TopSpartan3.vhd </div>
 <div> <i>your-Spartan3-repo</i>/Platine95S3.ucf </div>
 </p>
-<p> angelegt werden, das .bit File generiert und auf den Spartan3 ausgegeben werden. Dann sollte in Terminal_3 wieder
+<p> angelegt, das .bit File generiert und auf den Spartan3 ausgegeben werden. Dann sollte in Terminal_3 wieder
 
 <DEMO>FORTY-FORTH
 
 ok</DEMO>
 
-zu sehen und auch eine Nutzereingabe möglich sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, ob sich da etwas verheddert hat. Sonst bleibt nur, in Terminal_1 und _2 mit <code>git checkout</code> auf vorherige Versionen umzuschalten, .bit erneut zu generieren und auf den Spartan3 auszugeben. Dabei gilt momentan folgende Zuordnung </p>
+zu sehen und auch eine Nutzereingabe möglich sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, ob sich da etwas verheddert hat. Sonst bleibt nur, in Terminal_1 und Terminal_2 mit <code>git checkout</code> auf vorherige Versionen umzuschalten, .bit erneut zu generieren und auf den Spartan3 auszugeben. Dabei gilt momentan folgende Zuordnung </p>
 
 <table border="1"><tr>
   <th> <i>your-master-repo&amp;</i>   </th>
