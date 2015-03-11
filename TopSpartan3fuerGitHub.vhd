@@ -93,10 +93,12 @@ signal TAKTZAEHLER: STD_LOGIC_VECTOR (55 downto 0):="000000000000000000000000000
 
 --RXD --
 signal CLK_6_MHz,KEY_ABGESCHICKT,RxDI: STD_LOGIC;
+signal KEY_ABGESCHICKT_LOCAL: STD_LOGIC;
 signal KEY_BYTE: STD_LOGIC_VECTOR (7 downto 0);
 
 --TXD --
 signal EMIT_ABGESCHICKT_RUHEND,EMIT_ANGEKOMMEN,EMIT_ABGESCHICKT: STD_LOGIC;
+signal EMIT_ANGEKOMMEN_LOCAL: STD_LOGIC;
 signal EMIT_BYTE_RUHEND,EMIT_BYTE: STD_LOGIC_VECTOR (7 downto 0);
 
 begin
@@ -144,13 +146,14 @@ begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
         TxD<='1'; --Stop-Bit
         if EMIT_ABGESCHICKT_RUHEND/=EMIT_ANGEKOMMEN then
           OutBit:="1"&EMIT_BYTE_RUHEND&'0';
-          EMIT_ANGEKOMMEN<=EMIT_ABGESCHICKT_RUHEND;
+          EMIT_ANGEKOMMEN_LOCAL<=EMIT_ABGESCHICKT_RUHEND;
           else OutBit:="1111111111"; 
             end if;
         xcount2:=xcount2+1;
         else xcount2:=x"0";
         end if;
     end if;
+    EMIT_ANGEKOMMEN<=EMIT_ANGEKOMMEN_LOCAL;
   end process;
 
 process
@@ -168,7 +171,7 @@ begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
     if scount=x"00001000" then scount:=x"00000000";
           KEY_BYTE<=KEY_BYTE_L;
 --          STRG<=not STRG_MERK_RUHEND; 
-          KEY_ABGESCHICKT<=not KEY_ABGESCHICKT; 
+          KEY_ABGESCHICKT_LOCAL<=not KEY_ABGESCHICKT; 
       else 
 --        if scount>0 then scount:=scount+2; -- D0000, D000 statt 1100
         if scount/=0 then scount:=scount+8;
@@ -183,6 +186,7 @@ begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
   elsif scount(11 downto 4)=x"CB" then KEY_BYTE_L(6):=RxDI;
   elsif scount(11 downto 4)=x"E6" then KEY_BYTE_L(7):=RxDI;
     end if; 
+  KEY_ABGESCHICKT <= KEY_ABGESCHICKT_LOCAL; 
   end process;
 
 process
