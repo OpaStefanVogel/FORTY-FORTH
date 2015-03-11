@@ -29,7 +29,7 @@ RAMP1 VARIABLE RAMP3 ( RAMP3 TIB RAMP1
 
 ( - noch paar hilfreiche Funktionen:
 : DUMP ( addr n --> )
-  0 DO ( CR DUP . ) DUP @ . 1+ LOOP DROP ;
+  BEGIN SWAP ( CR DUP . ) DUP @ . 1 + SWAP 1 - DUP 0= UNTIL DROP ;
 
 : VLIST
   LFA @ BEGIN 
@@ -152,24 +152,24 @@ C 8 DUMP
   L6 ! L5 ! L4 ! L3 ! L2 ! L1 ! L0 !
   L0 @ L1 @ L4 @ MAX 1+ L6 @
   L0 @ L3 @ = IF
-    0 L1 @ L4 @ MAX 0 DO
+    0 L1 @ L4 @ MAX 0 BEGIN ROT
                  ( hier ist mal ! @ gewesen!!!)
-      I L1 @ < IF L2 @ DUP @ SWAP 1+ L2 ! ELSE 0 END_IF
-      I L4 @ < IF L5 @ DUP @ SWAP 1+ L5 ! ELSE 0 END_IF
+      OVER DUP L1 @ < IF L2 @ DUP @ SWAP 1+ L2 ! ELSE 0 END_IF
+      SWAP L4 @ < IF L5 @ DUP @ SWAP 1+ L5 ! ELSE 0 END_IF
       U+ L6 @ DUP 1+ L6 ! !
-      LOOP L6 @ !
+      ROT ROT 1 + 2DUP - 0= UNTIL 2DROP L6 @ !
     ELSE SWAP 1 - SWAP
-      1 L1 @ L4 @ MAX 0 DO
-        I L1 @ < IF L2 @ DUP @ SWAP 1+ L2 ! ELSE 0 END_IF
-        I L4 @ < IF L5 @ DUP @ SWAP 1+ L5 ! NOT ELSE -1 END_IF
+      1 L1 @ L4 @ MAX 0 BEGIN ROT
+        OVER DUP L1 @ < IF L2 @ DUP @ SWAP 1+ L2 ! ELSE 0 END_IF
+        SWAP L4 @ < IF L5 @ DUP @ SWAP 1+ L5 ! NOT ELSE -1 END_IF
         U+ L6 @ DUP 1+ L6 ! !
-        LOOP ( DUP .
+        ROT ROT 1 + 2DUP - 0= UNTIL 2DROP ( DUP .
         0= IF DUP L6 !
           ROT NOT ROT ROT
-          1 L1 @ L4 @ MAX 0 DO
+          1 L1 @ L4 @ MAX 0 BEGIN ROT
             0 L6 @ @ NOT U+ 
             L6 @ DUP 1+ L6 ! !
-            LOOP DROP
+            ROT ROT 1 + 2DUP - 0= UNTIL 2DROP DROP
           END_IF
       END_IF 
   END_LOCAL ;
@@ -313,7 +313,7 @@ ERGEBNIS @ SPEICHERENDE @ < NOT IF 7658 ERROR END_IF
   OPERAND1 !
   OPERAND1 OPERAND->SLX ( ax lx ax )
   OVER + 
-  SWAP 0 DO 1 - DUP @ HG. LOOP
+  BEGIN 1 - DUP @ HG. SWAP 1 - SWAP OVER 0= UNTIL DROP
   2DROP 
   20 EMIT ;
 : NB. SWAP N. N. ;
@@ -332,7 +332,7 @@ ERGEBNIS @ SPEICHERENDE @ < NOT IF 7658 ERROR END_IF
 ( Divisionen
 A014 MCODE DI32 ( 
 : DIV32 ( a b d --> r q )
-  10 0 DO DI32 LOOP DROP ;
+  10 BEGIN >R DI32 R> 1 - DUP 0= UNTIL 2DROP ;
 (  10 DI32 ;
 : /MOD ( b d --> r q ) 0 ROT ROT DIV32 ;
 : /MOD ( a b --> r q )
@@ -397,12 +397,12 @@ A014 MCODE DI32 (
   7 LOCAL
   L6 ! L5 ! L4 ! L3 ! L2 ! L1 ! L0 !
 L1 @ L4 @ < IF L0 @ L1 @ L2 @ 0 0 0 ELSE
-  L1 @ 0 DO
-    L2 @ I + @ NOT L6 @ I + !
-    LOOP
+  L1 @ 0 BEGIN
+    L2 @ OVER + @ NOT OVER L6 @ + !
+    1 + 2DUP - 0= UNTIL 2DROP
   L6 @ L1 @ + L4 @ - L2 !
   -1 L6 @ L1 @ + ! 1 L1 +!
-  L1 @ L4 @ - 0 DO
+  L1 @ L4 @ - 0 BEGIN
     L2 @ L4 @ + @ NOT
     L2 @ L4 @ + 1 - @ NOT
     L5 @ L4 @ + 1 - @      ( a b c )
@@ -414,20 +414,20 @@ L1 @ L4 @ < IF L0 @ L1 @ L2 @ 0 0 0 ELSE
     2DROP SWAP DROP
     0 L2 @ L4 @ + @ U+ L2 @ L4 @ + !
 BEGIN WHILE
- 1 L4 @ 0 DO
-   L2 @ I + @
-   L5 @ I + @ NOT
-   U+ L2 @ I + !
-   LOOP
+ 1 L4 @ 0 BEGIN ROT
+   OVER L2 @ OVER + @
+   SWAP L5 @ + @ NOT
+   U+ OVER L2 @ + !
+   ROT ROT 1 + 2DUP - 0= UNTIL 2DROP
 (   0 L2 @ L4 @ + @ U+ L2 @ L4 @ + !
 (   DUP . 7 EMIT
  -1 L2 @ L4 @ + 1+ +!
 REPEAT
     -1 L2 +!
-    LOOP
-  L4 @ 0 DO
-    L6 @ I + @ NOT L6 @ I + !
-    LOOP 
+    1 + 2DUP - 0= UNTIL 2DROP
+  L4 @ 0 BEGIN
+    L6 @ OVER + @ NOT OVER L6 @ + !
+    1 + 2DUP - 0= UNTIL 2DROP
   L4 @ L6 @ 1 - !
   L1 @ L4 @ - L6 @ L4 @ + !
 ( CR ." ++" L6 @ L1 @ 1 + DUMP ." ++"
