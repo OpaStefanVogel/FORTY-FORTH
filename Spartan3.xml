@@ -59,9 +59,12 @@ zu sehen und auch eine Nutzereingabe möglich sein. Wenn nicht, erstmal mit Eing
 
 <Terminal_1>
   <li> cp FFINIT1.TXT /dev/ttyS0 # recompiliert den vorhandenen FORTH-Interpreter </li>
-  <li> cp FFINIT1SMUL1.TXT /dev/ttyS0 # Division und schnelle Multiplikation, aber erst ab Step_11 </li>
-  <li> cp FFINIT2.TXT /dev/ttyS0 # nützliche Erweiterungen, wenn Platz dafuer </li>
-  <li> cp DEMO.TXT /dev/ttyS0 # DEMO-File </li>
+  <li> echo "HERE 0 0 DUMPZ" >/dev/ttyS0   # generiert Inhalt zu ProgRAM</li>
+  <li> echo "BZEIG @ E000 -1 DUMPZ" >/dev/ttyS0  # und Inhalt zu ByteRAM </li> 
+  <li> cp FFINIT1SMUL1.TXT /dev/ttyS0     # grosse ganze Zahlen </li>
+  <li> cp FFINIT2.TXT /dev/ttyS0 </li>
+  <li> cp DEMO.TXT /dev/ttyS0 </li>
+  <li> #</li>
   </Terminal_1>
 
 <weiter />Pause

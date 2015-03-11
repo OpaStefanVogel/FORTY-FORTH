@@ -8,7 +8,7 @@ ok den epiphany - Fehler ok war eigener Fehler
 .. eventuell PC, PD als Signal, oder RP mit als Variable
 ok alle CONV_UNSIGNED wieder in STD_LOGIC_VECTOR machen ok ist schon
 .. ob 0-0FFF oder 1FFF, ebenso E000-EFFF oder FFFF
-.. write-first oder UNCHANGED...
+nö write-first oder UNCHANGED...nö, dann macht ISE 109%
 ok vorherige Simulation bereits in Tcl-Console beenden ok
 .. stapR und stapRAM besser unterscheiden
 ok SP mod 4 mal versuchen
@@ -59,4 +59,7 @@ ok Spartan3_Step_9 hat KEY drin, soll raus ok
    da lieber doch ein schnelles DO LOOP, ich hab ja schon RAMB
 nö das 1. TEST wieder nur als Variante und gleich mit FF starten nö
 .. logfile auch mit xml!!!
+.. das fertige FFINIT1SMUL1+FFINIT2 muss sich auch recompilieren lassen
+   das ist eine knifflige Einschränkung, wie machen?
+
 
