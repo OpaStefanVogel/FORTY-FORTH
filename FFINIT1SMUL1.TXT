@@ -1,28 +1,11 @@
-( - LOOP's
-: I RP @ 1 + @ ;
-: J RP @ 3 + @ ;
-: K RP @ 5 + @ ;
-: (DO) SWAP R> ROT ROT >R >R >R ;
-: (LOOP) R> R> 1+ DUP R < IF >R 0 
-  ELSE R> DROP DROP -1 END_IF SWAP >R ;
-: (+LOOP) R> R>  ROT DUP  0< IF + R OVER
-  ELSE + DUP R END_IF < IF >R 0 
-  ELSE R> DROP DROP -1 END_IF SWAP >R  ;
-IMMEDIATE: DO COMPILE (DO) HERE ;
-IMMEDIATE: LOOP COMPILE (LOOP) 0BRANCH, ;
-IMMEDIATE: +LOOP COMPILE (+LOOP) 0BRANCH, ;
-( : LL 0 DO I . LOOP ; 7 LL ( ok geht
-
 ( - Variablen
 2F00 CONSTANT RAMP1
 RAMP1 1+ RAMP1 !
 : VARIABLE RAMP1 @ DUP CONSTANT DUP 1+ RAMP1 ! ! ;
-RAMP1 VARIABLE RAMP3 ( RAMP3 TIB RAMP1
+  RAMP1 VARIABLE RAMP3 ( RAMP3 TIB RAMP1
 : RAMBUF ( <name>  n --> )
   MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her )
 
-( : FILL ( adr n b --> )
-(  ROT ROT 0 DO 2DUP ! 1+ LOOP 2DROP ;
 : FILL ( adr n b --> )
   ROT ROT BEGIN DUP WHILE >R 2DUP ! 1 + R> 1 - REPEAT DROP 2DROP ;
 
@@ -30,19 +13,6 @@ RAMP1 VARIABLE RAMP3 ( RAMP3 TIB RAMP1
 ( - noch paar hilfreiche Funktionen:
 : DUMP ( addr n --> )
   BEGIN SWAP ( CR DUP . ) DUP @ . 1 + SWAP 1 - DUP 0= UNTIL DROP ;
-
-: VLIST
-  LFA @ BEGIN 
-    DUP 1+ @ OVER 2 + @ TYPE 20 EMIT 
-    DUP @ WHILE DUP @ + REPEAT
-  DROP ;
-
-: WLIST
-  LFA @ BEGIN ( CR ) DUP .
-    DUP 1+ @ OVER 2 + @ TYPE 20 EMIT 
-    DUP @ WHILE DUP @ + REPEAT
-  DROP
-  ;
 
 : MAX ( a b --> c )
   2DUP < IF SWAP END_IF DROP ;
@@ -62,15 +32,6 @@ A018 MCODE MULT_II
 
 
 
-
-
-
-
-
-
-
-
-
 1201 CONSTANT A
 1401 CONSTANT B
 1801 CONSTANT C
@@ -80,11 +41,6 @@ C 3FF 0000 FILL
 
 1111 0 C B 4 SUPERMULT . . . .
 C 8 DUMP
-
-
-
-
-
 
 
 
@@ -273,10 +229,6 @@ OPERAND1 OPERAND->SLX . . .
 
 
 
-
-
-
-
 : SPEICHERHOL ( l --> addr )
   ERGEBNIS @ 2DUP !
   1+ 2DUP + ERGEBNIS !
@@ -376,11 +328,6 @@ A014 MCODE DI32 (
   ;           ( a^n )
 
 10 20 N^ 10 10 N^ DUP -1 N+ SWAP 1 N+ N* N- N.
-
-
-
-
-
 
 
 
