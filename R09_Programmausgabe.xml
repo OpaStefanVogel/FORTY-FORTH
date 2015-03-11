@@ -14,7 +14,7 @@ EMIT_ANGEKOMMEN  = muss vom Empfänger invertiert werden. Das Programm wartet so
 
 EMIT  ( n --> ) gibt n auf Port EMIT_BYTE aus.
 
-Nur ein Beispielprogramm wie etwa</pr>
+Ein Beispielprogramm wie</pr>
 <ptable>
   <tr><td> 0000 </td><td> 0031 </td><td> 54 ( '1' )</td><td> 31    </td><td> 1 </td></tr>
   <tr><td> 0001 </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
@@ -34,7 +34,7 @@ Nur ein Beispielprogramm wie etwa</pr>
   <tr><td> 000F </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
   </ptable>
   
-<pr>ist inzwischen etwas dürftig. Ich habe deshalb ab Adresse PC=0010 einen FORTH-Interpreter angefügt, eine Minimalversion, die sich gerade so selbst zum Laufen bringt. Mal sehen, ob da schon was Gescheites passiert.</pr>
+<p>ist inzwischen etwas dürftig. Ich habe deshalb einen ersten FORTH-Interpreter in ProgRAM (ab PC=0010) und ByteRAM gepackt. Eine Minimalversion, die sich gerade so selbst zum Laufen bringt, mal sehen, ob da schon was gescheites passiert.</p>
 
 <Terminal_1>
   <li> git checkout Step_9 </li>
@@ -47,14 +47,14 @@ Nur ein Beispielprogramm wie etwa</pr>
   <li> run 20000 ns </li>
   </Tcl_Console>
 
-<p>Beginnend ab 40 ns wird auf EMIT_BYTE ein weiteres Zeichen der Hexadezimalfolge 31-2E-20-54-45-53-20-46-4F-52-54-59-2d-46-4f-52-54-48-0A-0A-6F-6B-0A ausgegeben. In einem echten Terminal würde das etwa so aussehen:</p>
+<p>Beginnend ab 380 ns wird alle 820 ns auf EMIT ein weiteres Zeichen der Hexadezimalfolge 46-4F-52-54-59-2d-46-4f-52-54-48-0A-0A-6F-6B-0A ausgegeben. In einem echten Terminal würde das etwa so aussehen:</p>
 
-<DEMO>1. TEST FORTY-FORTH
+<DEMO>FORTY-FORTH
 
 ok
 </DEMO>
 
-<p>Von 80 ns bis 880 ns wartet der Programmzähler PC darauf, dass von testbench.vhd aus EMIT_EMPFANGEN negiert wird, und so auch bei jedem weiteren ausgegebenen Zeichen. Schließlich ab 22160 ns wiederholt sich endlos eine 420 ns lange Progammschleife - ja weil noch eine Nutzereingabe fehlt...</p>
+<p>Von 900 ns bis 1220 ns wartet der Programmzähler PC darauf, dass von testbench.vhd aus EMIT_EMPFANGEN negiert wird, und so auch bei jedem weiteren ausgegebenen Zeichen. Schließlich ab 15540 ns wiederholt sich endlos eine 420 ns lange Progammschleife - ja weil noch eine Nutzereingabe fehlt...</p>
 
 <weiter /><a href="R10_Nutzereingabe.xml">R10 Nutzereingabe</a>
 
