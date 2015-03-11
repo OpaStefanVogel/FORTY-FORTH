@@ -446,8 +446,8 @@ START
     0000 BEGIN 2DUP + @ NG. 1+ DUP 10 = UNTIL DROP
     ."  -- " DUP HG. ." -" DUP 0F + . 
     10 +
-    2DUP = UNTIL 2DROP
-  ;
+    2DUP > NOT UNTIL 2DROP
+  ; 
 
 0 CRBIT !
 
