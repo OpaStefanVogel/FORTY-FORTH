@@ -39,7 +39,7 @@ entity TopSpartan3fuerGitHub is
     );	 
   end TopSpartan3fuerGitHub;
 
-architecture Step_9_und_10 of TopSpartan3fuerGitHub is
+architecture Step_10 of TopSpartan3fuerGitHub is
 
   component top
   port (
@@ -161,4 +161,4 @@ begin wait until (CLK_6_MHz'event and CLK_6_MHz='0');
   RXD_RUHEND<=RXD;
   end process;
 
-end Step_9_und_10;
+end Step_10;
