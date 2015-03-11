@@ -503,16 +503,16 @@ begin wait until (CLK_I'event and CLK_I='1');
 process --Rueckkehrstapel, TRUE_DUAL_PORT
 begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_StapR='1' then 
-    stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(7 downto 0))):=STORE_ZUM_RAM; 
+    stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0))):=STORE_ZUM_RAM; 
     end if;
-  FETCH_VOM_stapR<=stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(7 downto 0)));
+  FETCH_VOM_stapR<=stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0)));
   end process;
 process begin wait until (CLK_I'event and CLK_I='1');
   if RW='1' then
-    stapR(CONV_INTEGER(RP(7 downto 0))):=RPC;
+    stapR(CONV_INTEGER(RP(9 downto 0))):=RPC;
     RPCC<=RPC;
      else
-      RPCC<=stapR(CONV_INTEGER(RP(7 downto 0)));
+      RPCC<=stapR(CONV_INTEGER(RP(9 downto 0)));
     end if;
   end process;
 
