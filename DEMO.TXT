@@ -74,3 +74,42 @@ HERE . BZEIG ?
 
 
 
+
+
+
+
+
+( Also an der Stelle nach FFINIT1SMUL.TXT hab ich jetzt
+( 
+( N" ( <number>  -> n        liest bis " eine grosse ganze Zahl ein
+(                            kleine ganze Zahlen wie bisher eingeben
+( N+ N- N* N/ N/MOD NMOD N^  und rechnet damit
+( N.   a -->                 und gibt sie aus
+( NBK  a b --> a' b'         Kürzen
+( NGGT a b --> ggt           groesster gemeinsamer Teiler
+( 
+( also direkt eingeben und mit + - * / rechnen geht hier noch nicht
+
+
+
+ERGEBNIS ? ( Zahlenspeicher gefuellt bis ) 
+
+ZAHLENSPEICHER @ ERGEBNIS ! ( Zahlenspeicher leeren )
+
+ERGEBNIS ?
+
+N" 111111111111111" DUP N* N.
+
+ERGEBNIS ?
+
+( dritte binomische Formel 10^20-{10^10+1}*{10^10-1}=1 )
+10 20 N^ 10 10 N^ 1 N- 10 10 N^ 1 N+ N* N- N.
+
+ERGEBNIS ?
+
+( ok Feierabend heut, mehr geht erstmal nicht )
+
+
+
+
+
