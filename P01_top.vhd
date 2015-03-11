@@ -7,9 +7,9 @@ entity top is
     LEDS: out STD_LOGIC_VECTOR (7 downto 0);
             
     -- EMIT --
-    EMIT_GESENDET: out STD_LOGIC;
+    EMIT_ABGESCHICKT: out STD_LOGIC;
     EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
-    EMIT_EMPFANGEN: in STD_LOGIC;
+    EMIT_ANGEKOMMEN: in STD_LOGIC;
 
     -- nur zur Simulation und Fehlersuche:
     CLK_SIM : out STD_LOGIC;
@@ -34,9 +34,9 @@ component FortyForthProcessor
     WE_O: out STD_LOGIC;
         
     -- EMIT --
-    EMIT_GESENDET: out STD_LOGIC;
+    EMIT_ABGESCHICKT: out STD_LOGIC;
     EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
-    EMIT_EMPFANGEN: in STD_LOGIC;
+    EMIT_ANGEKOMMEN: in STD_LOGIC;
 
     -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
@@ -63,9 +63,9 @@ DUT0: FortyForthProcessor
     WE_O => WE,
     
     -- EMIT --
-    EMIT_GESENDET => EMIT_GESENDET,
+    EMIT_ABGESCHICKT => EMIT_ABGESCHICKT,
     EMIT_BYTE => EMIT_BYTE,
-    EMIT_EMPFANGEN => EMIT_EMPFANGEN,
+    EMIT_ANGEKOMMEN => EMIT_ANGEKOMMEN,
 
     -- nur fuer Simulation
     PC_SIM => PC_SIM,

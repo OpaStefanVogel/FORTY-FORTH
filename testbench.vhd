@@ -17,9 +17,9 @@ component top
     LEDS: out STD_LOGIC_VECTOR (7 downto 0);
 
     -- EMIT --
-    EMIT_GESENDET: out STD_LOGIC;
+    EMIT_ABGESCHICKT: out STD_LOGIC;
     EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
-    EMIT_EMPFANGEN: in STD_LOGIC;
+    EMIT_ANGEKOMMEN: in STD_LOGIC;
             
     -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
@@ -43,9 +43,9 @@ signal C_SIM: STD_LOGIC_VECTOR (15 downto 0);
 signal D_SIM: STD_LOGIC_VECTOR (15 downto 0);
 signal SP_SIM: integer;
     -- EMIT --
-signal EMIT_GESENDET: STD_LOGIC;
+signal EMIT_ABGESCHICKT: STD_LOGIC;
 signal EMIT_BYTE: STD_LOGIC_VECTOR (7 downto 0);
-signal EMIT_EMPFANGEN: STD_LOGIC:='0';
+signal EMIT_ANGEKOMMEN: STD_LOGIC:='0';
 
 begin
 
@@ -56,9 +56,9 @@ begin
       LEDS     => LEDS,
 
       -- EMIT --
-      EMIT_GESENDET => EMIT_GESENDET,
+      EMIT_ABGESCHICKT => EMIT_ABGESCHICKT,
       EMIT_BYTE => EMIT_BYTE,
-      EMIT_EMPFANGEN => EMIT_EMPFANGEN,
+      EMIT_ANGEKOMMEN => EMIT_ANGEKOMMEN,
 
       -- nur fuer Simulation
       PC_SIM => PC_SIM,
@@ -72,7 +72,7 @@ begin
 
   -- clock generation
   CLK <= not CLK after 10 ns;
-  EMIT_EMPFANGEN<=EMIT_GESENDET after 800 ns;
+  EMIT_ANGEKOMMEN<=EMIT_ABGESCHICKT after 800 ns;
 
 
 
