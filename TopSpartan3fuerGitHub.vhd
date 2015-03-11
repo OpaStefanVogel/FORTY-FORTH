@@ -95,11 +95,16 @@ signal TAKTZAEHLER: STD_LOGIC_VECTOR (55 downto 0):="000000000000000000000000000
 signal CLK_6_MHz,KEY_ABGESCHICKT,RxDI: STD_LOGIC;
 signal KEY_ABGESCHICKT_LOCAL: STD_LOGIC;
 signal KEY_BYTE: STD_LOGIC_VECTOR (7 downto 0);
+signal scount: STD_LOGIC_VECTOR (31 downto 0):=x"FFFF0000"; --wartet paar ms
+signal KEY_BYTE_LOCAL: STD_LOGIC_VECTOR (7 downto 0);
 
 --TXD --
 signal EMIT_ABGESCHICKT_RUHEND,EMIT_ANGEKOMMEN,EMIT_ABGESCHICKT: STD_LOGIC;
 signal EMIT_ANGEKOMMEN_LOCAL: STD_LOGIC;
 signal EMIT_BYTE_RUHEND,EMIT_BYTE: STD_LOGIC_VECTOR (7 downto 0);
+signal xcount1: STD_LOGIC_VECTOR (15 downto 0):=x"0000";
+signal xcount2: STD_LOGIC_VECTOR (3 downto 0):="0000";
+signal OutBit: STD_LOGIC_VECTOR (18 downto 9):="1111111111";
 
 begin
 
@@ -129,27 +134,23 @@ process(CLK) begin if CLK'event and CLK='1' then
 
 
 process 
-variable xcount1: STD_LOGIC_VECTOR (15 downto 0):=x"0000";
-variable xcount2: STD_LOGIC_VECTOR (3 downto 0):="0000";
-variable OutBit: STD_LOGIC_VECTOR (18 downto 9):="1111111111";
-variable XOFFOutput: STD_LOGIC;
 begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
-  if xcount1<x"01B2" then xcount1:=xcount1+8; else 
+  if xcount1<x"01B2" then xcount1<=xcount1+8; else 
     -- ganz neu 01B2 bei 112500, 1458H bei 9600, 14585H bei 600
 	 -- endlich mal merken, 1B2 entsteht aus 50000000/115200.
-    xcount1:=x"0000";
+    xcount1<=x"0000";
     if xcount2<x"A" then 
       TxD<=OutBit(9);
-      OutBit:='0'&OutBit(18 downto 10);
-      xcount2:=xcount2+1;
+      OutBit<='0'&OutBit(18 downto 10);
+      xcount2<=xcount2+1;
       elsif xcount2=x"A" then
         TxD<='1'; --Stop-Bit
         if EMIT_ABGESCHICKT_RUHEND/=EMIT_ANGEKOMMEN then
-          OutBit:="1"&EMIT_BYTE_RUHEND&'0';
+          OutBit<="1"&EMIT_BYTE_RUHEND&'0';
           EMIT_ANGEKOMMEN_LOCAL<=EMIT_ABGESCHICKT_RUHEND;
-          else OutBit:="1111111111"; end if;
-        xcount2:=xcount2+1;
-        else xcount2:=x"0"; end if;
+          else OutBit<="1111111111"; end if;
+        xcount2<=x"B";
+        else xcount2<=x"0"; end if;
     end if;
     EMIT_ANGEKOMMEN<=EMIT_ANGEKOMMEN_LOCAL;
   end process;
@@ -161,24 +162,22 @@ begin wait until (CLK_I'event and CLK_I='0');
   end process;
 
 process
-variable scount: STD_LOGIC_VECTOR (31 downto 0):=x"FFFF0000"; --wartet paar ms
-variable KEY_BYTE_LOCAL: STD_LOGIC_VECTOR (7 downto 0);
 begin wait until (CLK_6_MHz'event and CLK_6_MHz='1');
-  if (RxDI='0' and scount=x"00000000") then scount:=x"00000008"; else
-    if scount=x"00001000" then scount:=x"00000000";
+  if (RxDI='0' and scount=x"00000000") then scount<=x"00000008"; else
+    if scount=x"00001000" then scount<=x"00000000";
       KEY_BYTE<=KEY_BYTE_LOCAL;
       KEY_ABGESCHICKT_LOCAL<=not KEY_ABGESCHICKT; 
       else 
-        if scount/=0 then scount:=scount+8; -- +1 bei 50 MHz
+        if scount/=0 then scount<=scount+8; -- +1 bei 50 MHz
           end if; end if; end if;
-  if scount(11 downto 4)=x"28" then KEY_BYTE_LOCAL(0):=RxDI;
-    elsif scount(11 downto 4)=x"43" then KEY_BYTE_LOCAL(1):=RxDI;
-    elsif scount(11 downto 4)=x"5E" then KEY_BYTE_LOCAL(2):=RxDI;
-    elsif scount(11 downto 4)=x"7A" then KEY_BYTE_LOCAL(3):=RxDI;
-    elsif scount(11 downto 4)=x"95" then KEY_BYTE_LOCAL(4):=RxDI;
-    elsif scount(11 downto 4)=x"B0" then KEY_BYTE_LOCAL(5):=RxDI;
-    elsif scount(11 downto 4)=x"CB" then KEY_BYTE_LOCAL(6):=RxDI;
-    elsif scount(11 downto 4)=x"E6" then KEY_BYTE_LOCAL(7):=RxDI;
+  if scount(11 downto 4)=x"28" then KEY_BYTE_LOCAL(0)<=RxDI;
+    elsif scount(11 downto 4)=x"43" then KEY_BYTE_LOCAL(1)<=RxDI;
+    elsif scount(11 downto 4)=x"5E" then KEY_BYTE_LOCAL(2)<=RxDI;
+    elsif scount(11 downto 4)=x"7A" then KEY_BYTE_LOCAL(3)<=RxDI;
+    elsif scount(11 downto 4)=x"95" then KEY_BYTE_LOCAL(4)<=RxDI;
+    elsif scount(11 downto 4)=x"B0" then KEY_BYTE_LOCAL(5)<=RxDI;
+    elsif scount(11 downto 4)=x"CB" then KEY_BYTE_LOCAL(6)<=RxDI;
+    elsif scount(11 downto 4)=x"E6" then KEY_BYTE_LOCAL(7)<=RxDI;
       end if; 
   KEY_ABGESCHICKT <= KEY_ABGESCHICKT_LOCAL; 
   end process;
