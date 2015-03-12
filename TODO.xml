@@ -61,9 +61,10 @@ ok bei SMUL und so díe DO LOOP noch in BEGIN UNTIL umschreiben, oje
 nö das 1. TEST wieder nur als Variante und gleich mit FF starten nö
 .. logfile auch mit xml!!!
 .. das fertige FFINIT1SMUL1+FFINIT2 muss sich auch recompilieren lassen
-   das ist momentan nich eine knifflige Einschränkung, wie machen?
+   das ist momentan noch eine knifflige Einschränkung, wie machen?
 .. Bahn ist frei für massives Umstapeln in SDIV und so.
 .. ganz interessant wäre auch design summary mit zu Step_1 bis 11.
 .. davor NEBENRECHNUNG noch
 .. weiter dann mit MATRIX diesmal mit Objekt
+.. aber diesmal ohne Bruchrechnen!
 .. auch mal die 25 MHz wieder anmach, wär nicht schlecht.
