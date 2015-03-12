@@ -1,4 +1,18 @@
-( - Variablen
+( also ich hab jetzt
+( 111111 VARIABLE MOV EDUMP MAX...
+( 222222 dann SUPERMULT SMUL
+( 333333 dann ADDIER DIV32 SDIV 
+( 444444 dann 2OPERANDEN->SLX SLX->ERGEBNIS
+( 555555 und N+ N- N* N/MOD N. 
+( 666666 dann NEBENRECHNUNG A+0
+( 777777 dann N/ NMOD NGGT NBK N. N^ N"
+( 888888 dann nochmal N. nochmal für beliebige BASE
+( und fertig erstmal
+
+
+
+
+( 111111 - Variablen
 2F00 CONSTANT RAMP1
 RAMP1 1+ RAMP1 !
 : VARIABLE RAMP1 @ DUP CONSTANT DUP 1+ RAMP1 ! ! ;
@@ -22,6 +36,8 @@ RAMP1 1+ RAMP1 !
   2DUP > IF SWAP END_IF DROP ;
 
 
+
+( 222222 dann SUPERMULT SMUL
 
 A017 MCODE MULT_I  ( ebenso MULT_I und MULT_II
 A018 MCODE MULT_II
@@ -104,6 +120,8 @@ C 8 DUMP
 
 
 
+( 333333 dann ADDIER DIV32 SDIV 
+
 : ADDIER ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3)
          ( L0 L1 L2 L3 L4 L5 L6
   7 LOCAL
@@ -169,103 +187,6 @@ C 8 0 FILL
 C 8 DUMP
 
 
-
-
-
-
-
-( ------------- 2OPERANDEN->SLX SLX->ERGEBNIS 
-
-0 VARIABLE OPERAND1
-0 VARIABLE OPERAND2
-1400 VARIABLE ERGEBNIS
-1400 VARIABLE ZAHLENSPEICHER
-2000 VARIABLE SPEICHERENDE
-0 VARIABLE SCHIEB
-
-
-: SLX->ERGEBNIS ( sz lz az --> z )
-  OVER 0= IF 2DROP DROP 0 ELSE ( 0 bei 1/7
-    2DUP + BEGIN 1 - DUP @ 0= NOT UNTIL 
-    1 + OVER MAX ( sz lz az ez
-    ( DUP ERGEBNIS ! ( nicht wegen 0 1 OPERAND1
-    2DUP = IF 2DROP 2DROP 0 ELSE
-      OVER - ( sz lz az lneu
-      OVER @ C000 AND 0=
-      OVER 1 = AND IF
-        -1 ERGEBNIS +! DROP @ ELSE
-          OVER 1 - !
-          1 - 4000 OR
-          END_IF 
-      SWAP DROP 
-      SWAP IF MINUS END_IF
-      END_IF
-    END_IF
-  ;
-0 8 C SLX->ERGEBNIS .
-
-: OPERAND->SLX ( op --> sx lx ax )
-  DUP @ ( op x )
-  DUP 0< IF MINUS -1 ELSE 0 END_IF
-  ROT ROT ( sx op xabs )
-  DUP 4000 AND IF
-    SWAP DROP
-    3FFF AND
-    DUP @ SWAP 1+
-    ELSE
-      OVER ! 1 SWAP 
-      END_IF
-  ;
-
-77 OPERAND1 !
-OPERAND1 OPERAND->SLX . . .
--77 OPERAND1 !
-OPERAND1 OPERAND->SLX . . .
-5800 OPERAND1 !
-OPERAND1 OPERAND->SLX . . .
-
-
-
-
-
-
-
-
-: SPEICHERHOL ( l --> addr )
-  ERGEBNIS @ 2DUP !
-  1+ 2DUP + ERGEBNIS !
-  2DUP SWAP 0 FILL
-  SWAP DROP
-ERGEBNIS @ SPEICHERENDE @ < NOT IF 7658 ERROR END_IF
-  ;
-
-
-: 2OPERANDEN->2SLX ( op1 op2 --> sx lx ax sy ly ay az )
-  OPERAND2 !
-  OPERAND1 !
-  OPERAND1 OPERAND->SLX
-  OVER >R
-  OPERAND2 OPERAND->SLX
-  OVER R> + 1+
-  SPEICHERHOL
-  ;
-
-77 88 2OPERANDEN->2SLX . . . . . . .
-77 5800 2OPERANDEN->2SLX . . . . . . .
-
-
-
-
-: N+ ( x y --> z )
-  2OPERANDEN->2SLX ADDIER SLX->ERGEBNIS ;
-: N- ( x y --> z )
-  MINUS N+ ;
-: N* ( x y --> z )
-  2OPERANDEN->2SLX SMUL SLX->ERGEBNIS ;
-
-
-
-
 ( Divisionen
 A014 MCODE DI32 ( 
 : DIV32 ( a b d --> r q )
@@ -281,8 +202,6 @@ A014 MCODE DI32 (
   ;
 : / ( b d --> q ) /MOD SWAP DROP ;
 : MOD ( b d --> r ) /MOD DROP ;
-
-
 
 
 
@@ -350,6 +269,104 @@ C 8 DUMP
 0 4 C 0 2 B A SDIV . . . . . .
 A 8 DUMP
 
+
+
+
+( 444444 dann 2OPERANDEN->SLX SLX->ERGEBNIS
+
+0 VARIABLE OPERAND1
+0 VARIABLE OPERAND2
+1400 VARIABLE ERGEBNIS
+1400 VARIABLE ZAHLENSPEICHER
+2000 VARIABLE SPEICHERENDE
+0 VARIABLE SCHIEB
+
+
+: SLX->ERGEBNIS ( sz lz az --> z )
+  OVER 0= IF 2DROP DROP 0 ELSE ( 0 bei 1/7
+    2DUP + BEGIN 1 - DUP @ 0= NOT UNTIL 
+    1 + OVER MAX ( sz lz az ez
+    ( DUP ERGEBNIS ! ( nicht wegen 0 1 OPERAND1
+    2DUP = IF 2DROP 2DROP 0 ELSE
+      OVER - ( sz lz az lneu
+      OVER @ C000 AND 0=
+      OVER 1 = AND IF
+        DROP @ ELSE ( warum war da -1 ERGEBNIS +!
+          OVER 1 - !
+          1 - 4000 OR
+          END_IF 
+      SWAP DROP 
+      SWAP IF MINUS END_IF
+      END_IF
+    END_IF
+  ;
+0 8 C SLX->ERGEBNIS .
+
+: OPERAND->SLX ( op --> sx lx ax )
+  DUP @ ( op x )
+  DUP 0< IF MINUS -1 ELSE 0 END_IF
+  ROT ROT ( sx op xabs )
+  DUP 4000 AND IF
+    SWAP DROP
+    3FFF AND
+    DUP @ SWAP 1+
+    ELSE
+      OVER ! 1 SWAP 
+      END_IF
+  ;
+
+77 OPERAND1 !
+OPERAND1 OPERAND->SLX . . .
+-77 OPERAND1 !
+OPERAND1 OPERAND->SLX . . .
+5800 OPERAND1 !
+OPERAND1 OPERAND->SLX . . .
+
+
+
+
+
+
+
+
+: SPEICHERHOL ( l --> addr )
+  ERGEBNIS @ 2DUP !
+  1+ 2DUP + ERGEBNIS !
+  2DUP SWAP 0 FILL
+  SWAP DROP
+ERGEBNIS @ SPEICHERENDE @ < NOT IF 7658 ERROR END_IF
+  ;
+
+
+: 2OPERANDEN->2SLX ( op1 op2 --> sx lx ax sy ly ay az )
+  OPERAND2 !
+  OPERAND1 !
+  OPERAND1 OPERAND->SLX
+  OVER >R
+  OPERAND2 OPERAND->SLX
+  OVER R> + 1+
+  SPEICHERHOL
+  ;
+
+77 88 2OPERANDEN->2SLX . . . . . . .
+77 5800 2OPERANDEN->2SLX . . . . . . .
+
+
+
+
+
+
+( 555555 und N+ N- N* N/MOD N.
+
+
+: N+ ( x y --> z )
+  2OPERANDEN->2SLX ADDIER SLX->ERGEBNIS ;
+: N- ( x y --> z )
+  MINUS N+ ;
+: N* ( x y --> z )
+  2OPERANDEN->2SLX SMUL SLX->ERGEBNIS ;
+
+
 IMMEDIATE: RECURSE LFA @ 4 + COMPILE, ;
 : N/MOD ( x y --> r q )
   DUP 0= IF 0 ERROR END_IF
@@ -371,6 +388,42 @@ IMMEDIATE: RECURSE LFA @ 4 + COMPILE, ;
     SWAP END_IF
   ;
 
+: HG0. ( n -->  <hexstring> ) 
+  SHL16 DUP IF DIG EMIT ELSE DROP END_IF
+  SHL16 DUP IF DIG EMIT ELSE DROP END_IF
+  SHL16 DUP IF DIG EMIT ELSE DROP END_IF
+  SHL16 DIG EMIT DROP ;
+
+: N. ( n --> ) ( erstmal nur hexadezimale Ausgabe)
+  OPERAND1 !
+  OPERAND1 OPERAND->SLX ( sx lx ax )
+  ROT IF ." -" END_IF
+  OVER + 
+  1 - DUP @ HG0. SWAP 1 - SWAP
+  BEGIN OVER WHILE 1 - DUP @ HG. SWAP 1 - SWAP REPEAT DROP
+  DROP 
+  20 EMIT
+  ;
+
+1111 1111 N* N.
+
+: NB. SWAP N. N. ;
+
+
+
+7 3 N/MOD N. N. 
+3333 DUP N* DUP N* 10 N* DUP N.
+3333 DUP N* 10 N* DUP N.
+N/MOD NB.
+3333 DUP N* N.
+
+1111 DUP N* 8 N* DUP N.
+1111 8 N* DUP N.
+N/MOD NB.
+
+1111 DUP N* DUP N.
+1111 DUP N.
+N/MOD NB.
 
 
 
@@ -379,8 +432,8 @@ IMMEDIATE: RECURSE LFA @ 4 + COMPILE, ;
 
 
 
-
-(  ------ Zwischenergebnisse nur soweit nötig speichern
+( 666666 dann NEBENRECHNUNG A+0
+( ------ also Zwischenergebnisse nur solange wie nötig speichern
 
 ZAHLENSPEICHER @ VARIABLE BLOCKANFANG
 ZAHLENSPEICHER @ VARIABLE BLOCKENDE
@@ -400,6 +453,12 @@ INIT
   ;
 : B+0 ( a b --> a+0 b+0 )
   SWAP A+0 SWAP A+0 ;
+
+
+
+
+( 777777 dann N/ NMOD NGGT NBK N. N^ N" 
+( ------ also wo Zwischenergebnisse raus können
 
 
 : N/ ( b d --> q )
@@ -424,46 +483,8 @@ INIT
   ROT HAUPTRECHNUNG B+0 ;
 
 
-: HG0. ( n -->  <hexstring> ) 
-  SHL16 DUP IF DIG EMIT ELSE DROP END_IF
-  SHL16 DUP IF DIG EMIT ELSE DROP END_IF
-  SHL16 DUP IF DIG EMIT ELSE DROP END_IF
-  SHL16 DIG EMIT DROP ;
-
-: N. ( n --> )
-  NEBENRECHNUNG SWAP
-  OPERAND1 !
-  OPERAND1 OPERAND->SLX ( sx lx ax )
-  ROT IF ." -" END_IF
-  OVER + 
-  1 - DUP @ HG0. SWAP 1 - SWAP
-  BEGIN OVER WHILE 1 - DUP @ HG. SWAP 1 - SWAP REPEAT DROP
-  DROP 
-  20 EMIT
-  HAUPTRECHNUNG
-  ;
-
-1111 1111 N* N.
-
-: NB. SWAP N. N. ;
 
 777 99 NBK NB.
-
-
-
-7 3 N/MOD N. N. 
-3333 DUP N* DUP N* 10 N* DUP N.
-3333 DUP N* 10 N* DUP N.
-N/MOD NB.
-3333 DUP N* N.
-
-1111 DUP N* 8 N* DUP N.
-1111 8 N* DUP N.
-N/MOD NB.
-
-1111 DUP N* DUP N.
-1111 DUP N.
-N/MOD NB.
 
 
 
@@ -495,9 +516,9 @@ N/MOD NB.
   ;           ( a^n )
 
 
-333333 2 N^ 10 N*
-111111 2 N^ 
-2OPERANDEN->2SLX . . . . . .
+333333 2 N^ 10 N* N.
+111111 2 N^ N.
+
 
 10 20 N^ 10 10 N^ DUP -1 N+ SWAP 1 N+ N* N- N.
 
@@ -564,3 +585,23 @@ N/MOD NB.
 
 N" 000002330657FDD698" N" 4C0CF598D3" N* N.
 N" 000002330657FDD698" N" 4C0CF598D2" N* N.
+
+
+
+( 888888 dann nochmal N. doppelt!!! für DEZ
+
+
+: N. ( a -->  <zahl> )
+  BASE @ 10 = IF N. ELSE
+    DUP 0< IF MINUS ." -" END_IF
+    DUP 0= IF ." 0 " DROP ELSE
+      -1 SWAP ( Stapelmarkierung )
+      BEGIN DUP WHILE BASE @ N/MOD REPEAT DROP
+      BEGIN DUP 0< NOT WHILE 30 + DUP 39 > IF 7 + END_IF EMIT REPEAT
+      20 EMIT DROP END_IF
+    END_IF
+  ;
+
+: NB. SWAP N. N. ;
+
+777 99 NBK NB.

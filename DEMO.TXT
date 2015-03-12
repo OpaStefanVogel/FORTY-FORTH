@@ -107,9 +107,20 @@ ERGEBNIS ?
 
 ERGEBNIS ?
 
-( ok Feierabend heut, mehr geht erstmal nicht )
+
+( Zahlenbasis wechseln
+
+: HEX 10 BASE ! ;
+: DEZ 0A BASE ! ;
+
+N" 10000"
+DEZ DUP N.
+HEX DUP N.
+
+HEX N" 100000000"
+DEZ DUP N.
+HEX DUP N.
 
 
-
-
+( ok nicht viel mehr heut )
 
