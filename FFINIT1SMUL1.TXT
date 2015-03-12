@@ -6,6 +6,8 @@ RAMP1 1+ RAMP1 !
 : RAMBUF ( <name>  n --> )
   MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her )
 
+: MOVE ( adr1 adr2 n --> )
+  BEGIN DUP WHILE >R OVER @ OVER ! SWAP 1+ SWAP 1+ R> 1 - REPEAT DROP 2DROP ;
 : FILL ( adr n b --> )
   ROT ROT BEGIN DUP WHILE >R 2DUP ! 1 + R> 1 - REPEAT DROP 2DROP ;
 
@@ -260,23 +262,6 @@ ERGEBNIS @ SPEICHERENDE @ < NOT IF 7658 ERROR END_IF
   MINUS N+ ;
 : N* ( x y --> z )
   2OPERANDEN->2SLX SMUL SLX->ERGEBNIS ;
-: N. ( n --> )
-  DUP 0< IF ." -" END_IF
-  OPERAND1 !
-  OPERAND1 OPERAND->SLX ( ax lx ax )
-  OVER + 
-  BEGIN 1 - DUP @ HG. SWAP 1 - SWAP OVER 0= UNTIL DROP
-  2DROP 
-  20 EMIT ;
-: NB. SWAP N. N. ;
-
-2 3 N+ N.
-2 3 N* N.
-11111 11111 N* N.
-11111 11111 N* 11111 N* N.
-
-
-
 
 
 
@@ -300,44 +285,6 @@ A014 MCODE DI32 (
 
 
 
-
-
-
-: N^ ( a n --> a^n ) 
-  4 LOCAL
-  DUP 0< IF 12 ERROR END_IF    
-  2           ( a n 2        
-  L3 ! L2 ! L1 !    (  R1-3: a  n  2
-  1           ( p=1          a  n  2
-  BEGIN       ( p            a  n  2
-    L2 @ L3 @ ( p n 2        a  n  2
-    /MOD      ( p r n/2      a  n  2
-    L2 !      ( p r          a n/2 2
-    IF        ( p            a n/2 2
-      L1 @    ( p a          a n/2 2
-      N*       ( p*a          a n/2 2
-      END_IF   ( p*a          a n/2 2
-    L2 @      ( p*a n/2      a n/2 2
-    WHILE     ( p*a          a n/2 2
-      L1 @    ( p*a a        a n/2 2
-      L1 @    ( p*a a a      a n/2 2
-      N*       ( p*a a*a      a n/2 2
-      L1 !    ( p*a        a*a n/2 2
-      REPEAT  ( p*a        a*a n/2 2
-  END_LOCAL
-  ;           ( a^n )
-
-10 20 N^ 10 10 N^ DUP -1 N+ SWAP 1 N+ N* N- N.
-
-
-
-
-
-
-
-333333 2 N^ 10 N* 
-111111 2 N^ 
-2OPERANDEN->2SLX . . . . . .
 
 : SDIV ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3 s4 l4 r4)
        ( L0 L1 L2 L3 L4 L5 L6
@@ -424,11 +371,88 @@ IMMEDIATE: RECURSE LFA @ 4 + COMPILE, ;
     SWAP END_IF
   ;
 
-: N/ ( b d --> q ) N/MOD SWAP DROP ;
-: NMOD ( b d --> r ) N/MOD DROP ;
+
+
+
+
+
+
+
+
+
+(  ------ Zwischenergebnisse nur soweit nötig speichern
+
+ZAHLENSPEICHER @ VARIABLE BLOCKANFANG
+ZAHLENSPEICHER @ VARIABLE BLOCKENDE
+: NEBENRECHNUNG ( --> erg ) ERGEBNIS @ ;
+: HAUPTRECHNUNG ( erg --> ) ERGEBNIS ! ;
+: RECHENBLOCK BLOCKENDE @ BLOCKANFANG !
+  ERGEBNIS @ BLOCKENDE ! ;
+: INIT ZAHLENSPEICHER @ ERGEBNIS ! RECHENBLOCK RECHENBLOCK ;
+INIT
+
+: A+0 ( a --> a+0 ) 
+  OPERAND1 !
+  OPERAND1 OPERAND->SLX
+  OVER ERGEBNIS @ 1+ SWAP MOVE
+  ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz
+  SLX->ERGEBNIS
+  ;
+: B+0 ( a b --> a+0 b+0 )
+  SWAP A+0 SWAP A+0 ;
+
+
+: N/ ( b d --> q )
+  NEBENRECHNUNG ROT ROT 
+  N/MOD SWAP DROP
+  SWAP HAUPTRECHNUNG A+0
+  ;
+: NMOD ( b d --> r ) 
+  NEBENRECHNUNG ROT ROT 
+  N/MOD DROP 
+  SWAP HAUPTRECHNUNG A+0
+  ;
+
+: NGGT ( a b --> ggt )
+  NEBENRECHNUNG ROT ROT
+  BEGIN DUP WHILE
+    SWAP OVER NMOD REPEAT DROP 
+  SWAP HAUPTRECHNUNG A+0 ;
+: NBK ( a b --> a/ggt b/ggt ) 
+  NEBENRECHNUNG ROT ROT
+  2DUP NGGT ROT OVER N/ ROT ROT N/ 
+  ROT HAUPTRECHNUNG B+0 ;
+
+
+: HG0. ( n -->  <hexstring> ) 
+  SHL16 DUP IF DIG EMIT ELSE DROP END_IF
+  SHL16 DUP IF DIG EMIT ELSE DROP END_IF
+  SHL16 DUP IF DIG EMIT ELSE DROP END_IF
+  SHL16 DIG EMIT DROP ;
+
+: N. ( n --> )
+  NEBENRECHNUNG SWAP
+  OPERAND1 !
+  OPERAND1 OPERAND->SLX ( sx lx ax )
+  ROT IF ." -" END_IF
+  OVER + 
+  1 - DUP @ HG0. SWAP 1 - SWAP
+  BEGIN OVER WHILE 1 - DUP @ HG. SWAP 1 - SWAP REPEAT DROP
+  DROP 
+  20 EMIT
+  HAUPTRECHNUNG
+  ;
+
+1111 1111 N* N.
+
+: NB. SWAP N. N. ;
+
+777 99 NBK NB.
+
+
 
 7 3 N/MOD N. N. 
-3333 4 N^ 10 N* DUP N.
+3333 DUP N* DUP N* 10 N* DUP N.
 3333 DUP N* 10 N* DUP N.
 N/MOD NB.
 3333 DUP N* N.
@@ -441,12 +465,41 @@ N/MOD NB.
 1111 DUP N.
 N/MOD NB.
 
-: NGGT ( a b --> ggt )
-  BEGIN DUP WHILE
-    SWAP OVER NMOD REPEAT DROP ;
-: NBK ( a b --> a/ggt b/ggt ) 
-  2DUP NGGT ROT OVER N/ ROT ROT N/ ;
 
+
+
+: N^ ( a n --> a^n )
+  NEBENRECHNUNG ROT ROT ( erg a n )
+  4 LOCAL
+  DUP 0< IF 12 ERROR END_IF    
+  2           ( a n 2        
+  L3 ! L2 ! L1 !    (  R1-3: a  n  2
+  1           ( p=1          a  n  2
+  BEGIN       ( p            a  n  2
+    L2 @ L3 @ ( p n 2        a  n  2
+    /MOD      ( p r n/2      a  n  2
+    L2 !      ( p r          a n/2 2
+    IF        ( p            a n/2 2
+      L1 @    ( p a          a n/2 2
+      N*      ( p*a          a n/2 2
+      END_IF  ( p*a          a n/2 2
+    L2 @      ( p*a n/2      a n/2 2
+    WHILE     ( p*a          a n/2 2
+      L1 @    ( p*a a        a n/2 2
+      L1 @    ( p*a a a      a n/2 2
+      N*      ( p*a a*a      a n/2 2
+      L1 !    ( p*a        a*a n/2 2
+      REPEAT  ( p*a        a*a n/2 2
+  END_LOCAL   ( a^n
+  SWAP HAUPTRECHNUNG A+0
+  ;           ( a^n )
+
+
+333333 2 N^ 10 N*
+111111 2 N^ 
+2OPERANDEN->2SLX . . . . . .
+
+10 20 N^ 10 10 N^ DUP -1 N+ SWAP 1 N+ N* N- N.
 
 
 ( je einmal N* und N+ in NNUMBER
@@ -489,24 +542,25 @@ N/MOD NB.
 
 ( REPLACE: NUMBER NNUMBER ;
 
-111111111111 DUP N* DUP N.
-111111111111 DUP N.
+N" 111111111111111" DUP N* DUP N.
+N" 111111111111111" DUP N.
 N/MOD NB.
 
 N" 0026D4346A00" DUP N.
 N" 00000FC82800" DUP N.
-N/MOD NB.
-( NBK NB. 
+2DUP N/MOD NB.
+2DUP NBK NB. 
+( richtig wäre D6A220 275 bei NBK
 ( richtig wäre 3135 14 bei BK
 
-" 00A7426290A8C945E959A780" NNUMBER DROP DUP N.
-" 000002330657FDD698" NNUMBER DROP DUP N.
-N/MOD 
-NB. 
+N" 00A7426290A8C945E959A780" DUP N.
+N" 000002330657FDD698" DUP N.
+N/MOD NB. 
 ( richtig wäre 158B5843D5ED0 4C0CF598D2
 ( und nicht   0325AF2C3F8838 4C0CF598D3
 
 ( als vorlaeufigen Abschluss nochmal
 " 111111111111111" NNUMBER DROP DUP N* N.
 
-
+N" 000002330657FDD698" N" 4C0CF598D3" N* N.
+N" 000002330657FDD698" N" 4C0CF598D2" N* N.
