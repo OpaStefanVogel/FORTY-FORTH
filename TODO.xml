@@ -5,7 +5,8 @@ ok den epiphany - Fehler ok war eigener Fehler
 .. ja und natürlich unbedingt Kleinerzeichen in &x...; oder ganz raus
 .. Ergebnis auch noch als Tabelle mit xml
 .. nach P11 dann Vivado ausdrehen
-.. eventuell PC, PD als Signal, oder RP mit als Variable
+o. eventuell PC, PD als Signal, ist weniger % aber läuft schlecht, such warum
+nö oder RP mit als Variable nö, deutlich mehr %
 ok alle CONV_UNSIGNED wieder in STD_LOGIC_VECTOR machen ok ist schon
 .. ob 0-0FFF oder 1FFF, ebenso E000-EFFF oder FFFF
 nö write-first oder UNCHANGED...nö, dann macht ISE 109%
@@ -62,9 +63,10 @@ nö das 1. TEST wieder nur als Variante und gleich mit FF starten nö
 .. logfile auch mit xml!!!
 .. das fertige FFINIT1SMUL1+FFINIT2 muss sich auch recompilieren lassen
    das ist momentan noch eine knifflige Einschränkung, wie machen?
+   .. auch wenn DEZ eingestellt geht alle schief
 .. Bahn ist frei für massives Umstapeln in SDIV und so.
 .. ganz interessant wäre auch design summary mit zu Step_1 bis 11.
-.. davor NEBENRECHNUNG noch
+ok davor NEBENRECHNUNG noch
 .. weiter dann mit MATRIX diesmal mit Objekt
 .. aber diesmal ohne Bruchrechnen!
-.. auch mal die 25 MHz wieder anmach, wär nicht schlecht.
+ok auch mal die 25 MHz wieder anmach, wär nicht schlecht. ok perfekt
