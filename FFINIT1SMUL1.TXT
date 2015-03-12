@@ -364,7 +364,7 @@ BEGIN WHILE
  1 L4 @ 0 BEGIN ROT
    OVER L2 @ OVER + @
    SWAP L5 @ + @ NOT
-   U+ OVER L2 @ + !
+   U+ SWAP >R OVER L2 @ + ! R>
    ROT ROT 1 + 2DUP - 0= UNTIL 2DROP
 (   0 L2 @ L4 @ + @ U+ L2 @ L4 @ + !
 (   DUP . 7 EMIT
