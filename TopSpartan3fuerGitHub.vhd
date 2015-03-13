@@ -50,7 +50,12 @@ architecture Step_10 of TopSpartan3fuerGitHub is
     -- EMIT --
     EMIT_ABGESCHICKT: out STD_LOGIC;
     EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
-    EMIT_ANGEKOMMEN: in STD_LOGIC
+    EMIT_ANGEKOMMEN: in STD_LOGIC;
+
+     -- KEY --
+    KEY_ABGESCHICKT: in STD_LOGIC;
+    KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0);
+    KEY_ANGEKOMMEN: out STD_LOGIC
 
     );
 end component;
@@ -85,7 +90,12 @@ DUT: top
     -- EMIT --
     EMIT_ABGESCHICKT   => EMIT_ABGESCHICKT,
     EMIT_BYTE       => EMIT_BYTE,
-    EMIT_ANGEKOMMEN  => EMIT_ANGEKOMMEN
+    EMIT_ANGEKOMMEN  => EMIT_ANGEKOMMEN,
+
+     -- KEY --
+    KEY_ABGESCHICKT  => KEY_ABGESCHICKT,
+    KEY_BYTE      => KEY_BYTE,
+    KEY_ANGEKOMMEN => open
 
     );
 
