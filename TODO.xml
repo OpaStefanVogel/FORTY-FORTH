@@ -54,19 +54,23 @@ nö ProgRAM aus P20.vhd herausziehen damit unterschiedlich machbar??? nö lieber
 ok aber in DUMPZ < NOT statt = damit HERE 0 0 DUMPZ zu machen geht ok
 .. was auch nicht geht, letztes <p> in R10 vor <Terminal_1> hinsetzen
 ok Spartan3_Step_9 hat KEY drin, soll raus ok
-.. dann wohl doch alle + * . in M+ M* M. umbenennen
+ok dann wohl doch alle + * . in M+ M* M. umbenennen ok zumindestens vorübergehend
 .. da in R00.DTD das ANY für valide nicht ausreicht, muss ich doch noch weng füllen.
 ok bei SMUL und so díe DO LOOP noch in BEGIN UNTIL umschreiben, oje
    da lieber doch ein schnelles DO LOOP, ich hab ja schon RAMB
    ok habs geschafft, das ist die Wucht
 nö das 1. TEST wieder nur als Variante und gleich mit FF starten nö
 .. logfile auch mit xml!!!
-.. das fertige FFINIT1SMUL1+FFINIT2 muss sich auch recompilieren lassen
+ok das fertige FFINIT1SMUL1+FFINIT2 muss sich auch recompilieren lassen
    das ist momentan noch eine knifflige Einschränkung, wie machen?
-   .. auch wenn DEZ eingestellt geht alle schief
+   ok auch wenn DEZ eingestellt geht alle schief
+.. aber nochmal gründlich durchgucken
 .. Bahn ist frei für massives Umstapeln in SDIV und so.
 .. ganz interessant wäre auch design summary mit zu Step_1 bis 11.
 ok davor NEBENRECHNUNG noch
-.. weiter dann mit MATRIX diesmal mit Objekt
-.. aber diesmal ohne Bruchrechnen!
+ok weiter dann mit MATRIX INVERTIEREN ok 
+.. aber noch nicht mit O.
+ok aber diesmal ohne Bruchrechnen!
 ok auch mal die 25 MHz wieder anmach, wär nicht schlecht. ok perfekt
+ok N" 4000" geht nicht richtig??? ok inzwischen doch
+.. als nächstes mal SLX-ERGEBNIS, da war wo noch was
