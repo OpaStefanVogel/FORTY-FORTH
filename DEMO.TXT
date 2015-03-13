@@ -121,15 +121,37 @@ HEX N" 100000000"
 DEZ DUP N.
 HEX DUP N.
 
-( 
+
+
+
+( ******************************************************
+
+
+( versuchshalber mal umschalten wie ein neues Vokabular
+
+: M. . ; : M+ + ; : M- - ; : M* * ; : M/ / ;
+: . N. ; : + N+ : : - N- ; : * N* ; : / N/ ; : ^ N^ ; 
+
+ ' NNUMBER ' NUMBER - 1 - 8000 OR ' NUMBER !
+
+111111111111111 DUP * .
+
+
+
+( an der Stelle, wenn gewünscht, Programm-VHDL-Quelltext für Step_11 ausgeben
+( HEX INIT 
+( HERE 0 0 DUMPZ           ( für progRAM
+( BZEIG @ BANF @ -1 DUMPZ    ( für byteRAM
+( 3000 2C00 0 DUMPZ        ( für stapR
+
 
 
 ( jetzt nix mehr programmieren, also auf Dezimal umstellen, 
-( danach noch programmieren, das geht garantiert schief
+( nach DEZ weiter programmieren, das geht garantiert schief
 
 DEZ
 
-( ganzzanhlige Matrix inverzieren. Gegeben ist die 3x3 Matrix
+( ganzzahlige Matrix invertieren. Gegeben ist die 3x3 Matrix
 
 (    60 30 20
 (    30 20 15
@@ -148,8 +170,13 @@ INIT
 20 2 0 MAT!
 15 2 1 MAT!
 12 2 2 MAT!
+BDISP
 
 ( dann Invertieren, Ergebnis wird gleich mit ausgegeben
 
 INVERTIEREN
+
+( war auch schon in FFINIT1SMUL.TXT: 
+
+DEMOMATRIX INVERTIEREN 
 

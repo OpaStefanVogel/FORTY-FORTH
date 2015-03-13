@@ -393,11 +393,12 @@ IMMEDIATE: RECURSE LFA @ 4 + COMPILE, ;
     SWAP END_IF
   ;
 
-: HG0. ( n -->  <hexstring> ) 
-  SHL16 DUP IF DIG EMIT ELSE DROP END_IF
-  SHL16 DUP IF DIG EMIT ELSE DROP END_IF
-  SHL16 DUP IF DIG EMIT ELSE DROP END_IF
-  SHL16 DIG EMIT DROP ;
+: HG0. ( n -->  <hexstring> )
+  0 >R
+  SHL16 DUP IF DIG EMIT R> DROP -1 >R ELSE DROP END_IF
+  SHL16 DUP R OR IF DIG EMIT R> DROP -1 >R ELSE DROP END_IF
+  SHL16 DUP R OR IF DIG EMIT ELSE DROP END_IF
+  SHL16 DIG EMIT DROP R> DROP ;
 
 : N. ( n --> ) ( erstmal nur hexadezimale Ausgabe)
   OPERAND1 !
@@ -765,28 +766,31 @@ IMMEDIATE: +LOOP COMPILE (+LOOP) 0BRANCH, ;
   ; 
 
 
+
 ( jetzt nix mehr programmieren, also auf Dezimal umstellen, 
-( danach noch programmieren, das geht garantiert schief
+( danach noch programmieren geht garantiert schief
 
 DEZ
 
-INIT
-3 N !
-60 0 0 MAT!
-30 0 1 MAT!
-20 0 2 MAT!
-30 1 0 MAT!
-20 1 1 MAT!
-15 1 2 MAT!
-20 2 0 MAT!
-15 2 1 MAT!
-12 2 2 MAT!
+: DEMOMATRIX
+  INIT
+  3 N !
+  60 0 0 MAT!
+  30 0 1 MAT!
+  20 0 2 MAT!
+  30 1 0 MAT!
+  20 1 1 MAT!
+  15 1 2 MAT!
+  20 2 0 MAT!
+  15 2 1 MAT!
+  12 2 2 MAT!
+  ;
+
+DEMOMATRIX BDISP
 INVERTIEREN
 
 
-( jetzt abewr wieder Hexadezimal, weil es noch weiter geht
+( jetzt aber wieder Hexadezimal, weil es noch weiter gehen soll
 
 HEX
-
-
 
