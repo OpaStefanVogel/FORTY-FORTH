@@ -121,7 +121,7 @@ HEX N" 100000000"
 DEZ DUP N.
 HEX DUP N.
 
-
+( 
 
 
 ( jetzt nix mehr programmieren, also auf Dezimal umstellen, 
@@ -129,7 +129,7 @@ HEX DUP N.
 
 DEZ
 
-( ganzzanhlige Matrix invertzieren. Gegeben ist die 3x3 Matrix
+( ganzzanhlige Matrix inverzieren. Gegeben ist die 3x3 Matrix
 
 (    60 30 20
 (    30 20 15
