@@ -58,8 +58,6 @@ A003 CONSTANT RETURN
   ;
 
 
-: ? @ . ;
-: ABS DUP 0< IF MINUS END_IF ;
 IMMEDIATE: () 0 WORD 2DROP ;
 : QUERY ( adr --> n ) TIB @ 100 EXPECT ;
 : B. ( a b --> ) SWAP . . ;

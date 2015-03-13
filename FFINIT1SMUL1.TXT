@@ -7,6 +7,7 @@
 ( 666666 dann NEBENRECHNUNG A+0
 ( 777777 dann N/ NMOD NGGT NBK N. N^ N"
 ( 888888 dann nochmal N. nochmal für beliebige BASE
+( 999999 -- Obj
 ( und fertig erstmal
 
 
@@ -34,6 +35,8 @@ RAMP1 1+ RAMP1 !
   2DUP < IF SWAP END_IF DROP ;
 : MIN ( a b --> c )
   2DUP > IF SWAP END_IF DROP ;
+: ? @ . ;
+: ABS DUP 0< IF MINUS END_IF ;
 
 
 
@@ -525,6 +528,7 @@ INIT
 
 ( je einmal N* und N+ in NNUMBER
 : NNUMBER ( baddr n --> a faddr )
+  NEBENRECHNUNG ROT ROT
   7 LOCAL ( L3 L4 nicht verwendet
   L1 ! L0 !
   0 L1 @ IF
@@ -555,6 +559,7 @@ INIT
   L2 @ L1 @ - ( oo noch kein fadr !!!!!!!!!!!! siehe NNUMBER)
   DUP IF DROP L0 @ L2 @ + END_IF ( jetzt faddr
   END_LOCAL
+  ROT HAUPTRECHNUNG SWAP A+0 SWAP
   ;
 
 22 WORD: N" ( <number>  --> n ) NNUMBER DROP ;
@@ -607,3 +612,78 @@ N" 000002330657FDD698" N" 4C0CF598D2" N* N.
 : NB. SWAP N. N. ;
 
 777 99 NBK NB.
+
+
+INIT
+
+( 999999 -- Obj
+
+: ZERLEG ( a --> adr i )
+  3FFF AND DUP 1+ SWAP @ ;
+
+N" 111111111111111" DUP N* DUP N.
+DUP ZERLEG SWAP . .
+
+
+: L ( a i -> b ) OVER ABS 4000 AND IF
+    SWAP ZERLEG ( i adr j
+    ROT 2DUP ( adr j i j i )
+    > IF SWAP DROP + @ ELSE 2DROP DROP 0 END_IF
+    ELSE IF DROP 0 END_IF END_IF ;
+
+N" 111111111111111" DUP N* DUP N.
+DUP 0 L .
+DUP 1 L .
+DUP 2 L .
+DUP 3 L .
+DUP 4 L .
+DUP 5 L .
+DUP 6 L .
+DUP 7 L .
+
+
+: G ( a i -> a i b ) 2DUP L ;
+: H ( a i b --> a' )
+  ROT ROT ( b a i
+  OVER 4000 AND 0= OVER 0= AND IF 2DROP ELSE
+    OVER 4000 AND 0= IF 
+      DUP 1+ SPEICHERHOL ( b a i addrneu
+      ROT OVER ! ( b i addrneu
+(      OVER 1+ OVER 1 - ! ( b i addrneu
+      DUP >R + ! R> ( addrneu
+      1 - 4000 +
+      ELSE
+        OVER ( b a i a
+        ZERLEG ( b a i addr j
+        ROT ( b a addr j i
+        2DUP > IF SWAP DROP ROT >R + ! R> ELSE
+          DUP 1+ SPEICHERHOL ( b a addr j i addrneu
+          SWAP >R DUP >R ( b a addr j addrneu      addrneu i
+          SWAP MOVE DROP R> ( b addrneu            i 
+(          R 1+ OVER 1 - ! ( b addrneu                i
+          SWAP OVER R> + ! ( addrneu
+          1 - 4000 + ( a'
+          END_IF
+        0 SWAP ZERLEG SWAP SLX->ERGEBNIS
+        END_IF
+    END_IF
+  ;
+
+: O. ( obj --> )
+  DUP 4000 AND IF
+    ." [ "
+    ZERLEG OVER + SWAP ( eadr+1 aadr 
+    BEGIN 2DUP > WHILE DUP @ RECURSE 1 + REPEAT 2DROP
+     ." ] "
+    ELSE . END_IF
+  ;
+
+7 DUP O.
+2 9 H DUP O.
+3 11 H DUP O.
+1 4 1 6 H H DUP O.
+1 G 2 88 H H DUP O. 
+1 G 2 0 H H DUP O. 
+
+
+
