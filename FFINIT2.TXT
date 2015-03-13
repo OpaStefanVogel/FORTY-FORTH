@@ -1,18 +1,3 @@
-( - LOOP's
-: I RP @ 1 + @ ;
-: J RP @ 3 + @ ;
-: K RP @ 5 + @ ;
-: (DO) SWAP R> ROT ROT >R >R >R ;
-: (LOOP) R> R> 1+ DUP R < IF >R 0 
-  ELSE R> DROP DROP -1 END_IF SWAP >R ;
-: (+LOOP) R> R>  ROT DUP  0< IF + R OVER
-  ELSE + DUP R END_IF < IF >R 0 
-  ELSE R> DROP DROP -1 END_IF SWAP >R  ;
-IMMEDIATE: DO COMPILE (DO) HERE ;
-IMMEDIATE: LOOP COMPILE (LOOP) 0BRANCH, ;
-IMMEDIATE: +LOOP COMPILE (+LOOP) 0BRANCH, ;
-( : LL 0 DO I . LOOP ; 7 LL ( ok geht
-
 : VLIST
   LFA @ BEGIN 
     DUP 1+ @ OVER 2 + @ TYPE 20 EMIT 

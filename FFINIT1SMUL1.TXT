@@ -8,6 +8,8 @@
 ( 777777 dann N/ NMOD NGGT NBK N. N^ N"
 ( 888888 dann nochmal N. nochmal für beliebige BASE
 ( 999999 -- Obj
+( - LOOP's - sind aber sehr langsam
+( 00000 Invertieren
 ( und fertig erstmal
 
 
@@ -664,7 +666,7 @@ DUP 7 L .
           SWAP OVER R> + ! ( addrneu
           1 - 4000 + ( a'
           END_IF
-        0 SWAP ZERLEG SWAP SLX->ERGEBNIS
+(        0 SWAP ZERLEG SWAP SLX->ERGEBNIS
         END_IF
     END_IF
   ;
@@ -684,6 +686,107 @@ DUP 7 L .
 1 4 1 6 H H DUP O.
 1 G 2 88 H H DUP O. 
 1 G 2 0 H H DUP O. 
+
+0 1 1 H ( da ist noch ein Defekt bei 0 0 7 H da macht ZERLEG Quatsch
+0 0 0 1 H 1 2 H 2 5 H H DUP O.
+1 0 0 3 H 1 4 H 2 8 H H DUP O.
+2 0 0 9 H 1 2 H 2 1 H H CR DUP O.
+
+
+
+( - LOOP's - sind aber sehr langsam
+: I RP @ 1 + @ ;
+: J RP @ 3 + @ ;
+: K RP @ 5 + @ ;
+: (DO) SWAP R> ROT ROT >R >R >R ;
+: (LOOP) R> R> 1+ DUP R < IF >R 0 
+  ELSE R> DROP DROP -1 END_IF SWAP >R ;
+: (+LOOP) R> R>  ROT DUP  0< IF + R OVER
+  ELSE + DUP R END_IF < IF >R 0 
+  ELSE R> DROP DROP -1 END_IF SWAP >R  ;
+IMMEDIATE: DO COMPILE (DO) HERE ;
+IMMEDIATE: LOOP COMPILE (LOOP) 0BRANCH, ;
+IMMEDIATE: +LOOP COMPILE (+LOOP) 0BRANCH, ;
+( : LL 0 DO I . LOOP ; 7 LL ( ok geht
+
+: DEZ 0A BASE ! ;
+: HEX 10 BASE ! ;
+
+
+( 00000 Invertieren
+
+
+100 RAMBUF B
+10 RAMBUF Y
+10 RAMBUF Z
+10 VARIABLE N
+1 VARIABLE NEUERNENNER
+1 VARIABLE ALTERNENNER
+
+: (.) ( i adr --> adr' ) + ;
+: (.,.) ( i j adr --> adr' ) + SWAP N @ * + ;
+: MAT! B (.,.) ! ;
+
+: BDISP
+  ." [ " N @ 0 DO CR ." [ " N @ 0 DO J I B (.,.) @ N. LOOP ." ] " LOOP ." ] "
+  ;
+
+: INVERTIEREN
+  1 NEUERNENNER !
+  N @ 0 DO 
+    N @ 0 DO
+      I J B (.,.) @ I Y (.) !
+      J I B (.,.) @ I Z (.) !
+      LOOP
+    NEUERNENNER @ ALTERNENNER !
+    I Y (.) @ ALTERNENNER @ N+ I Y (.) !
+    I Z (.) @ ALTERNENNER @ N- I Z (.) !
+    I I B (.,.) @ NEUERNENNER !
+    N @ 0 DO 
+      N @ 0 DO 
+        NEBENRECHNUNG
+        J I B (.,.) @ NEUERNENNER @ N*
+        J Y (.) @ I Z (.) @ N* N-
+        ALTERNENNER @ N/
+        SWAP HAUPTRECHNUNG A+0
+        J I B (.,.) !
+        LOOP
+      LOOP
+    RECHENBLOCK
+(     CR I 1 + DUP . DUP * .
+( (    HEX
+(     ERGEBNIS @ BLOCKANFANG @ - . 
+(     SPEICHERENDE @ . ERGEBNIS @ . BDISP
+( (    DECIMAL
+(     0 0 B (.,.] @ N. ALTERNENNER @ . NEUERNENNER @ .
+    LOOP
+  BDISP
+  CR ." gemeinsamer Nenner: " NEUERNENNER @ N.
+  ; 
+
+
+( jetzt nix mehr programmieren, also auf Dezimal umstellen, 
+( danach noch programmieren, das geht garantiert schief
+
+DEZ
+
+INIT
+3 N !
+60 0 0 MAT!
+30 0 1 MAT!
+20 0 2 MAT!
+30 1 0 MAT!
+20 1 1 MAT!
+15 1 2 MAT!
+20 2 0 MAT!
+15 2 1 MAT!
+12 2 2 MAT!
+INVERTIEREN
+
+
+( jetzt abewr wieder Hexadezimal, weil es noch weiter geht
+
+HEX
 
 
 

@@ -122,5 +122,34 @@ DEZ DUP N.
 HEX DUP N.
 
 
-( ok nicht viel mehr heut )
+
+
+( jetzt nix mehr programmieren, also auf Dezimal umstellen, 
+( danach noch programmieren, das geht garantiert schief
+
+DEZ
+
+( ganzzanhlige Matrix invertzieren. Gegeben ist die 3x3 Matrix
+
+(    60 30 20
+(    30 20 15
+(    20 15 12
+
+( Eingeben als
+
+INIT
+3 N !
+60 0 0 MAT!
+30 0 1 MAT!
+20 0 2 MAT!
+30 1 0 MAT!
+20 1 1 MAT!
+15 1 2 MAT!
+20 2 0 MAT!
+15 2 1 MAT!
+12 2 2 MAT!
+
+( dann Invertieren, Ergebnis wird gleich mit ausgegeben
+
+INVERTIEREN
 
