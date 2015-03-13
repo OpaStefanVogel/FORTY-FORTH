@@ -9,7 +9,7 @@ end testbench;
 
 -------------------------------------------------------------------------------
 
-architecture test_Step_9 of testbench is
+architecture test_Step_11 of testbench is
 
 component top
   Port ( 
@@ -56,6 +56,27 @@ signal KEY_ABGESCHICKT: STD_LOGIC:='0';
 signal KEY_BYTE: STD_LOGIC_VECTOR (7 downto 0);
 signal KEY_ANGEKOMMEN: STD_LOGIC:='0';
 
+type TEXTTYPE is array(0 to 1024) of STD_LOGIC_VECTOR (7 downto 0);
+-- Programmspeicher 0000H-1FFFH
+signal TEXT: TEXTTYPE:=(
+  -- Anfang abwarten
+  x"00",x"00",x"00",x"00",
+  -- 56 89 * .
+  x"35",x"36",x"20",x"38",x"39",x"20",x"2A",x"20",x"2E",x"0A",
+  -- 111111111111111 DUP * .
+  x"31",x"31",x"31",x"31",x"31",x"31",x"31",x"31",
+  x"31",x"31",x"31",x"31",x"31",x"31",x"31",x"20",
+  x"44",x"55",x"50",x"20",x"2A",x"20",x"2E",x"0A",
+  -- DEZ
+  x"44",x"45",x"5A",x"0A",
+  -- nochmal 56 89 * .
+  x"35",x"36",x"20",x"38",x"39",x"20",x"2A",x"20",x"2E",x"0A",
+  -- DEMOMATRIX INVERTIEREN
+  x"44",x"45",x"4D",x"4F",x"4D",x"41",x"54",x"52",x"49",x"58",x"20",
+  x"49",x"4E",x"56",x"45",x"52",x"54",x"49",x"45",x"52",x"45",x"4E",x"0A",
+  others=>x"00");
+
+
 begin
 
   -- component instantiation
@@ -91,40 +112,17 @@ begin
 
 
   -- simuliert eine Tastatureingabe
-  process begin
-    wait for 100000 ns;
-    KEY_ABGESCHICKT<=not KEY_ABGESCHICKT;
-    KEY_BYTE<=x"35";
+  process
+  variable I: integer:=0;
+  begin
     wait for 30000 ns;
-    KEY_ABGESCHICKT<=not KEY_ABGESCHICKT;
-    KEY_BYTE<=x"36";
-    wait for 30000 ns;
-    KEY_ABGESCHICKT<=not KEY_ABGESCHICKT;
-    KEY_BYTE<=x"20";
-    wait for 30000 ns;
-    KEY_ABGESCHICKT<=not KEY_ABGESCHICKT;
-    KEY_BYTE<=x"38";
-    wait for 30000 ns;
-    KEY_ABGESCHICKT<=not KEY_ABGESCHICKT;
-    KEY_BYTE<=x"39";
-    wait for 30000 ns;
-    KEY_ABGESCHICKT<=not KEY_ABGESCHICKT;
-    KEY_BYTE<=x"20";
-    wait for 30000 ns;
-    KEY_ABGESCHICKT<=not KEY_ABGESCHICKT;
-    KEY_BYTE<=x"2A";
-    wait for 30000 ns;
-    KEY_ABGESCHICKT<=not KEY_ABGESCHICKT;
-    KEY_BYTE<=x"20";
-    wait for 30000 ns;
-    KEY_ABGESCHICKT<=not KEY_ABGESCHICKT;
-    KEY_BYTE<=x"2E";
-    wait for 30000 ns;
-    KEY_ABGESCHICKT<=not KEY_ABGESCHICKT;
-    KEY_BYTE<=x"0A";
-    wait for 1000 ms;
+      if TEXT(I)>x"00" then
+        KEY_BYTE<=TEXT(I);
+        KEY_ABGESCHICKT<=not KEY_ABGESCHICKT;
+      end if;
+      I:=I+1;
   end process;
 
-end test_Step_9;
+end test_Step_11;
 
 
