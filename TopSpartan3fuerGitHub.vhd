@@ -95,7 +95,7 @@ process(CLK) begin if CLK'event and CLK='1' then
   CLK_I<=TAKTZAEHLER(21);
   end if; end process;
 
-TXD <= RXD;
+TXD <= '1';
 
     AL <= "000000000000000000";
     DL <= x"00000000";
