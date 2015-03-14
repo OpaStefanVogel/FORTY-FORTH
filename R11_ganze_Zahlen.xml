@@ -9,7 +9,7 @@
 
 Zum Rechnen mit großen ganzen Zahlen sind weitere Rechenoperationen eingefügt, welche den Rechenablauf beschleunigen sollen.
 
-DI32 ( a b c --> r q ) teilt die aus a und b zusammengesetzte 32-Bit Zahl a*2^8+b durch c und gibt Rest r und Quotient q zurück.
+DI32 ( a b c --> r q ) teilt die aus a und b zusammengesetzte 32-Bit Zahl a*2^16+b durch c und gibt Rest r und Quotient q zurück.
 MULT_I ( ) und
 MULT_II ( ) sind zwei Hilfsfunktionen für die Multiplikation einer 16-Bit-Zahl mit einer ab Adresse adr gespeicherten großen ganzen Zahl der Länge l Bytes.
 
