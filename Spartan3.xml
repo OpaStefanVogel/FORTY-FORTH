@@ -7,7 +7,7 @@
 
 <p> Spartan3 Board </p>
 
-<p> Zuletzt war in Terminal_1 branch <code>Step_10</code> eingestellt. Alle speziell auf das Spartan3 Board bezogene Dateien befinden sich in einem extra Branch, welcher nicht gleichzeitig in Terminal_1 mit eingestellt werden kann. Deshalb in einem neuen Terminal_2 ein neues leeres Verzeichnis mit einem selbstgewählten Namen <i>your-Spartan3-repo</i> anlegen, in dieses Verzeichnis wechseln und nochmal klonen. </p>
+<p> Zuletzt war in Terminal_1 branch <code>Step_11</code> eingestellt. Alle speziell auf das Spartan3 Board bezogene Dateien befinden sich in einem extra Branch, welcher nicht gleichzeitig in Terminal_1 mit eingestellt werden kann. Deshalb in einem neuen Terminal_2 ein neues leeres Verzeichnis mit einem selbstgewählten Namen <i>your-Spartan3-repo</i> anlegen, in dieses Verzeichnis wechseln und nochmal klonen. </p>
 
 <Terminal_2>
   <li> git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git . </li>
@@ -59,12 +59,15 @@ zu sehen und auch eine Nutzereingabe möglich sein. Wenn nicht, erstmal mit Eing
 <p> Anstelle oder nach einigen Tastatureingaben in Terminal_3 hinein geht auch in Terminal_1</p>
 
 <Terminal_1>
-  <li> cp FFINIT1.TXT /dev/ttyS0 # recompiliert den vorhandenen FORTH-Interpreter </li>
-  <li> echo "HERE 0 0 DUMPZ" >/dev/ttyS0   # generiert Inhalt zu ProgRAM</li>
-  <li> echo "BZEIG @ E000 -1 DUMPZ" >/dev/ttyS0  # und Inhalt zu ByteRAM </li> 
-  <li> cp FFINIT1SMUL1.TXT /dev/ttyS0     # grosse ganze Zahlen </li>
-  <li> cp FFINIT2.TXT /dev/ttyS0 </li>
-  <li> cp DEMO.TXT /dev/ttyS0 </li>
+  <li> cp FFINIT1.TXT /dev/ttyS0             <i># recompiliert den vorhandenen FORTH-Interpreter</i> </li>
+  <li> echo "HERE 0 0 DUMPZ" >/dev/ttyS0     <i># generiert ProgRAM Step_10</i></li>
+  <li> echo "BZEIG @ E000 -1 DUMPZ" >/dev/ttyS0  <i># generiert ByteRAM Step_10</i></li> 
+  <li> cp FFINIT1SMUL1.TXT /dev/ttyS0        <i># grosse ganze Zahlen</i> </li>
+  <li> cp FFINIT2.TXT /dev/ttyS0             <i># "Sonstiges"</i></li>  
+  <li> cp DEMO.TXT /dev/ttyS0                <i># DEMO</i></li>
+  <li> echo "HEX HERE 0 0 DUMPZ" >/dev/ttyS0 <i># generiert ProgRAM Step_11</i></li>
+  <li> echo "BZEIG @ E000 -1 DUMPZ" >/dev/ttyS0 <i># generiert ByteRAM Step_11</i></li> 
+  <li> echo "HERE 0 0 DUMPZ" >/dev/ttyS0   <i># generiert stapR Step_11</i></li>
   <li> #</li>
   </Terminal_1>
 

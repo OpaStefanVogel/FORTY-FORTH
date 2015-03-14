@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
+<!DOCTYPE los SYSTEM "R00.dtd">
+<los>
+
+<step>Step 11</step>
+
+<pr>Große ganze Zahlen
+
+Zum Rechnen mit großen ganzen Zahlen sind weitere Rechenoperationen eingefügt, welche den Rechenablauf beschleunigen sollen.
+
+DI32 ( a b c --> r q ) teilt die aus a und b zusammengesetzte 32-Bit Zahl a*2^8+b durch c und gibt Rest r und Quotient q zurück.
+MULT_I ( ) und
+MULT_II ( ) sind zwei Hilfsfunktionen für die Multiplikation einer 16-Bit-Zahl mit einer ab Adresse adr gespeicherten großen ganzen Zahl der Länge l Bytes.
+
+Wie das alles abläuft und daraus schließlich das Matrix-Invertierungsprogramm gemacht wird - das muss der FORTH-Interpreter irgendwann selbst mal aufzeigen, etwa in einem Log-File während des Compilierens. Hier sollte nur deutlich gemacht werden, was im VHDL-Programm dazugekommen ist.
+
+Beispielaufgabe: <i>Invertiere die Matrix
+
+  [ [ 60 , 30 , 20 ] ,
+    [ 30 , 20 , 15 ] ,
+    [ 20 , 15 , 12 ] ]</i></pr>
+
+<Terminal_1>
+  <li> git checkout Step_11 </li>
+  <li> git diff <diff>Step_10...Step_11</diff> </li>
+  </Terminal_1>
+
+<Tcl_Console>
+  <li> close_sim -force -quiet </li>
+  <li> launch_simulation </li>
+  <li> run 20 ms </li>
+  </Tcl_Console>
+
+<p></p>
+
+<DEMO>FORTY-FORTH
+
+ok
+<u>56 89 * .</u> 2E06 ok
+<u>111111111111111 DUP * .</u> 123456789ABCDEFEDCBA987654321 ok
+<u>DEZ</u> ok
+<u>56 89 * .</u> 4984 ok
+<u>DEMOMATRIX INVERTIEREN</u> [ 
+[ 15 -60 50 ] 
+[ -60 320 -300 ] 
+[ 50 -300 300 ] ] 
+gemeinsamer Nenner: 100 ok
+</DEMO>
+
+<p>Die Nutzereingaben <u>56 89 * ....</u> beginnen ab 150000 ns in KEY_BYTE. Die Ergebnisse werden jeweils ab 4095520 ns, ab 8289100 ns, ab 12271060 ns und ab 18088320 ns an EMIT_BYTE ausgegeben. Darin enthaltenen ESCAPE-Sequenzen wie ESC-[-3-4-m stellen die Schriftfarbe ein. DEZ schaltet auf dezimale Zahlenbasis um, DEMOMATRIX stellt die oben genannte Matrix der Beispielaufgabe für das INVERTIEREN bereit.</p>  
+
+<weiter /><a href="Spartan3.xml">Installation Spartan3 Board</a>
+</los>
