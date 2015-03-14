@@ -130,7 +130,7 @@ HEX DUP N.
 ( versuchshalber mal umschalten wie ein neues Vokabular
 
 : M. . ; : M+ + ; : M- - ; : M* * ; : M/ / ;
-: . N. ; : + N+ : : - N- ; : * N* ; : / N/ ; : ^ N^ ; 
+: . N. ; : + N+ ; : - N- ; : * N* ; : / N/ ; : ^ N^ ; 
 
  ' NNUMBER ' NUMBER - 1 - 8000 OR ' NUMBER !
 
