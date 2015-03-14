@@ -39,7 +39,7 @@ entity TopSpartan3fuerGitHub is
     );	 
   end TopSpartan3fuerGitHub;
 
-architecture Step_9_und_10 of TopSpartan3fuerGitHub is
+architecture Step_10 of TopSpartan3fuerGitHub is
 
   component top
   port (
@@ -50,7 +50,12 @@ architecture Step_9_und_10 of TopSpartan3fuerGitHub is
     -- EMIT --
     EMIT_ABGESCHICKT: out STD_LOGIC;
     EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
-    EMIT_ANGEKOMMEN: in STD_LOGIC
+    EMIT_ANGEKOMMEN: in STD_LOGIC;
+
+     -- KEY --
+    KEY_ABGESCHICKT: in STD_LOGIC;
+    KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0);
+    KEY_ANGEKOMMEN: out STD_LOGIC
 
     );
 end component;
@@ -85,7 +90,12 @@ DUT: top
     -- EMIT --
     EMIT_ABGESCHICKT   => EMIT_ABGESCHICKT,
     EMIT_BYTE       => EMIT_BYTE,
-    EMIT_ANGEKOMMEN  => EMIT_ANGEKOMMEN
+    EMIT_ANGEKOMMEN  => EMIT_ANGEKOMMEN,
+
+     -- KEY --
+    KEY_ABGESCHICKT  => KEY_ABGESCHICKT,
+    KEY_BYTE      => KEY_BYTE,
+    KEY_ANGEKOMMEN => open
 
     );
 
@@ -150,4 +160,4 @@ begin wait until (CLK_6_MHz'event and CLK_6_MHz='0');
   RXD_RUHEND<=RXD;
   end process;
 
-end Step_9_und_10;
+end Step_10;
