@@ -1,0 +1,109 @@
+( weiter hier Neues erstmal aufsammeln und nicht ständig neuen ProgRAM machen
+
+( nach RESET zuerst FFINIT.TXT und FFINIT1SMUL1.TXT neu laden oder
+7 ' NUMBER !
+18 ' KEY_INT 6 + ! ( repariert KEY_INT
+RP0 ' QUIT ! A00A ' QUIT 1 + !
+QUIT
+1B EMIT 5B EMIT 33 EMIT 39 EMIT 6D EMIT ( Farben aus
+7 ' NUMBER !
+4000 000E ! ( aktiviert ^F = QUIT
+FORGET QUIT2
+( --- ohne dem geht nix
+
+
+
+( jetzt geht's weiter:
+
+
+( also zu O.
+( in H SLX->ERGEBNIS hinzu
+( am Anfang von H DUP >R .... R> C000 AND dazu, aber das muss noch weiter
+( ok Unterscheidung OBJ anhand l: l+4000 in L und H einfügen
+
+: OBJ? ( a --> flag )
+  ABS DUP 4000 < IF DROP 0 ELSE
+    ZERLEG SWAP DROP 4000 < IF 0 ELSE -1 
+      END_IF END_IF
+  ;
+
+: L ( a i -> b ) OVER OBJ? IF
+    SWAP ZERLEG 3FFF AND ( i adr j
+    ROT 2DUP ( adr j i j i )
+    > IF SWAP DROP + @ ELSE 2DROP DROP 0 END_IF
+    ELSE IF DROP 0 END_IF END_IF ;
+
+: H ( a i b --> a' )
+  DUP >R
+  ROT ROT ( b a i
+  OVER OBJ? 0= OVER 0= AND R> OBJ? 0= AND IF 2DROP ELSE
+    OVER OBJ? 0= IF 
+      DUP 1+ SPEICHERHOL ( b a i addrneu
+      ROT OVER ! ( b i addrneu
+(      OVER 1+ OVER 1 - ! ( b i addrneu ( aha, macht schon SPEICHERHOL
+      4000 OVER 1 - +! ( das ist jetzt neu fuer OBJ?
+      DUP >R + ! R> ( addrneu
+      1 - 4000 +
+      ELSE
+        OVER ( b a i a
+        ZERLEG 3FFF AND ( b a i addr j
+        ROT ( b a addr j i
+        2DUP > IF SWAP DROP ROT >R + ! R> ELSE
+          DUP 1+ SPEICHERHOL ( b a addr j i addrneu
+          SWAP >R DUP >R ( b a addr j addrneu      addrneu i
+          SWAP MOVE DROP R> ( b addrneu            i 
+(          R 1+ OVER 1 - ! ( b addrneu                i
+          4000 OVER 1 - +! ( das ist jetzt neu fuer OBJ?
+          SWAP OVER R> + ! ( addrneu
+          1 - 4000 + ( a'
+          END_IF
+        ZERLEG 3FFF AND ( adr l
+        BEGIN 2DUP + 1 - @ 0= OVER 1 > AND WHILE 1 - REPEAT ( adr lneu
+        OVER @ OBJ? 0= OVER 1 = AND IF DROP @ ELSE
+          SWAP 1 - SWAP ( addr-1 lneu
+          4000 + OVER ! 4000 +
+          END_IF  
+        END_IF
+    END_IF
+  ;
+  
+: O. ( obj --> )
+  DUP OBJ? IF
+    ." [ "
+    ZERLEG 3FFF AND OVER + SWAP ( eadr+1 aadr 
+    BEGIN 2DUP > WHILE DUP @ RECURSE 1 + REPEAT 2DROP
+     ." ] "
+    ELSE N. END_IF
+  ;
+
+7 DUP O.
+2 9 H DUP O.
+3 11 H DUP O.
+1 4 1 6 H H DUP O.
+1 G 2 88 H H DUP O. 
+1 G 2 0 H H DUP O.
+0 G 2 1987 H H DUP O.
+1 0 H DUP O.
+3 0 H DUP O.
+2 0 H DUP O.
+2 2444 H DUP O.
+0 N" 7777777" H DUP O.
+2 0 H DUP O.
+
+
+( 0 1 1 H ( da ist noch ein Defekt bei 0 0 7 H da macht ZERLEG Quatsch
+0 ( jetzt geht ZERLEG richtig ok
+0 0 0 1 H 1 2 H 2 5 H H DUP O.
+1 0 0 3 H 1 4 H 2 8 H H DUP O.
+2 0 0 9 H 1 2 H 2 1 H H CR DUP O.
+
+0 1 4 H DUP O.
+0 0 0 1 4 H H O.
+
+0 
+0 0 0 60 H 1 30 H 2 20 H H DUP O.
+1 0 0 30 H 1 20 H 2 15 H H DUP O.
+2 0 0 20 H 1 15 H 2 12 H H CR DUP O.
+
+( ok das passt
+
