@@ -8,7 +8,7 @@ QUIT
 1B EMIT 5B EMIT 33 EMIT 39 EMIT 6D EMIT ( Farben aus
 7 ' NUMBER !
 4000 000E ! ( aktiviert ^F = QUIT
-FORGET QUIT2
+FORGET LDUMP
 ( --- ohne dem geht nix
 
 
@@ -105,5 +105,6 @@ FORGET QUIT2
 1 0 0 30 H 1 20 H 2 15 H H DUP O.
 2 0 0 20 H 1 15 H 2 12 H H CR DUP O.
 
-( ok das passt
+( ok das passt besser
+
 
