@@ -48,10 +48,11 @@
         </ul>
       </header>
       
-      <section><span class="section"><xsl:apply-templates /></span></section>
+      <section><span class="section">
+        <xsl:apply-templates />
+        </span></section>
       
       </div>
-
     <footer>
       <p>Project maintained by <a href="https://github.com/OpaStefanVogel">OpaStefanVogel</a></p>
       <p>Hosted on GitHub Pages &#x2014; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
@@ -69,7 +70,21 @@
 <xsl:template match="code"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="i"><xsl:copy-of select="." /></xsl:template>
 
-<xsl:template match="step"><span class="zurueck">zum <a href="#Terminal">Terminal</a> oder <a href="index.html#Inhalt">zurück zu Inhalt</a></span></xsl:template>
+<xsl:template match="step">
+  <span class="zurueck">
+    <svg width="20" height="20" viewBox="-100 -100 200 200" >
+       <g stroke="black">
+         <circle cx="0" cy="0" r="100" fill="none" />
+         <path fill="grey"><xsl:attribute name="d">
+           M 0 0 L 0 -100 
+           A 100 100 0 <xsl:value-of select="/los/svg_path/@schnips" /> Z
+           </xsl:attribute></path>
+         </g>
+       </svg>
+     <span class="zuruecktext"> zum <a href="#Terminal">Terminal</a> oder 
+     <a href="index.html#Inhalt">zurück zu Inhalt</a>
+     </span></span>
+   </xsl:template>
 <xsl:template match="weiter">Das war <xsl:value-of select="/los/step" /><br />
 weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inhalt.</a></span></xsl:template>
 

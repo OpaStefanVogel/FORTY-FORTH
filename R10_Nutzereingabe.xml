@@ -43,4 +43,6 @@ ok
 <p>Die Nutzereingabe <u>56 89 * .</u> ist farblich unterschiedlich dargestellt gegenüber der Programmausgabe. Die Nutzereingabe wurde mit Enter=0A abgeschlossen (nicht dargestellt). Sie erscheint ab 100000 ns in KEY_BYTE. Das Ergebnis wird beginnend ab 2391120 ns in EMIT_BYTE ausgegeben.</p>  
 
 <weiter /><a href="R11_ganze_Zahlen.xml">R11 Rechnen mit großen ganzen Zahlen</a>
+
+<svg_path schnips="1 1 -87 -50"/>
 </los>

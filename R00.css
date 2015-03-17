@@ -36,6 +36,10 @@ code { font-family:monospace;
   float:right;
   }
 
+.zuruecktext {
+  vertical-align: top ;
+  }
+
 .pr { 
   white-space: pre-wrap; 
   }
