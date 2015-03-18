@@ -69,6 +69,8 @@
 <xsl:template match="table"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="code"><xsl:copy-of select="." /></xsl:template>
 <xsl:template match="i"><xsl:copy-of select="." /></xsl:template>
+<xsl:template match="tr"><xsl:copy-of select="." /></xsl:template>
+<xsl:template match="td"><xsl:copy-of select="." /></xsl:template>
 
 <xsl:template match="step">
   <span class="zurueck">
@@ -110,7 +112,7 @@ weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inh
     <th> FORTH-Notation </th>
     <th> Stapelinhalt   </th>
     <th> SP             </th></tr>
-    <xsl:copy-of select="." />
+    <xsl:apply-templates />
     </table>
   </xsl:template>
 
@@ -127,7 +129,7 @@ weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inh
   <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p>
   </xsl:template>
 <xsl:template match="Terminal_3">
-  <p><div>Terminal_3: <i>beliebig&amp; </i></div>
+  <p><div>Terminal_3: <i>beliebiges-Verzeichnis&amp; </i></div>
   <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p>
   </xsl:template>
 

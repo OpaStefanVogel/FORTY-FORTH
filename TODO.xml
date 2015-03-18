@@ -75,4 +75,7 @@ ok auch mal die 25 MHz wieder anmach, wär nicht schlecht. ok perfekt
 ok N" 4000" geht nicht richtig??? ok inzwischen doch
 .. als nächstes mal SLX-ERGEBNIS, da war wo noch was
    ok  im Moment sowieso ERROR - Fehler Nummer 7658, da kann nix schiefgehen.
-.. Step_0 nur für Spartan§ und nicht vivado!!! Das ist es.
+.. Step_0 nur für Spartan3 und nicht vivado!!! Das ist es.
+ok copy-of in ptable ist wohl nicht ganz korrekt... ok ist behoben
+.. ganz ohne Variablen?
+

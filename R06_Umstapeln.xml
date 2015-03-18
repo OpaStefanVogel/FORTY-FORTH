@@ -9,7 +9,7 @@
 
 Übliche FORTH-Worte zum Umstapeln sind 
 
-Code   FORTH-Wort   Stapeldiagramm
+PD=    FORTH-Wort   Stapeldiagramm
 B412   SWAP         ( a b --> b a )
 B502   OVER         ( a b --> a b a )
 B501   DUP          ( a --> a a )

@@ -16,11 +16,11 @@ EMIT  ( n --> ) gibt n auf Port EMIT_BYTE aus.
 
 Ein Beispielprogramm wie</pr>
 <ptable>
-  <tr><td> 0000 </td><td> 0031 </td><td> 54 ( '1' )</td><td> 31    </td><td> 1 </td></tr>
+  <tr><td> 0000 </td><td> 0031 </td><td> 31 ( '1' )</td><td> 31    </td><td> 1 </td></tr>
   <tr><td> 0001 </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
-  <tr><td> 0002 </td><td> 002E </td><td> 45 ( '.' )</td><td> 2E    </td><td> 1 </td></tr>
+  <tr><td> 0002 </td><td> 002E </td><td> 2E ( '.' )</td><td> 2E    </td><td> 1 </td></tr>
   <tr><td> 0003 </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
-  <tr><td> 0004 </td><td> 0020 </td><td> 53 ( ' ' )</td><td> 20    </td><td> 1 </td></tr>
+  <tr><td> 0004 </td><td> 0020 </td><td> 20 ( ' ' )</td><td> 20    </td><td> 1 </td></tr>
   <tr><td> 0005 </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
   <tr><td> 0006 </td><td> 0054 </td><td> 54 ( 'T' )</td><td> 54    </td><td> 1 </td></tr>
   <tr><td> 0007 </td><td> A005 </td><td> EMIT      </td><td>       </td><td> 0 </td></tr>
