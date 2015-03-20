@@ -68,6 +68,7 @@ zu sehen und auch eine Nutzereingabe möglich sein. Wenn nicht, erstmal mit Eing
   <li> echo "HEX HERE 0 0 DUMPZ" >/dev/ttyS0 <i># generiert ProgRAM Step_11</i></li>
   <li> echo "BZEIG @ E000 -1 DUMPZ" >/dev/ttyS0 <i># generiert ByteRAM Step_11</i></li> 
   <li> echo "HERE 0 0 DUMPZ" >/dev/ttyS0   <i># generiert stapR Step_11</i></li>
+  <li> cp TESTFUERNEUES.TXT /dev/ttyS0     <i># Neues nach Step_11</i></li>
   <li> #</li>
   </Terminal_1>
 
