@@ -1,4 +1,6 @@
 ( weiter hier Neues erstmal aufsammeln und nicht ständig neuen ProgRAM machen
+( : . N. ; in DEMO.TXT war Unfug ( nur um Step_11 Simulation zu ermöglichen )
+( deshalb muss ich das jetzt mühsam rückgängig machen:
 
 ( nach RESET zuerst FFINIT.TXT und FFINIT1SMUL1.TXT neu laden oder
 7 ' NUMBER !
@@ -7,13 +9,17 @@ RP0 ' QUIT ! A00A ' QUIT 1 + !
 QUIT
 1B EMIT 5B EMIT 33 EMIT 39 EMIT 6D EMIT ( Farben aus
 7 ' NUMBER !
+8000 16 ! ( deaktiviert EXXI
 4000 000E ! ( aktiviert ^F = QUIT
 FORGET LDUMP
 ( --- ohne dem geht nix
 
 
 
-( jetzt geht's weiter:
+
+
+
+( jetzt geht's aber weiter mit Neuem:
 
 
 ( also zu O.
@@ -108,3 +114,74 @@ FORGET LDUMP
 ( ok das passt besser
 
 
+
+
+
+
+
+
+( jetzt neue Matrixeingabe und neues INVERTIEREN
+
+0 VARIABLE SPMERK
+: [ ( ---> spmerk )
+  SPMERK @ SP @ SPMERK !
+  ;
+
+: ] ( spmerk a b c d ... z --> matrix )
+  0 BEGIN SP @ 1 - SPMERK @ - WHILE
+    SP @ 2 - SPMERK @ - ROT H REPEAT
+  SWAP SPMERK !
+  ;
+
+(   zuallerletzt nochmal NEBENRECHNUNG checken zuguterletzt dann auch noch B Y Z 
+( NENNER als LOCAL und O. rein, uff, das ist ein Brocken. .. L0 war doch ( zuviel...
+
+: INVERTIEREN ( matrix dim --> invmat nenner )
+  ( L0=mat L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
+  8 LOCAL
+  L1 ! L0 ! 0 L5 ! 0 L6 !
+  L0 @ 1 ( mat nenner )
+  L1 @ L2 ! BEGIN -1 L2 +!
+    L7 ! ( mat )
+    L0 @ L2 @ L L2 @ L ( mat neuernenner )
+    L1 @ L3 ! BEGIN -1 L3 +!
+      OVER L3 @ L L2 @ L L5 @ L3 @ ROT H L5 !
+      OVER L2 @ L L3 @ L L6 @ L3 @ ROT H L6 !
+      L3 @ 0= UNTIL
+    L5 @ L2 @ L L7 @ N+ L5 @ L2 @ ROT H L5 !
+    L6 @ L2 @ L L7 @ N- L6 @ L2 @ ROT H L6 !
+    L1 @ L3 ! BEGIN -1 L3 +!
+      OVER L3 @ L ( mat nenner mat[L3] )
+      L1 @ L4 ! BEGIN -1 L4 +!
+        NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner )
+        OVER L4 @ L OVER N*
+        L5 @ L3 @ L L6 @ L4 @ L N* N-
+        L7 @ N/ ( mat erg mat[L3] nenner bijneu )
+        2SWAP SWAP ( mat nenner bijneu mat[L3] erg )
+        DROP ( HAUPTRECHNUNG ) SWAP ( A+0 ) ( mat nenner mat[L3] bijneu+0
+        SWAP L4 @ ROT H ( mat nenner mat[L3]neu )
+        L4 @ 0= UNTIL
+      ROT L3 @ ROT H SWAP ( matneu nenner )
+      L3 @ 0= UNTIL
+    ( RECHENBLOCK )
+    L2 @ 0= UNTIL
+  END_LOCAL
+  ; 
+  
+
+
+
+
+( so und jetzt anwenden
+
+[ [ 3C 1E 14 ] ( dezimal 60 30 20
+  [ 1E 14 0F ] ( dezimal 30 20 15
+  [ 14 0F 0C ] ( dezimal 20 15 12
+  ] 3
+OVER O. DUP .
+INVERTIEREN
+OVER O. DUP .
+( herauskommen muss dabei
+(             [ [ F -3C 32 ] [ -3C 140 -12C ] [ 32 -12C 12C ] ] 0064
+( dezimal        15 -60 ...                                      100
+( stimmt, also Schluss für heut
