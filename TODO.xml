@@ -83,4 +83,9 @@ ok copy-of in ptable ist wohl nicht ganz korrekt... ok ist behoben
 .. noch was geht noch nicht wie es sollte: : DX 11111 ;
 .. KEY_INT zeigt noch auf Adresse 0008 statt neu 0018
 .. /usr/share/doc/git-core/contrib/workdir/git-new-workdir FORTY-FORTH_gh-pages/ FORTY-FORTH_master
+   wenn im zweiten Verzeichnis gleicher branch, 
+   dann erfolgt keine automatische Aktualisierung!!! 
+   nur branch weiter und dafür macht Index alles zurück
+   deshalb vollkommen anderen branch versuchen
+
 
