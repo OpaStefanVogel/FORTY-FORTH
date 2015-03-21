@@ -706,7 +706,7 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
         when others => A:=EXFET;
         end case;
       T:=1;
-    elsif PD=x"A014" then -- DIVISION_MIT_REST 32B/16B=16R/16Q
+    elsif PD=x"A014" then -- DI32 DIVISION_MIT_REST 32B/16B=16R/16Q
       UBIT:=C(15);
       C:=C(14 downto 0)&B(15);
       B:=B(14 downto 0)&'0';
@@ -715,9 +715,8 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
         B(0):='1';
         end if;
       T:=3;
-    elsif PD=x"A017" then -- SuperMULT I
-      --     A    B    C    D        R
-      --     D    C    B    A        R
+    elsif PD=x"A017" then -- MULT_I
+      --     D    C    B    A        stapR
       --     c    ü   adr1 adr2      i
       -- c   ü   erg1 adr2 adr1      i-1
       SUMME:=(D*EXFET)+(x"0000"&C);
@@ -726,9 +725,8 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
       C:=SUMME(15 downto 0);
       RPC<=RPCC-1; RW<='1';
       T:=4; SP:=SP+1;
-    elsif PD=x"A018" then -- SuperMULT II
-      --     A    B     C      D         R
-      --     D    C     B      A         R
+    elsif PD=x"A018" then -- MULT_II
+      --     D    C     B      A         stapR
       -- c   ü1  erg1   adr2   adr1      i-1
       -- c   ü2  adr1+1 adr2+1 i-1       i-1
       SUMME:=(D&C)+(x"0000"&EXFET);
