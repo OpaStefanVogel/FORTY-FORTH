@@ -73,10 +73,13 @@ ok weiter dann mit MATRIX INVERTIEREN ok
 ok aber diesmal ohne Bruchrechnen!
 ok auch mal die 25 MHz wieder anmach, wär nicht schlecht. ok perfekt
 ok N" 4000" geht nicht richtig??? ok inzwischen doch
-.. als nächstes mal SLX-ERGEBNIS, da war wo noch was
-   ok  im Moment sowieso ERROR - Fehler Nummer 7658, da kann nix schiefgehen.
-.. Step_0 nur für Spartan3 und nicht vivado!!! Das ist es.
 ok copy-of in ptable ist wohl nicht ganz korrekt... ok ist behoben
 .. ganz ohne Variablen?
 .. wenigstens die ab 0040 noch extra, damit readonly wieder mal geht
+.. als nächstes mal SLX-ERGEBNIS, da war wo noch was,
+   ok im Moment sowieso ERROR - Fehler Nummer 7658, da kann nix schiefgehen.
+   .. SPEICHERFREI über SPEICHERENDE hinaus noch, das hatte ich doch schon
+.. Step_0 nur für Spartan3 und nicht vivado!!! Das ist es.
+.. noch was geht noch nicht wie es sollte: : DX 11111 ;
+.. KEY_INT zeigt noch auf Adresse 0008 statt neu 0018
 
