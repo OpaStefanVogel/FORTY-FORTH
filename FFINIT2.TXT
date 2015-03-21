@@ -1,0 +1,206 @@
+
+A003 CONSTANT RETURN
+: REPLACE: ( <name > ) 
+  CSP! ( oo )
+  20 WORD FIND DUP IF 
+    LCFA DROP 1+ ( pfa
+(    HERE OVER - 1 - JRBIT XSETBT SWAP !
+    HERE SWAP DP ! DUP COMPILE, RETURN , DP !
+    1 STAT !
+    ELSE 2DROP 3 ERROR END_IF ;
+
+: FORGET ( <name > )
+  20 WORD FIND IF 
+    DP !
+    HERE DUP @ + LFA !
+    HERE 1+ @ BZEIG !
+    ELSE DROP ." nicht gefunden " END_IF
+  ;
+
+: MOVE ( adr1 adr2 n --> )
+  BEGIN DUP WHILE >R OVER @ OVER ! SWAP 1+ SWAP 1+ R> 1 - REPEAT DROP 2DROP ;
+
+: LDUMP LFA @ HERE OVER - DUMP ;
+
+: FEHLERTEXT ( n --> n )
+  CR
+  DUP 0 = IF ." Division durch Null" END_IF
+  DUP 3 = IF ." Wort nicht definiert" END_IF
+  DUP 6 = IF ." Eingabezeile zu lang" END_IF
+  DUP 9 = IF ." Strukturfehler in IF END_IF BEGIN UNTIL DO LOOP " END_IF
+  ;
+
+
+: ? @ . ;
+: ABS DUP 0< IF MINUS END_IF ;
+IMMEDIATE: () 0 WORD 2DROP ;
+: QUERY ( adr --> n ) TIB @ 100 EXPECT ;
+: B. ( a b --> ) SWAP . . ;
+: 2@ ( adr --> a b )
+  DUP 1+ @ SWAP @ ;
+: 2! ( a b adr --> )
+  SWAP OVER ! 1+ ! ;
+: 2? 2@ B. ;
+
+A012 MCODE D+
+A013 MCODE D-
+
+
+( ganz neu: Steuerungstasten: ^A bis ^G, weiter ^H=^A ^L=^B ...
+18 8 0 FILL
+: STRG: : HERE 3 - DUP . @ 1+ DUP . @ DUP . 40 - HERE SWAP 7 AND 18 + ! ;
+STRG: ^G 7 EMIT ." <1xPIEP>" ;
+STRG: ^F 7 EMIT ." QUIT" QUIT ;
+STRG: ^A ." Angehalten für genau eine Eingabezeile: " CR 3600 100 EXPECT INTERPRET ." ok";
+
+
+( INIT3P78.txt
+( alle aufgesammelten Ergänzungen allgemeiner Art:
+
+( - paar Geraeteadressen:
+D004 CONSTANT UHR
+D005 CONSTANT SWTI
+D00D CONSTANT UHRL
+2D05 CONSTANT XOFFINPUT
+
+( - "Platinen befestigen und entfernen"
+20 RAMBUF TLISTE
+TLISTE VARIABLE TLISTENZEIGER
+: TLISTY 
+  TLISTENZEIGER @ TLISTE DO 
+    I @ CR DUP . 3 - 2@ SWAP TYPE 
+    LOOP ;
+
+0 VARIABLE REMOPFA
+0 VARIABLE STATMERK
+0 VARIABLE EXXIUHR
+: EXXI
+  UHRL @ >R
+  STAT @ STATMERK ! 0 STAT ! ( eigentlich >R
+  TLISTE
+  BEGIN DUP TLISTENZEIGER @ < WHILE
+    DUP >R @ EXECUTE R> 1+ REPEAT DROP
+  STATMERK @ STAT ! 
+  UHRL @ R> - EXXIUHR ! 
+  ;
+( ' EXXI 6 1+ - 6000 OR 6 !
+' EXXI 4000 + 16 ! ( CR geht momentan +F9XX
+
+: ENTFERNE 
+  20 WORD FIND LCFA DROP 1+
+  ( DUP 0= IF 3 ERROR END_IF )
+  0 REMOPFA !
+  TLISTENZEIGER @ TLISTE > IF
+    TLISTENZEIGER @ TLISTE DO
+      DUP I @ = IF
+        1 REMOPFA !
+        -1 TLISTENZEIGER +!
+        END_IF
+      REMOPFA @ IF
+        I 1+ @ I !
+        END_IF
+      LOOP END_IF
+  REMOPFA !
+  ;
+  
+: BEFESTIGE ENTFERNE
+  REMOPFA @ TLISTENZEIGER @ !
+  1 TLISTENZEIGER +! 
+  ;
+
+
+
+
+IMMEDIATE: (*REM*) BEGIN CR QUERY " (*END*)" Z= UNTIL ; 
+
+
+: DABS ( h l --> h' l' )
+  OVER 0< IF 0 0 2SWAP D- END_IF ;
+
+
+(*REM*)
+( CASEOFS aus'm PSION:
+: CASEOFS ( n  <name> -> )
+  DUP RAMBUF
+  0 DO
+    0 I RAMP3 @ + !
+    LOOP
+  ;
+
+: CASEOF: ( fn en --> )
+  + HERE DPMERK @ - SWAP !
+  CSP! 1 STAT !
+  ;
+
+: CASEOF ( fn en --> )
+  + @ DUP IF
+    DPMERK @ + EXECUTE
+    ELSE DROP END_IF ;
+(*END*)
+
+( - CASE
+( : BIT ( i n --> bit )
+(   2 ROT DUP 0< IF 99 ERROR ELSE 
+(   ^ AND 0= 1 + END_IF ; 
+
+: (OF) ( n r i --> f r' )
+  ROT = DUP ROT OR ;
+: (RANGE-OF) ( n1 n2 r i --> f r' )
+  DUP >R ROT > ROT R> > OR 0= DUP ROT OR ;
+( : (BIT-OF) ( n r i --> f r' )
+(   ROT BIT DUP ROT OR ;
+
+IMMEDIATE: CASE ( n --> )
+  " >R 0 >R" 
+  INTERPRET ;
+IMMEDIATE: END_CASE ( --> )
+  " R> R> 2DROP" 
+  INTERPRET ;
+IMMEDIATE: OF ( n --> )
+  " R> R (OF) >R IF" 
+  INTERPRET ;              
+IMMEDIATE: RANGE-OF ( n1 n2 --> )
+  " R> R (RANGE-OF) >R IF" 
+  INTERPRET ;
+IMMEDIATE: BIT-OF ( m --> )
+  " R> R (BIT-OF) >R IF" 
+  INTERPRET ;
+IMMEDIATE: ELSEOF ( --> )
+  " R 0= IF" INTERPRET ;
+IMMEDIATE: END_OF ( --> )
+  " END_IF" INTERPRET ;
+: ERR ." keine gültige RAM-Adresse" QUIT ;
+' ERR 4000 OR 22 !
+' ERR 4000 OR 20 !
+
+IMMEDIATE: <; 0 STAT ! CSP? HERE 1 - @ 800 OR HERE 1 - ! SMUDGE [ SMUDGE ] ; 
+( : T 77 88 DROP <; 
+( ' T 8 DUMP
+( : W PAUSENBIT ! <;
+( ' W 8 DUMP
+
+
+( Ausgabe von ESCAPE-Sequenzen:
+20 WORD: ESC 1B EMIT 0 DO DUP C@ EMIT 1+ LOOP DROP ;
+ESC ]0;FORTY-FORTH 07 EMIT ( 07 EMIT schließt ]
+: FESTPOSITION ESC [s ESC [1;1H ESC [31m ; ( saveC Pos1,1 redcolor
+: RUCKPOSITION ESC [u ESC [39m ; ( restoreC defaultcolor
+
+: QUIT2 
+  RP0 @ RP !
+  BEGIN 
+    STAT @ 0= IF ESC [34m ." ok" END_IF CR ESC [39m 
+    TIB @ 100 EXPECT ESC [36m INTERPRET 
+    AGAIN ;
+
+REPLACE: QUIT QUIT2 ;
+QUIT
+
+
+: IOSTART
+  2C40 2C00 DO I @ I ! LOOP
+  2D30 2D14 DO I @ I ! LOOP
+  ;
+IOSTART
+
+0 CRBIT !

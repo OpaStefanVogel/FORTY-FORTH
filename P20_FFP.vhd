@@ -16,7 +16,12 @@ entity FortyForthProcessor is
     EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
     EMIT_ANGEKOMMEN: in STD_LOGIC;
     
-    -- nur zur Simulation und Fehlersuche:
+     -- EMIT --
+    KEY_ABGESCHICKT: in STD_LOGIC;
+    KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0);
+    KEY_ANGEKOMMEN: out STD_LOGIC;
+
+   -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     PD_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     SP_SIM: out integer;
@@ -250,12 +255,16 @@ signal FETCH_VOM_ProgRAM,FETCH_VOM_ByteRAM,FETCH_VOM_stapR: STD_LOGIC_VECTOR (15
 signal WE_ZUM_RAM,WE_ZUM_ProgRAM,WE_ZUM_ByteRAM,WE_ZUM_stapR: STD_LOGIC;
 -- fuer EMIT-Ausgabe
 signal EMIT_ABGESCHICKT_LOCAL,EMIT_ANGEKOMMEN_RUHEND,XOFF_INPUT_L: STD_LOGIC:='0';
+signal KEY_ANGEKOMMEN_LOCAL,KEY_ABGESCHICKT_RUHEND,KEY_ABGESCHICKT_MERK: STD_LOGIC:='0';
+signal KEY_BYTE_RUHEND: STD_LOGIC_VECTOR (7 downto 0);
 
 
 begin
 
 process begin wait until (CLK_I'event and CLK_I='1'); --ruhende Eingangsdaten für FortyForthprocessor
   EMIT_ANGEKOMMEN_RUHEND<=EMIT_ANGEKOMMEN;
+  KEY_BYTE_RUHEND<=KEY_BYTE;
+  KEY_ABGESCHICKT_RUHEND<=KEY_ABGESCHICKT;
   end process;
   
 
@@ -273,11 +282,18 @@ variable STAK: STD_LOGIC_VECTOR (7 downto 0);
 -- fuer Rechenoperationen mit Uebertrag
 variable U: STD_LOGIC_VECTOR (31 downto 0);
 
-begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
-  PD:=PD_VOM_ProgRAM;                                   PC_SIM<=PC;
-  PC:=PC+1;                                             PD_SIM<=PD;
-  WE:='0';                                              SP_SIM<=SP;
-  DIST:=PD(11)&PD(11)&PD(11)&PD(11)&PD(11 downto 0);
+begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
+  -- ob ein KEY aingetroffen ist --
+  if KEY_ABGESCHICKT_MERK/=KEY_ABGESCHICKT_RUHEND then 
+    KEY_ABGESCHICKT_MERK<=KEY_ABGESCHICKT_RUHEND;
+    PD:=x"4026";
+    PC:=PC;
+    else
+      PD:=PD_VOM_ProgRAM;
+      PC:=PC+1;
+      end if;                                           -- Simulation --
+  WE:='0';                                              PD_SIM<=PD;
+  DIST:=PD(11)&PD(11)&PD(11)&PD(11)&PD(11 downto 0);    SP_SIM<=SP;
   -- oberste 4 Stapeleintraege entnehmen
   R:=HOLE_VOM_STAPEL;                                   -- Simulation --
   A:=R(P(SP-1));                                        A_SIM<=A;
@@ -287,7 +303,7 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
   T:=0;
   -- Rueckkehrstapel
   RW<='0';
-
+ 
   if PD(15 downto 13)="010" then                 -- 4000-5FFF Unterprogrammaufruf
     RPC<=PC;PC:=PD and x"3FFF";RP<=RP-1;RW<='1';
     elsif PD(15 downto 12)=x"8" then PC:=PC+DIST;-- 8000-8FFF relativer Sprung
@@ -341,6 +357,7 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
         else PC:=PC-1; end if; -- warten
     elsif PD=x"A009" then -- STORE Speicheradresse beschreiben
       case A is
+        when x"D000" => KEY_ANGEKOMMEN_LOCAL<=not KEY_ANGEKOMMEN_LOCAL;
         when x"D001" => SP:=CONV_INTEGER(B);
         when x"D002" => RP<=B;
         when x"D003" => PC:=B;
@@ -350,6 +367,7 @@ begin wait until (CLK_I'event and CLK_I='0');           -- Simulation --
       SP:=SP-2;
     elsif PD=x"A00A" then -- FETCH Speicheradresse lesen
       case A is
+        when x"D000" => A:=x"00"&KEY_BYTE_RUHEND;
         when x"D001" => A:=CONV_STD_LOGIC_VECTOR(SP,16);
         when x"D002" => A:=RP;
         when x"D003" => A:=PC;
@@ -401,6 +419,7 @@ ADR_O<=ADRESSE_ZUM_RAM;
 DAT_O<=STORE_ZUM_RAM;
 WE_O<=WE_ZUM_RAM;
 EMIT_ABGESCHICKT<=EMIT_ABGESCHICKT_LOCAL;
+KEY_ANGEKOMMEN<=KEY_ANGEKOMMEN_LOCAL;
 
 -- hier werden die Lesedaten der unterschiedlichen Speicher zusammengefuehrt
 EXFET<=FETCH_VOM_ProgRAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else

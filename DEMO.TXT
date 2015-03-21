@@ -1,0 +1,76 @@
+56 89 * .
+77 88 + .
+
+( aktuelles Vokabular
+
+VLIST
+
+( nochmal mit Speicheradressen
+
+WLIST
+
+( LED's stellen, also auf Adresse 2D04 ausgeben
+
+2D04 CONSTANT LEDS
+55 LEDS !
+
+( erreichte Programmdresse in 0000-1FFF
+
+HERE .
+
+( erreichte Adresse in Textspeicher E000-FFFF
+
+BZEIG ?
+
+( aktuelle Stapelhoehe
+
+SP ?
+
+SP ?
+
+( Ein neues Wort definieren
+
+: H ." Hallo Welt " ;
+
+H
+
+( Bedingung IF
+
+: W ( n --> ) 
+  ." Das ist eine " 
+  1 AND IF ." un" END_IF 
+  ." gerade Zahl " ; 
+
+7 W
+8 W
+
+( Programmschleife
+
+: X ( n --> )
+  0 DO I . LOOP ;
+  
+13 X
+
+( oder
+
+: Y ( n -->
+  0 BEGIN DUP . 1+ 2DUP = UNTIL 2DROP ;
+
+13 Y
+
+( oder
+
+: Z ( n -->
+  0 BEGIN 2DUP > WHILE DUP . 1+ REPEAT 2DROP ;
+
+13 Z
+
+( alles aus dieser DEMO wieder vergessen
+
+HERE . BZEIG ?
+FORGET LEDS
+HERE . BZEIG ?
+
+
+
+

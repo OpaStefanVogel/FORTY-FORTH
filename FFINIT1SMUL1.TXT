@@ -1,0 +1,54 @@
+( - LOOP's
+: I RP @ 1 + @ ;
+: J RP @ 3 + @ ;
+: K RP @ 5 + @ ;
+: (DO) SWAP R> ROT ROT >R >R >R ;
+: (LOOP) R> R> 1+ DUP R < IF >R 0 
+  ELSE R> DROP DROP -1 END_IF SWAP >R ;
+: (+LOOP) R> R>  ROT DUP  0< IF + R OVER
+  ELSE + DUP R END_IF < IF >R 0 
+  ELSE R> DROP DROP -1 END_IF SWAP >R  ;
+IMMEDIATE: DO COMPILE (DO) HERE ;
+IMMEDIATE: LOOP COMPILE (LOOP) 0BRANCH, ;
+IMMEDIATE: +LOOP COMPILE (+LOOP) 0BRANCH, ;
+( : LL 0 DO I . LOOP ; 7 LL ( ok geht
+
+( - Variablen
+2F00 CONSTANT RAMP1
+RAMP1 1+ RAMP1 !
+: VARIABLE RAMP1 @ DUP CONSTANT DUP 1+ RAMP1 ! ! ;
+RAMP1 VARIABLE RAMP3 ( RAMP3 TIB RAMP1
+: RAMBUF ( <name>  n --> )
+  MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her )
+
+( : FILL ( adr n b --> )
+(  ROT ROT 0 DO 2DUP ! 1+ LOOP 2DROP ;
+: FILL ( adr n b --> )
+  ROT ROT BEGIN DUP WHILE >R 2DUP ! 1 + R> 1 - REPEAT DROP 2DROP ;
+
+
+( - noch paar hilfreiche Funktionen:
+: DUMP ( addr n --> )
+  0 DO ( CR DUP . ) DUP @ . 1+ LOOP DROP ;
+
+: VLIST
+  LFA @ BEGIN 
+    DUP 1+ @ OVER 2 + @ TYPE 20 EMIT 
+    DUP @ WHILE DUP @ + REPEAT
+  DROP ;
+
+: WLIST
+  LFA @ BEGIN ( CR ) DUP .
+    DUP 1+ @ OVER 2 + @ TYPE 20 EMIT 
+    DUP @ WHILE DUP @ + REPEAT
+  DROP
+  ;
+
+: MAX ( a b --> c )
+  2DUP < IF SWAP END_IF DROP ;
+: MIN ( a b --> c )
+  2DUP > IF SWAP END_IF DROP ;
+
+
+
+
