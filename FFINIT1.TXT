@@ -213,7 +213,7 @@ IMMEDIATE: ' ( <NAME> --> --> pfa )
 : KEY_INT ( --> )
   D000 @ 
   DUP 08 < IF 
-    8 + @ DUP IF DUP EXECUTE END_IF
+    18 + @ DUP IF DUP EXECUTE END_IF
     DROP
     ELSE
       IRAMADR @ ! 
