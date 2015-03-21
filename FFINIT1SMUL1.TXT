@@ -1,4 +1,701 @@
-( - LOOP's
+( also ich hab jetzt
+( 111111 VARIABLE MOV EDUMP MAX...
+( 222222 dann SUPERMULT SMUL
+( 333333 dann ADDIER DIV32 SDIV 
+( 444444 dann 2OPERANDEN->SLX SLX->ERGEBNIS
+( 555555 und N+ N- N* N/MOD N. 
+( 666666 dann NEBENRECHNUNG A+0
+( 777777 dann N/ NMOD NGGT NBK N. N^ N"
+( 888888 dann nochmal N. nochmal für beliebige BASE
+( 999999 -- Obj
+( - LOOP's - sind aber sehr langsam
+( 00000 Invertieren
+( und fertig erstmal
+
+
+
+
+( 111111 - Variablen
+2F00 CONSTANT RAMP1
+RAMP1 1+ RAMP1 !
+: VARIABLE RAMP1 @ DUP CONSTANT DUP 1+ RAMP1 ! ! ;
+  RAMP1 VARIABLE RAMP3 ( RAMP3 TIB RAMP1
+: RAMBUF ( <name>  n --> )
+  MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her )
+
+: MOVE ( adr1 adr2 n --> )
+  BEGIN DUP WHILE >R OVER @ OVER ! SWAP 1+ SWAP 1+ R> 1 - REPEAT DROP 2DROP ;
+: FILL ( adr n b --> )
+  ROT ROT BEGIN DUP WHILE >R 2DUP ! 1 + R> 1 - REPEAT DROP 2DROP ;
+
+
+( - noch paar hilfreiche Funktionen:
+: DUMP ( addr n --> )
+  BEGIN SWAP ( CR DUP . ) DUP @ . 1 + SWAP 1 - DUP 0= UNTIL DROP ;
+
+: MAX ( a b --> c )
+  2DUP < IF SWAP END_IF DROP ;
+: MIN ( a b --> c )
+  2DUP > IF SWAP END_IF DROP ;
+: ? @ . ;
+: ABS DUP 0< IF MINUS END_IF ;
+
+
+
+( 222222 dann SUPERMULT SMUL
+
+A017 MCODE MULT_I  ( ebenso MULT_I und MULT_II
+A018 MCODE MULT_II
+: SUPERMULT ( a u adrc adrb n --> a u' adrc' adrb' )
+  >R
+  BEGIN MULT_I MULT_II UNTIL
+  R> DROP ; ( <;>
+
+
+
+
+
+1201 CONSTANT A
+1401 CONSTANT B
+1801 CONSTANT C
+A 1FF 1111 FILL
+B 1FF 1111 FILL
+C 3FF 0000 FILL
+
+1111 0 C B 4 SUPERMULT . . . .
+C 8 DUMP
+
+
+
+
+
+: SMUL ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3)
+       ( L0 L1 L2 L3 L4 L5 L6
+  7 LOCAL
+  L6 ! L5 ! L4 ! L3 ! L2 ! L1 ! L0 !
+  L0 @ L3 @ IF NOT END_IF
+  L1 @ L4 @ + 1+
+  L6 @ OVER 0 FILL
+  L6 @ 
+  DUP L2 @ L1 @ BEGIN
+    0 2OVER @ ROT ROT L5 @ L4 @ ( ... a u  adrc  adrb n )
+    SUPERMULT                   ( ... a u' adrc' adrb' )
+    DROP ! DROP
+
+(    vorher:
+(    L4 @ 0 
+(    BEGIN OVER WHILE SWAP -1 + SWAP
+(      0 SWAP 
+(      L6 @ @ L5 @ @ L2 @ @ U* D+ 
+(      L6 @ DUP 1 + L6 ! !
+(      L5 @ 1 + L5 !
+(      REPEAT
+(    L6 @ ! DROP
+
+    ROT 1 + ROT 1 + ROT -1 + ( 1 L2 +! 1 L6 +!
+    DUP 0= UNTIL DROP 2DROP
+  END_LOCAL
+  ;
+
+C 8 0 FILL
+0 2 A 0 2 B C SMUL . . .
+C 8 DUMP
+
+C 201 0 FILL
+0 100 A 0 100 B C SMUL . . .
+C 8 DUMP
+
+C 101 0 FILL
+0 80 A 0 80 B C SMUL . . .
+C 8 DUMP
+
+( C 2001 0 FILL
+( 0 1000 A 0 1000 B C SMUL . . .
+( C 8 DUMP
+
+
+: a*a;; 
+  A 2000 111111 FILL
+  B 2000 111111 FILL
+  C 4001 000000 FILL
+  0 2000 A 0 2000 B C SMUL 7 EMIT ;
+
+
+
+
+
+
+( 333333 dann ADDIER DIV32 SDIV 
+
+: ADDIER ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3)
+         ( L0 L1 L2 L3 L4 L5 L6
+  7 LOCAL
+  L6 ! L5 ! L4 ! L3 ! L2 ! L1 ! L0 !
+  L0 @ L1 @ L4 @ MAX 1+ L6 @
+  L0 @ L3 @ = IF
+    0 L1 @ L4 @ MAX 0 BEGIN ROT
+                 ( hier ist mal ! @ gewesen!!!)
+      OVER DUP L1 @ < IF L2 @ DUP @ SWAP 1+ L2 ! ELSE 0 END_IF
+      SWAP L4 @ < IF L5 @ DUP @ SWAP 1+ L5 ! ELSE 0 END_IF
+      U+ L6 @ DUP 1+ L6 ! !
+      ROT ROT 1 + 2DUP - 0= UNTIL 2DROP L6 @ !
+    ELSE SWAP 1 - SWAP
+      1 L1 @ L4 @ MAX 0 BEGIN ROT
+        OVER DUP L1 @ < IF L2 @ DUP @ SWAP 1+ L2 ! ELSE 0 END_IF
+        SWAP L4 @ < IF L5 @ DUP @ SWAP 1+ L5 ! NOT ELSE -1 END_IF
+        U+ L6 @ DUP 1+ L6 ! !
+        ROT ROT 1 + 2DUP - 0= UNTIL 2DROP ( DUP .
+        0= IF DUP L6 !
+          ROT NOT ROT ROT
+          1 L1 @ L4 @ MAX 0 BEGIN ROT
+            0 L6 @ @ NOT U+ 
+            L6 @ DUP 1+ L6 ! !
+            ROT ROT 1 + 2DUP - 0= UNTIL 2DROP DROP
+          END_IF
+      END_IF 
+  END_LOCAL ;
+
+
+C 8 0 FILL
+0 2 A 0 2 B C ADDIER . . .
+C 8 DUMP
+
+C 8 0 FILL
+0 5 A 0 7 B C ADDIER . . .
+C 8 DUMP
+
+C 8 0 FILL
+0 7 A 0 3 B C ADDIER . . .
+C 8 DUMP
+
+A 8 FFFF FILL
+C 8 0 FILL
+0 2 A 0 2 B C ADDIER . . .
+C 8 DUMP ( 1110 1111 0001 0000
+
+
+A 8 2222 FILL
+C 8 0 FILL
+0 2 A -1 2 B C ADDIER . . .
+C 8 DUMP
+
+C 8 0 FILL
+-1 2 A 0 2 B C ADDIER . . .
+C 8 DUMP
+
+C 8 0 FILL
+0 2 B -1 2 A C ADDIER . . .
+C 8 DUMP
+
+C 8 0 FILL
+-1 2 B 0 2 A C ADDIER . . .
+C 8 DUMP
+
+
+( Divisionen
+A014 MCODE DI32 ( 
+: DIV32 ( a b d --> r q )
+  10 BEGIN >R DI32 R> 1 - DUP 0= UNTIL 2DROP ;
+(  10 DI32 ;
+: /MOD ( b d --> r q ) 0 ROT ROT DIV32 ;
+: /MOD ( a b --> r q )
+  OVER 0< IF SWAP MINUS SWAP
+    DUP 0< IF MINUS /MOD SWAP MINUS SWAP
+      ELSE /MOD MINUS SWAP MINUS SWAP END_IF
+    ELSE DUP 0< IF MINUS /MOD MINUS
+      ELSE /MOD END_IF END_IF
+  ;
+: / ( b d --> q ) /MOD SWAP DROP ;
+: MOD ( b d --> r ) /MOD DROP ;
+
+
+
+: SDIV ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3 s4 l4 r4)
+       ( L0 L1 L2 L3 L4 L5 L6
+  7 LOCAL
+  L6 ! L5 ! L4 ! L3 ! L2 ! L1 ! L0 !
+L1 @ L4 @ < IF L0 @ L1 @ L2 @ 0 0 0 ELSE
+  L1 @ 0 BEGIN
+    L2 @ OVER + @ NOT OVER L6 @ + !
+    1 + 2DUP - 0= UNTIL 2DROP
+  L6 @ L1 @ + L4 @ - L2 !
+  -1 L6 @ L1 @ + ! 1 L1 +!
+  L1 @ L4 @ - 0 BEGIN
+    L2 @ L4 @ + @ NOT
+    L2 @ L4 @ + 1 - @ NOT
+    L5 @ L4 @ + 1 - @      ( a b c )
+    DIV32 
+    SWAP DROP              ( q )
+    DUP L2 @ L4 @ + 1+ !
+    0 L2 @ L5 @ L4 @       ( c ü adrc adrb n )
+    SUPERMULT
+    2DROP SWAP DROP
+    0 L2 @ L4 @ + @ U+ L2 @ L4 @ + !
+BEGIN WHILE
+ 1 L4 @ 0 BEGIN ROT
+   OVER L2 @ OVER + @
+   SWAP L5 @ + @ NOT
+   U+ SWAP >R OVER L2 @ + ! R>
+   ROT ROT 1 + 2DUP - 0= UNTIL 2DROP
+(   0 L2 @ L4 @ + @ U+ L2 @ L4 @ + !
+(   DUP . 7 EMIT
+ -1 L2 @ L4 @ + 1+ +!
+REPEAT
+    -1 L2 +!
+    1 + 2DUP - 0= UNTIL 2DROP
+  L4 @ 0 BEGIN
+    L6 @ OVER + @ NOT OVER L6 @ + !
+    1 + 2DUP - 0= UNTIL 2DROP
+  L4 @ L6 @ 1 - !
+  L1 @ L4 @ - L6 @ L4 @ + !
+( CR ." ++" L6 @ L1 @ 1 + DUMP ." ++"
+  L0 @ L4 @ L6 @
+  L0 @ L3 @ IF NOT END_IF
+  L1 @ L4 @ -
+  L6 @ L4 @ + 1 +
+ END_IF
+  END_LOCAL
+  ;
+
+( 333333 4 N^ 10 N* VARIABLE NA
+( 333333 DUP N* 10 N* VARIABLE NB
+( NA @ 10 DUMP
+( NA @ NB @ 2OPERANDEN->2SLX OVER . DUP . SDIV
+
+654321 A !
+234567 A 1+ !
+000001 A 2 + !
+432101 B !
+A98765 B 1+ !
+
+0 3 A 0 2 B C SMUL . . .
+C 8 DUMP
+
+0 4 C 0 2 B A SDIV . . . . . .
+A 8 DUMP
+
+
+
+
+( 444444 dann 2OPERANDEN->SLX SLX->ERGEBNIS
+
+0 VARIABLE OPERAND1
+0 VARIABLE OPERAND2
+1400 VARIABLE ERGEBNIS
+1400 VARIABLE ZAHLENSPEICHER
+2000 VARIABLE SPEICHERENDE
+0 VARIABLE SCHIEB
+
+
+: SLX->ERGEBNIS ( sz lz az --> z )
+  OVER 0= IF 2DROP DROP 0 ELSE ( 0 bei 1/7
+    2DUP + BEGIN 1 - DUP @ 0= NOT UNTIL 
+    1 + OVER MAX ( sz lz az ez
+    ( DUP ERGEBNIS ! ( nicht wegen 0 1 OPERAND1
+    2DUP = IF 2DROP 2DROP 0 ELSE
+      OVER - ( sz lz az lneu
+      OVER @ C000 AND 0=
+      OVER 1 = AND IF
+        DROP @ ELSE ( warum war da -1 ERGEBNIS +!
+          OVER 1 - !
+          1 - 4000 OR
+          END_IF 
+      SWAP DROP 
+      SWAP IF MINUS END_IF
+      END_IF
+    END_IF
+  ;
+0 8 C SLX->ERGEBNIS .
+
+: OPERAND->SLX ( op --> sx lx ax )
+  DUP @ ( op x )
+  DUP 0< IF MINUS -1 ELSE 0 END_IF
+  ROT ROT ( sx op xabs )
+  DUP 4000 AND IF
+    SWAP DROP
+    3FFF AND
+    DUP @ SWAP 1+
+    ELSE
+      OVER ! 1 SWAP 
+      END_IF
+  ;
+
+77 OPERAND1 !
+OPERAND1 OPERAND->SLX . . .
+-77 OPERAND1 !
+OPERAND1 OPERAND->SLX . . .
+5800 OPERAND1 !
+OPERAND1 OPERAND->SLX . . .
+
+
+
+
+
+
+
+
+: SPEICHERHOL ( l --> addr )
+  ERGEBNIS @ 2DUP !
+  1+ 2DUP + ERGEBNIS !
+  2DUP SWAP 0 FILL
+  SWAP DROP
+ERGEBNIS @ SPEICHERENDE @ < NOT IF 7658 ERROR END_IF
+  ;
+
+
+: 2OPERANDEN->2SLX ( op1 op2 --> sx lx ax sy ly ay az )
+  OPERAND2 !
+  OPERAND1 !
+  OPERAND1 OPERAND->SLX
+  OVER >R
+  OPERAND2 OPERAND->SLX
+  OVER R> + 1+
+  SPEICHERHOL
+  ;
+
+77 88 2OPERANDEN->2SLX . . . . . . .
+77 5800 2OPERANDEN->2SLX . . . . . . .
+
+
+
+
+
+
+( 555555 und N+ N- N* N/MOD N.
+
+
+: N+ ( x y --> z )
+  2OPERANDEN->2SLX ADDIER SLX->ERGEBNIS ;
+: N- ( x y --> z )
+  MINUS N+ ;
+: N* ( x y --> z )
+  2OPERANDEN->2SLX SMUL SLX->ERGEBNIS ;
+
+
+IMMEDIATE: RECURSE LFA @ 4 + COMPILE, ;
+: N/MOD ( x y --> r q )
+  DUP 0= IF 0 ERROR END_IF
+  DUP OPERAND1 !
+  OPERAND1 OPERAND->SLX 
+  ROT DROP OVER + 1 - @ ( ly ty )
+  SWAP 1 > IF
+    1 BEGIN OVER 0< NOT WHILE 
+      SWAP DUP + SWAP DUP N+ REPEAT
+    SWAP DROP DUP SCHIEB !
+    ROT OVER N*
+    ROT ROT N*
+    ELSE DROP 1 SCHIEB ! END_IF 
+  2OPERANDEN->2SLX SDIV
+  SLX->ERGEBNIS >R 
+  SLX->ERGEBNIS R>
+  SCHIEB @ 1 - IF 
+    SWAP SCHIEB @ RECURSE SWAP DROP
+    SWAP END_IF
+  ;
+
+: HG0. ( n -->  <hexstring> )
+  0 >R
+  SHL16 DUP IF DIG EMIT R> DROP -1 >R ELSE DROP END_IF
+  SHL16 DUP R OR IF DIG EMIT R> DROP -1 >R ELSE DROP END_IF
+  SHL16 DUP R OR IF DIG EMIT ELSE DROP END_IF
+  SHL16 DIG EMIT DROP R> DROP ;
+
+: N. ( n --> ) ( erstmal nur hexadezimale Ausgabe)
+  OPERAND1 !
+  OPERAND1 OPERAND->SLX ( sx lx ax )
+  ROT IF ." -" END_IF
+  OVER + 
+  1 - DUP @ HG0. SWAP 1 - SWAP
+  BEGIN OVER WHILE 1 - DUP @ HG. SWAP 1 - SWAP REPEAT DROP
+  DROP 
+  20 EMIT
+  ;
+
+1111 1111 N* N.
+
+: NB. SWAP N. N. ;
+
+
+
+7 3 N/MOD N. N. 
+3333 DUP N* DUP N* 10 N* DUP N.
+3333 DUP N* 10 N* DUP N.
+N/MOD NB.
+3333 DUP N* N.
+
+1111 DUP N* 8 N* DUP N.
+1111 8 N* DUP N.
+N/MOD NB.
+
+1111 DUP N* DUP N.
+1111 DUP N.
+N/MOD NB.
+
+
+
+
+
+
+
+
+( 666666 dann NEBENRECHNUNG A+0
+( ------ also Zwischenergebnisse nur solange wie nötig speichern
+
+ZAHLENSPEICHER @ VARIABLE BLOCKANFANG
+ZAHLENSPEICHER @ VARIABLE BLOCKENDE
+: NEBENRECHNUNG ( --> erg ) ERGEBNIS @ ;
+: HAUPTRECHNUNG ( erg --> ) ERGEBNIS ! ;
+: RECHENBLOCK BLOCKENDE @ BLOCKANFANG !
+  ERGEBNIS @ BLOCKENDE ! ;
+: INIT ZAHLENSPEICHER @ ERGEBNIS ! RECHENBLOCK RECHENBLOCK ;
+INIT
+
+: A+0 ( a --> a+0 ) 
+  OPERAND1 !
+  OPERAND1 OPERAND->SLX
+  OVER ERGEBNIS @ 1+ SWAP MOVE
+  ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz
+  SLX->ERGEBNIS
+  ;
+: B+0 ( a b --> a+0 b+0 )
+  SWAP A+0 SWAP A+0 ;
+
+
+
+
+( 777777 dann N/ NMOD NGGT NBK N. N^ N" 
+( ------ also wo Zwischenergebnisse raus können
+
+
+: N/ ( b d --> q )
+  NEBENRECHNUNG ROT ROT 
+  N/MOD SWAP DROP
+  SWAP HAUPTRECHNUNG A+0
+  ;
+: NMOD ( b d --> r ) 
+  NEBENRECHNUNG ROT ROT 
+  N/MOD DROP 
+  SWAP HAUPTRECHNUNG A+0
+  ;
+
+: NGGT ( a b --> ggt )
+  NEBENRECHNUNG ROT ROT
+  BEGIN DUP WHILE
+    SWAP OVER NMOD REPEAT DROP 
+  SWAP HAUPTRECHNUNG A+0 ;
+: NBK ( a b --> a/ggt b/ggt ) 
+  NEBENRECHNUNG ROT ROT
+  2DUP NGGT ROT OVER N/ ROT ROT N/ 
+  ROT HAUPTRECHNUNG B+0 ;
+
+
+
+777 99 NBK NB.
+
+
+
+
+: N^ ( a n --> a^n )
+  NEBENRECHNUNG ROT ROT ( erg a n )
+  4 LOCAL
+  DUP 0< IF 12 ERROR END_IF    
+  2           ( a n 2        
+  L3 ! L2 ! L1 !    (  R1-3: a  n  2
+  1           ( p=1          a  n  2
+  BEGIN       ( p            a  n  2
+    L2 @ L3 @ ( p n 2        a  n  2
+    /MOD      ( p r n/2      a  n  2
+    L2 !      ( p r          a n/2 2
+    IF        ( p            a n/2 2
+      L1 @    ( p a          a n/2 2
+      N*      ( p*a          a n/2 2
+      END_IF  ( p*a          a n/2 2
+    L2 @      ( p*a n/2      a n/2 2
+    WHILE     ( p*a          a n/2 2
+      L1 @    ( p*a a        a n/2 2
+      L1 @    ( p*a a a      a n/2 2
+      N*      ( p*a a*a      a n/2 2
+      L1 !    ( p*a        a*a n/2 2
+      REPEAT  ( p*a        a*a n/2 2
+  END_LOCAL   ( a^n
+  SWAP HAUPTRECHNUNG A+0
+  ;           ( a^n )
+
+
+333333 2 N^ 10 N* N.
+111111 2 N^ N.
+
+
+10 20 N^ 10 10 N^ DUP -1 N+ SWAP 1 N+ N* N- N.
+
+
+( je einmal N* und N+ in NNUMBER
+: NNUMBER ( baddr n --> a faddr )
+  NEBENRECHNUNG ROT ROT
+  7 LOCAL ( L3 L4 nicht verwendet
+  L1 ! L0 !
+  0 L1 @ IF
+    DUP L2 ! 1 L5 ! ( Vorzeichen )
+    BEGIN ( M23 Vorzeichen gucken )
+      -1 L6 ! 
+      L0 @ L2 @ + C@
+      2B ( 43 2B ) = IF L2 @ 1+ L2 ! 0 L6 ! ELSE
+        L0 @ L2 @ + C@
+        2D ( 45 2D ) = IF L2 @ 1+ L2 !
+          0 L6 !
+          L5 @ MINUS L5 ! END_IF
+        END_IF
+      L6 @ UNTIL
+    L2 @ L1 @ < IF
+      BEGIN
+        L0 @ L2 @ + C@
+        DUP IF ( oo L1 auf Bytes )
+          DIGIT NOT IF DROP L1 @ MINUS L1 ! ELSE
+            SWAP BASE @ N* N+
+            L2 @ 1+ L2 ! 
+            END_IF
+          ELSE DROP L2 @ L1 ! END_IF
+        L2 @ L1 @ < NOT UNTIL
+      END_IF ( M19 )
+    END_IF ( M19 )
+  L5 @ 0< IF MINUS END_IF
+  L2 @ L1 @ - ( oo noch kein fadr !!!!!!!!!!!! siehe NNUMBER)
+  DUP IF DROP L0 @ L2 @ + END_IF ( jetzt faddr
+  END_LOCAL
+  ROT HAUPTRECHNUNG SWAP A+0 SWAP
+  ;
+
+22 WORD: N" ( <number>  --> n ) NNUMBER DROP ;
+
+
+
+( REPLACE: NUMBER NNUMBER ;
+
+N" 111111111111111" DUP N* DUP N.
+N" 111111111111111" DUP N.
+N/MOD NB.
+
+N" 0026D4346A00" DUP N.
+N" 00000FC82800" DUP N.
+2DUP N/MOD NB.
+2DUP NBK NB. 
+( richtig wäre D6A220 275 bei NBK
+( richtig wäre 3135 14 bei BK
+
+N" 00A7426290A8C945E959A780" DUP N.
+N" 000002330657FDD698" DUP N.
+N/MOD NB. 
+( richtig wäre 158B5843D5ED0 4C0CF598D2
+( und nicht   0325AF2C3F8838 4C0CF598D3
+
+( als vorlaeufigen Abschluss nochmal
+" 111111111111111" NNUMBER DROP DUP N* N.
+
+N" 000002330657FDD698" N" 4C0CF598D3" N* N.
+N" 000002330657FDD698" N" 4C0CF598D2" N* N.
+
+
+
+( 888888 dann nochmal N. doppelt!!! für DEZ
+
+
+: N. ( a -->  <zahl> )
+  BASE @ 10 = IF N. ELSE
+    NEBENRECHNUNG SWAP
+    DUP 0< IF MINUS ." -" END_IF
+    DUP 0= IF ." 0 " DROP ELSE
+      -1 SWAP ( Stapelmarkierung )
+      BEGIN DUP WHILE BASE @ N/MOD REPEAT DROP
+      BEGIN DUP 0< NOT WHILE 30 + DUP 39 > IF 7 + END_IF EMIT REPEAT
+      20 EMIT DROP END_IF
+    HAUPTRECHNUNG
+    END_IF
+  ;
+
+: NB. SWAP N. N. ;
+
+777 99 NBK NB.
+
+
+INIT
+
+( 999999 -- Obj
+
+: ZERLEG ( a --> adr i )
+  3FFF AND DUP 1+ SWAP @ ;
+
+N" 111111111111111" DUP N* DUP N.
+DUP ZERLEG SWAP . .
+
+
+: L ( a i -> b ) OVER ABS 4000 AND IF
+    SWAP ZERLEG ( i adr j
+    ROT 2DUP ( adr j i j i )
+    > IF SWAP DROP + @ ELSE 2DROP DROP 0 END_IF
+    ELSE IF DROP 0 END_IF END_IF ;
+
+N" 111111111111111" DUP N* DUP N.
+DUP 0 L .
+DUP 1 L .
+DUP 2 L .
+DUP 3 L .
+DUP 4 L .
+DUP 5 L .
+DUP 6 L .
+DUP 7 L .
+
+
+: G ( a i -> a i b ) 2DUP L ;
+: H ( a i b --> a' )
+  ROT ROT ( b a i
+  OVER 4000 AND 0= OVER 0= AND IF 2DROP ELSE
+    OVER 4000 AND 0= IF 
+      DUP 1+ SPEICHERHOL ( b a i addrneu
+      ROT OVER ! ( b i addrneu
+(      OVER 1+ OVER 1 - ! ( b i addrneu
+      DUP >R + ! R> ( addrneu
+      1 - 4000 +
+      ELSE
+        OVER ( b a i a
+        ZERLEG ( b a i addr j
+        ROT ( b a addr j i
+        2DUP > IF SWAP DROP ROT >R + ! R> ELSE
+          DUP 1+ SPEICHERHOL ( b a addr j i addrneu
+          SWAP >R DUP >R ( b a addr j addrneu      addrneu i
+          SWAP MOVE DROP R> ( b addrneu            i 
+(          R 1+ OVER 1 - ! ( b addrneu                i
+          SWAP OVER R> + ! ( addrneu
+          1 - 4000 + ( a'
+          END_IF
+(        0 SWAP ZERLEG SWAP SLX->ERGEBNIS
+        END_IF
+    END_IF
+  ;
+
+: O. ( obj --> )
+  DUP 4000 AND IF
+    ." [ "
+    ZERLEG OVER + SWAP ( eadr+1 aadr 
+    BEGIN 2DUP > WHILE DUP @ RECURSE 1 + REPEAT 2DROP
+     ." ] "
+    ELSE . END_IF
+  ;
+
+7 DUP O.
+2 9 H DUP O.
+3 11 H DUP O.
+1 4 1 6 H H DUP O.
+1 G 2 88 H H DUP O. 
+1 G 2 0 H H DUP O. 
+
+0 1 1 H ( da ist noch ein Defekt bei 0 0 7 H da macht ZERLEG Quatsch
+0 0 0 1 H 1 2 H 2 5 H H DUP O.
+1 0 0 3 H 1 4 H 2 8 H H DUP O.
+2 0 0 9 H 1 2 H 2 1 H H CR DUP O.
+
+
+
+( - LOOP's - sind aber sehr langsam
 : I RP @ 1 + @ ;
 : J RP @ 3 + @ ;
 : K RP @ 5 + @ ;
@@ -13,42 +710,87 @@ IMMEDIATE: LOOP COMPILE (LOOP) 0BRANCH, ;
 IMMEDIATE: +LOOP COMPILE (+LOOP) 0BRANCH, ;
 ( : LL 0 DO I . LOOP ; 7 LL ( ok geht
 
-( - Variablen
-2F00 CONSTANT RAMP1
-RAMP1 1+ RAMP1 !
-: VARIABLE RAMP1 @ DUP CONSTANT DUP 1+ RAMP1 ! ! ;
-RAMP1 VARIABLE RAMP3 ( RAMP3 TIB RAMP1
-: RAMBUF ( <name>  n --> )
-  MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her )
-
-( : FILL ( adr n b --> )
-(  ROT ROT 0 DO 2DUP ! 1+ LOOP 2DROP ;
-: FILL ( adr n b --> )
-  ROT ROT BEGIN DUP WHILE >R 2DUP ! 1 + R> 1 - REPEAT DROP 2DROP ;
+: DEZ 0A BASE ! ;
+: HEX 10 BASE ! ;
 
 
-( - noch paar hilfreiche Funktionen:
-: DUMP ( addr n --> )
-  0 DO ( CR DUP . ) DUP @ . 1+ LOOP DROP ;
+( 00000 Invertieren
 
-: VLIST
-  LFA @ BEGIN 
-    DUP 1+ @ OVER 2 + @ TYPE 20 EMIT 
-    DUP @ WHILE DUP @ + REPEAT
-  DROP ;
 
-: WLIST
-  LFA @ BEGIN ( CR ) DUP .
-    DUP 1+ @ OVER 2 + @ TYPE 20 EMIT 
-    DUP @ WHILE DUP @ + REPEAT
-  DROP
+100 RAMBUF B
+10 RAMBUF Y
+10 RAMBUF Z
+10 VARIABLE N
+1 VARIABLE NEUERNENNER
+1 VARIABLE ALTERNENNER
+
+: (.) ( i adr --> adr' ) + ;
+: (.,.) ( i j adr --> adr' ) + SWAP N @ * + ;
+: MAT! B (.,.) ! ;
+
+: BDISP
+  ." [ " N @ 0 DO CR ." [ " N @ 0 DO J I B (.,.) @ N. LOOP ." ] " LOOP ." ] "
   ;
 
-: MAX ( a b --> c )
-  2DUP < IF SWAP END_IF DROP ;
-: MIN ( a b --> c )
-  2DUP > IF SWAP END_IF DROP ;
+: INVERTIEREN
+  1 NEUERNENNER !
+  N @ 0 DO 
+    N @ 0 DO
+      I J B (.,.) @ I Y (.) !
+      J I B (.,.) @ I Z (.) !
+      LOOP
+    NEUERNENNER @ ALTERNENNER !
+    I Y (.) @ ALTERNENNER @ N+ I Y (.) !
+    I Z (.) @ ALTERNENNER @ N- I Z (.) !
+    I I B (.,.) @ NEUERNENNER !
+    N @ 0 DO 
+      N @ 0 DO 
+        NEBENRECHNUNG
+        J I B (.,.) @ NEUERNENNER @ N*
+        J Y (.) @ I Z (.) @ N* N-
+        ALTERNENNER @ N/
+        SWAP HAUPTRECHNUNG A+0
+        J I B (.,.) !
+        LOOP
+      LOOP
+    RECHENBLOCK
+(     CR I 1 + DUP . DUP * .
+( (    HEX
+(     ERGEBNIS @ BLOCKANFANG @ - . 
+(     SPEICHERENDE @ . ERGEBNIS @ . BDISP
+( (    DECIMAL
+(     0 0 B (.,.] @ N. ALTERNENNER @ . NEUERNENNER @ .
+    LOOP
+  BDISP
+  CR ." gemeinsamer Nenner: " NEUERNENNER @ N.
+  ; 
 
 
 
+( jetzt nix mehr programmieren, also auf Dezimal umstellen, 
+( danach noch programmieren geht garantiert schief
+
+DEZ
+
+: DEMOMATRIX
+  INIT
+  3 N !
+  60 0 0 MAT!
+  30 0 1 MAT!
+  20 0 2 MAT!
+  30 1 0 MAT!
+  20 1 1 MAT!
+  15 1 2 MAT!
+  20 2 0 MAT!
+  15 2 1 MAT!
+  12 2 2 MAT!
+  ;
+
+DEMOMATRIX BDISP
+INVERTIEREN
+
+
+( jetzt aber wieder Hexadezimal, weil es noch weiter gehen soll
+
+HEX
 

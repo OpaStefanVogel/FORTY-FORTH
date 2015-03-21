@@ -74,3 +74,109 @@ HERE . BZEIG ?
 
 
 
+
+
+
+
+
+( Also an der Stelle nach FFINIT1SMUL.TXT hab ich jetzt
+( 
+( N" ( <number>  -> n        liest bis " eine grosse ganze Zahl ein
+(                            kleine ganze Zahlen wie bisher eingeben
+( N+ N- N* N/ N/MOD NMOD N^  und rechnet damit
+( N.   a -->                 und gibt sie aus
+( NBK  a b --> a' b'         Kürzen
+( NGGT a b --> ggt           groesster gemeinsamer Teiler
+( 
+( also direkt eingeben und mit + - * / rechnen geht hier noch nicht
+
+
+
+ERGEBNIS ? ( Zahlenspeicher gefuellt bis ) 
+
+ZAHLENSPEICHER @ ERGEBNIS ! ( Zahlenspeicher leeren )
+
+ERGEBNIS ?
+
+N" 111111111111111" DUP N* N.
+
+ERGEBNIS ?
+
+( dritte binomische Formel 10^20-{10^10+1}*{10^10-1}=1 )
+10 20 N^ 10 10 N^ 1 N- 10 10 N^ 1 N+ N* N- N.
+
+ERGEBNIS ?
+
+
+( Zahlenbasis wechseln
+
+: HEX 10 BASE ! ;
+: DEZ 0A BASE ! ;
+
+N" 10000"
+DEZ DUP N.
+HEX DUP N.
+
+HEX N" 100000000"
+DEZ DUP N.
+HEX DUP N.
+
+
+
+
+( ******************************************************
+
+
+( versuchshalber mal umschalten wie ein neues Vokabular
+
+: M. . ; : M+ + ; : M- - ; : M* * ; : M/ / ;
+: . N. ; : + N+ ; : - N- ; : * N* ; : / N/ ; : ^ N^ ; 
+
+ ' NNUMBER ' NUMBER - 1 - 8000 OR ' NUMBER !
+
+111111111111111 DUP * .
+
+
+
+( an der Stelle, wenn gewünscht, Programm-VHDL-Quelltext für Step_11 ausgeben
+( HEX INIT 
+( HERE 0 0 DUMPZ           ( für progRAM
+( BZEIG @ BANF @ -1 DUMPZ    ( für byteRAM
+( 3000 2C00 0 DUMPZ        ( für stapR
+
+
+
+( jetzt nix mehr programmieren, also auf Dezimal umstellen, 
+( nach DEZ weiter programmieren, das geht garantiert schief
+
+DEZ
+
+( ganzzahlige Matrix invertieren. Gegeben ist die 3x3 Matrix
+
+(    60 30 20
+(    30 20 15
+(    20 15 12
+
+( Eingeben als
+
+INIT
+3 N !
+60 0 0 MAT!
+30 0 1 MAT!
+20 0 2 MAT!
+30 1 0 MAT!
+20 1 1 MAT!
+15 1 2 MAT!
+20 2 0 MAT!
+15 2 1 MAT!
+12 2 2 MAT!
+BDISP
+
+( dann Invertieren, Ergebnis wird gleich mit ausgegeben
+
+INVERTIEREN
+
+( war auch schon in FFINIT1SMUL.TXT: 
+
+DEMOMATRIX INVERTIEREN 
+
