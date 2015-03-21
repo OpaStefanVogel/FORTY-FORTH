@@ -158,7 +158,7 @@ FORGET LDUMP
         L5 @ L3 @ L L6 @ L4 @ L N* N-
         L7 @ N/ ( mat erg mat[L3] nenner bijneu )
         2SWAP SWAP ( mat nenner bijneu mat[L3] erg )
-        DROP ( HAUPTRECHNUNG ) SWAP ( A+0 ) ( mat nenner mat[L3] bijneu+0
+        HAUPTRECHNUNG SWAP A+0 ( mat nenner mat[L3] bijneu+0
         SWAP L4 @ ROT H ( mat nenner mat[L3]neu )
         L4 @ 0= UNTIL
       ROT L3 @ ROT H SWAP ( matneu nenner )
@@ -180,8 +180,77 @@ FORGET LDUMP
   ] 3
 OVER O. DUP .
 INVERTIEREN
-OVER O. DUP .
+OVER O. DUP N.
 ( herauskommen muss dabei
 (             [ [ F -3C 32 ] [ -3C 140 -12C ] [ 32 -12C 12C ] ] 0064
 ( dezimal        15 -60 ...                                      100
 ( stimmt, also Schluss für heut
+
+
+( paar Vandermonde-Matrizen invertieren:
+INIT
+[ [ 1 1 1 1 ]
+  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ ]
+  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ ]
+  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ ]
+  ]
+4 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( raus kommt  [ [ 480 -360 180 -48 ] [ -4E0 558 -2A0 84 ] [ 1B0 -240 150 -48 ]
+
+INIT
+[ [ 1 1 1 1 1 ]
+  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ ]
+  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ ]
+  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ ]
+  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ ]
+  ]
+5 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( raus kommt  [ [ 2A300 -2A300 ... ] ] 8700
+
+INIT
+[ [ 1 1 1 1 1 1 ]
+  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ 2 6 N^ ]
+  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ 3 6 N^ ]
+  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ 4 6 N^ ]
+  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ 5 6 N^ ]
+  [ 6 1 N^ 6 2 N^ 6 3 N^ 6 4 N^ 6 5 N^ 6 6 N^ ]
+  ]
+6 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( raus kommt  [ [ 8E62000 -B1FA800 ... ] ] 17BB000
+
+INIT
+[ [ 1 1 1 1 1 1 1 ]
+  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ 2 6 N^ 2 7 N^ ]
+  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ 3 6 N^ 3 7 N^ ]
+  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ 4 6 N^ 4 7 N^ ]
+  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ 5 6 N^ 5 7 N^ ]
+  [ 6 1 N^ 6 2 N^ 6 3 N^ 6 4 N^ 6 5 N^ 6 6 N^ 6 7 N^ ]
+  [ 7 1 N^ 7 2 N^ 7 3 N^ 7 4 N^ 7 5 N^ 7 6 N^ 7 7 N^ ]
+  ]
+7 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( raus kommt  [ [ CC65AF0000 -13298868000 ... ] ] 1D33190000
+
+INIT
+[ [ 1 1 1 1 1 1 1 1 ]
+  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ 2 6 N^ 2 7 N^ 2 8 N^ ]
+  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ 3 6 N^ 3 7 N^ 3 8 N^ ]
+  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ 4 6 N^ 4 7 N^ 4 8 N^ ]
+  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ 5 6 N^ 5 7 N^ 5 8 N^ ]
+  [ 6 1 N^ 6 2 N^ 6 3 N^ 6 4 N^ 6 5 N^ 6 6 N^ 6 7 N^ 6 8 N^ ]
+  [ 7 1 N^ 7 2 N^ 7 3 N^ 7 4 N^ 7 5 N^ 7 6 N^ 7 7 N^ 7 8 N^ ]
+  [ 8 1 N^ 8 2 N^ 8 3 N^ 8 4 N^ 8 5 N^ 8 6 N^ 8 7 N^ 8 8 N^ ]
+  ]
+8 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( raus kommt  [ [ 8FB77F0C000000 -FB811E55000000 ... ] ] 11F6EFE1800000
+
+( mehr geht erstmal nicht weil nicht mehr Platz
