@@ -29,9 +29,6 @@ A003 CONSTANT RETURN
     ELSE DROP ." nicht gefunden " END_IF
   ;
 
-: MOVE ( adr1 adr2 n --> )
-  BEGIN DUP WHILE >R OVER @ OVER ! SWAP 1+ SWAP 1+ R> 1 - REPEAT DROP 2DROP ;
-
 : LDUMP LFA @ HERE OVER - DUMP ;
 
 : FEHLERTEXT ( n --> n )
@@ -61,7 +58,7 @@ A013 MCODE D-
 : STRG: : HERE 3 - DUP . @ 1+ DUP . @ DUP . 40 - HERE SWAP 7 AND 18 + ! ;
 STRG: ^G 7 EMIT ." <1xPIEP>" ;
 STRG: ^F 7 EMIT ." QUIT" QUIT ;
-STRG: ^A ." Angehalten für genau eine Eingabezeile: " CR 3600 100 EXPECT INTERPRET ." ok";
+STRG: ^A ." Angehalten für genau eine Eingabezeile: " CR FA00 100 EXPECT INTERPRET ." ok";
 
 
 ( INIT3P78.txt

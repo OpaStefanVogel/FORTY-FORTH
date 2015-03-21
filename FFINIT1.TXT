@@ -14,9 +14,11 @@
 ( und schließlich DUMPY
 ( SPOOL.TXT-->Pxx.vhd
 
+( zuerst alles moegliche wieder auf Ausgangszustand schalten
 ( -1 2C23 ! ( schaltet RX_ aus !!!
-DPMERK @ DP ! BANF @ BZEIG ! -1 CRBIT !
 2 2 * DUP * BASE ! ( HEX )
+1B EMIT 5B EMIT 33 EMIT 39 EMIT 6D EMIT ( Farben aus
+DPMERK @ DP ! BANF @ BZEIG ! -1 CRBIT !
 7 ' NUMBER ! ( original NUMBER wieder an
 8000 16 ! ( EXXI ausschalten
 ' DUMPZ 4 - LFA ! ( zurueck auf Anfangsvokabular
@@ -211,7 +213,7 @@ IMMEDIATE: ' ( <NAME> --> --> pfa )
 : KEY_INT ( --> )
   D000 @ 
   DUP 08 < IF 
-    8 + @ DUP IF DUP EXECUTE END_IF
+    18 + @ DUP IF DUP EXECUTE END_IF
     DROP
     ELSE
       IRAMADR @ ! 
@@ -432,6 +434,7 @@ START
 
 
 ( INIT2P78.txt
+1B EMIT 5B EMIT 33 EMIT 39 EMIT 6D EMIT ( Farben nochmal aus
 -1 CRBIT !
 
 ( erste Forth Erweiterungen
