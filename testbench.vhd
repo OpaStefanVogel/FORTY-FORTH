@@ -56,7 +56,7 @@ signal KEY_ABGESCHICKT: STD_LOGIC:='0';
 signal KEY_BYTE: STD_LOGIC_VECTOR (7 downto 0);
 signal KEY_ANGEKOMMEN: STD_LOGIC:='0';
 
-type TEXTTYPE is array(0 to 1024) of STD_LOGIC_VECTOR (7 downto 0);
+type TEXTTYPE is array(0 to 8*1024) of STD_LOGIC_VECTOR (7 downto 0);
 -- Programmspeicher 0000H-1FFFH
 signal TEXT: TEXTTYPE:=(
   -- Anfang abwarten
@@ -72,8 +72,15 @@ signal TEXT: TEXTTYPE:=(
   -- nochmal 56 89 * .
   x"35",x"36",x"20",x"38",x"39",x"20",x"2A",x"20",x"2E",x"0A",
   -- DEMOMATRIX INVERTIEREN
-  x"44",x"45",x"4D",x"4F",x"4D",x"41",x"54",x"52",x"49",x"58",x"20",
-  x"49",x"4E",x"56",x"45",x"52",x"54",x"49",x"45",x"52",x"45",x"4E",x"0A",
+  x"5B",x"20",x"0A",
+  x"5B",x"20",x"31",x"20",x"31",x"20",x"31",x"20",x"31",x"20",x"5D",x"0A",
+  x"5B",x"20",x"32",x"20",x"34",x"20",x"38",x"20",x"31",x"36",x"20",x"5D",x"0A",
+  x"5B",x"20",x"33",x"20",x"39",x"20",x"32",x"37",x"20",x"38",x"31",x"20",x"5D",x"0A",
+  x"5B",x"20",x"34",x"20",x"31",x"36",x"20",x"36",x"34",x"20",x"32",x"35",x"36",x"20",x"5D",x"0A",
+  x"5D",x"20",x"0A",
+  x"34",x"20",x"49",x"4E",x"56",x"45",x"52",x"54",x"49",x"45",x"52",x"45",x"4E",x"0A",
+  x"4F",x"56",x"45",x"52",x"20",x"4F",x"2E",x"0A",
+  x"44",x"55",x"50",x"20",x"2E",x"0A",
   others=>x"00");
 
 

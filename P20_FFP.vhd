@@ -350,7 +350,7 @@ x"475F",x"437C",x"A003",x"FFFA",x"E813",x"0002",x"475F",x"A007",x"A003",x"FFFA",
 x"E819",x"0002",x"475F",x"42C7",x"A003",x"FFFA",x"E81C",x"0002",x"475F",x"4A03",x"A003",x"FFFA",x"E81F",x"0001",x"475F",x"4DE6", -- 1350-135F 
 x"A003",x"FFFA",x"E821",x"0001",x"475F",x"4BC8",x"A003",x"FFFA",x"E823",x"0001",x"475F",x"4BD0",x"A003",x"FFFA",x"E825",x"0001", -- 1360-136F 
 x"475F",x"4BD7",x"A003",x"FFFA",x"E827",x"0001",x"475F",x"4CE0",x"A003",x"FFFA",x"E829",x"0001",x"475F",x"4D20",x"A003",x"0000", -- 1370-137F
-  others=>x"0000");
+others=>x"0000");
 
 -- Textspeicher
 type ByteRAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (7 downto 0);
@@ -554,8 +554,8 @@ x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",
 x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2FC0-2FCF 
 x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"02ED",x"02ED",x"02ED",x"0083",x"02B5",x"02ED",x"02ED", -- 2FD0-2FDF 
 x"02ED",x"02ED",x"02ED",x"02ED",x"02ED",x"02ED",x"0402",x"0402",x"0000",x"0001",x"02ED",x"0083",x"02ED",x"02ED",x"0659",x"02ED", -- 2FE0-2FEF 
-x"0083",x"02ED",x"02ED",x"02ED",x"0083",x"0334",x"035B",x"020C",x"02A8",x"07DB",x"0702",x"FB0D",x"FB07",x"FB00",x"FB00",x"1312", -- 2FF0-2FFF 
-  others=>x"0000");
+x"0083",x"02ED",x"02ED",x"02ED",x"0083",x"0334",x"035B",x"020C",x"02A8",x"07DB",x"0702",x"FB0D",x"FB07",x"FB00",x"FB00",x"1312", -- 2FF0-2FFF
+  others=>x"0000");
 
 --diese Funktion übernimmt von SP nur die beiden niedrigsten Bits
   function P(SP : integer) return integer is begin
