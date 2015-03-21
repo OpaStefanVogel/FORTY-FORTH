@@ -2,13 +2,13 @@ ok am Anfang doch gleich vivado ohne -mode tcl
 ok noch diff-Verweis zu GitHub machen ok, perfekt als <diff></diff>
 .. FLOAT die Stapeldiagramme
 ok den epiphany - Fehler ok war eigener Fehler
-.. ja und natürlich unbedingt Kleinerzeichen in &x...; oder ganz raus
+o. ja und natürlich unbedingt Kleinerzeichen in &x...; oder ganz raus
 .. Ergebnis auch noch als Tabelle mit xml
 .. nach P11 dann Vivado ausdrehen
 o. eventuell PC, PD als Signal, ist weniger % aber läuft schlecht, such warum
 nö oder RP mit als Variable nö, deutlich mehr %
 ok alle CONV_UNSIGNED wieder in STD_LOGIC_VECTOR machen ok ist schon
-.. ob 0-0FFF oder 1FFF, ebenso E000-EFFF oder FFFF
+nö ob 0-0FFF oder 1FFF, ebenso E000-EFFF oder FFFF nö eventuell bei P21
 nö write-first oder UNCHANGED...nö, dann macht ISE 109%
 ok vorherige Simulation bereits in Tcl-Console beenden ok
 .. stapR und stapRAM besser unterscheiden
@@ -87,5 +87,27 @@ ok KEY_INT zeigt noch auf Adresse 0008 statt neu 0018 ok jetzt 0018
    dann erfolgt keine automatische Aktualisierung!!! 
    nur branch weiter und dafür macht Index alles zurück
    deshalb vollkommen anderen branch versuchen
+.. so, wenn jetzt "<" reinkommt, was muss da alles mit gleich geschehen
+   ok jede Menge < wegen < 0< und <name> <text> umschreiben in LT 0LT ok
+   ok automatisch jede Restzeile beginnend mit &lt; als Kommentar überlesen???
+      oder echt jedes Wort ab < bis > überlesen???
+      oder < als Zeilenende nehmen??? ja das
+   .. wenn alles drin das neue INVERTIEREN hinzupacken ohne DO LOOP
+   .. und neues R11 dazu mit Vandermonde
+   .. dann auch Log-File endlich
 
+Script hierzu von FFINIT1.TXT zu FFINIT1NEU.TXT:
 
+7aa6afde6f2ca
+cp FFINIT1.TXT /dev/ttyAMA0
+echo ': LT < ; : 0LT 0< ; ' >/dev/ttyAMA0 # macht aus < 0< neu \ und 0\
+echo 'HERE 100 + DPMERK ! E800 BANF !' >/dev/ttyAMA0
+cp FFINIT1NEU.TXT /dev/ttyAMA0
+cp FFINIT1NEU.TXT /dev/ttyAMA0
+echo '058 DPMERK ! E000 BANF !' >/dev/ttyAMA0
+cp FFINIT1NEU.TXT /dev/ttyAMA0
+cp FFINIT1NEU.TXT /dev/ttyAMA0
+( screen ^A H Logfile starten
+echo "HERE 0 0 DUMPZ" >/dev/ttyAMA0          # generiert ProgRAM Step_10
+echo "BZEIG @ BANF @ -1 DUMPZ" >/dev/ttyAMA0 # generiert ByteRAM Step_10
+( screen ^A H Logfile beenden
