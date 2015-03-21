@@ -12,7 +12,7 @@
   ;
 
 A003 CONSTANT RETURN
-: REPLACE: ( <name > ) 
+: REPLACE: ( /name/ ) 
   CSP! ( oo )
   20 WORD FIND DUP IF 
     LCFA DROP 1+ ( pfa
@@ -21,7 +21,7 @@ A003 CONSTANT RETURN
     1 STAT !
     ELSE 2DROP 3 ERROR END_IF ;
 
-: FORGET ( <name > )
+: FORGET ( /name/ )
   20 WORD FIND IF 
     DP !
     HERE DUP @ + LFA !
@@ -30,6 +30,21 @@ A003 CONSTANT RETURN
   ;
 
 : LDUMP LFA @ HERE OVER - DUMP ;
+
+( - LOOP's - sind aber sehr langsam
+: I RP @ 1 + @ ;
+: J RP @ 3 + @ ;
+: K RP @ 5 + @ ;
+: (DO) SWAP R> ROT ROT >R >R >R ;
+: (LOOP) R> R> 1+ DUP R LT IF >R 0 
+  ELSE R> DROP DROP -1 END_IF SWAP >R ;
+: (+LOOP) R> R>  ROT DUP  0LT IF + R OVER
+  ELSE + DUP R END_IF LT IF >R 0 
+  ELSE R> DROP DROP -1 END_IF SWAP >R  ;
+IMMEDIATE: DO COMPILE (DO) HERE ;
+IMMEDIATE: LOOP COMPILE (LOOP) 0BRANCH, ;
+IMMEDIATE: +LOOP COMPILE (+LOOP) 0BRANCH, ;
+( : LL 0 DO I . LOOP ; 7 LL ( ok geht
 
 : FEHLERTEXT ( n --> n )
   CR
@@ -56,7 +71,7 @@ A013 MCODE D-
 ( ganz neu: Steuerungstasten: ^A bis ^G, weiter ^H=^A ^L=^B ...
 18 8 0 FILL
 : STRG: : HERE 3 - DUP . @ 1+ DUP . @ DUP . 40 - HERE SWAP 7 AND 18 + ! ;
-STRG: ^G 7 EMIT ." <1xPIEP>" ;
+STRG: ^G 7 EMIT ." /1xPIEP/" ;
 STRG: ^F 7 EMIT ." QUIT" QUIT ;
 STRG: ^A ." Angehalten für genau eine Eingabezeile: " CR FA00 100 EXPECT INTERPRET ." ok";
 
@@ -74,9 +89,9 @@ D00D CONSTANT UHRL
 20 RAMBUF TLISTE
 TLISTE VARIABLE TLISTENZEIGER
 : TLISTY 
-  TLISTENZEIGER @ TLISTE DO 
-    I @ CR DUP . 3 - 2@ SWAP TYPE 
-    LOOP ;
+  TLISTENZEIGER @ TLISTE BEGIN 
+    DUP @ CR DUP . 3 - 2@ SWAP TYPE 
+    1 + 2DUP = UNTIL 2DROP ;
 
 0 VARIABLE REMOPFA
 0 VARIABLE STATMERK
@@ -85,7 +100,7 @@ TLISTE VARIABLE TLISTENZEIGER
   UHRL @ >R
   STAT @ STATMERK ! 0 STAT ! ( eigentlich >R
   TLISTE
-  BEGIN DUP TLISTENZEIGER @ < WHILE
+  BEGIN DUP TLISTENZEIGER @ LT WHILE
     DUP >R @ EXECUTE R> 1+ REPEAT DROP
   STATMERK @ STAT ! 
   UHRL @ R> - EXXIUHR ! 
@@ -122,12 +137,12 @@ IMMEDIATE: (*REM*) BEGIN CR QUERY " (*END*)" Z= UNTIL ;
 
 
 : DABS ( h l --> h' l' )
-  OVER 0< IF 0 0 2SWAP D- END_IF ;
+  OVER 0LT IF 0 0 2SWAP D- END_IF ;
 
 
 (*REM*)
 ( CASEOFS aus'm PSION:
-: CASEOFS ( n  <name> -> )
+: CASEOFS ( n  /name/ --> )
   DUP RAMBUF
   0 DO
     0 I RAMP3 @ + !
@@ -147,7 +162,7 @@ IMMEDIATE: (*REM*) BEGIN CR QUERY " (*END*)" Z= UNTIL ;
 
 ( - CASE
 ( : BIT ( i n --> bit )
-(   2 ROT DUP 0< IF 99 ERROR ELSE 
+(   2 ROT DUP 0LT IF 99 ERROR ELSE 
 (   ^ AND 0= 1 + END_IF ; 
 
 : (OF) ( n r i --> f r' )
@@ -180,10 +195,10 @@ IMMEDIATE: END_OF ( --> )
 ' ERR 4000 OR 22 !
 ' ERR 4000 OR 20 !
 
-IMMEDIATE: <; 0 STAT ! CSP? HERE 1 - @ 800 OR HERE 1 - ! SMUDGE [ SMUDGE ] ; 
-( : T 77 88 DROP <; 
+IMMEDIATE: /; 0 STAT ! CSP? HERE 1 - @ 800 OR HERE 1 - ! SMUDGE [ SMUDGE ] ; 
+( : T 77 88 DROP /; 
 ( ' T 8 DUMP
-( : W PAUSENBIT ! <;
+( : W PAUSENBIT ! /;
 ( ' W 8 DUMP
 
 
