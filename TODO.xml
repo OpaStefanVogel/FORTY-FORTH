@@ -82,4 +82,5 @@ ok copy-of in ptable ist wohl nicht ganz korrekt... ok ist behoben
 .. Step_0 nur für Spartan3 und nicht vivado!!! Das ist es.
 .. noch was geht noch nicht wie es sollte: : DX 11111 ;
 .. KEY_INT zeigt noch auf Adresse 0008 statt neu 0018
+.. /usr/share/doc/git-core/contrib/workdir/git-new-workdir FORTY-FORTH_gh-pages/ FORTY-FORTH_master
 
