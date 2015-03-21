@@ -13,7 +13,7 @@ nö write-first oder UNCHANGED...nö, dann macht ISE 109%
 ok vorherige Simulation bereits in Tcl-Console beenden ok
 .. stapR und stapRAM besser unterscheiden
 ok SP mod 4 mal versuchen
-.. auch die libarys mal neu sondieren was nötig und was richtig
+.. auch die librarys mal neu sondieren was nötig und was richtig
 .. Verweis auf Zoomtasten
 nö P01_top kann vorerst raus, 2D04 mit in testbench nö
 ok SP_SIM kann wieder unter PD_SIM in den Ports
@@ -45,7 +45,7 @@ ok in RXD noch STRG umsetzen auf nach dbInput, aber wie? aha mit STRG_2
 .. na vielleicht doch ein kleiner Minifehler bei /section//div/ statt /span/
 ok FFPINIT1.TXT und 2 gehören in master mit rein ok
 ok alle .xml auch so anordnen, dass sie ohne xslt lesbar sind. ok
-.. auch noch einen Weiterhupf
+ok auch noch einen Weiterhupf ok svg-Kreis
 .. README.md dann auch mit vorrichten
 ok das .ucf File auch noch weng zurechtmachen. ok
 ok colorisierte Ausgabe --- in FFINIT2.TXT mit reinmach erstmal ok
@@ -69,7 +69,7 @@ ok das fertige FFINIT1SMUL1+FFINIT2 muss sich auch recompilieren lassen
 .. ganz interessant wäre auch design summary mit zu Step_1 bis 11.
 ok davor NEBENRECHNUNG noch
 ok weiter dann mit MATRIX INVERTIEREN ok 
-.. aber noch nicht mit O.
+ok aber noch nicht mit O. ok jetzt doch
 ok aber diesmal ohne Bruchrechnen!
 ok auch mal die 25 MHz wieder anmach, wär nicht schlecht. ok perfekt
 ok N" 4000" geht nicht richtig??? ok inzwischen doch
@@ -81,7 +81,7 @@ ok copy-of in ptable ist wohl nicht ganz korrekt... ok ist behoben
    .. SPEICHERFREI über SPEICHERENDE hinaus noch, das hatte ich doch schon
 .. Step_0 nur für Spartan3 und nicht vivado!!! Das ist es.
 .. noch was geht noch nicht wie es sollte: : DX 11111 ;
-.. KEY_INT zeigt noch auf Adresse 0008 statt neu 0018
+ok KEY_INT zeigt noch auf Adresse 0008 statt neu 0018 ok jetzt 0018
 .. /usr/share/doc/git-core/contrib/workdir/git-new-workdir FORTY-FORTH_gh-pages/ FORTY-FORTH_master
    wenn im zweiten Verzeichnis gleicher branch, 
    dann erfolgt keine automatische Aktualisierung!!! 
