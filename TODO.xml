@@ -82,32 +82,19 @@ ok copy-of in ptable ist wohl nicht ganz korrekt... ok ist behoben
 .. Step_0 nur für Spartan3 und nicht vivado!!! Das ist es.
 .. noch was geht noch nicht wie es sollte: : DX 11111 ;
 ok KEY_INT zeigt noch auf Adresse 0008 statt neu 0018 ok jetzt 0018
-.. /usr/share/doc/git-core/contrib/workdir/git-new-workdir FORTY-FORTH_gh-pages/ FORTY-FORTH_master
+ok /usr/share/doc/git-core/contrib/workdir/git-new-workdir FORTY-FORTH_gh-pages/ FORTY-FORTH_master
    wenn im zweiten Verzeichnis gleicher branch, 
    dann erfolgt keine automatische Aktualisierung!!! 
    nur branch weiter und dafür macht Index alles zurück
    deshalb vollkommen anderen branch versuchen
-.. so, wenn jetzt "<" reinkommt, was muss da alles mit gleich geschehen
+o. so, wenn jetzt "<" reinkommt, was muss da alles mit gleich geschehen
    ok jede Menge < wegen < 0< und <name> <text> umschreiben in LT 0LT ok
    ok automatisch jede Restzeile beginnend mit &lt; als Kommentar überlesen???
       oder echt jedes Wort ab < bis > überlesen???
       oder < als Zeilenende nehmen??? ja das
-   .. wenn alles drin das neue INVERTIEREN hinzupacken ohne DO LOOP
-   .. und neues R11 dazu mit Vandermonde
+   ok wenn alles drin das neue INVERTIEREN hinzupacken ohne DO LOOP
+   ok jetzt aber erstmal alles in einem INIT.xml, das sieht schon ganz gut aus
+   o. und neues R11 dazu mit Vandermonde
    .. dann auch Log-File endlich
-
-Script hierzu von FFINIT1.TXT zu FFINIT1NEU.TXT:
-
-7aa6afde6f2ca
-cp FFINIT1.TXT /dev/ttyAMA0
-echo ': LT < ; : 0LT 0< ; ' >/dev/ttyAMA0 # macht aus < 0< neu \ und 0\
-echo 'HERE 100 + DPMERK ! E800 BANF !' >/dev/ttyAMA0
-cp FFINIT1NEU.TXT /dev/ttyAMA0
-cp FFINIT1NEU.TXT /dev/ttyAMA0
-echo '058 DPMERK ! E000 BANF !' >/dev/ttyAMA0
-cp FFINIT1NEU.TXT /dev/ttyAMA0
-cp FFINIT1NEU.TXT /dev/ttyAMA0
-( screen ^A H Logfile starten
-echo "HERE 0 0 DUMPZ" >/dev/ttyAMA0          # generiert ProgRAM Step_10
-echo "BZEIG @ BANF @ -1 DUMPZ" >/dev/ttyAMA0 # generiert ByteRAM Step_10
-( screen ^A H Logfile beenden
+   .. aber ESCAPE verträgt sich überhaupt nicht mit xml
+.. bei [ ] muss noch die Doppelverwendung raus.
