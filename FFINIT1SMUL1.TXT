@@ -721,8 +721,6 @@ DUP ZERLEG SWAP . .
 ( 00000 Invertieren
 
 
-HEX
-
 0 VARIABLE SPMERK
 : [ ( ---> spmerk )
   SPMERK @ SP @ SPMERK !

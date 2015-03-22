@@ -3,6 +3,7 @@
 ( deshalb muss ich das jetzt mühsam rückgängig machen:
 
 ( nach RESET zuerst FFINIT.TXT und FFINIT1SMUL1.TXT neu laden oder
+2 2 * DUP * BASE ! ( HEX )
 7 ' NUMBER !
 18 ' KEY_INT 6 + ! ( repariert KEY_INT
 RP0 ' QUIT ! A00A ' QUIT 1 + !
