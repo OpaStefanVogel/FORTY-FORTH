@@ -1,0 +1,77 @@
+INIT { 
+  white-space: pre-wrap;
+  font-family:monospace;
+  font-size: 110%;
+  }
+
+AXIOME {
+  display: inline-block;
+  border:solid;
+  }
+
+sekt {
+  display: inline-block;
+  border:solid;
+  margin: 5px;
+  padding: 10px;
+  }
+
+.VorSekt {
+  background-color: yellow;
+  }
+
+
+
+
+
+.section { 
+  font-family:monospace;
+  #white-space: pre-wrap; 
+  }
+
+table { #white-space: nowrap;
+  }
+
+code { font-family:monospace; 
+       font-size: 110%; 
+       #border: solid;
+       }
+
+.ffterm {
+  display: inline-block;
+  white-space: pre-wrap; 
+  padding: 4px;
+  margin-left: 2px;
+  border: solid;
+  background-color: lightyellow;
+  min-width: 300px;
+  min-height: 120px;
+  color: #069; # wie header h1
+  #border-color: blue;
+  border-width: 1px;
+  border-radius: 4px;
+  }
+  
+.Nutzereingabe {
+  color: black;
+  background-color: Moccasin;
+  #border: solid;
+  }
+
+.zurueck {
+  float:right;
+  }
+
+.zuruecktext {
+  vertical-align: top ;
+  }
+
+.pr { 
+  white-space: pre-wrap; 
+  }
+
+.Terminal {
+  white-space: nowrap;
+  list-style-type: none;
+  }
+
