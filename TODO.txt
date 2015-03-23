@@ -2,7 +2,8 @@ ok am Anfang doch gleich vivado ohne -mode tcl
 ok noch diff-Verweis zu GitHub machen ok, perfekt als <diff></diff>
 .. FLOAT die Stapeldiagramme
 ok den epiphany - Fehler ok war eigener Fehler
-o. ja und natürlich unbedingt Kleinerzeichen in &x...; oder ganz raus
+ok ja und natürlich unbedingt Kleinerzeichen in &x...; oder ganz raus
+.. für die ">" auch noch was anderes...
 .. Ergebnis auch noch als Tabelle mit xml
 .. nach P11 dann Vivado ausdrehen
 o. eventuell PC, PD als Signal, ist weniger % aber läuft schlecht, such warum
@@ -49,7 +50,7 @@ ok auch noch einen Weiterhupf ok svg-Kreis
 .. README.md dann auch mit vorrichten
 ok das .ucf File auch noch weng zurechtmachen. ok
 ok colorisierte Ausgabe --- in FFINIT2.TXT mit reinmach erstmal ok
-.. na inzwischen kann auch das pre-wrap allmählich ganz raus
+.. na inzwischen kann auch das pre-wrap allmählich ganz raus, naja es wird immer mal gebraucht
 nö ProgRAM aus P20.vhd herausziehen damit unterschiedlich machbar??? nö lieber nicht
 ok aber in DUMPZ < NOT statt = damit HERE 0 0 DUMPZ zu machen geht ok
 .. was auch nicht geht, letztes <p> in R10 vor <Terminal_1> hinsetzen
@@ -60,11 +61,11 @@ ok bei SMUL und so díe DO LOOP noch in BEGIN UNTIL umschreiben, oje
    da lieber doch ein schnelles DO LOOP, ich hab ja schon RAMB
    ok habs geschafft, das ist die Wucht
 nö das 1. TEST wieder nur als Variante und gleich mit FF starten nö
-.. logfile auch mit xml!!!
+ok logfile auch mit xml!!! ok ist da, gut geworden
 ok das fertige FFINIT1SMUL1+FFINIT2 muss sich auch recompilieren lassen
    das ist momentan noch eine knifflige Einschränkung, wie machen?
    ok auch wenn DEZ eingestellt geht alle schief
-.. aber nochmal gründlich durchgucken
+ok aber nochmal gründlich durchgucken ok isT jetzt gemacht mit screenlog.xml
 .. Bahn ist frei für massives Umstapeln in SDIV und so.
 .. ganz interessant wäre auch design summary mit zu Step_1 bis 11.
 ok davor NEBENRECHNUNG noch
@@ -75,19 +76,19 @@ ok auch mal die 25 MHz wieder anmach, wär nicht schlecht. ok perfekt
 ok N" 4000" geht nicht richtig??? ok inzwischen doch
 ok copy-of in ptable ist wohl nicht ganz korrekt... ok ist behoben
 .. ganz ohne Variablen?
-.. wenigstens die ab 0040 noch extra, damit readonly wieder mal geht
+.. wenigstens die ab 0040 noch extra, damit readonly wieder mal geht, VARIABLE gleich bei CONSTANT mit
 .. als nächstes mal SLX-ERGEBNIS, da war wo noch was,
-   ok im Moment sowieso ERROR - Fehler Nummer 7658, da kann nix schiefgehen.
+   ok im Moment sowieso ERROR - Fehler Nummer 0369, da kann nix schiefgehen.
    .. SPEICHERFREI über SPEICHERENDE hinaus noch, das hatte ich doch schon
 .. Step_0 nur für Spartan3 und nicht vivado!!! Das ist es.
-.. noch was geht noch nicht wie es sollte: : DX 11111 ;
+o. noch was geht noch nicht wie es sollte: : DX 11111 ; ist erstmal 1234 ERROR.
 ok KEY_INT zeigt noch auf Adresse 0008 statt neu 0018 ok jetzt 0018
 ok /usr/share/doc/git-core/contrib/workdir/git-new-workdir FORTY-FORTH_gh-pages/ FORTY-FORTH_master
    wenn im zweiten Verzeichnis gleicher branch, 
    dann erfolgt keine automatische Aktualisierung!!! 
    nur branch weiter und dafür macht Index alles zurück
    deshalb vollkommen anderen branch versuchen
-o. so, wenn jetzt "<" reinkommt, was muss da alles mit gleich geschehen
+ok so, wenn jetzt "<" reinkommt, was muss da alles mit gleich geschehen
    ok jede Menge < wegen < 0< und <name> <text> umschreiben in LT 0LT ok
    ok automatisch jede Restzeile beginnend mit &lt; als Kommentar überlesen???
       oder echt jedes Wort ab < bis > überlesen???
@@ -95,6 +96,51 @@ o. so, wenn jetzt "<" reinkommt, was muss da alles mit gleich geschehen
    ok wenn alles drin das neue INVERTIEREN hinzupacken ohne DO LOOP
    ok jetzt aber erstmal alles in einem INIT.xml, das sieht schon ganz gut aus
    o. und neues R11 dazu mit Vandermonde
-   .. dann auch Log-File endlich
-   .. aber ESCAPE verträgt sich überhaupt nicht mit xml
-.. bei [ ] muss noch die Doppelverwendung raus.
+   ok dann auch Log-File endlich, ja das wird jetzt ok
+   ok aber ESCAPE verträgt sich überhaupt nicht mit xml, aha CSI nehmen wenn überhaupt
+ok bei [ ] muss noch die Doppelverwendung raus. ok ist jetzt { } solange geht
+ok die /diff/ ab Step_10 rausmach weil nicht funktioniert wegen zuviel Ausgabe.
+ok vom Prinzip her gehören INIT.xml und screenlog.xml mit in Step_xx rein,
+       das muss zusammen mit P20.vhd alles in sich stimmig sein
+       deshalb nicht mit in gh.pages.
+       ok ich mach jetzt so eine Konstellation in master.
+ok da stimmt doch JR 8000 bei DIST > 800 nicht???? ok ja mehr ist gar nicht vorgesehen, jetzt REPLACE:
+.. mal alle !!!aufsammel weng: SP, JR, ! @, DP max 1400, xml am Zeilenanfang,INTERRU.
+ok uff CRBIT ist raus!!! ok
+ok wieso ist IRAMADR ungleich JRAMADR ? aha wegen cp, da ist ganze Menge Vorlauf ok DUMPZ
+ok mal schauen, ob ich absolut leere /ok/ok/ wegbekomme, vorallem bei /xml/ ok ja klar
+nö einen extra Zweig für nicht mehr benötigte Funktionen, nö, extra sekt.
+.. mal schauen ob anstelle x"0123" auch adr=>x"0123" geht in stapR
+ok O. auch mit in . packen, ok das ist aber praktisch.
+ok jetzt ist das Ausgabeformat umschaltbar zwischen ok und <ok></ok> für screenlog.0 
+ok die ganzen offenen Klammern ( endlich mal schließen ... so ) 
+ok wie das XMLBIT benennen? XBIT einfach nur. ok
+ok DEZ heißt eigentlich DECIMAL in Step_11
+.. durchaus auch andere Browser mal versuchen
+ok testbench.vhd jetzt mit "56 89 * ." statt x"35",x"36"...
+ok ich lasse FFINIT1NEU.txt und FFINIT2NEU.txt jetzt zusätzlich drin für neue Sachen, weniger --amend's
+ok CSI C2 9B geht ja nur in screen, also alles wieder auf ESCAPE umstellen. ok
+.. FFINIT1.txt muss die aktuelle auf dem Spartan3 gespeicherte Version halten!!!
+
+
+solange S3 nicht neu programmiert ist, ein Skript zur Erstellung von ... aus ..:
+###!!! wenn es ab hier losgehen soll wegen neuer AXIOME, dann zuerst RESET drücken auf dem Spartan3
+###!!! ebenso wenn Reset gedrückt auf dem Spartan3, dann muss es hier losgehen:
+cp FFINIT1.txt /dev/ttyAMA0
+echo 'HERE 100 + DPMERK ! E800 BANF !' >/dev/ttyAMA0
+cp FFINIT1NEU.txt /dev/ttyAMA0
+cp FFINIT1NEU.txt /dev/ttyAMA0
+echo '058 DPMERK ! E000 BANF !' >/dev/ttyAMA0
+cp FFINIT1NEU.txt /dev/ttyAMA0
+### wenn einmal bis hierher durchgeĺaufen, dann reicht auch ab jetzt
+cp FFINIT1NEU.txt /dev/ttyAMA0
+cp FFINIT2NEU.txt /dev/ttyAMA0 # für Step_11
+
+#dann neues screenlog.xml:
+echo '-1 XBIT !' >/dev/ttyAMA0
+#screenlog starten ^AH
+cp INIT.xml /dev/ttyAMA0
+#screenlog anhalten ^AH
+echo '0 XBIT !' >/dev/ttyAMA0
+
+

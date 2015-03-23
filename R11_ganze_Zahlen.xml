@@ -13,7 +13,7 @@ DI32 ( a b c --> r q ) teilt die aus a und b zusammengesetzte 32-Bit Zahl a*2^16
 MULT_I ( ... ) und
 MULT_II ( ... ) sind zwei Hilfsfunktionen für die Multiplikation einer 16-Bit-Zahl mit einer ab Adresse adr gespeicherten großen ganzen Zahl der Länge l Bytes.
 
-Hier sollte nur deutlich gemacht werden, was im VHDL-Programm dazugekommen ist. Wie alles mit dem FORTH-Interpreter abläuft und daraus schließlich das Matrix-Invertierungsprogramm gemacht wird - das muss der FORTH-Interpreter irgendwann selbst mal aufzeigen, etwa in einem Log-File während des Compilierens. Ein Anfang in diese Richtung ist das File <i>your-master-repo/</i>INIT.xml in einen Browser ausgeben lassen, da stehen schon einige (wenige) Erläuterungen. 
+Hier ist nur aufgeführt, was im VHDL-Programm dazugekommen ist. Wie das alles mit dem FORTH-Interpreter zusammenwirkt und daraus schließlich das Matrix-Invertierungsprogramm gemacht wird, öffne dazu die Datei <code><i>your-master-repo</i>/screenlog.xml</code> mit einem xml-Browser. Das ist ein Logfile, welches beim Compilieren des Forth-Interpreters angefertigt wurde. Es enthält den vollständigen FORTH-Quelltext, versehen mit wenigstens ein paar Erläuterungen.
 
 Beispielaufgabe: <i>Invertiere die Matrix
 
@@ -24,13 +24,13 @@ Beispielaufgabe: <i>Invertiere die Matrix
 
 <Terminal_1>
   <li> git checkout Step_11 </li>
-  <li> git diff <diff>Step_10...Step_11</diff> </li>
+  <li> git diff Step_10...Step_11 </li>
   </Terminal_1>
 
 <Tcl_Console>
   <li> close_sim -force -quiet </li>
   <li> launch_simulation </li>
-  <li> run 20 ms </li>
+  <li> run 60 ms </li>
   </Tcl_Console>
 
 <p></p>
@@ -40,18 +40,18 @@ Beispielaufgabe: <i>Invertiere die Matrix
 ok
 <u>56 89 * .</u> 2E06 ok
 <u>111111111111111 DUP * .</u> 123456789ABCDEFEDCBA987654321 ok
-<u>DEZ</u> ok
+<u>DECIMAL</u> ok
 <u>56 89 * .</u> 4984 ok
 <u>[ [ 1   1   1    1 ]</u> ok
 <u>  [ 2   4   8   16 ]</u> ok
 <u>  [ 3   9  27   81 ]</u> ok
 <u>  [ 4  16  64  256 ] ] </u> ok
 <u>4 INVERTIEREN</u> 
-<u>OVER O.</u> [ [ 1152 -864 384 -72 ] [ -1248 1368 -672 132 ] [ 432 -576 336 -72 ] [ -48 72 -48 12 ] ] ok
+<u>OVER .</u> [ [ 1152 -864 384 -72 ] [ -1248 1368 -672 132 ] [ 432 -576 336 -72 ] [ -48 72 -48 12 ] ] ok
 <u>DUP .</u> 288 ok
 </DEMO>
 
-<p>Die Nutzereingaben <u>56 89 * ....</u> beginnen ab 150000 ns in KEY_BYTE. Die Ergebnisse werden jeweils ab 4095520 ns, ab 8289100 ns, ab 12271060 ns und ab 18088320(?) ns an EMIT_BYTE ausgegeben. Darin enthaltene ESCAPE-Sequenzen wie ESC-[-3-4-m stellen die Schriftfarbe ein. DEZ schaltet auf dezimale Zahlenbasis um. INVERTIEREN holt vom Stapel die Matrix [ [ 1 ... ] ] und die Dimension 4 und gibt deren Inverse [ [ 1152 ... ] ] und den gemeinsamen Nenner 288 aller Matrixelemente auf dem Stapel zurück (ab 61875500 ns).</p>  
+<p>Die Nutzereingaben <u>56 89 * ....</u> beginnen ab 30000 ns in KEY_BYTE. Die Ergebnisse werden jeweils ab 3822640 ns, ab 7633120 ns, ab 11160200 ns auf EMIT_BYTE ausgegeben. Darin enthaltene ESCAPE-Sequenzen wie 1B-5B-33-36-6D (ESC-[-3-6-m) stellen die Schriftfarbe ein. DECIMAL schaltet auf dezimale Zahlenbasis um. INVERTIEREN holt vom Stapel die Matrix [ [ 1 ... ] ] und die Dimension 4 und gibt deren Inverse [ [ 1152 ... ] ] und den gemeinsamen Nenner 288 aller Matrixelemente auf dem Stapel zurück (ab 54644980 ns).</p>  
 
 <weiter /><a href="Spartan3.xml">Installation Spartan3 Board</a>
 

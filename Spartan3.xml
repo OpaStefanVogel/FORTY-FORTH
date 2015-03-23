@@ -59,9 +59,15 @@ zu sehen und auch eine Nutzereingabe möglich sein. Wenn nicht, erstmal mit Eing
 <p> Anstelle oder nach einigen Tastatureingaben in Terminal_3 hinein geht auch in Terminal_1</p>
 
 <Terminal_1>
+  <li> echo '-1 XBIT !' >/dev/ttyS0 <i># schaltet xml-Ausgabemodus ein</i> </li>
+  <li> <i># jetzt screenlog starten, (C-a H) bei <a href="http://www.gnu.org/software/screen/manual/html_node/Log.html#Log">screen</a></i> </li>
   <li> cp INIT.xml /dev/ttyS0    <i># recompiliert den vorhandenen FORTH-Interpreter</i> </li>
-  <li>   <i># # # und generiert dabei auch die ProgRAM-, ByteRAM- und stapR-Arrays</i></li>
+  <li> <i># jetzt screenlog stoppen, nochmal (C-a H)</i> </li>
+  <li> echo '0 XBIT !' >/dev/ttyS0 <i># schaltet xml-Ausgabemodus aus</i> </li>
+  <li> <i>#</i></li>
   </Terminal_1>
+
+<p>Das bei 'screenlog' anfallende Logfile kann in einem xml-Browser formatiert betrachtet werden.</p>
 
 <weiter />Pause
 
