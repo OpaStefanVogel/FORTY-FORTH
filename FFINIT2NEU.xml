@@ -38,8 +38,8 @@ A018 MCODE MULT_II
 
 
 
-1201 CONSTANT A
-1401 CONSTANT B
+1401 CONSTANT A
+1601 CONSTANT B
 1801 CONSTANT C
 A 1FF 1111 FILL
 B 1FF 1111 FILL
@@ -893,7 +893,8 @@ A003 CONSTANT RETURN
 : STRG: : HERE 3 - DUP . @ 1+ DUP . @ DUP . 40 - HERE SWAP 7 AND 18 + ! ;
 STRG: ^G 7 EMIT ." /1xPIEP/" ;
 STRG: ^F 7 EMIT ." QUIT" QUIT ;
-STRG: ^A ." Angehalten für genau eine Eingabezeile: " CR FA00 100 EXPECT INTERPRET ." ok";
+STRG: ^A ." Angehalten für genau eine Eingabezeile: " 
+  CR FA00 100 EXPECT INTERPRET ." ok";
 
 : QUERY ( adr --> n ) TIB @ 100 EXPECT ;
 

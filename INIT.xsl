@@ -45,11 +45,15 @@
   <xsl:copy-of select="." />
   </xsl:template>
 
+<xsl:template match="DUMPZ">
+  <xsl:copy-of select="." />
+  </xsl:template>
+
 <xsl:template match="sekt">
   <div class="VorSekt">
     <xsl:attribute name="id"><xsl:value-of select="@inhalt" /></xsl:attribute>
     <xsl:value-of select="@inhalt" />
-    <a href="#Übersicht"> --> oder zurück zur Übersicht</a>
+    <a href="#Übersicht"> -----> zurück zur Übersicht</a>
     </div>
   <sekt><xsl:apply-templates /></sekt>
   </xsl:template>

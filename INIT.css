@@ -19,11 +19,11 @@ sekt {
   }
 
 .VorSekt {
-  background-color: yellow;
+  background-color: Aqua;
   }
 
 ok {
-  background-color: red; 
+  background-color: Gold; 
   }
 
 fl {
@@ -39,5 +39,9 @@ fr {
 
 ul { 
   white-space: nowrap;
+  }
+
+DUMPZ { 
+  background-color: Pink; 
   }
 

@@ -3,25 +3,7 @@
 <!DOCTYPE INIT SYSTEM "INIT.DTD">
 <INIT>
 
-<sekt inhalt="vorab der Ablauf, was tun, wenn INIT1.TXT geändert werden muss">
-( INIT1 von Zeile 38 bis ca. Zeile 448 bei START:
-( wenn unverändert, dann nur 1x laden
-( wenn verändert, dann
-  ( zuerst RESET und 1x das alte INIT1Pxx laden (um REPLACE: rückgängig zu machen)
-  (   und dann so das neue INIT1Pxx laden:
-  (   HERE 100 + DPMERK ! E800 BANF !
-  (   2x neues INIT1Pxx laden
-  (   058 DPMERK ! E000 BANF !
-  (   nochmal 2x neues INIT1Pxx laden
-( danach INIT2Pxx ab Zeile 424 laden und die weiteren...
-( HERE 2400 OVER - 0 FILL
-( BZEIG @ FA00 OVER - 0 FILL
-( logfile-->Pxxlog.txt
-( und schließlich DUMPY
-( SPOOL.TXT-->Pxx.vhd
-  </sekt>
-
-<sekt inhalt="Anfangszustand so herstellen wie benötigt">
+<sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
 ( zuerst alles Notwendige wieder auf Ausgangszustand schalten
 ( -1 2C23 ! ( schaltet RX_ aus !!!
 2 2 * DUP * BASE ! ( HEX )
@@ -36,6 +18,19 @@ QUIT         ( original QUIT starten
 
 <AXIOME>
 <sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen, deshalb extra ändern)">
+<sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen">
+( wenn sich AXIOME nicht ändern, ganz normal hintereinander weg compilieren
+( wenn sich AXIOME verändern, dann
+       ( zuerst RESET und 1x die ursprünglichen AXIOME laden 
+       ( um REPLACE: rückgängig zu machen
+       ( und dann so die neuen AXIOME compilieren:
+       (   HERE 100 + DPMERK ! E800 BANF !
+       (   dann eventuell notwendige Ergänzungsfunktionen
+       (   2x neue AXIOME compilieren
+       (   058 DPMERK ! E000 BANF !
+       (   2x neue AXIOME compilieren
+       (   danach alles was nach den AXIOMEN folgt 1x compilieren
+  </sekt>
 DPMERK @ DP ! BANF @ BZEIG !
 
 ( Forth Axiome:
@@ -475,6 +470,7 @@ START
 : DUMPZ ( bis+1 von dubit --> )
   DUBIT !
   " ' START " INTERPRET 4000 + 10 !
+  CR 3C EMIT ." DUMPZ>"
   BEGIN
     CR ."   "
     0000 BEGIN 
@@ -485,6 +481,7 @@ START
     ."  -- " DUP HG. ." -" DUP 0F + . 
     10 +
     2DUP > NOT UNTIL 2DROP
+  CR 3C EMIT ." /DUMPZ>"
   ; 
 
 HERE . BZEIG ?
