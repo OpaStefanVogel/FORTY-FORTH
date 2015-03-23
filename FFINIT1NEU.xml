@@ -477,7 +477,11 @@ START
   " ' START " INTERPRET 4000 + 10 !
   BEGIN
     CR ."   "
-    0000 BEGIN 2DUP + @ NG. 1+ DUP 10 = UNTIL DROP
+    0000 BEGIN 
+      2DUP + 
+      DUP IRAMADR = IF DROP JRAMADR END_IF
+      @ NG. 1+ DUP 10 = 
+      UNTIL DROP
     ."  -- " DUP HG. ." -" DUP 0F + . 
     10 +
     2DUP > NOT UNTIL 2DROP
