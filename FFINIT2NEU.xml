@@ -1108,7 +1108,7 @@ VLIST
 
 WLIST
 
-( LED's stellen, also auf Adresse 2D04 ausgeben
+( LED's zum Leuchten bringen, also auf Adresse 2D04 ausgeben
 
 2D04 CONSTANT LEDS
 55 LEDS !
@@ -1257,13 +1257,12 @@ DUP O.
 4 INVERTIEREN
 OVER O.
 DUP .
-( Ergebnis sollte sein:
+( Ergebnis sollte sein: OVER O.
 (      [ [ 1152 -864 384 -72 ] 
 (        [ -1248 1368 -672 132 ] 
 (        [ 432 -576 336 -72 ] 
 (        [ -48 72 -48 12 ] ] ok
-( und gemeinsamer Nenner:
-( DUP . 288
+( und gemeinsamer Nenner: DUP . 288
 
   </sekt>
 

@@ -3,18 +3,6 @@
 <!DOCTYPE INIT SYSTEM "INIT.DTD">
 <INIT>
 
-<sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
-( zuerst alles Notwendige wieder auf Ausgangszustand schalten
-( -1 2C23 ! ( schaltet RX_ aus !!!
-2 2 * DUP * BASE ! ( HEX )
-7 ' NUMBER ! ( original NUMBER wieder an
-RP0 ' QUIT ! A00A ' QUIT 1 + ! ( original QUIT wiederherstellen
-QUIT         ( original QUIT starten
-8000 16 ! ( EXXI ausschalten
-4000 000E ! ( aktiviert ^F = QUIT
-' DUMPZ 4 - LFA ! ( LFA zurueck auf Anfangsvokabular
-</sekt>
-
 <AXIOME>
 <sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen, deshalb separat ändern)">
 <sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen">
@@ -29,10 +17,23 @@ QUIT         ( original QUIT starten
        (   058 DPMERK ! E000 BANF !
        (   2x neue AXIOME compilieren
        (   danach alles was nach den AXIOMEN folgt 1x compilieren
-DPMERK @ DP ! BANF @ BZEIG !
 </sekt>
 
-<sekt inhalt="so, mit irgendwas muss es losgehen">
+<sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
+( zuerst alles Notwendige wieder auf Ausgangszustand schalten
+( -1 2C23 ! ( schaltet RX_ aus !!!
+2 2 * DUP * BASE ! ( HEX )
+7 ' NUMBER ! ( original NUMBER wieder an
+RP0 ' QUIT ! A00A ' QUIT 1 + ! ( original QUIT wiederherstellen
+QUIT         ( original QUIT starten
+8000 16 ! ( EXXI ausschalten
+4000 000E ! ( aktiviert ^F = QUIT
+' DUMPZ 4 - LFA ! ( LFA zurueck auf Anfangsvokabular
+
+DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG auf die festgelegte Anfangsadressen setzen )
+</sekt>
+
+<sekt inhalt="so, mit irgendwas muss das Compilieren losgehen">
 IMMEDIATE: ( 29 WORD 2DROP ;
 IMMEDIATE: { 0 STAT ! ; ( war ursprünglich mal [  
 : } 1 STAT ! ;
@@ -44,6 +45,7 @@ COMPILE: (CONSTANT:) R> @ STAT @ IF LIT, END_IF ;
 
 <sekt inhalt="Konstanten">
 : CONSTANT ( /name/  c --> ) CREATE COMPILE (CONSTANT:) , SMUDGE ;
+
 D001 CONSTANT SP
 D002 CONSTANT RP
 D003 CONSTANT PC
