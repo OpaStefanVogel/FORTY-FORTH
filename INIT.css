@@ -43,6 +43,7 @@ ul {
 
 DUMPZ { 
   background-color: Pink; 
+  white-space: pre;
   }
 
 .zurück { 
