@@ -7,6 +7,7 @@ INIT {
 AXIOME {
   display: inline-block;
   border:solid;
+  background-color: Magenta; 
   }
 
 sekt {
@@ -14,64 +15,29 @@ sekt {
   border:solid;
   margin: 5px;
   padding: 10px;
+  background-color: white; 
   }
 
 .VorSekt {
   background-color: yellow;
   }
 
-
-
-
-
-.section { 
-  font-family:monospace;
-  #white-space: pre-wrap; 
+ok {
+  background-color: red; 
   }
 
-table { #white-space: nowrap;
+fl {
+  background-color: LightGrey; 
+  float: left; 
   }
 
-code { font-family:monospace; 
-       font-size: 110%; 
-       #border: solid;
-       }
-
-.ffterm {
-  display: inline-block;
-  white-space: pre-wrap; 
-  padding: 4px;
-  margin-left: 2px;
-  border: solid;
-  background-color: lightyellow;
-  min-width: 300px;
-  min-height: 120px;
-  color: #069; # wie header h1
-  #border-color: blue;
-  border-width: 1px;
-  border-radius: 4px;
-  }
-  
-.Nutzereingabe {
-  color: black;
-  background-color: Moccasin;
-  #border: solid;
+fr {
+  background-color: White; 
+  color: LightGrey;
+  float: right; 
   }
 
-.zurueck {
-  float:right;
-  }
-
-.zuruecktext {
-  vertical-align: top ;
-  }
-
-.pr { 
-  white-space: pre-wrap; 
-  }
-
-.Terminal {
+ul { 
   white-space: nowrap;
-  list-style-type: none;
   }
 

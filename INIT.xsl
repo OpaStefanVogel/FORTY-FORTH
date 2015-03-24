@@ -18,17 +18,30 @@
 
 <xsl:template match="INIT"><INIT>
   <h1 id="Übersicht">Übersicht</h1>
-  <xsl:for-each select="sekt">
-    <a><xsl:attribute name="href">#<xsl:value-of select="@inhalt" /></xsl:attribute>
-      <xsl:value-of select="@inhalt" />
-      </a>
-    <br />
-  </xsl:for-each>
+  <ul>
+    <xsl:for-each select="//sekt">
+      <li><a><xsl:attribute name="href">#<xsl:value-of select="@inhalt" /></xsl:attribute>
+        <xsl:value-of select="@inhalt" />
+        </a></li>
+      </xsl:for-each>
+    </ul>
   <xsl:apply-templates /></INIT>
   </xsl:template>
 
 <xsl:template match="AXIOME">
   <div>AXIOME </div>
+  <AXIOME><xsl:apply-templates /></AXIOME>
+  </xsl:template>
+
+<xsl:template match="ok">
+  <xsl:copy-of select="." />
+  </xsl:template>
+
+<xsl:template match="fl">
+  <xsl:copy-of select="." />
+  </xsl:template>
+
+<xsl:template match="fr">
   <xsl:copy-of select="." />
   </xsl:template>
 

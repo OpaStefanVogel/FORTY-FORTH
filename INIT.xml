@@ -28,21 +28,20 @@
 7 ' NUMBER ! ( original NUMBER wieder an
 RP0 ' QUIT ! A00A ' QUIT 1 + ! ( original QUIT wiederherstellen
 QUIT         ( original QUIT starten
-1B EMIT 5B EMIT 33 EMIT 39 EMIT 6D EMIT ( Farben aus
 8000 16 ! ( EXXI ausschalten
 4000 000E ! ( aktiviert ^F = QUIT
 ' DUMPZ 4 - LFA ! ( LFA zurueck auf Anfangsvokabular
 ( 1B EMIT 63 EMIT 
   </sekt>
 
-<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen, deshalb extra ändern">
 <AXIOME>
-DPMERK @ DP ! BANF @ BZEIG ! -1 CRBIT !
+<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen, deshalb extra ändern)">
+DPMERK @ DP ! BANF @ BZEIG !
 
 ( Forth Axiome:
 IMMEDIATE: ( 29 WORD 2DROP ;
-IMMEDIATE: [ 0 STAT ! ;
-: ] 1 STAT ! ;
+IMMEDIATE: { 0 STAT ! ;
+: } 1 STAT ! ;
 IMMEDIATE: COMPILE 20 WORD FIND LCFA DROP COMPILE, ;
 COMPILE: (LIT,) R> DUP 1+ >R @ ;
 : LIT, ( a --> ) DUP 3FFF > OVER C000 LT OR IF COMPILE (LIT,) END_IF , ;
@@ -58,6 +57,9 @@ D003 CONSTANT PC
 ( 43 CONSTANT IRAMADR ( neu ( D800 43 !
 ( 44 CONSTANT JRAMADR ( neu ( D800 44 !
 
+46 CONSTANT CRBZEIG BZEIG @ CRBZEIG !
+47 CONSTANT CRDP DP @ CRDP !
+
 48 CONSTANT BASE ( 10 BASE !
 49 CONSTANT TIB ( 3F00 TIB !
 4A CONSTANT IN1
@@ -69,12 +71,11 @@ D003 CONSTANT PC
 50 CONSTANT STAT 0 STAT !
 51 CONSTANT LFA
 
-
 52 CONSTANT BANF ( 3800 BANF !
 53 CONSTANT BZEIG
 54 CONSTANT DPMERK ( 056 DPMERK !
 55 CONSTANT CSP
-56 CONSTANT CRBIT -1 CRBIT !
+( 56 CONSTANT CRBIT ( 0 CRBIT !
 57 CONSTANT LOCALADDR
 
 VERSION 1+ CONSTANT VERSION VERSION .
@@ -150,8 +151,8 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 : BYE BEGIN ." BYE " AGAIN ;
 : +! ( a adr --> adr+1 ) SWAP OVER @ + SWAP ! ;
 : R> RP @ 1+ @ RP @ 1+ RP 2DUP @ @ SWAP ! ! ;
-: >R RP @ DUP -1 + RP 2DUP @ @ SWAP DUP -1 + RP ! ! ! ! ; ( nicht unterhalb RP speichern wegen INTXY )
-: R RP @ 1+ @ ;
+: >R RP @ DUP -1 + RP 2DUP @ @ SWAP DUP -1 + RP ! ! ! ! ; 
+: R RP @ 1+ @ ; ( bei R> >R nicht unterhalb RP speichern wegen INTXY )
 : , DP @ ! 1 DP +! ;
 : EXECUTE PC ! ;
 : KEY 12 EXECUTE ;
@@ -170,7 +171,13 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 : H. HG. 20 EMIT ;
 : . H. ;
 : ? @ . ;
-: CR 0A EMIT CRBIT @ IF HERE . BZEIG @ . END_IF ;
+: CR 
+  CRDP @ DP @ - STAT @ 0= NOT OR IF 
+    3C EMIT ." fl>" CRDP @ . CRBZEIG @ . 3C EMIT ." /fl>"
+    3C EMIT ." fr>" DP @ . BZEIG @ . 3C EMIT ." /fr>"
+    DP @ CRDP ! BZEIG @ CRBZEIG ! 
+    END_IF
+  0A EMIT ;
 : FEHLERTEXT ( n --> n ) ;
 : DISABLE 
   CR ." weiter nach Taste ESCAPE "
@@ -210,7 +217,6 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 
 
 ( KEY
--1 CRBIT !
 IMMEDIATE: ' ( /name/ --> --> pfa ) 
   20 WORD FIND LCFA DROP 1+ STAT @ IF LIT, END_IF ; 
 
@@ -421,9 +427,13 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
 : QUIT 
   RP0 @ RP !
   BEGIN 
-    STAT @ 0= IF ." ok" END_IF CR 
-    TIB @ 100 EXPECT INTERPRET
-    AGAIN ;
+    3C EMIT ." /ok>"
+    CR 
+    TIB @ 100 EXPECT 
+    3C EMIT ." ok>" 
+    INTERPRET 
+    AGAIN 
+  ;
 
 : START ." FORTY-FORTH" CR CR QUIT ;
 
@@ -438,21 +448,19 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
 :          : CREATE 1 STAT ! COMPILE (:) ;
 
 ( das hier jetzt mit dem neuen CREATE:
-IMMEDIATE: ; 0 STAT ! CSP? A003 , SMUDGE [ SMUDGE ] ; 
-( tatsaechlich [ SMUDGE ] wegen 2x laden!!! 
+IMMEDIATE: ; 0 STAT ! CSP? A003 , SMUDGE { SMUDGE } ; 
+( tatsaechlich { SMUDGE } wegen 2x laden!!! 
 ( Ende der Axiome. Hiermit enden die Axiome.
 
 0 DPMERK @ ! ( abkoppeln
-0 CRBIT ! VERSION .
+HERE . BZEIG ?
 
 START
-  </AXIOME>
   </sekt>
-
-<sekt inhalt="was noch bis Adresse 0800H draufpasst">
+  </AXIOME>
+  
+<sekt inhalt="bis Adresse 0800H passt noch DUMPZ drauf (fast)">
 ( schon INIT2P78.txt
-1B EMIT 5B EMIT 33 EMIT 39 EMIT 6D EMIT ( Farben nochmal aus
--1 CRBIT !
 
 ( erste Forth Erweiterungen
 ( - DUMPY
@@ -468,19 +476,14 @@ START
   DUBIT !
   " ' START " INTERPRET 4000 + 10 !
   BEGIN
-    CR
+    CR ."   "
     0000 BEGIN 2DUP + @ NG. 1+ DUP 10 = UNTIL DROP
     ."  -- " DUP HG. ." -" DUP 0F + . 
     10 +
     2DUP > NOT UNTIL 2DROP
   ; 
 
-0 CRBIT !
-
-( 
-( HERE 0000 0 DUMPZ ( fuer ProgRAM, IRAMADR=JRAMADR von Hand setzen )
-( BZEIG @ BANF @ -1 DUMPZ ( fuer ByteRAM
-( 3000 2C00 0 DUMPZ ( fuer stapR, bei nur FFINIT1 nicht noetig )
+HERE . BZEIG ?
 
   </sekt>
 
@@ -489,8 +492,6 @@ START
 HERE 0 0 DUMPZ          ( generiert ProgRAM Step_10
 BZEIG @ E000 -1 DUMPZ   ( generiert ByteRAM Step_10
   </sekt>
-
-
 
 <sekt inhalt="Variablen">
 2F00 CONSTANT RAMP1
@@ -914,9 +915,7 @@ N/MOD NB.
 
 
 
-<sekt inhalt="Zwischenergebnisse löschen">( 666666 dann NEBENRECHNUNG A+0
-( ------ also Zwischenergebnisse nur solange wie nötig speichern
-
+<sekt inhalt="Zwischenergebnisse nicht unnötig speichern">
 ZAHLENSPEICHER @ VARIABLE BLOCKANFANG
 ZAHLENSPEICHER @ VARIABLE BLOCKENDE
 : NEBENRECHNUNG ( --> erg ) ERGEBNIS @ ;
@@ -969,40 +968,6 @@ INIT
 777 99 NBK NB.
 
 
-
-
-: N^ ( a n --> a^n )
-  NEBENRECHNUNG ROT ROT ( erg a n )
-  4 LOCAL
-  DUP 0LT IF 12 ERROR END_IF    
-  2           ( a n 2        
-  L3 ! L2 ! L1 !    (  R1-3: a  n  2
-  1           ( p=1          a  n  2
-  BEGIN       ( p            a  n  2
-    L2 @ L3 @ ( p n 2        a  n  2
-    /MOD      ( p r n/2      a  n  2
-    L2 !      ( p r          a n/2 2
-    IF        ( p            a n/2 2
-      L1 @    ( p a          a n/2 2
-      N*      ( p*a          a n/2 2
-      END_IF  ( p*a          a n/2 2
-    L2 @      ( p*a n/2      a n/2 2
-    WHILE     ( p*a          a n/2 2
-      L1 @    ( p*a a        a n/2 2
-      L1 @    ( p*a a a      a n/2 2
-      N*      ( p*a a*a      a n/2 2
-      L1 !    ( p*a        a*a n/2 2
-      REPEAT  ( p*a        a*a n/2 2
-  END_LOCAL   ( a^n
-  SWAP HAUPTRECHNUNG A+0
-  ;           ( a^n )
-
-
-333333 2 N^ 10 N* N.
-111111 2 N^ N.
-
-
-10 20 N^ 10 10 N^ DUP -1 N+ SWAP 1 N+ N* N- N.
 
 
 ( je einmal N* und N+ in NNUMBER
@@ -1069,6 +1034,43 @@ N/MOD NB.
 
 N" 000002330657FDD698" N" 4C0CF598D3" N* N.
 N" 000002330657FDD698" N" 4C0CF598D2" N* N.
+
+
+
+
+: N^ ( a n --> a^n )
+  NEBENRECHNUNG ROT ROT ( erg a n )
+  4 LOCAL
+  DUP 0LT IF 12 ERROR END_IF    
+  2           ( a n 2        
+  L3 ! L2 ! L1 !    (  R1-3: a  n  2
+  1           ( p=1          a  n  2
+  BEGIN       ( p            a  n  2
+    L2 @ L3 @ ( p n 2        a  n  2
+    /MOD      ( p r n/2      a  n  2
+    L2 !      ( p r          a n/2 2
+    IF        ( p            a n/2 2
+      L1 @    ( p a          a n/2 2
+      N*      ( p*a          a n/2 2
+      END_IF  ( p*a          a n/2 2
+    L2 @      ( p*a n/2      a n/2 2
+    WHILE     ( p*a          a n/2 2
+      L1 @    ( p*a a        a n/2 2
+      L1 @    ( p*a a a      a n/2 2
+      N*      ( p*a a*a      a n/2 2
+      L1 !    ( p*a        a*a n/2 2
+      REPEAT  ( p*a        a*a n/2 2
+  END_LOCAL   ( a^n
+  SWAP HAUPTRECHNUNG A+0
+  ;           ( a^n )
+
+
+3333 2 N^ 10 N* N.
+1111 2 N^ N.
+
+
+10 20 N^ 10 10 N^ DUP -1 N+ SWAP 1 N+ N* N- N.
+
 
   </sekt>
 
@@ -1373,8 +1375,32 @@ A003 CONSTANT RETURN
     ELSE DROP ." nicht gefunden " END_IF
   ;
 
-: LDUMP LFA @ HERE OVER - DUMP ;
+: FEHLERTEXT ( n --> n )
+  CR
+  DUP 0 = IF ." Division durch Null" END_IF
+  DUP 3 = IF ." Wort nicht definiert" END_IF
+  DUP 6 = IF ." Eingabezeile zu lang" END_IF
+  DUP 9 = IF ." Strukturfehler in IF END_IF BEGIN UNTIL DO LOOP " END_IF
+  ;
 
+( ganz neu: Steuerungstasten: ^A bis ^G, weiter ^H=^A ^L=^B ...
+18 8 0 FILL
+: STRG: : HERE 3 - DUP . @ 1+ DUP . @ DUP . 40 - HERE SWAP 7 AND 18 + ! ;
+STRG: ^G 7 EMIT ." /1xPIEP/" ;
+STRG: ^F 7 EMIT ." QUIT" QUIT ;
+STRG: ^A ." Angehalten für genau eine Eingabezeile: " CR FA00 100 EXPECT INTERPRET ." ok";
+
+: QUERY ( adr --> n ) TIB @ 100 EXPECT ;
+
+IMMEDIATE: (*REM*) 
+  3C EMIT ." /ok>"
+  BEGIN CR QUERY " (*END*)" Z= UNTIL
+  3C EMIT ." ok>"
+  ; 
+
+( aufgesammelten Ergänzungen allgemeiner Art:
+
+(*REM*)
 ( - LOOP's - sind aber sehr langsam
 : I RP @ 1 + @ ;
 : J RP @ 3 + @ ;
@@ -1390,17 +1416,8 @@ IMMEDIATE: LOOP COMPILE (LOOP) 0BRANCH, ;
 IMMEDIATE: +LOOP COMPILE (+LOOP) 0BRANCH, ;
 ( : LL 0 DO I . LOOP ; 7 LL ( ok geht
 
-: FEHLERTEXT ( n --> n )
-  CR
-  DUP 0 = IF ." Division durch Null" END_IF
-  DUP 3 = IF ." Wort nicht definiert" END_IF
-  DUP 6 = IF ." Eingabezeile zu lang" END_IF
-  DUP 9 = IF ." Strukturfehler in IF END_IF BEGIN UNTIL DO LOOP " END_IF
-  ;
-
 
 IMMEDIATE: () 0 WORD 2DROP ;
-: QUERY ( adr --> n ) TIB @ 100 EXPECT ;
 : B. ( a b --> ) SWAP . . ;
 : 2@ ( adr --> a b )
   DUP 1+ @ SWAP @ ;
@@ -1408,20 +1425,11 @@ IMMEDIATE: () 0 WORD 2DROP ;
   SWAP OVER ! 1+ ! ;
 : 2? 2@ B. ;
 
+: LDUMP LFA @ HERE OVER - DUMP ;
+
 A012 MCODE D+
 A013 MCODE D-
 
-
-( ganz neu: Steuerungstasten: ^A bis ^G, weiter ^H=^A ^L=^B ...
-18 8 0 FILL
-: STRG: : HERE 3 - DUP . @ 1+ DUP . @ DUP . 40 - HERE SWAP 7 AND 18 + ! ;
-STRG: ^G 7 EMIT ." /1xPIEP/" ;
-STRG: ^F 7 EMIT ." QUIT" QUIT ;
-STRG: ^A ." Angehalten für genau eine Eingabezeile: " CR FA00 100 EXPECT INTERPRET ." ok";
-
-
-( INIT3P78.txt
-( alle aufgesammelten Ergänzungen allgemeiner Art:
 
 ( - paar Geraeteadressen:
 D004 CONSTANT UHR
@@ -1475,16 +1483,10 @@ TLISTE VARIABLE TLISTENZEIGER
   ;
 
 
-
-
-IMMEDIATE: (*REM*) BEGIN CR QUERY " (*END*)" Z= UNTIL ; 
-
-
 : DABS ( h l --> h' l' )
   OVER 0LT IF 0 0 2SWAP D- END_IF ;
 
 
-(*REM*)
 ( CASEOFS aus'm PSION:
 : CASEOFS ( n  /name/ --> )
   DUP RAMBUF
@@ -1502,7 +1504,6 @@ IMMEDIATE: (*REM*) BEGIN CR QUERY " (*END*)" Z= UNTIL ;
   + @ DUP IF
     DPMERK @ + EXECUTE
     ELSE DROP END_IF ;
-(*END*)
 
 ( - CASE
 ( : BIT ( i n --> bit )
@@ -1547,15 +1548,12 @@ IMMEDIATE: /; 0 STAT ! CSP? HERE 1 - @ 800 OR HERE 1 - ! SMUDGE [ SMUDGE ] ;
 
 
 ( Ausgabe von ESCAPE-Sequenzen:
-20 WORD: ESC 1B EMIT 0 DO DUP C@ EMIT 1+ LOOP DROP ;
+20 WORD: ESC 1B EMIT BEGIN OVER C@ EMIT SWAP 1 + SWAP 1 - DUP 0= UNTIL DROP ;
 ESC ]0;FORTY-FORTH 07 EMIT ( 07 EMIT schließt ]
 : FESTPOSITION ESC [s ESC [1;1H ESC [31m ; ( saveC Pos1,1 redcolor
 : RUCKPOSITION ESC [u ESC [39m ; ( restoreC defaultcolor
 
-  </sekt>
-
-  
-<sekt inhalt="Alternativer Start">
+( Alternativer Start mit ESCAPE-Sequenzen
 
 : QUIT2 
   RP0 @ RP !
@@ -1564,8 +1562,21 @@ ESC ]0;FORTY-FORTH 07 EMIT ( 07 EMIT schließt ]
     TIB @ 100 EXPECT ESC [36m INTERPRET 
     AGAIN ;
 
-REPLACE: QUIT QUIT2 ;
-QUIT
+( REPLACE: QUIT QUIT2 ;
+( QUIT
+
+: QUIT3
+  RP0 @ RP !
+  BEGIN 
+    STAT @ 0= IF ."   " END_IF
+    CR  
+    CRBIT @ 2 AND IF 3C EMIT ." /ok>" END_IF
+    CRBIT @ 4 AND IF C2 EMIT 9B EMIT 33 EMIT 36 EMIT 6D EMIT END_IF
+    TIB @ 100 EXPECT 
+    CRBIT @ 4 AND IF C2 EMIT 9B EMIT 33 EMIT 39 EMIT 6D EMIT END_IF
+    CRBIT @ 2 AND IF 3C EMIT ." ok>" END_IF
+    INTERPRET
+    AGAIN ;
 
 
 : IOSTART
@@ -1573,9 +1584,11 @@ QUIT
   2D30 2D14 DO I @ I ! LOOP
   ;
 IOSTART
+(*END*)
+
   </sekt>
 
-0 CRBIT !
+
 
 <sekt inhalt="DEMO">
 56 89 * .
@@ -1624,12 +1637,11 @@ H
 7 W
 8 W
 
-( Programmschleife
+( Programmschleifen, die DO LOOP ist aber momentan aus.
 
-: X ( n --> )
-  0 DO I . LOOP ;
-  
-13 X
+( : X ( n --> )
+(   0 DO I . LOOP ;
+( 13 X 
 
 ( oder
 
@@ -1736,12 +1748,14 @@ DUP O.
 4 INVERTIEREN
 OVER O.
 DUP .
-( Erg: [ [ 1152 -864 384 -72 ] 
+( Ergebnis sollte sein:
+(      [ [ 1152 -864 384 -72 ] 
 (        [ -1248 1368 -672 132 ] 
 (        [ 432 -576 336 -72 ] 
 (        [ -48 72 -48 12 ] ] ok
-( DUP . 288 ok
+( und gemeinsamer Nenner:
+( DUP . 288
+
   </sekt>
 
 </INIT>
-
