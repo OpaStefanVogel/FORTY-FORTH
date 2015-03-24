@@ -436,7 +436,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
     AGAIN 
   ;
 
-: START ." FORTY-FORTH" CR CR QUIT ;
+: START ." FORTY-FORTH" CR CR 3C EMIT ." ok>" QUIT ;
 
 : SMUDGE 0 SMUDGEBIT ! ( LFA @ 1+ DUP @ DUP 0LT IF MINUS END_IF SWAP ! ) ;
 
