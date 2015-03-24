@@ -53,7 +53,7 @@
   <div class="VorSekt">
     <xsl:attribute name="id"><xsl:value-of select="@inhalt" /></xsl:attribute>
     <xsl:value-of select="@inhalt" />
-    <a href="#Übersicht"> -----> zurück zur Übersicht</a>
+    <a href="#Übersicht" class="zurück"> -----> zurück zur Übersicht</a>
     </div>
   <sekt><xsl:apply-templates /></sekt>
   </xsl:template>

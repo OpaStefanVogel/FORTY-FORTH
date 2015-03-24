@@ -1104,7 +1104,7 @@ IOSTART
 
 VLIST
 
-( nochmal mit Speicheradressen
+( nochmal mit Speicheradressen, vor jedem Wort steht dessen Aufruf-Adresse
 
 WLIST
 
@@ -1143,7 +1143,7 @@ H
 7 W
 8 W
 
-( Programmschleifen, die DO LOOP ist aber momentan aus.
+( Programmschleifen, die für DO LOOP ist aber momentan stillgelegt.
 
 ( : X ( n --> )
 (   0 DO I . LOOP ;
@@ -1189,7 +1189,10 @@ HERE . BZEIG ?
 ( also direkt eingeben und mit + - * / rechnen geht hier noch nicht
 
 
-
+( ERGEBNIS ist ein blöd gewählter Variablenname, 
+( bezeichnet ab welcher Adresse das nächste Ergebnis gespeichert wird,
+( Platz dafür ist von 1400H bis 1FFFH, aktuell erreicht: )
+ 
 ERGEBNIS ? ( Zahlenspeicher gefuellt bis ) 
 
 ZAHLENSPEICHER @ ERGEBNIS ! ( Zahlenspeicher leeren )
@@ -1232,9 +1235,9 @@ HEX DUP N.
 
 ( an der Stelle, wenn gewünscht, Programm-VHDL-Quelltext für Step_11 ausgeben
 HEX INIT 
-HERE 0 0 DUMPZ           ( generiert progRAM für Step_11
-BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM für Step_11
-3000 2C00 0 DUMPZ        ( generiert stapR   für Step_11
+HERE 0 0 DUMPZ           ( generiert progRAM in P20.vhd für Step_11
+BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM in P20.vhd für Step_11
+3000 2C00 0 DUMPZ        ( generiert stapR   in P20.vhd für Step_11
   </sekt>
 
 <sekt inhalt="noch ein wenig DEMO">
@@ -1265,4 +1268,3 @@ DUP .
   </sekt>
 
 </INIT>
-

@@ -13,11 +13,10 @@ QUIT         ( original QUIT starten
 8000 16 ! ( EXXI ausschalten
 4000 000E ! ( aktiviert ^F = QUIT
 ' DUMPZ 4 - LFA ! ( LFA zurueck auf Anfangsvokabular
-( 1B EMIT 63 EMIT 
-  </sekt>
+</sekt>
 
 <AXIOME>
-<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen, deshalb extra ändern)">
+<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen, deshalb separat ändern)">
 <sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen">
 ( wenn sich AXIOME nicht ändern, ganz normal hintereinander weg compilieren
 ( wenn sich AXIOME verändern, dann
@@ -30,17 +29,20 @@ QUIT         ( original QUIT starten
        (   058 DPMERK ! E000 BANF !
        (   2x neue AXIOME compilieren
        (   danach alles was nach den AXIOMEN folgt 1x compilieren
-  </sekt>
 DPMERK @ DP ! BANF @ BZEIG !
+</sekt>
 
-( Forth Axiome:
+<sekt inhalt="so, mit irgendwas muss es losgehen">
 IMMEDIATE: ( 29 WORD 2DROP ;
-IMMEDIATE: { 0 STAT ! ;
+IMMEDIATE: { 0 STAT ! ; ( war ursprünglich mal [  
 : } 1 STAT ! ;
 IMMEDIATE: COMPILE 20 WORD FIND LCFA DROP COMPILE, ;
 COMPILE: (LIT,) R> DUP 1+ >R @ ;
 : LIT, ( a --> ) DUP 3FFF > OVER C000 LT OR IF COMPILE (LIT,) END_IF , ;
 COMPILE: (CONSTANT:) R> @ STAT @ IF LIT, END_IF ;
+</sekt>
+
+<sekt inhalt="Konstanten">
 : CONSTANT ( /name/  c --> ) CREATE COMPILE (CONSTANT:) , SMUDGE ;
 D001 CONSTANT SP
 D002 CONSTANT RP
@@ -49,11 +51,11 @@ D003 CONSTANT PC
 40 CONSTANT RBIT
 41 CONSTANT SMUDGEBIT
 42 CONSTANT RP0 3000 RP0 !
-( 43 CONSTANT IRAMADR ( neu ( D800 43 !
-( 44 CONSTANT JRAMADR ( neu ( D800 44 !
-
+43 CONSTANT IRAMADR ( F000 43 !
+44 CONSTANT JRAMADR ( F000 44 !
+45 CONSTANT XOFF
 46 CONSTANT CRBZEIG BZEIG @ CRBZEIG !
-47 CONSTANT CRDP DP @ CRDP !
+47 CONSTANT CRDP DP @ 8 - CRDP !
 
 48 CONSTANT BASE ( 10 BASE !
 49 CONSTANT TIB ( 3F00 TIB !
@@ -65,17 +67,16 @@ D003 CONSTANT PC
 4F CONSTANT DP
 50 CONSTANT STAT 0 STAT !
 51 CONSTANT LFA
-
 52 CONSTANT BANF ( 3800 BANF !
 53 CONSTANT BZEIG
 54 CONSTANT DPMERK ( 056 DPMERK !
 55 CONSTANT CSP
-( 56 CONSTANT CRBIT ( 0 CRBIT !
-57 CONSTANT LOCALADDR
+56 CONSTANT LOCALADDR
 
 VERSION 1+ CONSTANT VERSION VERSION .
+</sekt>
 
-( der neue Maschinencode:
+<sekt inhalt="Maschinencode">
 A003 CONSTANT RETURN
 COMPILE: (MCODE:) R> STAT @ IF @ , ELSE EXECUTE END_IF ;
 : MCODE CREATE COMPILE (MCODE:) , RETURN , SMUDGE ;
@@ -103,8 +104,9 @@ B60C MCODE 2OVER
 B603 MCODE 2DUP
 B200 MCODE 2DROP
 8000 MCODE NOOP
+</sekt>
 
-( - ein Abschnitt für die Zeichenketten )
+<sekt inhalt="ein Abschnitt für die Zeichenketten">
 : B, ( b --> ) BZEIG @ ! 1 BZEIG +! ;
 : Z, ( badr n --> ) BZEIG @ LIT, DUP ,
   BEGIN SWAP DUP @ B, 1+ SWAP 1 - DUP 0= UNTIL
@@ -113,9 +115,9 @@ COMPILE: (WORD:) WORD STAT @ IF Z, R> COMPILE, END_IF ;
 : WORD: CREATE 1 STAT ! , COMPILE (WORD:) -1 CSP +! ;
 22 WORD: " ;
 22 WORD: ." TYPE ;
+</sekt>
 
-
-<REM>weiter mit Programmstrukturen</REM>
+<sekt inhalt="weiter mit Programmstrukturen">
 : HERE DP @ ;
 : JRBIT 8 ;
 : JR0BIT 9 ;
@@ -131,10 +133,10 @@ IMMEDIATE: END_IF HERE OVER - ROT XSETBT SWAP 1 - ! ;
 IMMEDIATE: ELSE 1 ALLOT COMPILE END_IF JRBIT HERE ;
 IMMEDIATE: WHILE COMPILE IF ;
 IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
+</sekt>
 
 
-
-<REM>einige kleinere Funktionen</REM>
+<sekt inhalt="etliche kleinere Funktionen">
 : C@ @ ;
 : C! ! ;
 : 1+ ( a --> a+1 ) 1 + ;
@@ -186,8 +188,9 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
   DISABLE QUIT ;
 : CSP! SP @ CSP ! ;
 : CSP? SP @ CSP @ - IF 9 ERROR END_IF ;
+</sekt>
 
-(
+<sekt inhalt="lokale Variablen">
 : LOCAL ( n --> )
   R> SWAP 
   DUP MINUS RP @ + RP !
@@ -209,16 +212,16 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 : L5 LOCALADDR @ 5 + ;
 : L6 LOCALADDR @ 6 + ;
 : L7 LOCALADDR @ 7 + ;
+</sekt>
 
-
-( KEY
+<sekt inhalt="alles zu KEY">
 IMMEDIATE: ' ( /name/ --> --> pfa ) 
   20 WORD FIND LCFA DROP 1+ STAT @ IF LIT, END_IF ; 
 
 ( - neu: KEY_INT, ersetzt Code auf Adressen 0018 bis 003D
-43 CONSTANT IRAMADR ( F000 43 !
-44 CONSTANT JRAMADR ( F000 44 !
-45 CONSTANT XOFF
+( 43 CONSTANT IRAMADR ( F000 43 !
+( 44 CONSTANT JRAMADR ( F000 44 !
+( 45 CONSTANT XOFF
 
 : INCR4 ( adr --> )
   DUP @ 1 +
@@ -251,12 +254,12 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
 
 ' KEY_INT 4000 + 26 !
 ' KEYCODE2 4000 + 12 !
+</sekt>
 
 
 
 
-
-( - es folgt der Interpreter:
+<sekt inhalt="es folgt der Interpreter">
 ( neu ESCAPE durch EXPECT durchlaufen lassen und 7F-->08:
 ( und 7F in 08 umwandeln:
 ( und nach n Zeichen kein 0D mehr lesen
@@ -419,14 +422,17 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
   R> IN4 ! R> IN3 ! R> IN2 ! R> IN1 !
   ;
 
-: QUIT 
+: QUIT
   RP0 @ RP !
+  3C EMIT ." /ok>"
   BEGIN 
-    3C EMIT ." /ok>"
     CR 
-    TIB @ 100 EXPECT 
-    3C EMIT ." ok>" 
-    INTERPRET 
+    TIB @ 100 EXPECT
+    OVER @ 3C = IF 2DROP ELSE
+      3C EMIT ." ok>" 
+      INTERPRET 
+      3C EMIT ." /ok>"
+      END_IF
     AGAIN 
   ;
 
@@ -446,15 +452,16 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
 IMMEDIATE: ; 0 STAT ! CSP? A003 , SMUDGE { SMUDGE } ; 
 ( tatsaechlich { SMUDGE } wegen 2x laden!!! 
 ( Ende der Axiome. Hiermit enden die Axiome.
+</sekt>
 
 0 DPMERK @ ! ( abkoppeln
 HERE . BZEIG ?
 
 START
-  </sekt>
-  </AXIOME>
+</sekt>
+</AXIOME>
   
-<sekt inhalt="bis Adresse 0800H passt noch DUMPZ drauf (fast)">
+<sekt inhalt="bis Adresse 0800H passt noch DUMPZ drauf (inzwischen nicht mehr)">
 ( schon INIT2P78.txt
 
 ( erste Forth Erweiterungen
@@ -490,7 +497,7 @@ HERE . BZEIG ?
 
 
 <sekt inhalt="ProgRAM und ByteRAM für Step_9 und Step_10 erstellen">
-HERE 0 0 DUMPZ          ( generiert ProgRAM Step_10
-BZEIG @ E000 -1 DUMPZ   ( generiert ByteRAM Step_10
+HERE 0 0 DUMPZ          ( generiert ProgRAM in P20.vhd Step_10
+BZEIG @ E000 -1 DUMPZ   ( generiert ByteRAM in P20.vhd Step_10
   </sekt>
 
