@@ -21,8 +21,7 @@ RAMP1 1+ RAMP1 !
 : MIN ( a b --> c )
   2DUP > IF SWAP END_IF DROP ;
 : ABS DUP 0LT IF MINUS END_IF ;
-
-  </sekt>
+</sekt>
 
 
 <sekt inhalt="Multiplikation">( 222222 dann SUPERMULT SMUL
@@ -102,8 +101,7 @@ C 8 DUMP
   B 2000 111111 FILL
   C 4001 000000 FILL
   0 2000 A 0 2000 B C SMUL 7 EMIT ;
-
-  </sekt>
+</sekt>
 
 
 
@@ -173,8 +171,7 @@ C 8 DUMP
 C 8 0 FILL
 -1 2 B 0 2 A C ADDIER . . .
 C 8 DUMP
-
-  </sekt>
+</sekt>
 
 <sekt inhalt="Division">( Divisionen
 A014 MCODE DI32 ( 
@@ -257,7 +254,7 @@ C 8 DUMP
 
 0 4 C 0 2 B A SDIV . . . . . .
 A 8 DUMP
-  </sekt>
+</sekt>
 
 
 
@@ -339,8 +336,7 @@ ERGEBNIS @ SPEICHERENDE @ LT NOT IF 7658 ERROR END_IF
 
 77 88 2OPERANDEN->2SLX . . . . . . .
 77 5800 2OPERANDEN->2SLX . . . . . . .
-
-  </sekt>
+</sekt>
 
 
 
@@ -412,8 +408,7 @@ N/MOD NB.
 1111 DUP N* DUP N.
 1111 DUP N.
 N/MOD NB.
-
-  </sekt>
+</sekt>
 
 
 
@@ -575,9 +570,7 @@ N" 000002330657FDD698" N" 4C0CF598D2" N* N.
 
 
 10 20 N^ 10 10 N^ DUP -1 N+ SWAP 1 N+ N* N- N.
-
-
-  </sekt>
+</sekt>
 
 
 
@@ -601,8 +594,7 @@ N" 000002330657FDD698" N" 4C0CF598D2" N* N.
 
 777 99 NBK NB.
 INIT
-
-  </sekt>
+</sekt>
 
 
 
@@ -701,8 +693,7 @@ DUP ZERLEG SWAP . .
 2 0 0 20 H 1 15 H 2 12 H H CR DUP O.
 
 ( ok das passt besser
-
-  </sekt>
+</sekt>
 
 
 
@@ -841,8 +832,7 @@ ERGEBNIS ?
 ( raus kommt  [ [ 8FB77F0C000000 -FB811E55000000 ... ] ] 11F6EFE1800000
 
 ( mehr geht erstmal nicht weil nicht mehr Platz
-
-  </sekt>
+</sekt>
 
 
 
@@ -902,10 +892,11 @@ IMMEDIATE: (*REM*)
   3C EMIT ." /ok>"
   BEGIN CR QUERY " (*END*)" Z= UNTIL
   3C EMIT ." ok>"
-  ; 
+  ;
+</sekt>
 
-( aufgesammelten Ergänzungen allgemeiner Art:
 
+<sekt inhalt="Reste, die schon weggelassen sind">
 (*REM*)
 ( - LOOP's - sind aber sehr langsam
 : I RP @ 1 + @ ;
@@ -1091,8 +1082,7 @@ ESC ]0;FORTY-FORTH 07 EMIT ( 07 EMIT schließt ]
   ;
 IOSTART
 (*END*)
-
-  </sekt>
+</sekt>
 
 
 
@@ -1221,7 +1211,7 @@ HEX DUP N.
 HEX N" 100000000"
 DEZ DUP N.
 HEX DUP N.
-  </sekt>
+</sekt>
 
 
 
@@ -1238,7 +1228,7 @@ HEX INIT
 HERE 0 0 DUMPZ           ( generiert progRAM in P20.vhd für Step_11
 BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM in P20.vhd für Step_11
 3000 2C00 0 DUMPZ        ( generiert stapR   in P20.vhd für Step_11
-  </sekt>
+</sekt>
 
 <sekt inhalt="noch ein wenig DEMO">
 
@@ -1264,6 +1254,7 @@ DUP .
 (        [ -48 72 -48 12 ] ] ok
 ( und gemeinsamer Nenner: DUP . 288
 
-  </sekt>
+</sekt>
 
+</FFINIT2>
 </INIT>

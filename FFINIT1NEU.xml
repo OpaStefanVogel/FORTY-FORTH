@@ -6,10 +6,9 @@
 <AXIOME>
 <sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen, deshalb separat ändern)">
 <sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen">
-( wenn sich AXIOME nicht ändern, ganz normal hintereinander weg compilieren
+( wenn sich AXIOME nicht ändern, ganz normal hintereinanderweg compilieren
 ( wenn sich AXIOME verändern, dann
        ( zuerst RESET und 1x die ursprünglichen AXIOME laden 
-       ( um REPLACE: rückgängig zu machen
        ( und dann so die neuen AXIOME compilieren:
        (   HERE 100 + DPMERK ! E800 BANF !
        (   dann eventuell notwendige Ergänzungsfunktionen
@@ -21,14 +20,13 @@
 
 <sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
 ( zuerst alles Notwendige wieder auf Ausgangszustand schalten
-( -1 2C23 ! ( schaltet RX_ aus !!!
 2 2 * DUP * BASE ! ( HEX )
-7 ' NUMBER ! ( original NUMBER wieder an
+7 ' NUMBER !       ( original NUMBER wieder an
 RP0 ' QUIT ! A00A ' QUIT 1 + ! ( original QUIT wiederherstellen
-QUIT         ( original QUIT starten
-8000 16 ! ( EXXI ausschalten
-4000 000E ! ( aktiviert ^F = QUIT
-' DUMPZ 4 - LFA ! ( LFA zurueck auf Anfangsvokabular
+QUIT               ( original QUIT starten
+8000 16 !          ( EXXI ausschalten
+4000 000E !        ( aktiviert ^F = QUIT
+' DUMPZ 4 - LFA !  ( LFA zurueck auf Anfangsvokabular
 
 DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG auf die festgelegte Anfangsadressen setzen )
 </sekt>
@@ -462,12 +460,13 @@ HERE . BZEIG ?
 START
 </sekt>
 </AXIOME>
-  
+
+<FFINIT2>
 <sekt inhalt="bis Adresse 0800H passt noch DUMPZ drauf (inzwischen nicht mehr)">
 ( schon INIT2P78.txt
 
 ( erste Forth Erweiterungen
-( - DUMPY
+( - DUMPZ
 ( RAMB-Inhaltsausgabe erzeugen:
 : DUBIT HERE ;
 : LG. ( n --> )
