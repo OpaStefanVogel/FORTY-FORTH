@@ -1227,7 +1227,7 @@ HEX DUP N.
 
 <sekt inhalt="in den Zustand für Step_11 bringen und wieder RAM generieren">
 : M. . ; : M+ + ; : M- - ; : M* * ; : M/ / ;
-: . N. ; : + N+ ; : - N- ; : * N* ; : / N/ ; : ^ N^ ; 
+: . O. ; : + N+ ; : - N- ; : * N* ; : / N/ ; : ^ N^ ; 
 
  ' NNUMBER ' NUMBER - 1 - 8000 OR ' NUMBER !
 
