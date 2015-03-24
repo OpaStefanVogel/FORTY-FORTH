@@ -4,7 +4,7 @@
 <INIT>
 
 <AXIOME>
-<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen, deshalb separat ändern)">
+<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen, deshalb separat ändern)"><REF1/>
 <sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen">
 ( wenn sich AXIOME nicht ändern, ganz normal hintereinanderweg compilieren
 ( wenn sich AXIOME verändern, dann
@@ -436,7 +436,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
     AGAIN 
   ;
 
-: START ." FORTY-FORTH" CR CR 3C EMIT ." ok>" QUIT ;
+: START ." FORTY-FORTH" CR CR 3C EMIT ." ok>" 55 2D04 ! QUIT ; ( 2D04 sind die LED's)
 
 : SMUDGE 0 SMUDGEBIT ! ( LFA @ 1+ DUP @ DUP 0LT IF MINUS END_IF SWAP ! ) ;
 
