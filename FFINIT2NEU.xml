@@ -1229,11 +1229,12 @@ HEX DUP N.
 <sekt inhalt="in den Zustand für Step_11 bringen und wieder RAM generieren">
 : NLIT, ( a --> ) DUP 3FFF > OVER C000 LT OR IF 1234 ERROR END_IF , ;
 REPLACE: LIT, NLIT, ; 
+REPLACE: NUMBER NNUMBER ;
 : M. . ; : M+ + ; : M- - ; : M* * ; : M/ / ; : M/MOD /MOD ; : MMOD MOD ;
 : . O. ; : + N+ ; : - N- ; : * N* ; : / N/ ; : /MOD N/MOD : : MOD NMOD ; 
 : GGT NGGT ; : BK NBK ; : ^ N^ ; : ? @ . ;
 
- ' NNUMBER ' NUMBER - 1 - 8000 OR ' NUMBER !
+
 
 111111111111111 DUP * .
 

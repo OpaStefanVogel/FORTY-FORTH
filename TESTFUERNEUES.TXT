@@ -3,13 +3,9 @@
 
 ( nach RESET zuerst FFINIT.TXT und FFINIT1SMUL1.TXT neu laden oder
 2 2 * DUP * BASE ! ( HEX )
-7 ' NUMBER !       ( original NUMBER
-B501 ' LIT, ! 3FFF ' LIT, 1 + ! ( original LIT,
-RP0  ' QUIT ! A00A ' QUIT 1 + ! ( original QUIT
-QUIT               ( original QUIT starten
-8000 16 !          ( EXXI ausschalten
-4000 000E !        ( aktiviert ^F = QUIT
-FORGET LDUMP 
+7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER
+B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT,
+FORGET NLIT, 
 ( --- ohne dem geht nix
 
 

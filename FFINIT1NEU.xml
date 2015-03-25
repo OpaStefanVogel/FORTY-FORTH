@@ -7,14 +7,14 @@
 <AXIOME>
 <sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen und sind deshalb separat zusammengefasst)">
 <sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen">
-( wenn sich AXIOME nicht ändern, ganz normal hintereinanderweg compilieren )
-( wenn sich AXIOME verändern, dann )
-  ( zuerst RESET und 1x die ursprünglichen AXIOME laden ) 
-  ( anschließend die neuen AXIOME compilieren, so: )
+( wenn die Axiome so bleiben wie sie sind, ganz normal 1x hintereinanderweg compilieren )
+( wenn die Axiome verändert werden sollen, dann )
+  ( zuerst RESET und 1x die ursprünglichen Axiome laden ) 
+  ( anschließend die neuen Axiome compilieren, so: )
     ( HERE 100 + DPMERK ! E800 BANF ! )
-    ( 2x neue AXIOME compilieren <REF1/> )
+    ( 2x neue Axiome compilieren <REF1/> )
     ( 058 DPMERK ! E000 BANF ! )
-    ( 2x neue AXIOME compilieren <REF1/> nochmal ) 
+    ( 2x neue Axiome compilieren <REF1/> nochmal ) 
     ( danach alles, was nach den AXIOMEN folgt, 1x compilieren )
   ( bei verzwickten Veränderungen kann es vorkommen, 
   ( dass noch weitere Zwischenschritte eingefügt werden müssen. )
@@ -23,12 +23,9 @@
 <sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
 ( zuerst alles Notwendige wieder auf Ausgangszustand schalten
 2 2 * DUP * BASE ! ( HEX )
-7 ' NUMBER !       ( original NUMBER
-B501 ' LIT, ! 3FFF ' LIT, 1 + ! ( original LIT,
-RP0  ' QUIT ! A00A ' QUIT 1 + ! ( original QUIT
-QUIT               ( original QUIT starten
-8000 16 !          ( EXXI ausschalten
-4000 000E !        ( aktiviert ^F = QUIT
+7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER
+B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT,
+4000 000E !        ( aktiviert ^F = START
 ' DUMPZ 4 - LFA !  ( LFA zurueck auf Anfangsvokabular
 
 DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG zurücksetzen )
