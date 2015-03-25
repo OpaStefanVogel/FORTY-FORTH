@@ -17,16 +17,21 @@
   </xsl:template>
 
 <xsl:template match="INIT"><INIT>
-<a href="INIT.xml">INIT.xml</a>: damit wird der FORTH-Interpreter recompiliert: cp INIT.xml /dev/tty..
-<a href="screenlog.0">screenlog.0</a>: Logfile, welches dabei angefertigt wurde
-  verwendete Farben:
-    <span style="background-color: Magenta;">Magenta</span> damit sind die AXIOME eingerahmt
-    <span style="background-color: Aqua;">Aqua</span> Überschriften aus der Inhaltsübersicht
+Wozu diese beiden Files verwendet werden:
+  <a href="INIT.xml">INIT.xml</a>: FORTH-Interpreter recompilieren mit cp INIT.xml /dev/tty..
+  <a href="screenlog.0">screenlog.0</a>: Logfile, welches dabei angefertigt wurde, 
+    auch um bequem die generierten Speicherarrays für P20_FFP.vhd entnehmen zu können.
+
+Bedeutung der verwendeten Hintergrundfarben:
+  <span style="background-color: Magenta;">Magenta</span> damit sind die AXIOME eingerahmt
+  <span style="background-color: Aqua;">Aqua</span> Überschriften aus der Inhaltsübersicht
   nur bei <a href="screenlog.0">screenlog.0</a>:
     <span style="background-color: LightGrey;">LightGrey</span> erreichte Speicheradressen vorm Weitercompilieren, Programm 0000H-1400H, Text E000H-FB00H
-    <span style="background-color: Khaki;">Khaki</span> Programmausgaben des FORTH-Interpreters
+    <span style="background-color: Khaki;">Khaki</span> Programmausgaben des FORTH-Interpreters im xml-Ausgabemodus
     <span style="background-color: Pink;">Pink</span> generierte Speicherarrays zum Kopieren in P20_FFP.vhd hinein
-  <h1 id="Übersicht">Inhaltsübersicht</h1>
+
+  <h1 id="Übersicht">Inhalt</h1>
+
   <ul>
     <xsl:for-each select="*/sekt">
       <li><a><xsl:attribute name="href">#<xsl:value-of select="@inhalt" /></xsl:attribute>

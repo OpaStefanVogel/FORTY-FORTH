@@ -2,20 +2,21 @@
 <?xml-stylesheet type="text/xsl" href="INIT.xsl" ?>
 <!DOCTYPE INIT SYSTEM "INIT.DTD">
 <INIT>
+-1 XBIT ! ( schaltet CSI-"ok"-Ausgabe auf xml-Modus um )
 
 <AXIOME>
-<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen, deshalb separat ändern)">
+<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen und sind deshalb separat zusammengefasst)">
 <sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen">
 ( wenn sich AXIOME nicht ändern, ganz normal hintereinanderweg compilieren )
 ( wenn sich AXIOME verändern, dann )
-       ( zuerst RESET und 1x die ursprünglichen AXIOME laden ) 
-       ( und dann so die neuen AXIOME compilieren: )
-       (   HERE 100 + DPMERK ! E800 BANF ! )
-       (   dann eventuell notwendige Ergänzungsfunktionen )
-       (   2x neue AXIOME compilieren <REF1/> )
-       (   058 DPMERK ! E000 BANF ! )
-       (   2x neue AXIOME compilieren nochmal <REF1/> ) 
-       (   danach alles was nach den AXIOMEN folgt 1x compilieren )
+  ( zuerst RESET und 1x die ursprünglichen AXIOME laden ) 
+  ( anschließend die neuen AXIOME compilieren, so: )
+    ( HERE 100 + DPMERK ! E800 BANF ! )
+    ( dann eventuell notwendige Ergänzungsfunktionen )
+    ( 2x neue AXIOME compilieren <REF1/> )
+    ( 058 DPMERK ! E000 BANF ! )
+    ( 2x neue AXIOME compilieren nochmal <REF1/> ) 
+    ( danach alles was nach den AXIOMEN folgt 1x compilieren )
 </sekt>
 
 <sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
@@ -424,10 +425,10 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
 : QUIT
   RP0 @ RP ! 
   XBIT @ IF 3C EMIT ." /ok>" ELSE ." ok" END_IF
-  BEGIN 
+  BEGIN ( im Prinzip nur BEGIN CR TIB @ 100 EXPECT INTERPRET AGAIN )
     CR 
     TIB @ 100 EXPECT
-    OVER @ 3C = IF 2DROP ELSE
+    OVER @ 3C = IF 2DROP ELSE ( xml am Zeilenanfang gleich überlesen )
       XBIT @ IF 
         3C EMIT ." ok>" 
         INTERPRET 
@@ -443,7 +444,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
   ;
 
 
-: START ." FORTY-FORTH" CR CR 55 2D04 ! QUIT ; ( 2D04 sind die LED's)
+: START ." FORTY-FORTH" CR CR QUIT ; ( 2D04 sind die LED's)
 
 : SMUDGE 0 SMUDGEBIT ! ( LFA @ 1+ DUP @ DUP 0LT IF MINUS END_IF SWAP ! ) ;
 
@@ -483,7 +484,7 @@ START
 : NG. ( n --> )
   ." x" 22 EMIT LG. 22 EMIT ." ," ; 
 : DUMPZ ( bis+1 von dubit --> )
-  DUBIT !
+  DUBIT ! XBIT @ >R 0 XBIT !
   " ' START " INTERPRET 4000 + 10 !
   CR 3C EMIT ." DUMPZ>"
   BEGIN
@@ -497,6 +498,7 @@ START
     10 +
     2DUP > NOT UNTIL 2DROP
   CR 3C EMIT ." /DUMPZ>"
+  R> XBIT !
   ; 
 
 HERE . BZEIG ?

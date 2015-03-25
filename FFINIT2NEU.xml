@@ -1213,14 +1213,14 @@ ERGEBNIS ?
 ( Zahlenbasis wechseln
 
 : HEX 10 BASE ! ;
-: DEZ 0A BASE ! ;
+: DECIMAL 0A BASE ! ;
 
 HEX N" 10000"
-DEZ DUP N.
+DECIMAL DUP N.
 HEX DUP N.
 
 HEX N" 100000000"
-DEZ DUP N.
+DECIMAL DUP N.
 HEX DUP N.
 </sekt>
 
@@ -1229,14 +1229,15 @@ HEX DUP N.
 <sekt inhalt="in den Zustand für Step_11 bringen und wieder RAM generieren">
 : NLIT, ( a --> ) DUP 3FFF > OVER C000 LT OR IF 1234 ERROR END_IF , ;
 REPLACE: LIT, NLIT, ; 
-: M. . ; : M+ + ; : M- - ; : M* * ; : M/ / ;
-: . O. ; : + N+ ; : - N- ; : * N* ; : / N/ ; : ^ N^ ; 
+: M. . ; : M+ + ; : M- - ; : M* * ; : M/ / ; : M/MOD /MOD ; : MMOD MOD ;
+: . O. ; : + N+ ; : - N- ; : * N* ; : / N/ ; : /MOD N/MOD : : MOD NMOD ; 
+: GGT NGGT ; : BK NBK ; : ^ N^ ; : ? @ . ;
 
  ' NNUMBER ' NUMBER - 1 - 8000 OR ' NUMBER !
 
 111111111111111 DUP * .
 
-( an der Stelle, wenn gewünscht, Programm-VHDL-Quelltext für Step_11 ausgeben
+( an der Stelle Programm-VHDL-Quelltext für Step_11 ausgeben
 HEX INIT 
 HERE 0 0 DUMPZ           ( generiert progRAM in P20.vhd für Step_11
 BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM in P20.vhd für Step_11
@@ -1249,7 +1250,7 @@ BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM in P20.vhd für Step_11
 
 ( eine Matrix invertieren )
 
-DEZ
+DECIMAL
 
 [ [ 1 1 ^ 1 2 ^ 1 3 ^ 1 1 ^ ]
   [ 2 1 ^ 2 2 ^ 2 3 ^ 2 4 ^ ]
@@ -1269,5 +1270,6 @@ DUP .
 
 </sekt>
 
+0 XBIT ! ( schaltet xml-Ausgabemodus zurück auf "ok" )
 </FFINIT2>
 </INIT>
