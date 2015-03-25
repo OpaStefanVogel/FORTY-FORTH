@@ -320,7 +320,7 @@ OPERAND1 OPERAND->SLX . . .
   1+ 2DUP + ERGEBNIS !
   2DUP SWAP 0 FILL
   SWAP DROP
-ERGEBNIS @ SPEICHERENDE @ LT NOT IF 7658 ERROR END_IF
+ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
   ;
 
 
@@ -876,6 +876,9 @@ A003 CONSTANT RETURN
   DUP 3 = IF ." Wort nicht definiert" END_IF
   DUP 6 = IF ." Eingabezeile zu lang" END_IF
   DUP 9 = IF ." Strukturfehler in IF END_IF BEGIN UNTIL DO LOOP " END_IF
+  DUP 12 = IF ." negativer Exponent" END_IF
+  DUP 369 = IF ." Zahlenspeicher voll" END_IF
+  DUP 1234 = IF ." große ganze Zahlen kompilieren geht momentan nicht, siehe TESTFUERNEUES.TXT" END_IF
   ;
 
 ( ganz neu: Steuerungstasten: ^A bis ^G, weiter ^H=^A ^L=^B ...
@@ -1081,6 +1084,14 @@ ESC ]0;FORTY-FORTH 07 EMIT ( 07 EMIT schließt ]
   2D30 2D14 DO I @ I ! LOOP
   ;
 IOSTART
+
+( wozu das RBIT war? für relatives CR )
+: COMPILE, ( adr --> )
+  RBIT @ IF 4000 ELSE 
+    DP @ 1+ - 0FFF AND 3000 END_IF
+    0000 + + , ;
+
+
 (*END*)
 </sekt>
 
@@ -1216,6 +1227,8 @@ HEX DUP N.
 
 
 <sekt inhalt="in den Zustand für Step_11 bringen und wieder RAM generieren">
+: NLIT, ( a --> ) DUP 3FFF > OVER C000 LT OR IF 1234 ERROR END_IF , ;
+REPLACE: LIT, NLIT, ; 
 : M. . ; : M+ + ; : M- - ; : M* * ; : M/ / ;
 : . O. ; : + N+ ; : - N- ; : * N* ; : / N/ ; : ^ N^ ; 
 

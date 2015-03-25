@@ -1,32 +1,22 @@
-( weiter hier Neues erstmal aufsammeln und nicht ständig neuen ProgRAM machen
-( : . N. ; in DEMO.TXT war Unfug ( nur um Step_11 Simulation zu ermöglichen )
+( : . N. ; in DEMO.TXT war Unfug, war nur, um Step_11 Simulation zu ermöglichen )
 ( deshalb muss ich das jetzt mühsam rückgängig machen:
 
 ( nach RESET zuerst FFINIT.TXT und FFINIT1SMUL1.TXT neu laden oder
 2 2 * DUP * BASE ! ( HEX )
-7 ' NUMBER !
-18 ' KEY_INT 6 + ! ( repariert KEY_INT
-RP0 ' QUIT ! A00A ' QUIT 1 + !
-QUIT
-1B EMIT 5B EMIT 33 EMIT 39 EMIT 6D EMIT ( Farben aus
-7 ' NUMBER !
-8000 16 ! ( deaktiviert EXXI
-4000 000E ! ( aktiviert ^F = QUIT
-FORGET LDUMP
+7 ' NUMBER !       ( original NUMBER
+B501 ' LIT, ! 3FFF ' LIT, 1 + ! ( original LIT,
+RP0  ' QUIT ! A00A ' QUIT 1 + ! ( original QUIT
+QUIT               ( original QUIT starten
+8000 16 !          ( EXXI ausschalten
+4000 000E !        ( aktiviert ^F = QUIT
+FORGET LDUMP 
 ( --- ohne dem geht nix
 
 
 
 
 
-
-( jetzt geht's aber weiter mit Neuem:
-
-
-( also zu O.
-( in H SLX->ERGEBNIS hinzu
-( am Anfang von H DUP >R .... R> C000 AND dazu, aber das muss noch weiter
-( ok Unterscheidung OBJ anhand l: l+4000 in L und H einfügen
+( jetzt kann es weitergehen mit neuen Wortdefinitionen:
 
 
 
@@ -34,9 +24,6 @@ FORGET LDUMP
 
 
 
-
-
-( jetzt neue Matrixeingabe und neues INVERTIEREN
 
 
 

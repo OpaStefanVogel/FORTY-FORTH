@@ -4,31 +4,32 @@
 <INIT>
 
 <AXIOME>
-<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen, deshalb separat ändern)"><REF1/>
+<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen, deshalb separat ändern)">
 <sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen">
-( wenn sich AXIOME nicht ändern, ganz normal hintereinanderweg compilieren
-( wenn sich AXIOME verändern, dann
-       ( zuerst RESET und 1x die ursprünglichen AXIOME laden 
-       ( und dann so die neuen AXIOME compilieren:
-       (   HERE 100 + DPMERK ! E800 BANF !
-       (   dann eventuell notwendige Ergänzungsfunktionen
-       (   2x neue AXIOME compilieren
-       (   058 DPMERK ! E000 BANF !
-       (   2x neue AXIOME compilieren
-       (   danach alles was nach den AXIOMEN folgt 1x compilieren
+( wenn sich AXIOME nicht ändern, ganz normal hintereinanderweg compilieren )
+( wenn sich AXIOME verändern, dann )
+       ( zuerst RESET und 1x die ursprünglichen AXIOME laden ) 
+       ( und dann so die neuen AXIOME compilieren: )
+       (   HERE 100 + DPMERK ! E800 BANF ! )
+       (   dann eventuell notwendige Ergänzungsfunktionen )
+       (   2x neue AXIOME compilieren <REF1/> )
+       (   058 DPMERK ! E000 BANF ! )
+       (   2x neue AXIOME compilieren nochmal <REF1/> ) 
+       (   danach alles was nach den AXIOMEN folgt 1x compilieren )
 </sekt>
 
 <sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
 ( zuerst alles Notwendige wieder auf Ausgangszustand schalten
 2 2 * DUP * BASE ! ( HEX )
-7 ' NUMBER !       ( original NUMBER wieder an
-RP0 ' QUIT ! A00A ' QUIT 1 + ! ( original QUIT wiederherstellen
+7 ' NUMBER !       ( original NUMBER
+B501 ' LIT, ! 3FFF ' LIT, 1 + ! ( original LIT,
+RP0  ' QUIT ! A00A ' QUIT 1 + ! ( original QUIT
 QUIT               ( original QUIT starten
 8000 16 !          ( EXXI ausschalten
 4000 000E !        ( aktiviert ^F = QUIT
 ' DUMPZ 4 - LFA !  ( LFA zurueck auf Anfangsvokabular
 
-DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG auf die festgelegte Anfangsadressen setzen )
+DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG zurücksetzen )
 </sekt>
 
 <sekt inhalt="so, mit irgendwas muss das Compilieren losgehen">
@@ -48,7 +49,8 @@ D001 CONSTANT SP
 D002 CONSTANT RP
 D003 CONSTANT PC
 
-40 CONSTANT RBIT
+( für das Folgende freigehaltene Adressen: 0040-0057 )
+40 CONSTANT XBIT
 41 CONSTANT SMUDGEBIT
 42 CONSTANT RP0 3000 RP0 !
 43 CONSTANT IRAMADR ( F000 43 !
@@ -169,7 +171,7 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 : . H. ;
 : ? @ . ;
 : CR 
-  CRDP @ DP @ - STAT @ 0= NOT OR IF 
+  CRDP @ DP @ - STAT @ 0= NOT OR XBIT @ 0= NOT AND IF 
     3C EMIT ." fl>" CRDP @ . CRBZEIG @ . 3C EMIT ." /fl>"
     3C EMIT ." fr>" DP @ . BZEIG @ . 3C EMIT ." /fr>"
     DP @ CRDP ! BZEIG @ CRBZEIG ! 
@@ -376,15 +378,12 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
       DUP @ + REPEAT
   R> DROP R>
   ROT 0= IF DROP DROP 0 0 END_IF
+  ( OVER LFA @ SWAP LT IF ." *" OVER . LFA @ . END_IF ( vref wenn gebraucht
   ;
 
-: LCFA ( lfa r --> cfa r )
-  SWAP 3 + SWAP ;
+: LCFA ( lfa r --> cfa r ) SWAP 3 + SWAP ;
 
-: COMPILE, ( adr --> )
-  RBIT @ IF 4000 ELSE 
-    DP @ 1+ - 0FFF AND 3000 END_IF
-    0000 + + , ;
+: COMPILE, ( adr --> ) 4000 + , ;
 
 : CREATE ( /name/  --> )
   CSP! ( Stapelbalance prüfen in ; )
@@ -423,20 +422,28 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
   ;
 
 : QUIT
-  RP0 @ RP !
-  3C EMIT ." /ok>"
+  RP0 @ RP ! 
+  XBIT @ IF 3C EMIT ." /ok>" ELSE ." ok" END_IF
   BEGIN 
     CR 
     TIB @ 100 EXPECT
     OVER @ 3C = IF 2DROP ELSE
-      3C EMIT ." ok>" 
-      INTERPRET 
-      3C EMIT ." /ok>"
+      XBIT @ IF 
+        3C EMIT ." ok>" 
+        INTERPRET 
+        3C EMIT ." /ok>" 
+        ELSE
+          C2 EMIT 9B EMIT 33 EMIT 36 EMIT 6D EMIT
+          INTERPRET 
+          C2 EMIT 9B EMIT 33 EMIT 39 EMIT 6D EMIT
+          STAT @ 0= IF ." ok" END_IF 
+          END_IF 
       END_IF
     AGAIN 
   ;
 
-: START ." FORTY-FORTH" CR CR 3C EMIT ." ok>" 55 2D04 ! QUIT ; ( 2D04 sind die LED's)
+
+: START ." FORTY-FORTH" CR CR 55 2D04 ! QUIT ; ( 2D04 sind die LED's)
 
 : SMUDGE 0 SMUDGEBIT ! ( LFA @ 1+ DUP @ DUP 0LT IF MINUS END_IF SWAP ! ) ;
 

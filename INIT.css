@@ -23,7 +23,7 @@ sekt {
   }
 
 ok {
-  background-color: Bisque; 
+  background-color: Khaki; 
   }
 
 fl {
@@ -44,6 +44,7 @@ ul {
 DUMPZ { 
   background-color: Pink; 
   white-space: pre;
+  overflow: hidden;
   }
 
 .zurück { 
