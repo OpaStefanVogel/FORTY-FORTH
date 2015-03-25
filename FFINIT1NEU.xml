@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="INIT.xsl" ?>
 <!DOCTYPE INIT SYSTEM "INIT.DTD">
 <INIT>
--1 XBIT ! ( schaltet CSI-"ok"-Ausgabe auf xml-Modus um )
+-1 XBIT ! ( schaltet ab der nächsten Zeile die CSI-"ok"-Ausgabe auf xml-Modus um )
 
 <AXIOME>
 <sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen und sind deshalb separat zusammengefasst)">
@@ -12,11 +12,12 @@
   ( zuerst RESET und 1x die ursprünglichen AXIOME laden ) 
   ( anschließend die neuen AXIOME compilieren, so: )
     ( HERE 100 + DPMERK ! E800 BANF ! )
-    ( dann eventuell notwendige Ergänzungsfunktionen )
     ( 2x neue AXIOME compilieren <REF1/> )
     ( 058 DPMERK ! E000 BANF ! )
-    ( 2x neue AXIOME compilieren nochmal <REF1/> ) 
-    ( danach alles was nach den AXIOMEN folgt 1x compilieren )
+    ( 2x neue AXIOME compilieren <REF1/> nochmal ) 
+    ( danach alles, was nach den AXIOMEN folgt, 1x compilieren )
+  ( bei verzwickten Veränderungen kann es vorkommen, 
+  ( dass noch weitere Zwischenschritte eingefügt werden müssen. )
 </sekt>
 
 <sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
@@ -436,8 +437,8 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
         ELSE
           C2 EMIT 9B EMIT 33 EMIT 36 EMIT 6D EMIT
           INTERPRET 
-          C2 EMIT 9B EMIT 33 EMIT 39 EMIT 6D EMIT
           STAT @ 0= IF ." ok" END_IF 
+          C2 EMIT 9B EMIT 33 EMIT 39 EMIT 6D EMIT
           END_IF 
       END_IF
     AGAIN 
@@ -445,6 +446,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
 
 
 : START ." FORTY-FORTH" CR CR QUIT ; ( 2D04 sind die LED's)
+
 
 : SMUDGE 0 SMUDGEBIT ! ( LFA @ 1+ DUP @ DUP 0LT IF MINUS END_IF SWAP ! ) ;
 

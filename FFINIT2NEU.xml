@@ -1047,7 +1047,7 @@ IMMEDIATE: /; 0 STAT ! CSP? HERE 1 - @ 800 OR HERE 1 - ! SMUDGE [ SMUDGE ] ;
 ( ' W 8 DUMP
 
 
-( Ausgabe von ESCAPE-Sequenzen:
+( Ausgabe von ESCAPE-Sequenzen: sie vertragen sich aber nicht mit xml, besser CSI nehmen
 20 WORD: ESC 1B EMIT BEGIN OVER C@ EMIT SWAP 1 + SWAP 1 - DUP 0= UNTIL DROP ;
 ESC ]0;FORTY-FORTH 07 EMIT ( 07 EMIT schließt ]
 : FESTPOSITION ESC [s ESC [1;1H ESC [31m ; ( saveC Pos1,1 redcolor
@@ -1248,7 +1248,7 @@ BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM in P20.vhd für Step_11
 
 111111111111111 DUP * .
 
-( eine Matrix invertieren )
+( jetzt eine Matrix invertieren )
 
 DECIMAL
 
@@ -1256,12 +1256,12 @@ DECIMAL
   [ 2 1 ^ 2 2 ^ 2 3 ^ 2 4 ^ ]
   [ 3 1 ^ 3 2 ^ 3 3 ^ 3 4 ^ ]
   [ 4 1 ^ 4 2 ^ 4 3 ^ 4 4 ^ ]
-  ]
-DUP O.
-4 INVERTIEREN
-OVER O.
+  ] 
 DUP .
-( Ergebnis sollte sein: OVER O.
+4 INVERTIEREN ( mat dim --> invmat nenner )
+OVER .
+DUP .
+( Ergebnis sollte sein: OVER .
 (      [ [ 1152 -864 384 -72 ] 
 (        [ -1248 1368 -672 132 ] 
 (        [ 432 -576 336 -72 ] 
@@ -1270,6 +1270,6 @@ DUP .
 
 </sekt>
 
-0 XBIT ! ( schaltet xml-Ausgabemodus zurück auf "ok" )
+0 XBIT ! ( schaltet xml-Ausgabemodus wieder zurück auf CSI-"ok" )
 </FFINIT2>
 </INIT>
