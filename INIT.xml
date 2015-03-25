@@ -2,33 +2,33 @@
 <?xml-stylesheet type="text/xsl" href="INIT.xsl" ?>
 <!DOCTYPE INIT SYSTEM "INIT.DTD">
 <INIT>
+-1 XBIT ! ( schaltet ab der nächsten Zeile die CSI-"ok"-Ausgabe auf xml-Modus um )
 
 <AXIOME>
-<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen, deshalb separat ändern)">
+<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen und sind deshalb separat zusammengefasst)">
 <sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen">
-( wenn sich AXIOME nicht ändern, ganz normal hintereinanderweg compilieren
-( wenn sich AXIOME verändern, dann
-       ( zuerst RESET und 1x die ursprünglichen AXIOME laden 
-       ( und dann so die neuen AXIOME compilieren:
-       (   HERE 100 + DPMERK ! E800 BANF !
-       (   dann eventuell notwendige Ergänzungsfunktionen
-       (   2x neue AXIOME compilieren
-       (   058 DPMERK ! E000 BANF !
-       (   2x neue AXIOME compilieren
-       (   danach alles was nach den AXIOMEN folgt 1x compilieren
+( wenn die Axiome so bleiben wie sie sind, ganz normal 1x hintereinanderweg compilieren )
+( wenn die Axiome verändert werden sollen, dann )
+  ( zuerst RESET und 1x die ursprünglichen Axiome laden ) 
+  ( anschließend die neuen Axiome compilieren, so: )
+    ( HERE 100 + DPMERK ! E800 BANF ! )
+    ( 2x neue Axiome compilieren <REF1/> )
+    ( 058 DPMERK ! E000 BANF ! )
+    ( 2x neue Axiome compilieren <REF1/> nochmal ) 
+    ( danach alles, was nach den AXIOMEN folgt, 1x compilieren )
+  ( bei verzwickten Veränderungen kann es vorkommen, 
+  ( dass noch weitere Zwischenschritte eingefügt werden müssen. )
 </sekt>
 
 <sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
 ( zuerst alles Notwendige wieder auf Ausgangszustand schalten
 2 2 * DUP * BASE ! ( HEX )
-7 ' NUMBER !       ( original NUMBER wieder an
-RP0 ' QUIT ! A00A ' QUIT 1 + ! ( original QUIT wiederherstellen
-QUIT               ( original QUIT starten
-8000 16 !          ( EXXI ausschalten
-4000 000E !        ( aktiviert ^F = QUIT
+7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER
+B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT,
+4000 000E !        ( aktiviert ^F = START
 ' DUMPZ 4 - LFA !  ( LFA zurueck auf Anfangsvokabular
 
-DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG auf die festgelegte Anfangsadressen setzen )
+DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG zurücksetzen )
 </sekt>
 
 <sekt inhalt="so, mit irgendwas muss das Compilieren losgehen">
@@ -48,7 +48,8 @@ D001 CONSTANT SP
 D002 CONSTANT RP
 D003 CONSTANT PC
 
-40 CONSTANT RBIT
+( für das Folgende freigehaltene Adressen: 0040-0057 )
+40 CONSTANT XBIT
 41 CONSTANT SMUDGEBIT
 42 CONSTANT RP0 3000 RP0 !
 43 CONSTANT IRAMADR ( F000 43 !
@@ -135,7 +136,6 @@ IMMEDIATE: WHILE COMPILE IF ;
 IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 </sekt>
 
-
 <sekt inhalt="etliche kleinere Funktionen">
 : C@ @ ;
 : C! ! ;
@@ -169,7 +169,7 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 : . H. ;
 : ? @ . ;
 : CR 
-  CRDP @ DP @ - STAT @ 0= NOT OR IF 
+  CRDP @ DP @ - STAT @ 0= NOT OR XBIT @ 0= NOT AND IF 
     3C EMIT ." fl>" CRDP @ . CRBZEIG @ . 3C EMIT ." /fl>"
     3C EMIT ." fr>" DP @ . BZEIG @ . 3C EMIT ." /fr>"
     DP @ CRDP ! BZEIG @ CRBZEIG ! 
@@ -255,9 +255,6 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
 ' KEY_INT 4000 + 26 !
 ' KEYCODE2 4000 + 12 !
 </sekt>
-
-
-
 
 <sekt inhalt="es folgt der Interpreter">
 ( neu ESCAPE durch EXPECT durchlaufen lassen und 7F-->08:
@@ -376,15 +373,12 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
       DUP @ + REPEAT
   R> DROP R>
   ROT 0= IF DROP DROP 0 0 END_IF
+  ( OVER LFA @ SWAP LT IF ." *" OVER . LFA @ . END_IF ( vref wenn gebraucht
   ;
 
-: LCFA ( lfa r --> cfa r )
-  SWAP 3 + SWAP ;
+: LCFA ( lfa r --> cfa r ) SWAP 3 + SWAP ;
 
-: COMPILE, ( adr --> )
-  RBIT @ IF 4000 ELSE 
-    DP @ 1+ - 0FFF AND 3000 END_IF
-    0000 + + , ;
+: COMPILE, ( adr --> ) 4000 + , ;
 
 : CREATE ( /name/  --> )
   CSP! ( Stapelbalance prüfen in ; )
@@ -423,20 +417,29 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
   ;
 
 : QUIT
-  RP0 @ RP !
-  3C EMIT ." /ok>"
-  BEGIN 
+  RP0 @ RP ! 
+  XBIT @ IF 3C EMIT ." /ok>" ELSE ." ok" END_IF
+  BEGIN ( im Prinzip nur BEGIN CR TIB @ 100 EXPECT INTERPRET AGAIN )
     CR 
     TIB @ 100 EXPECT
-    OVER @ 3C = IF 2DROP ELSE
-      3C EMIT ." ok>" 
-      INTERPRET 
-      3C EMIT ." /ok>"
+    OVER @ 3C = IF 2DROP ELSE ( xml am Zeilenanfang gleich überlesen )
+      XBIT @ IF 
+        3C EMIT ." ok>" 
+        INTERPRET 
+        3C EMIT ." /ok>" 
+        ELSE
+          C2 EMIT 9B EMIT 33 EMIT 36 EMIT 6D EMIT
+          INTERPRET 
+          STAT @ 0= IF ." ok" END_IF 
+          C2 EMIT 9B EMIT 33 EMIT 39 EMIT 6D EMIT
+          END_IF 
       END_IF
     AGAIN 
   ;
 
+
 : START ." FORTY-FORTH" CR CR QUIT ;
+
 
 : SMUDGE 0 SMUDGEBIT ! ( LFA @ 1+ DUP @ DUP 0LT IF MINUS END_IF SWAP ! ) ;
 
@@ -463,8 +466,6 @@ START
 
 <FFINIT2>
 <sekt inhalt="bis Adresse 0800H passt noch DUMPZ drauf (inzwischen nicht mehr)">
-( schon INIT2P78.txt
-
 ( erste Forth Erweiterungen
 ( - DUMPZ
 ( RAMB-Inhaltsausgabe erzeugen:
@@ -476,7 +477,7 @@ START
 : NG. ( n --> )
   ." x" 22 EMIT LG. 22 EMIT ." ," ; 
 : DUMPZ ( bis+1 von dubit --> )
-  DUBIT !
+  DUBIT ! XBIT @ >R 0 XBIT !
   " ' START " INTERPRET 4000 + 10 !
   CR 3C EMIT ." DUMPZ>"
   BEGIN
@@ -490,33 +491,28 @@ START
     10 +
     2DUP > NOT UNTIL 2DROP
   CR 3C EMIT ." /DUMPZ>"
+  R> XBIT !
   ; 
 
 HERE . BZEIG ?
-
-  </sekt>
-
+</sekt>
 
 <sekt inhalt="ProgRAM und ByteRAM für Step_9 und Step_10 erstellen">
 HERE 0 0 DUMPZ          ( generiert ProgRAM in P20.vhd Step_10
 BZEIG @ E000 -1 DUMPZ   ( generiert ByteRAM in P20.vhd Step_10
-  </sekt>
+</sekt>
 
 <sekt inhalt="Variablen">
-2F00 CONSTANT RAMP1
-RAMP1 1+ RAMP1 !
+2F00 CONSTANT RAMP1 RAMP1 1+ RAMP1 !
 : VARIABLE RAMP1 @ DUP CONSTANT DUP 1+ RAMP1 ! ! ;
-  RAMP1 VARIABLE RAMP3 ( RAMP3 TIB RAMP1
-: RAMBUF ( /name/  n --> )
-  MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her )
+</sekt>
 
+<sekt inhalt="noch paar hilfreiche Funktionen">
 : MOVE ( adr1 adr2 n --> )
   BEGIN DUP WHILE >R OVER @ OVER ! SWAP 1+ SWAP 1+ R> 1 - REPEAT DROP 2DROP ;
 : FILL ( adr n b --> )
   ROT ROT BEGIN DUP WHILE >R 2DUP ! 1 + R> 1 - REPEAT DROP 2DROP ;
 
-
-( - noch paar hilfreiche Funktionen:
 : DUMP ( addr n --> )
   BEGIN SWAP ( CR DUP . ) DUP @ . 1 + SWAP 1 - DUP 0= UNTIL DROP ;
 
@@ -527,9 +523,7 @@ RAMP1 1+ RAMP1 !
 : ABS DUP 0LT IF MINUS END_IF ;
 </sekt>
 
-
-<sekt inhalt="Multiplikation">( 222222 dann SUPERMULT SMUL
-
+<sekt inhalt="Multiplikation">
 A017 MCODE MULT_I  ( ebenso MULT_I und MULT_II
 A018 MCODE MULT_II
 : SUPERMULT ( a u adrc adrb n --> a u' adrc' adrb' )
@@ -598,20 +592,9 @@ C 8 DUMP
 ( C 2001 0 FILL
 ( 0 1000 A 0 1000 B C SMUL . . .
 ( C 8 DUMP
-
-
-: a*a;; 
-  A 2000 111111 FILL
-  B 2000 111111 FILL
-  C 4001 000000 FILL
-  0 2000 A 0 2000 B C SMUL 7 EMIT ;
 </sekt>
 
-
-
-
-<sekt inhalt="Addition">( 333333 dann ADDIER DIV32 SDIV 
-
+<sekt inhalt="Addition"> 
 : ADDIER ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3)
          ( L0 L1 L2 L3 L4 L5 L6
   7 LOCAL
@@ -677,7 +660,7 @@ C 8 0 FILL
 C 8 DUMP
 </sekt>
 
-<sekt inhalt="Division">( Divisionen
+<sekt inhalt="Division">
 A014 MCODE DI32 ( 
 : DIV32 ( a b d --> r q )
   10 BEGIN >R DI32 R> 1 - DUP 0= UNTIL 2DROP ;
@@ -760,10 +743,7 @@ C 8 DUMP
 A 8 DUMP
 </sekt>
 
-
-
-<sekt inhalt="Zahlenspeicher">( 444444 dann 2OPERANDEN->SLX SLX->ERGEBNIS
-
+<sekt inhalt="Zahlenspeicher">
 0 VARIABLE OPERAND1
 0 VARIABLE OPERAND2
 1400 VARIABLE ERGEBNIS
@@ -824,7 +804,7 @@ OPERAND1 OPERAND->SLX . . .
   1+ 2DUP + ERGEBNIS !
   2DUP SWAP 0 FILL
   SWAP DROP
-ERGEBNIS @ SPEICHERENDE @ LT NOT IF 7658 ERROR END_IF
+ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
   ;
 
 
@@ -842,10 +822,7 @@ ERGEBNIS @ SPEICHERENDE @ LT NOT IF 7658 ERROR END_IF
 77 5800 2OPERANDEN->2SLX . . . . . . .
 </sekt>
 
-
-
-
-<sekt inhalt="N+ N- N* N/MOD N.">( 555555 und N+ N- N* N/MOD N.
+<sekt inhalt="N+ N- N* N/MOD N.">
 : N+ ( x y --> z )
   2OPERANDEN->2SLX ADDIER SLX->ERGEBNIS ;
 : N- ( x y --> z )
@@ -913,11 +890,6 @@ N/MOD NB.
 1111 DUP N.
 N/MOD NB.
 </sekt>
-
-
-
-
-
 
 <sekt inhalt="Zwischenergebnisse nicht unnötig speichern">
 ZAHLENSPEICHER @ VARIABLE BLOCKANFANG
@@ -1076,11 +1048,7 @@ N" 000002330657FDD698" N" 4C0CF598D2" N* N.
 10 20 N^ 10 10 N^ DUP -1 N+ SWAP 1 N+ N* N- N.
 </sekt>
 
-
-
-
-<sekt inhalt="nochmal N. für beliebige Zahlenbasis">( 888888 dann nochmal N. doppelt!!! für DEZ
-
+<sekt inhalt="nochmal N. für beliebige Zahlenbasis">
 : N. ( a -->  /zahl/ )
   BASE @ 10 = IF N. ELSE
     NEBENRECHNUNG SWAP
@@ -1100,10 +1068,7 @@ N" 000002330657FDD698" N" 4C0CF598D2" N* N.
 INIT
 </sekt>
 
-
-
-<sekt inhalt="Array-Objekte">( 999999 -- Obj
-
+<sekt inhalt="Array-Objekte">
 : ZERLEG ( a --> adr i )
   3FFF AND DUP 1+ SWAP @ ;
 
@@ -1199,11 +1164,7 @@ DUP ZERLEG SWAP . .
 ( ok das passt besser
 </sekt>
 
-
-
-<sekt inhalt="Invertieren">( 00000 Invertieren
-
-
+<sekt inhalt="Invertieren">
 0 VARIABLE SPMERK
 : [ ( ---> spmerk )
   SPMERK @ SP @ SPMERK !
@@ -1338,11 +1299,7 @@ ERGEBNIS ?
 ( mehr geht erstmal nicht weil nicht mehr Platz
 </sekt>
 
-
-
-
-<sekt inhalt="Reste die auch weggelassen werden können, wenn alles geht">( ab hier FFINIT2.TXT
-
+<sekt inhalt="Reste die auch weggelassen werden können, wenn alles geht">
 : VLIST
   LFA @ BEGIN 
     DUP 1+ @ OVER 2 + @ TYPE 20 EMIT 
@@ -1380,6 +1337,9 @@ A003 CONSTANT RETURN
   DUP 3 = IF ." Wort nicht definiert" END_IF
   DUP 6 = IF ." Eingabezeile zu lang" END_IF
   DUP 9 = IF ." Strukturfehler in IF END_IF BEGIN UNTIL DO LOOP " END_IF
+  DUP 12 = IF ." negativer Exponent" END_IF
+  DUP 369 = IF ." Zahlenspeicher voll" END_IF
+  DUP 1234 = IF ." große ganze Zahlen kompilieren geht momentan nicht, siehe TESTFUERNEUES.TXT" END_IF
   ;
 
 ( ganz neu: Steuerungstasten: ^A bis ^G, weiter ^H=^A ^L=^B ...
@@ -1399,9 +1359,12 @@ IMMEDIATE: (*REM*)
   ;
 </sekt>
 
-
 <sekt inhalt="Reste, die schon weggelassen sind">
 (*REM*)
+  RAMP1 VARIABLE RAMP3 ( RAMP3 TIB RAMP1
+: RAMBUF ( /name/  n --> )
+  MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her )
+
 ( - LOOP's - sind aber sehr langsam
 : I RP @ 1 + @ ;
 : J RP @ 3 + @ ;
@@ -1548,7 +1511,7 @@ IMMEDIATE: /; 0 STAT ! CSP? HERE 1 - @ 800 OR HERE 1 - ! SMUDGE [ SMUDGE ] ;
 ( ' W 8 DUMP
 
 
-( Ausgabe von ESCAPE-Sequenzen:
+( Ausgabe von ESCAPE-Sequenzen: sie vertragen sich aber nicht mit xml, besser CSI nehmen
 20 WORD: ESC 1B EMIT BEGIN OVER C@ EMIT SWAP 1 + SWAP 1 - DUP 0= UNTIL DROP ;
 ESC ]0;FORTY-FORTH 07 EMIT ( 07 EMIT schließt ]
 : FESTPOSITION ESC [s ESC [1;1H ESC [31m ; ( saveC Pos1,1 redcolor
@@ -1585,10 +1548,20 @@ ESC ]0;FORTY-FORTH 07 EMIT ( 07 EMIT schließt ]
   2D30 2D14 DO I @ I ! LOOP
   ;
 IOSTART
+
+( wozu das RBIT war? für relatives CR )
+: COMPILE, ( adr --> )
+  RBIT @ IF 4000 ELSE 
+    DP @ 1+ - 0FFF AND 3000 END_IF
+    0000 + + , ;
+
+: a*a;; 
+  A 2000 111111 FILL
+  B 2000 111111 FILL
+  C 4001 000000 FILL
+  0 2000 A 0 2000 B C SMUL 7 EMIT ;
 (*END*)
 </sekt>
-
-
 
 <sekt inhalt="DEMO">
 56 89 * .
@@ -1706,28 +1679,30 @@ ERGEBNIS ?
 ( Zahlenbasis wechseln
 
 : HEX 10 BASE ! ;
-: DEZ 0A BASE ! ;
+: DECIMAL 0A BASE ! ;
 
 HEX N" 10000"
-DEZ DUP N.
+DECIMAL DUP N.
 HEX DUP N.
 
 HEX N" 100000000"
-DEZ DUP N.
+DECIMAL DUP N.
 HEX DUP N.
 </sekt>
 
-
-
 <sekt inhalt="in den Zustand für Step_11 bringen und wieder RAM generieren">
-: M. . ; : M+ + ; : M- - ; : M* * ; : M/ / ;
-: . O. ; : + N+ ; : - N- ; : * N* ; : / N/ ; : ^ N^ ; 
+: NLIT, ( a --> ) DUP 3FFF > OVER C000 LT OR IF 1234 ERROR END_IF , ;
+REPLACE: LIT, NLIT, ; 
+REPLACE: NUMBER NNUMBER ;
+: M. . ; : M+ + ; : M- - ; : M* * ; : M/ / ; : M/MOD /MOD ; : MMOD MOD ;
+: . O. ; : + N+ ; : - N- ; : * N* ; : / N/ ; : /MOD N/MOD : : MOD NMOD ; 
+: GGT NGGT ; : BK NBK ; : ^ N^ ; : ? @ . ;
 
- ' NNUMBER ' NUMBER - 1 - 8000 OR ' NUMBER !
+
 
 111111111111111 DUP * .
 
-( an der Stelle, wenn gewünscht, Programm-VHDL-Quelltext für Step_11 ausgeben
+( an der Stelle Programm-VHDL-Quelltext für Step_11 ausgeben
 HEX INIT 
 HERE 0 0 DUMPZ           ( generiert progRAM in P20.vhd für Step_11
 BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM in P20.vhd für Step_11
@@ -1735,23 +1710,22 @@ BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM in P20.vhd für Step_11
 </sekt>
 
 <sekt inhalt="noch ein wenig DEMO">
-
 111111111111111 DUP * .
 
-( eine Matrix invertieren )
+( jetzt eine Matrix invertieren )
 
-DEZ
+DECIMAL
 
 [ [ 1 1 ^ 1 2 ^ 1 3 ^ 1 1 ^ ]
   [ 2 1 ^ 2 2 ^ 2 3 ^ 2 4 ^ ]
   [ 3 1 ^ 3 2 ^ 3 3 ^ 3 4 ^ ]
   [ 4 1 ^ 4 2 ^ 4 3 ^ 4 4 ^ ]
-  ]
-DUP O.
-4 INVERTIEREN
-OVER O.
+  ] 
 DUP .
-( Ergebnis sollte sein: OVER O.
+4 INVERTIEREN ( mat dim --> invmat nenner )
+OVER .
+DUP .
+( Ergebnis sollte sein: OVER .
 (      [ [ 1152 -864 384 -72 ] 
 (        [ -1248 1368 -672 132 ] 
 (        [ 432 -576 336 -72 ] 
@@ -1760,5 +1734,6 @@ DUP .
 
 </sekt>
 
+0 XBIT ! ( schaltet xml-Ausgabemodus wieder zurück auf CSI-"ok" )
 </FFINIT2>
 </INIT>

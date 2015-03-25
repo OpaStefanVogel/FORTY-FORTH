@@ -2,33 +2,33 @@
 <?xml-stylesheet type="text/xsl" href="INIT.xsl" ?>
 <!DOCTYPE INIT SYSTEM "INIT.DTD">
 <INIT>
+-1 XBIT ! ( schaltet ab der nächsten Zeile die CSI-"ok"-Ausgabe auf xml-Modus um )
 
 <AXIOME>
-<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen, deshalb separat ändern)">
+<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen und sind deshalb separat zusammengefasst)">
 <sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen">
-( wenn sich AXIOME nicht ändern, ganz normal hintereinanderweg compilieren
-( wenn sich AXIOME verändern, dann
-       ( zuerst RESET und 1x die ursprünglichen AXIOME laden 
-       ( und dann so die neuen AXIOME compilieren:
-       (   HERE 100 + DPMERK ! E800 BANF !
-       (   dann eventuell notwendige Ergänzungsfunktionen
-       (   2x neue AXIOME compilieren
-       (   058 DPMERK ! E000 BANF !
-       (   2x neue AXIOME compilieren
-       (   danach alles was nach den AXIOMEN folgt 1x compilieren
+( wenn die Axiome so bleiben wie sie sind, ganz normal 1x hintereinanderweg compilieren )
+( wenn die Axiome verändert werden sollen, dann )
+  ( zuerst RESET und 1x die ursprünglichen Axiome laden ) 
+  ( anschließend die neuen Axiome compilieren, so: )
+    ( HERE 100 + DPMERK ! E800 BANF ! )
+    ( 2x neue Axiome compilieren <REF1/> )
+    ( 058 DPMERK ! E000 BANF ! )
+    ( 2x neue Axiome compilieren <REF1/> nochmal ) 
+    ( danach alles, was nach den AXIOMEN folgt, 1x compilieren )
+  ( bei verzwickten Veränderungen kann es vorkommen, 
+  ( dass noch weitere Zwischenschritte eingefügt werden müssen. )
 </sekt>
 
 <sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
 ( zuerst alles Notwendige wieder auf Ausgangszustand schalten
 2 2 * DUP * BASE ! ( HEX )
-7 ' NUMBER !       ( original NUMBER wieder an
-RP0 ' QUIT ! A00A ' QUIT 1 + ! ( original QUIT wiederherstellen
-QUIT               ( original QUIT starten
-8000 16 !          ( EXXI ausschalten
-4000 000E !        ( aktiviert ^F = QUIT
+7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER
+B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT,
+4000 000E !        ( aktiviert ^F = START
 ' DUMPZ 4 - LFA !  ( LFA zurueck auf Anfangsvokabular
 
-DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG auf die festgelegte Anfangsadressen setzen )
+DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG zurücksetzen )
 </sekt>
 
 <sekt inhalt="so, mit irgendwas muss das Compilieren losgehen">
@@ -48,7 +48,8 @@ D001 CONSTANT SP
 D002 CONSTANT RP
 D003 CONSTANT PC
 
-40 CONSTANT RBIT
+( für das Folgende freigehaltene Adressen: 0040-0057 )
+40 CONSTANT XBIT
 41 CONSTANT SMUDGEBIT
 42 CONSTANT RP0 3000 RP0 !
 43 CONSTANT IRAMADR ( F000 43 !
@@ -135,7 +136,6 @@ IMMEDIATE: WHILE COMPILE IF ;
 IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 </sekt>
 
-
 <sekt inhalt="etliche kleinere Funktionen">
 : C@ @ ;
 : C! ! ;
@@ -169,7 +169,7 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 : . H. ;
 : ? @ . ;
 : CR 
-  CRDP @ DP @ - STAT @ 0= NOT OR IF 
+  CRDP @ DP @ - STAT @ 0= NOT OR XBIT @ 0= NOT AND IF 
     3C EMIT ." fl>" CRDP @ . CRBZEIG @ . 3C EMIT ." /fl>"
     3C EMIT ." fr>" DP @ . BZEIG @ . 3C EMIT ." /fr>"
     DP @ CRDP ! BZEIG @ CRBZEIG ! 
@@ -255,9 +255,6 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
 ' KEY_INT 4000 + 26 !
 ' KEYCODE2 4000 + 12 !
 </sekt>
-
-
-
 
 <sekt inhalt="es folgt der Interpreter">
 ( neu ESCAPE durch EXPECT durchlaufen lassen und 7F-->08:
@@ -376,15 +373,12 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
       DUP @ + REPEAT
   R> DROP R>
   ROT 0= IF DROP DROP 0 0 END_IF
+  ( OVER LFA @ SWAP LT IF ." *" OVER . LFA @ . END_IF ( vref wenn gebraucht
   ;
 
-: LCFA ( lfa r --> cfa r )
-  SWAP 3 + SWAP ;
+: LCFA ( lfa r --> cfa r ) SWAP 3 + SWAP ;
 
-: COMPILE, ( adr --> )
-  RBIT @ IF 4000 ELSE 
-    DP @ 1+ - 0FFF AND 3000 END_IF
-    0000 + + , ;
+: COMPILE, ( adr --> ) 4000 + , ;
 
 : CREATE ( /name/  --> )
   CSP! ( Stapelbalance prüfen in ; )
@@ -423,20 +417,29 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
   ;
 
 : QUIT
-  RP0 @ RP !
-  3C EMIT ." /ok>"
-  BEGIN 
+  RP0 @ RP ! 
+  XBIT @ IF 3C EMIT ." /ok>" ELSE ." ok" END_IF
+  BEGIN ( im Prinzip nur BEGIN CR TIB @ 100 EXPECT INTERPRET AGAIN )
     CR 
     TIB @ 100 EXPECT
-    OVER @ 3C = IF 2DROP ELSE
-      3C EMIT ." ok>" 
-      INTERPRET 
-      3C EMIT ." /ok>"
+    OVER @ 3C = IF 2DROP ELSE ( xml am Zeilenanfang gleich überlesen )
+      XBIT @ IF 
+        3C EMIT ." ok>" 
+        INTERPRET 
+        3C EMIT ." /ok>" 
+        ELSE
+          C2 EMIT 9B EMIT 33 EMIT 36 EMIT 6D EMIT
+          INTERPRET 
+          STAT @ 0= IF ." ok" END_IF 
+          C2 EMIT 9B EMIT 33 EMIT 39 EMIT 6D EMIT
+          END_IF 
       END_IF
     AGAIN 
   ;
 
+
 : START ." FORTY-FORTH" CR CR QUIT ;
+
 
 : SMUDGE 0 SMUDGEBIT ! ( LFA @ 1+ DUP @ DUP 0LT IF MINUS END_IF SWAP ! ) ;
 
@@ -463,8 +466,6 @@ START
 
 <FFINIT2>
 <sekt inhalt="bis Adresse 0800H passt noch DUMPZ drauf (inzwischen nicht mehr)">
-( schon INIT2P78.txt
-
 ( erste Forth Erweiterungen
 ( - DUMPZ
 ( RAMB-Inhaltsausgabe erzeugen:
@@ -476,7 +477,7 @@ START
 : NG. ( n --> )
   ." x" 22 EMIT LG. 22 EMIT ." ," ; 
 : DUMPZ ( bis+1 von dubit --> )
-  DUBIT !
+  DUBIT ! XBIT @ >R 0 XBIT !
   " ' START " INTERPRET 4000 + 10 !
   CR 3C EMIT ." DUMPZ>"
   BEGIN
@@ -490,15 +491,14 @@ START
     10 +
     2DUP > NOT UNTIL 2DROP
   CR 3C EMIT ." /DUMPZ>"
+  R> XBIT !
   ; 
 
 HERE . BZEIG ?
-
-  </sekt>
-
+</sekt>
 
 <sekt inhalt="ProgRAM und ByteRAM für Step_9 und Step_10 erstellen">
 HERE 0 0 DUMPZ          ( generiert ProgRAM in P20.vhd Step_10
 BZEIG @ E000 -1 DUMPZ   ( generiert ByteRAM in P20.vhd Step_10
-  </sekt>
+</sekt>
 

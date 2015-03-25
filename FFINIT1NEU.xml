@@ -136,7 +136,6 @@ IMMEDIATE: WHILE COMPILE IF ;
 IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 </sekt>
 
-
 <sekt inhalt="etliche kleinere Funktionen">
 : C@ @ ;
 : C! ! ;
@@ -256,9 +255,6 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
 ' KEY_INT 4000 + 26 !
 ' KEYCODE2 4000 + 12 !
 </sekt>
-
-
-
 
 <sekt inhalt="es folgt der Interpreter">
 ( neu ESCAPE durch EXPECT durchlaufen lassen und 7F-->08:
@@ -499,12 +495,10 @@ START
   ; 
 
 HERE . BZEIG ?
-
-  </sekt>
-
+</sekt>
 
 <sekt inhalt="ProgRAM und ByteRAM für Step_9 und Step_10 erstellen">
 HERE 0 0 DUMPZ          ( generiert ProgRAM in P20.vhd Step_10
 BZEIG @ E000 -1 DUMPZ   ( generiert ByteRAM in P20.vhd Step_10
-  </sekt>
+</sekt>
 
