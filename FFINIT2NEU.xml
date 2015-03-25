@@ -1,18 +1,14 @@
 <sekt inhalt="Variablen">
-2F00 CONSTANT RAMP1
-RAMP1 1+ RAMP1 !
+2F00 CONSTANT RAMP1 RAMP1 1+ RAMP1 !
 : VARIABLE RAMP1 @ DUP CONSTANT DUP 1+ RAMP1 ! ! ;
-  RAMP1 VARIABLE RAMP3 ( RAMP3 TIB RAMP1
-: RAMBUF ( /name/  n --> )
-  MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her )
+</sekt>
 
+<sekt inhalt="noch paar hilfreiche Funktionen">
 : MOVE ( adr1 adr2 n --> )
   BEGIN DUP WHILE >R OVER @ OVER ! SWAP 1+ SWAP 1+ R> 1 - REPEAT DROP 2DROP ;
 : FILL ( adr n b --> )
   ROT ROT BEGIN DUP WHILE >R 2DUP ! 1 + R> 1 - REPEAT DROP 2DROP ;
 
-
-( - noch paar hilfreiche Funktionen:
 : DUMP ( addr n --> )
   BEGIN SWAP ( CR DUP . ) DUP @ . 1 + SWAP 1 - DUP 0= UNTIL DROP ;
 
@@ -23,9 +19,7 @@ RAMP1 1+ RAMP1 !
 : ABS DUP 0LT IF MINUS END_IF ;
 </sekt>
 
-
-<sekt inhalt="Multiplikation">( 222222 dann SUPERMULT SMUL
-
+<sekt inhalt="Multiplikation">
 A017 MCODE MULT_I  ( ebenso MULT_I und MULT_II
 A018 MCODE MULT_II
 : SUPERMULT ( a u adrc adrb n --> a u' adrc' adrb' )
@@ -94,20 +88,9 @@ C 8 DUMP
 ( C 2001 0 FILL
 ( 0 1000 A 0 1000 B C SMUL . . .
 ( C 8 DUMP
-
-
-: a*a;; 
-  A 2000 111111 FILL
-  B 2000 111111 FILL
-  C 4001 000000 FILL
-  0 2000 A 0 2000 B C SMUL 7 EMIT ;
 </sekt>
 
-
-
-
-<sekt inhalt="Addition">( 333333 dann ADDIER DIV32 SDIV 
-
+<sekt inhalt="Addition"> 
 : ADDIER ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3)
          ( L0 L1 L2 L3 L4 L5 L6
   7 LOCAL
@@ -173,7 +156,7 @@ C 8 0 FILL
 C 8 DUMP
 </sekt>
 
-<sekt inhalt="Division">( Divisionen
+<sekt inhalt="Division">
 A014 MCODE DI32 ( 
 : DIV32 ( a b d --> r q )
   10 BEGIN >R DI32 R> 1 - DUP 0= UNTIL 2DROP ;
@@ -256,10 +239,7 @@ C 8 DUMP
 A 8 DUMP
 </sekt>
 
-
-
-<sekt inhalt="Zahlenspeicher">( 444444 dann 2OPERANDEN->SLX SLX->ERGEBNIS
-
+<sekt inhalt="Zahlenspeicher">
 0 VARIABLE OPERAND1
 0 VARIABLE OPERAND2
 1400 VARIABLE ERGEBNIS
@@ -338,10 +318,7 @@ ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
 77 5800 2OPERANDEN->2SLX . . . . . . .
 </sekt>
 
-
-
-
-<sekt inhalt="N+ N- N* N/MOD N.">( 555555 und N+ N- N* N/MOD N.
+<sekt inhalt="N+ N- N* N/MOD N.">
 : N+ ( x y --> z )
   2OPERANDEN->2SLX ADDIER SLX->ERGEBNIS ;
 : N- ( x y --> z )
@@ -409,11 +386,6 @@ N/MOD NB.
 1111 DUP N.
 N/MOD NB.
 </sekt>
-
-
-
-
-
 
 <sekt inhalt="Zwischenergebnisse nicht unnötig speichern">
 ZAHLENSPEICHER @ VARIABLE BLOCKANFANG
@@ -572,11 +544,7 @@ N" 000002330657FDD698" N" 4C0CF598D2" N* N.
 10 20 N^ 10 10 N^ DUP -1 N+ SWAP 1 N+ N* N- N.
 </sekt>
 
-
-
-
-<sekt inhalt="nochmal N. für beliebige Zahlenbasis">( 888888 dann nochmal N. doppelt!!! für DEZ
-
+<sekt inhalt="nochmal N. für beliebige Zahlenbasis">
 : N. ( a -->  /zahl/ )
   BASE @ 10 = IF N. ELSE
     NEBENRECHNUNG SWAP
@@ -596,10 +564,7 @@ N" 000002330657FDD698" N" 4C0CF598D2" N* N.
 INIT
 </sekt>
 
-
-
-<sekt inhalt="Array-Objekte">( 999999 -- Obj
-
+<sekt inhalt="Array-Objekte">
 : ZERLEG ( a --> adr i )
   3FFF AND DUP 1+ SWAP @ ;
 
@@ -695,11 +660,7 @@ DUP ZERLEG SWAP . .
 ( ok das passt besser
 </sekt>
 
-
-
-<sekt inhalt="Invertieren">( 00000 Invertieren
-
-
+<sekt inhalt="Invertieren">
 0 VARIABLE SPMERK
 : [ ( ---> spmerk )
   SPMERK @ SP @ SPMERK !
@@ -834,11 +795,7 @@ ERGEBNIS ?
 ( mehr geht erstmal nicht weil nicht mehr Platz
 </sekt>
 
-
-
-
-<sekt inhalt="Reste die auch weggelassen werden können, wenn alles geht">( ab hier FFINIT2.TXT
-
+<sekt inhalt="Reste die auch weggelassen werden können, wenn alles geht">
 : VLIST
   LFA @ BEGIN 
     DUP 1+ @ OVER 2 + @ TYPE 20 EMIT 
@@ -898,9 +855,12 @@ IMMEDIATE: (*REM*)
   ;
 </sekt>
 
-
 <sekt inhalt="Reste, die schon weggelassen sind">
 (*REM*)
+  RAMP1 VARIABLE RAMP3 ( RAMP3 TIB RAMP1
+: RAMBUF ( /name/  n --> )
+  MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her )
+
 ( - LOOP's - sind aber sehr langsam
 : I RP @ 1 + @ ;
 : J RP @ 3 + @ ;
@@ -1091,11 +1051,13 @@ IOSTART
     DP @ 1+ - 0FFF AND 3000 END_IF
     0000 + + , ;
 
-
+: a*a;; 
+  A 2000 111111 FILL
+  B 2000 111111 FILL
+  C 4001 000000 FILL
+  0 2000 A 0 2000 B C SMUL 7 EMIT ;
 (*END*)
 </sekt>
-
-
 
 <sekt inhalt="DEMO">
 56 89 * .
@@ -1224,8 +1186,6 @@ DECIMAL DUP N.
 HEX DUP N.
 </sekt>
 
-
-
 <sekt inhalt="in den Zustand für Step_11 bringen und wieder RAM generieren">
 : NLIT, ( a --> ) DUP 3FFF > OVER C000 LT OR IF 1234 ERROR END_IF , ;
 REPLACE: LIT, NLIT, ; 
@@ -1246,7 +1206,6 @@ BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM in P20.vhd für Step_11
 </sekt>
 
 <sekt inhalt="noch ein wenig DEMO">
-
 111111111111111 DUP * .
 
 ( jetzt eine Matrix invertieren )

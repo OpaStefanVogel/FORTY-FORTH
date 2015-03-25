@@ -442,7 +442,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
   ;
 
 
-: START ." FORTY-FORTH" CR CR QUIT ; ( 2D04 sind die LED's)
+: START ." FORTY-FORTH" CR CR QUIT ;
 
 
 : SMUDGE 0 SMUDGEBIT ! ( LFA @ 1+ DUP @ DUP 0LT IF MINUS END_IF SWAP ! ) ;
@@ -470,8 +470,6 @@ START
 
 <FFINIT2>
 <sekt inhalt="bis Adresse 0800H passt noch DUMPZ drauf (inzwischen nicht mehr)">
-( schon INIT2P78.txt
-
 ( erste Forth Erweiterungen
 ( - DUMPZ
 ( RAMB-Inhaltsausgabe erzeugen:
