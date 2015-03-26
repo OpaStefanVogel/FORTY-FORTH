@@ -19,7 +19,7 @@
 <xsl:template match="INIT"><INIT>
 Wozu die beiden Files INIT.xml und screenlog.0 verwendet werden:
   <a href="INIT.xml">INIT.xml</a>: FORTH-Interpreter recompilieren mit cp INIT.xml /dev/tty..
-  <a href="screenlog.0">screenlog.0</a>: Logfile, welches dabei angefertigt wurde, 
+  <a href="screenlog.xml">screenlog.xml</a>: Logfile, welches dabei angefertigt wurde, 
     vor allem auch, um bequem die generierten Speicherarrays für P20_FFP.vhd entnehmen zu können.
 
 Bedeutung der verwendeten Hintergrundfarben:
