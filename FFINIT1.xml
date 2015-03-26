@@ -21,19 +21,19 @@
 </sekt>
 
 <sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
-( zuerst alles Notwendige wieder auf Ausgangszustand schalten
+( zuerst alles Notwendige wieder auf Ausgangszustand schalten )
 2 2 * DUP * BASE ! ( HEX )
-7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER
-B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT,
-4000 000E !        ( aktiviert ^F = START
-' DUMPZ 4 - LFA !  ( LFA zurueck auf Anfangsvokabular
+7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER )
+B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT, )
+4000 000E !        ( aktiviert ^F = START )
+' DUMPZ 4 - LFA !  ( LFA zurueck auf Anfangsvokabular )
 
 DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG zurücksetzen )
 </sekt>
 
 <sekt inhalt="so, mit irgendwas muss das Compilieren losgehen">
 IMMEDIATE: ( 29 WORD 2DROP ;
-IMMEDIATE: { 0 STAT ! ; ( war ursprünglich mal [  
+IMMEDIATE: { 0 STAT ! ; ( war ursprünglich mal [ )  
 : } 1 STAT ! ;
 IMMEDIATE: COMPILE 20 WORD FIND LCFA DROP COMPILE, ;
 COMPILE: (LIT,) R> DUP 1+ >R @ ;
@@ -52,14 +52,14 @@ D003 CONSTANT PC
 40 CONSTANT XBIT
 41 CONSTANT SMUDGEBIT
 42 CONSTANT RP0 3000 RP0 !
-43 CONSTANT IRAMADR ( F000 43 !
-44 CONSTANT JRAMADR ( F000 44 !
+43 CONSTANT IRAMADR
+44 CONSTANT JRAMADR
 45 CONSTANT XOFF
 46 CONSTANT CRBZEIG BZEIG @ CRBZEIG !
 47 CONSTANT CRDP DP @ 8 - CRDP !
 
-48 CONSTANT BASE ( 10 BASE !
-49 CONSTANT TIB ( 3F00 TIB !
+48 CONSTANT BASE
+49 CONSTANT TIB
 4A CONSTANT IN1
 4B CONSTANT IN2
 4C CONSTANT IN3
@@ -68,9 +68,9 @@ D003 CONSTANT PC
 4F CONSTANT DP
 50 CONSTANT STAT 0 STAT !
 51 CONSTANT LFA
-52 CONSTANT BANF ( 3800 BANF !
+52 CONSTANT BANF
 53 CONSTANT BZEIG
-54 CONSTANT DPMERK ( 056 DPMERK !
+54 CONSTANT DPMERK
 55 CONSTANT CSP
 56 CONSTANT LOCALADDR
 
@@ -218,11 +218,6 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 IMMEDIATE: ' ( /name/ --> --> pfa ) 
   20 WORD FIND LCFA DROP 1+ STAT @ IF LIT, END_IF ; 
 
-( - neu: KEY_INT, ersetzt Code auf Adressen 0018 bis 003D
-( 43 CONSTANT IRAMADR ( F000 43 !
-( 44 CONSTANT JRAMADR ( F000 44 !
-( 45 CONSTANT XOFF
-
 : INCR4 ( adr --> )
   DUP @ 1 +
   DUP 3FF AND 000 = IF 400 - END_IF 
@@ -257,9 +252,9 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
 </sekt>
 
 <sekt inhalt="es folgt der Interpreter">
-( neu ESCAPE durch EXPECT durchlaufen lassen und 7F-->08:
-( und 7F in 08 umwandeln:
-( und nach n Zeichen kein 0D mehr lesen
+( ESCAPE durch EXPECT durchlaufen lassen )
+( und 7F in 08 umwandeln )
+( und nach n Zeichen kein 0D mehr lesen )
 : EXPECT ( /text/  adr n --> adr m )
   5 LOCAL
   L2 ! L1 ! L1 @ L4 !
@@ -289,18 +284,18 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
   ;
 
 
-: DIGIT ( z --> d r ) ( r=-1 wenn gueltig
-  ( vorher r=0 wenn gueltig!!!
+: DIGIT ( z --> d r ) ( r=-1 wenn gueltig )
+  ( vorher r=0 wenn gueltig!!! )
   DUP 30 ( 30 48 ) LT NOT OVER 3A ( 3A 58 ) LT AND
   OVER 41 ( 41 65 ) LT NOT OR 
-  DUP IF ( z -1 wenn gueltig
+  DUP IF ( z -1 wenn gueltig )
     SWAP 30 ( 30 48 ) -
     DUP 0A LT NOT IF 7 - END_IF
     DUP BASE @ LT NOT IF DROP DROP 0 0 END_IF
     SWAP END_IF ;
 
 : NUMBER ( badr n --> a r )
-  7 LOCAL ( L3 L4 nicht verwendet
+  7 LOCAL ( L3 L4 nicht verwendet )
   L1 ! L0 !
   0 L1 @ IF
     DUP L2 ! 1 L5 ! ( Vorzeichen )
@@ -339,7 +334,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
       1 IN3 +! REPEAT
   IN3 @ IN2 !
   BEGIN 
-    IN3 @ C@ 3C = IF IN3 @ IN4 ! END_IF ( alles nach 3C ist Kommentar
+    IN3 @ C@ 3C = IF IN3 @ IN4 ! END_IF ( alles nach 3C ist Kommentar )
     IN3 @ C@ R = NOT IN3 @ IN4 @ LT AND WHILE
       1 IN3 +! REPEAT
   IN2 @ IN3 @ OVER -
@@ -352,7 +347,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
     R> DROP SWAP 0 BEGIN 2DUP - WHILE >R >R
       OVER C@ OVER C@ - IF DROP DROP 0 0 END_IF
       DUP IF 1+ SWAP 1+ SWAP END_IF
-      R> R> 1+ REPEAT 2DROP ( neu bei 16 BIT ohne DO LOOP)
+      R> R> 1+ REPEAT 2DROP ( neu bei 16 BIT ohne DO LOOP )
     DROP IF -1 ELSE 0 END_IF
     END_IF ;
 ( : Z= DROP SWAP DROP SWAP @ SWAP @ = ;
@@ -362,18 +357,18 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
   LFA @ 
   SMUDGEBIT @ IF DUP @ + END_IF
   BEGIN
-    DUP 1+ DUP @ ( lfa nfa adr
+    DUP 1+ DUP @ ( lfa nfa adr )
     SWAP 1+ @ ( lfa adr n1 )
     ( 2DUP CR B. 2DUP TYPE
-    ( BEGIN 2DUP + 1 - C@ 0= WHILE 1 - REPEAT ( ??? momentan nicht)
+    ( BEGIN 2DUP + 1 - C@ 0= WHILE 1 - REPEAT ( ??? momentan nicht )
     R> R> 2DUP >R >R ( 0 lfa adr1 n1 adr2 n2 )
     Z= IF SWAP 0= SWAP END_IF ( heisst gefunden )
     OVER 0= OVER @ 0= NOT AND 
-    OVER DUP @ + LFA @ = NOT AND WHILE ( wegen 2xladen
+    OVER DUP @ + LFA @ = NOT AND WHILE ( wegen 2xladen )
       DUP @ + REPEAT
   R> DROP R>
   ROT 0= IF DROP DROP 0 0 END_IF
-  ( OVER LFA @ SWAP LT IF ." *" OVER . LFA @ . END_IF ( vref wenn gebraucht
+  ( OVER LFA @ SWAP LT IF ." *" OVER . LFA @ . END_IF ( vref wenn gebraucht )
   ;
 
 : LCFA ( lfa r --> cfa r ) SWAP 3 + SWAP ;
@@ -396,9 +391,9 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
   20 WORD
   DUP WHILE
     2DUP FIND 
-    DUP IF ( gefunden
+    DUP IF ( gefunden )
       >R >R 2DROP R> R> LCFA DROP EXECUTE
-      ELSE ( nicht gefunden
+      ELSE ( nicht gefunden )
         2DROP
         2DUP NUMBER IF ( keine Zahl )
           2DROP DROP
@@ -451,13 +446,13 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
 :   COMPILE: CREATE 1 STAT ! COMPILE (COMPILE:) ;
 :          : CREATE 1 STAT ! COMPILE (:) ;
 
-( das hier jetzt mit dem neuen CREATE:
+( das hier jetzt mit dem neuen CREATE: )
 IMMEDIATE: ; 0 STAT ! CSP? A003 , SMUDGE { SMUDGE } ; 
-( tatsaechlich { SMUDGE } wegen 2x laden!!! 
-( Ende der Axiome. Hiermit enden die Axiome.
+( tatsaechlich { SMUDGE } wegen 2x laden!!! ) 
+( Ende der Axiome. Hiermit enden die Axiome. )
 </sekt>
 
-0 DPMERK @ ! ( abkoppeln
+0 DPMERK @ ! ( abkoppeln )
 HERE . BZEIG ?
 
 START
@@ -466,9 +461,9 @@ START
 
 <FFINIT2>
 <sekt inhalt="bis Adresse 0800H passt noch DUMPZ drauf (inzwischen nicht mehr)">
-( erste Forth Erweiterungen
-( - DUMPZ
-( RAMB-Inhaltsausgabe erzeugen:
+( erste Forth Erweiterungen )
+( - DUMPZ )
+( RAMB-Inhaltsausgabe erzeugen: )
 : DUBIT HERE ;
 : LG. ( n --> )
   DUBIT @ IF SHL16 DROP SHL16 DROP 
@@ -498,7 +493,7 @@ HERE . BZEIG ?
 </sekt>
 
 <sekt inhalt="ProgRAM und ByteRAM für Step_9 und Step_10 erstellen">
-HERE 0 0 DUMPZ          ( generiert ProgRAM in P20.vhd Step_10
-BZEIG @ E000 -1 DUMPZ   ( generiert ByteRAM in P20.vhd Step_10
+HERE 0 0 DUMPZ          ( generiert ProgRAM für P20_FFP.vhd Step_10 )
+BZEIG @ E000 -1 DUMPZ   ( generiert ByteRAM für P20_FFP.vhd Step_10 )
 </sekt>
 

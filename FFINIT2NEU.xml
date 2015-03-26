@@ -20,12 +20,12 @@
 </sekt>
 
 <sekt inhalt="Multiplikation">
-A017 MCODE MULT_I  ( ebenso MULT_I und MULT_II
+A017 MCODE MULT_I
 A018 MCODE MULT_II
 : SUPERMULT ( a u adrc adrb n --> a u' adrc' adrb' )
   >R
   BEGIN MULT_I MULT_II UNTIL
-  R> DROP ; ( /;>
+  R> DROP ; ( /;> )
 
 
 
@@ -46,7 +46,7 @@ C 8 DUMP
 
 
 : SMUL ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3)
-       ( L0 L1 L2 L3 L4 L5 L6
+       ( L0 L1 L2 L3 L4 L5 L6 )
   7 LOCAL
   L6 ! L5 ! L4 ! L3 ! L2 ! L1 ! L0 !
   L0 @ L3 @ IF NOT END_IF
@@ -58,7 +58,7 @@ C 8 DUMP
     SUPERMULT                   ( ... a u' adrc' adrb' )
     DROP ! DROP
 
-(    vorher:
+(    vorher: )
 (    L4 @ 0 
 (    BEGIN OVER WHILE SWAP -1 + SWAP
 (      0 SWAP 
@@ -91,14 +91,14 @@ C 8 DUMP
 </sekt>
 
 <sekt inhalt="Addition"> 
-: ADDIER ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3)
-         ( L0 L1 L2 L3 L4 L5 L6
+: ADDIER ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3 )
+         ( L0 L1 L2 L3 L4 L5 L6 )
   7 LOCAL
   L6 ! L5 ! L4 ! L3 ! L2 ! L1 ! L0 !
   L0 @ L1 @ L4 @ MAX 1+ L6 @
   L0 @ L3 @ = IF
     0 L1 @ L4 @ MAX 0 BEGIN ROT
-                 ( hier ist mal ! @ gewesen!!!)
+                 ( hier ist mal ! @ gewesen!!! )
       OVER DUP L1 @ LT IF L2 @ DUP @ SWAP 1+ L2 ! ELSE 0 END_IF
       SWAP L4 @ LT IF L5 @ DUP @ SWAP 1+ L5 ! ELSE 0 END_IF
       U+ L6 @ DUP 1+ L6 ! !
@@ -135,7 +135,7 @@ C 8 DUMP
 A 8 FFFF FILL
 C 8 0 FILL
 0 2 A 0 2 B C ADDIER . . .
-C 8 DUMP ( 1110 1111 0001 0000
+C 8 DUMP ( 1110 1111 0001 0000 )
 
 
 A 8 2222 FILL
@@ -157,10 +157,9 @@ C 8 DUMP
 </sekt>
 
 <sekt inhalt="Division">
-A014 MCODE DI32 ( 
+A014 MCODE DI32 
 : DIV32 ( a b d --> r q )
   10 BEGIN >R DI32 R> 1 - DUP 0= UNTIL 2DROP ;
-(  10 DI32 ;
 : /MOD ( b d --> r q ) 0 ROT ROT DIV32 ;
 : /MOD ( a b --> r q )
   OVER 0LT IF SWAP MINUS SWAP
@@ -174,8 +173,8 @@ A014 MCODE DI32 (
 
 
 
-: SDIV ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3 s4 l4 r4)
-       ( L0 L1 L2 L3 L4 L5 L6
+: SDIV ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3 s4 l4 r4 )
+       ( L0 L1 L2 L3 L4 L5 L6 )
   7 LOCAL
   L6 ! L5 ! L4 ! L3 ! L2 ! L1 ! L0 !
 L1 @ L4 @ LT IF L0 @ L1 @ L2 @ 0 0 0 ELSE
@@ -249,15 +248,15 @@ A 8 DUMP
 
 
 : SLX->ERGEBNIS ( sz lz az --> z )
-  OVER 0= IF 2DROP DROP 0 ELSE ( 0 bei 1/7
+  OVER 0= IF 2DROP DROP 0 ELSE ( 0 bei 1/7 )
     2DUP + BEGIN 1 - DUP @ 0= NOT UNTIL 
-    1 + OVER MAX ( sz lz az ez
-    ( DUP ERGEBNIS ! ( nicht wegen 0 1 OPERAND1
+    1 + OVER MAX ( sz lz az ez )
+    ( DUP ERGEBNIS ! ( nicht wegen 0 1 OPERAND1 )
     2DUP = IF 2DROP 2DROP 0 ELSE
-      OVER - ( sz lz az lneu
+      OVER - ( sz lz az lneu )
       OVER @ C000 AND 0=
       OVER 1 = AND IF
-        DROP @ ELSE ( warum war da -1 ERGEBNIS +!
+        DROP @ ELSE ( warum war da -1 ERGEBNIS +! )
           OVER 1 - !
           1 - 4000 OR
           END_IF 
@@ -355,7 +354,7 @@ IMMEDIATE: RECURSE LFA @ 4 + COMPILE, ;
   SHL16 DUP R OR IF DIG EMIT ELSE DROP END_IF
   SHL16 DIG EMIT DROP R> DROP ;
 
-: N. ( n --> ) ( erstmal nur hexadezimale Ausgabe)
+: N. ( n --> ) ( erstmal nur hexadezimale Ausgabe )
   OPERAND1 !
   OPERAND1 OPERAND->SLX ( sx lx ax )
   ROT IF ." -" END_IF
@@ -401,19 +400,16 @@ INIT
   OPERAND1 !
   OPERAND1 OPERAND->SLX
   OVER ERGEBNIS @ 1+ SWAP MOVE
-  ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz
+  ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz )
   SLX->ERGEBNIS
   ;
 : B+0 ( a b --> a+0 b+0 )
   SWAP A+0 SWAP A+0 ;
+</sekt>
 
 
 
-
-( 777777 dann N/ NMOD NGGT NBK N. N^ N" 
-( ------ also wo Zwischenergebnisse raus können
-
-
+<sekt inhalt="Anwenden in N/ NMOD NGGT NBK...">
 : N/ ( b d --> q )
   NEBENRECHNUNG ROT ROT 
   N/MOD SWAP DROP
@@ -442,7 +438,7 @@ INIT
 
 
 
-( je einmal N* und N+ in NNUMBER
+( je einmal N* und N+ in NNUMBER )
 : NNUMBER ( baddr n --> a faddr )
   NEBENRECHNUNG ROT ROT
   7 LOCAL ( L3 L4 nicht verwendet
@@ -472,8 +468,8 @@ INIT
       END_IF ( M19 )
     END_IF ( M19 )
   L5 @ 0LT IF MINUS END_IF
-  L2 @ L1 @ - ( oo noch kein fadr !!!!!!!!!!!! siehe NNUMBER)
-  DUP IF DROP L0 @ L2 @ + END_IF ( jetzt faddr
+  L2 @ L1 @ - ( oo noch kein fadr !!!!!!!!!!!! siehe NNUMBER )
+  DUP IF DROP L0 @ L2 @ + END_IF ( jetzt faddr )
   END_LOCAL
   ROT HAUPTRECHNUNG SWAP A+0 SWAP
   ;
@@ -492,16 +488,16 @@ N" 0026D4346A00" DUP N.
 N" 00000FC82800" DUP N.
 2DUP N/MOD NB.
 2DUP NBK NB. 
-( richtig wäre D6A220 275 bei NBK
-( richtig wäre 3135 14 bei BK
+( richtig wäre D6A2200 275 bei N/MOD )
+( richtig wäre 3135 14 bei NBK )
 
 N" 00A7426290A8C945E959A780" DUP N.
 N" 000002330657FDD698" DUP N.
 N/MOD NB. 
-( richtig wäre 158B5843D5ED0 4C0CF598D2
-( und nicht   0325AF2C3F8838 4C0CF598D3
+( richtig wäre 158B5843D5ED0 4C0CF598D2 )
+( und nicht   0325AF2C3F8838 4C0CF598D3 )
 
-( als vorlaeufigen Abschluss nochmal
+( als vorlaeufigen Abschluss nochmal )
 " 111111111111111" NNUMBER DROP DUP N* N.
 
 N" 000002330657FDD698" N" 4C0CF598D3" N* N.
@@ -514,25 +510,25 @@ N" 000002330657FDD698" N" 4C0CF598D2" N* N.
   NEBENRECHNUNG ROT ROT ( erg a n )
   4 LOCAL
   DUP 0LT IF 12 ERROR END_IF    
-  2           ( a n 2        
-  L3 ! L2 ! L1 !    (  R1-3: a  n  2
-  1           ( p=1          a  n  2
-  BEGIN       ( p            a  n  2
-    L2 @ L3 @ ( p n 2        a  n  2
-    /MOD      ( p r n/2      a  n  2
-    L2 !      ( p r          a n/2 2
-    IF        ( p            a n/2 2
-      L1 @    ( p a          a n/2 2
-      N*      ( p*a          a n/2 2
-      END_IF  ( p*a          a n/2 2
-    L2 @      ( p*a n/2      a n/2 2
-    WHILE     ( p*a          a n/2 2
-      L1 @    ( p*a a        a n/2 2
-      L1 @    ( p*a a a      a n/2 2
-      N*      ( p*a a*a      a n/2 2
-      L1 !    ( p*a        a*a n/2 2
-      REPEAT  ( p*a        a*a n/2 2
-  END_LOCAL   ( a^n
+  2           ( a n 2 )        
+  L3 ! L2 ! L1 !    (  R1-3: a  n  2 )
+  1           ( p=1          a  n  2 )
+  BEGIN       ( p            a  n  2 )
+    L2 @ L3 @ ( p n 2        a  n  2 )
+    /MOD      ( p r n/2      a  n  2 )
+    L2 !      ( p r          a n/2 2 )
+    IF        ( p            a n/2 2 )
+      L1 @    ( p a          a n/2 2 )
+      N*      ( p*a          a n/2 2 )
+      END_IF  ( p*a          a n/2 2 )
+    L2 @      ( p*a n/2      a n/2 2 )
+    WHILE     ( p*a          a n/2 2 )
+      L1 @    ( p*a a        a n/2 2 )
+      L1 @    ( p*a a a      a n/2 2 )
+      N*      ( p*a a*a      a n/2 2 )
+      L1 !    ( p*a        a*a n/2 2 )
+      REPEAT  ( p*a        a*a n/2 2 )
+  END_LOCAL   ( a^n )
   SWAP HAUPTRECHNUNG A+0
   ;           ( a^n )
 
@@ -578,7 +574,7 @@ DUP ZERLEG SWAP . .
   ;
 
 : L ( a i -> b ) OVER OBJ? IF
-    SWAP ZERLEG 3FFF AND ( i adr j
+    SWAP ZERLEG 3FFF AND ( i adr j )
     ROT 2DUP ( adr j i j i )
     > IF SWAP DROP + @ ELSE 2DROP DROP 0 END_IF
     ELSE IF DROP 0 END_IF END_IF ;
@@ -587,32 +583,32 @@ DUP ZERLEG SWAP . .
 
 : H ( a i b --> a' )
   DUP >R
-  ROT ROT ( b a i
+  ROT ROT ( b a i )
   OVER OBJ? 0= OVER 0= AND R> OBJ? 0= AND IF 2DROP ELSE
     OVER OBJ? 0= IF 
-      DUP 1+ SPEICHERHOL ( b a i addrneu
-      ROT OVER ! ( b i addrneu
-(      OVER 1+ OVER 1 - ! ( b i addrneu ( aha, macht schon SPEICHERHOL
-      4000 OVER 1 - +! ( das ist jetzt neu fuer OBJ?
-      DUP >R + ! R> ( addrneu
+      DUP 1+ SPEICHERHOL ( b a i addrneu )
+      ROT OVER ! ( b i addrneu )
+(      OVER 1+ OVER 1 - ! ( b i addrneu ( aha, macht schon SPEICHERHOL )
+      4000 OVER 1 - +! ( das ist jetzt neu fuer OBJ? )
+      DUP >R + ! R> ( addrneu )
       1 - 4000 +
       ELSE
-        OVER ( b a i a
-        ZERLEG 3FFF AND ( b a i addr j
-        ROT ( b a addr j i
+        OVER                 ( b a i a )
+        ZERLEG 3FFF AND      ( b a i addr j )
+        ROT                  ( b a addr j i )
         2DUP > IF SWAP DROP ROT >R + ! R> ELSE
-          DUP 1+ SPEICHERHOL ( b a addr j i addrneu
-          SWAP >R DUP >R ( b a addr j addrneu      addrneu i
-          SWAP MOVE DROP R> ( b addrneu            i 
-(          R 1+ OVER 1 - ! ( b addrneu                i
-          4000 OVER 1 - +! ( das ist jetzt neu fuer OBJ?
-          SWAP OVER R> + ! ( addrneu
-          1 - 4000 + ( a'
+          DUP 1+ SPEICHERHOL ( b a addr j i addrneu )
+          SWAP >R DUP >R     ( b a addr j addrneu      addrneu i )
+          SWAP MOVE DROP R>  ( b addrneu            i )
+(          R 1+ OVER 1 - !    ( b addrneu                i )
+          4000 OVER 1 - +!   ( das ist jetzt neu fuer OBJ? )
+          SWAP OVER R> + !   ( addrneu )
+          1 - 4000 +         ( a' )
           END_IF
-        ZERLEG 3FFF AND ( adr l
-        BEGIN 2DUP + 1 - @ 0= OVER 1 > AND WHILE 1 - REPEAT ( adr lneu
+        ZERLEG 3FFF AND      ( adr l )
+        BEGIN 2DUP + 1 - @ 0= OVER 1 > AND WHILE 1 - REPEAT ( adr lneu )
         OVER @ OBJ? 0= OVER 1 = AND IF DROP @ ELSE
-          SWAP 1 - SWAP ( addr-1 lneu
+          SWAP 1 - SWAP      ( addr-1 lneu )
           4000 + OVER ! 4000 +
           END_IF  
         END_IF
@@ -622,7 +618,7 @@ DUP ZERLEG SWAP . .
 : O. ( obj --> )
   DUP OBJ? IF
     ." [ "
-    ZERLEG 3FFF AND OVER + SWAP ( eadr+1 aadr 
+    ZERLEG 3FFF AND OVER + SWAP ( eadr+1 aadr )
     BEGIN 2DUP > WHILE DUP @ RECURSE 1 + REPEAT 2DROP
      ." ] "
     ELSE N. END_IF
@@ -643,8 +639,7 @@ DUP ZERLEG SWAP . .
 2 0 H DUP O.
 
 
-( 0 1 1 H ( da ist noch ein Defekt bei 0 0 7 H da macht ZERLEG Quatsch
-0 ( jetzt geht ZERLEG richtig ok
+0
 0 0 0 1 H 1 2 H 2 5 H H DUP O.
 1 0 0 3 H 1 4 H 2 8 H H DUP O.
 2 0 0 9 H 1 2 H 2 1 H H CR DUP O.
@@ -656,8 +651,6 @@ DUP ZERLEG SWAP . .
 0 0 0 60 H 1 30 H 2 20 H H DUP O.
 1 0 0 30 H 1 20 H 2 15 H H DUP O.
 2 0 0 20 H 1 15 H 2 12 H H CR DUP O.
-
-( ok das passt besser
 </sekt>
 
 <sekt inhalt="Invertieren">
@@ -672,8 +665,8 @@ DUP ZERLEG SWAP . .
   SWAP SPMERK !
   ;
 
-(   zuallerletzt nochmal NEBENRECHNUNG checken zuguterletzt dann auch noch B Y Z 
-( NENNER als LOCAL und O. rein, uff, das ist ein Brocken. .. L0 war doch ( zuviel...
+(   zuallerletzt nochmal NEBENRECHNUNG checken zuguterletzt dann auch noch B Y Z )
+( NENNER als LOCAL und O. rein, uff, das ist ein Brocken. .. L0 war doch zuviel... )
 
 : INVERTIEREN ( matrix dim --> invmat nenner )
   ( L0=mat L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
@@ -697,7 +690,7 @@ DUP ZERLEG SWAP . .
         L5 @ L3 @ L L6 @ L4 @ L N* N-
         L7 @ N/ ( mat erg mat[L3] nenner bijneu )
         2SWAP SWAP ( mat nenner bijneu mat[L3] erg )
-        HAUPTRECHNUNG SWAP A+0 ( mat nenner mat[L3] bijneu+0
+        HAUPTRECHNUNG SWAP A+0 ( mat nenner mat[L3] bijneu+0 )
         SWAP L4 @ ROT H ( mat nenner mat[L3]neu )
         L4 @ 0= UNTIL
       ROT L3 @ ROT H SWAP ( matneu nenner )
@@ -705,28 +698,24 @@ DUP ZERLEG SWAP . .
     ( RECHENBLOCK )
     L2 @ 0= UNTIL
   END_LOCAL
-  ; 
-  
+  ;
 
 
+( so und jetzt anwenden )
 
-
-( so und jetzt anwenden
-
-[ [ 3C 1E 14 ] ( dezimal 60 30 20
-  [ 1E 14 0F ] ( dezimal 30 20 15
-  [ 14 0F 0C ] ( dezimal 20 15 12
+[ [ 3C 1E 14 ] ( dezimal 60 30 20 )
+  [ 1E 14 0F ] ( dezimal 30 20 15 )
+  [ 14 0F 0C ] ( dezimal 20 15 12 )
   ] 3
 OVER O. DUP .
 INVERTIEREN
 OVER O. DUP N.
-( herauskommen muss dabei
-(             [ [ F -3C 32 ] [ -3C 140 -12C ] [ 32 -12C 12C ] ] 0064
-( dezimal        15 -60 ...                                      100
-( stimmt, also Schluss für heut
+( herauskommen muss dabei )
+(             [ [ F -3C 32 ] [ -3C 140 -12C ] [ 32 -12C 12C ] ] 0064 )
+( dezimal        15 -60 ...                                      100 )
 
 
-( paar Vandermonde-Matrizen invertieren:
+( paar Vandermonde-Matrizen invertieren: )
 INIT
 [ [ 1 1 1 1 ]
   [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ ]
@@ -736,7 +725,7 @@ INIT
 4 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( raus kommt  [ [ 480 -360 180 -48 ] [ -4E0 558 -2A0 84 ] [ 1B0 -240 150 -48 ]
+( herauskommen soll [ [ 480 -360 180 -48 ] [ -4E0 558 -2A0 84 ] [ 1B0 -240 150 -48 ] )
 
 INIT
 [ [ 1 1 1 1 1 ]
@@ -748,7 +737,7 @@ INIT
 5 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( raus kommt  [ [ 2A300 -2A300 ... ] ] 8700
+( herauskommen soll  [ [ 2A300 -2A300 ... ] ] 8700 )
 
 INIT
 [ [ 1 1 1 1 1 1 ]
@@ -761,7 +750,7 @@ INIT
 6 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( raus kommt  [ [ 8E62000 -B1FA800 ... ] ] 17BB000
+( herauskommen soll  [ [ 8E62000 -B1FA800 ... ] ] 17BB000 )
 
 INIT
 [ [ 1 1 1 1 1 1 1 ]
@@ -775,7 +764,7 @@ INIT
 7 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( raus kommt  [ [ CC65AF0000 -13298868000 ... ] ] 1D33190000
+( herauskommen soll  [ [ CC65AF0000 -13298868000 ... ] ] 1D33190000 )
 
 INIT
 [ [ 1 1 1 1 1 1 1 1 ]
@@ -790,7 +779,7 @@ INIT
 8 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( raus kommt  [ [ 8FB77F0C000000 -FB811E55000000 ... ] ] 11F6EFE1800000
+( herauskommen soll  [ [ 8FB77F0C000000 -FB811E55000000 ... ] ] 11F6EFE1800000 )
 
 ( mehr geht erstmal nicht weil nicht mehr Platz
 </sekt>
@@ -838,7 +827,7 @@ A003 CONSTANT RETURN
   DUP 1234 = IF ." große ganze Zahlen kompilieren geht momentan nicht, siehe TESTFUERNEUES.TXT" END_IF
   ;
 
-( ganz neu: Steuerungstasten: ^A bis ^G, weiter ^H=^A ^L=^B ...
+( ganz neu: Steuerungstasten: ^A bis ^G, weiter ^H=^A ^L=^B ... )
 18 8 0 FILL
 : STRG: : HERE 3 - DUP . @ 1+ DUP . @ DUP . 40 - HERE SWAP 7 AND 18 + ! ;
 STRG: ^G 7 EMIT ." /1xPIEP/" ;
@@ -861,7 +850,7 @@ IMMEDIATE: (*REM*)
 : RAMBUF ( /name/  n --> )
   MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her )
 
-( - LOOP's - sind aber sehr langsam
+( - LOOP's - sind aber sehr langsam )
 : I RP @ 1 + @ ;
 : J RP @ 3 + @ ;
 : K RP @ 5 + @ ;
@@ -874,7 +863,7 @@ IMMEDIATE: (*REM*)
 IMMEDIATE: DO COMPILE (DO) HERE ;
 IMMEDIATE: LOOP COMPILE (LOOP) 0BRANCH, ;
 IMMEDIATE: +LOOP COMPILE (+LOOP) 0BRANCH, ;
-( : LL 0 DO I . LOOP ; 7 LL ( ok geht
+( : LL 0 DO I . LOOP ; 7 LL ( ok geht )
 
 
 IMMEDIATE: () 0 WORD 2DROP ;
@@ -891,13 +880,13 @@ A012 MCODE D+
 A013 MCODE D-
 
 
-( - paar Geraeteadressen:
+( - paar Geraeteadressen: )
 D004 CONSTANT UHR
 D005 CONSTANT SWTI
 D00D CONSTANT UHRL
 2D05 CONSTANT XOFFINPUT
 
-( - "Platinen befestigen und entfernen"
+( - "Platinen befestigen und entfernen" )
 20 RAMBUF TLISTE
 TLISTE VARIABLE TLISTENZEIGER
 : TLISTY 
@@ -910,7 +899,7 @@ TLISTE VARIABLE TLISTENZEIGER
 0 VARIABLE EXXIUHR
 : EXXI
   UHRL @ >R
-  STAT @ STATMERK ! 0 STAT ! ( eigentlich >R
+  STAT @ STATMERK ! 0 STAT ! ( eigentlich >R )
   TLISTE
   BEGIN DUP TLISTENZEIGER @ LT WHILE
     DUP >R @ EXECUTE R> 1+ REPEAT DROP
@@ -918,7 +907,7 @@ TLISTE VARIABLE TLISTENZEIGER
   UHRL @ R> - EXXIUHR ! 
   ;
 ( ' EXXI 6 1+ - 6000 OR 6 !
-' EXXI 4000 + 16 ! ( CR geht momentan +F9XX
+' EXXI 4000 + 16 ! ( CR geht momentan +F9XX )
 
 : ENTFERNE 
   20 WORD FIND LCFA DROP 1+
@@ -947,7 +936,7 @@ TLISTE VARIABLE TLISTENZEIGER
   OVER 0LT IF 0 0 2SWAP D- END_IF ;
 
 
-( CASEOFS aus'm PSION:
+( CASEOFS aus'm PSION: )
 : CASEOFS ( n  /name/ --> )
   DUP RAMBUF
   0 DO
@@ -965,7 +954,7 @@ TLISTE VARIABLE TLISTENZEIGER
     DPMERK @ + EXECUTE
     ELSE DROP END_IF ;
 
-( - CASE
+( - CASE )
 ( : BIT ( i n --> bit )
 (   2 ROT DUP 0LT IF 99 ERROR ELSE 
 (   ^ AND 0= 1 + END_IF ; 
@@ -1007,13 +996,13 @@ IMMEDIATE: /; 0 STAT ! CSP? HERE 1 - @ 800 OR HERE 1 - ! SMUDGE [ SMUDGE ] ;
 ( ' W 8 DUMP
 
 
-( Ausgabe von ESCAPE-Sequenzen: sie vertragen sich aber nicht mit xml, besser CSI nehmen
+( Ausgabe von ESCAPE-Sequenzen: sie vertragen sich aber nicht mit xml, besser CSI nehmen )
 20 WORD: ESC 1B EMIT BEGIN OVER C@ EMIT SWAP 1 + SWAP 1 - DUP 0= UNTIL DROP ;
 ESC ]0;FORTY-FORTH 07 EMIT ( 07 EMIT schließt ]
 : FESTPOSITION ESC [s ESC [1;1H ESC [31m ; ( saveC Pos1,1 redcolor
 : RUCKPOSITION ESC [u ESC [39m ; ( restoreC defaultcolor
 
-( Alternativer Start mit ESCAPE-Sequenzen
+( Alternativer Start mit ESCAPE-Sequenzen )
 
 : QUIT2 
   RP0 @ RP !
@@ -1067,36 +1056,36 @@ IOSTART
 
 VLIST
 
-( nochmal mit Speicheradressen, vor jedem Wort steht dessen Aufruf-Adresse
+( nochmal mit Speicheradressen, vor jedem Wort steht dessen Aufruf-Adresse )
 
 WLIST
 
-( LED's zum Leuchten bringen, also auf Adresse 2D04 ausgeben
+( LED's zum Leuchten bringen, also auf Adresse 2D04 ausgeben )
 
 2D04 CONSTANT LEDS
 55 LEDS !
 
-( erreichte Programmdresse in 0000-1FFF
+( erreichte Programmdresse in 0000-1FFF )
 
 HERE .
 
-( erreichte Adresse in Textspeicher E000-FFFF
+( erreichte Adresse in Textspeicher E000-FFFF )
 
 BZEIG ?
 
-( aktuelle Stapelhoehe
+( aktuelle Stapelhoehe )
 
 SP ?
 
 SP ?
 
-( Ein neues Wort definieren
+( Ein neues Wort definieren )
 
 : H ." Hallo Welt " ;
 
 H
 
-( Bedingung IF
+( Bedingung IF )
 
 : W ( n --> ) 
   ." Das ist eine " 
@@ -1106,27 +1095,27 @@ H
 7 W
 8 W
 
-( Programmschleifen, die für DO LOOP ist aber momentan stillgelegt.
+( Programmschleifen, die für DO LOOP ist aber momentan stillgelegt. )
 
 ( : X ( n --> )
 (   0 DO I . LOOP ;
 ( 13 X 
 
-( oder
+( oder )
 
-: Y ( n -->
+: Y ( n --> )
   0 BEGIN DUP . 1+ 2DUP = UNTIL 2DROP ;
 
 13 Y
 
-( oder
+( oder )
 
-: Z ( n -->
+: Z ( n --> )
   0 BEGIN 2DUP > WHILE DUP . 1+ REPEAT 2DROP ;
 
 13 Z
 
-( alles aus dieser DEMO wieder vergessen
+( alles ab LEDS wieder vergessen )
 
 HERE . BZEIG ?
 FORGET LEDS
@@ -1140,8 +1129,7 @@ HERE . BZEIG ?
 
 
 
-( Also an der Stelle nach FFINIT1SMUL.TXT hab ich jetzt
-( 
+( Also an der Stelle nach FFINIT1SMUL.TXT hab ich jetzt )
 ( N" ( /number/  -> n        liest bis " eine grosse ganze Zahl ein
 (                            kleine ganze Zahlen wie bisher eingeben
 ( N+ N- N* N/ N/MOD NMOD N^  und rechnet damit
@@ -1152,7 +1140,7 @@ HERE . BZEIG ?
 ( also direkt eingeben und mit + - * / rechnen geht hier noch nicht
 
 
-( ERGEBNIS ist ein blöd gewählter Variablenname, 
+( ERGEBNIS ist unpassend gewählter Variablenname, 
 ( bezeichnet ab welcher Adresse das nächste Ergebnis gespeichert wird,
 ( Platz dafür ist von 1400H bis 1FFFH, aktuell erreicht: )
  
@@ -1172,7 +1160,7 @@ ERGEBNIS ?
 ERGEBNIS ?
 
 
-( Zahlenbasis wechseln
+( Zahlenbasis wechseln )
 
 : HEX 10 BASE ! ;
 : DECIMAL 0A BASE ! ;
@@ -1194,15 +1182,17 @@ REPLACE: NUMBER NNUMBER ;
 : . O. ; : + N+ ; : - N- ; : * N* ; : / N/ ; : /MOD N/MOD : : MOD NMOD ; 
 : GGT NGGT ; : BK NBK ; : ^ N^ ; : ? @ . ;
 
+( jetzt rechnen auch + - * / mit großen ganzen Zahlen, 
+( allerdings beim Compilieren von großen ganzen Zahlen im Moment noch 1234 ERROR
 
 
 111111111111111 DUP * .
 
-( an der Stelle Programm-VHDL-Quelltext für Step_11 ausgeben
+( an der Stelle Programm-VHDL-Quelltext für Step_11 ausgeben )
 HEX INIT 
-HERE 0 0 DUMPZ           ( generiert progRAM in P20.vhd für Step_11
-BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM in P20.vhd für Step_11
-3000 2C00 0 DUMPZ        ( generiert stapR   in P20.vhd für Step_11
+HERE 0 0 DUMPZ           ( generiert progRAM für P20_FFP.vhd Step_11
+BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM für P20_FFP.vhd Step_11
+3000 2C00 0 DUMPZ        ( generiert stapR   für P20_FFP.vhd Step_11
 </sekt>
 
 <sekt inhalt="noch ein wenig DEMO">
@@ -1221,12 +1211,12 @@ DUP .
 4 INVERTIEREN ( mat dim --> invmat nenner )
 OVER .
 DUP .
-( Ergebnis sollte sein: OVER .
-(      [ [ 1152 -864 384 -72 ] 
-(        [ -1248 1368 -672 132 ] 
-(        [ 432 -576 336 -72 ] 
-(        [ -48 72 -48 12 ] ] ok
-( und gemeinsamer Nenner: DUP . 288
+( Ergebnis sollte sein: OVER .      )
+(      [ [ 1152 -864 384 -72 ]      )
+(        [ -1248 1368 -672 132 ]    ) 
+(        [ 432 -576 336 -72 ]       )
+(        [ -48 72 -48 12 ] ] ok     )
+( und gemeinsamer Nenner: DUP . 288 )
 
 </sekt>
 
