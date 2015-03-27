@@ -15,8 +15,8 @@ testbench.vhd      Testbench zu P01.vhd+P20_FFP.vhd
 
 INIT.xml           recompiliert den Forth-Interpreter
 screenlog.xml      Logfile dazu, enthält Speicherarrays für P20_FFP.vhd
-INIT.xsl           xslt-Templates und
 
+INIT.xsl           xslt-Templates und
 INIT.css           css-Formatierung und
 INIT.DTD           DOCTYPE zu INIT.xml und screenlog.xml
 
