@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xml-stylesheet type="text/xsl" href="INIT.xsl" ?>
+<!DOCTYPE INIT SYSTEM "INIT.DTD">
+<INIT>
+-1 XBIT ! ( schaltet ab der nächsten Zeile die CSI-"ok"-Ausgabe auf xml-Modus um )
+
+<AXIOME>
+<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen und sind deshalb separat zusammengefasst)">
+<sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen">
+( wenn die Axiome so bleiben wie sie sind, ganz normal 1x hintereinanderweg compilieren )
+( wenn die Axiome verändert werden sollen, dann )
+  ( zuerst RESET und 1x die ursprünglichen Axiome laden ) 
+  ( anschließend die neuen Axiome compilieren, so: )
+    ( HERE 100 + DPMERK ! E800 BANF ! )
+    ( 2x neue Axiome compilieren <REF1/> )
+    ( 058 DPMERK ! E000 BANF ! )
+    ( 2x neue Axiome compilieren <REF1/> nochmal ) 
+    ( danach alles, was nach den AXIOMEN folgt, 1x compilieren )
+  ( bei verzwickten Veränderungen kann es vorkommen, 
+  ( dass noch weitere Zwischenschritte eingefügt werden müssen. )
+</sekt>
+
+<sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
+( zuerst alles Notwendige wieder auf Ausgangszustand schalten )
+2 2 * DUP * BASE ! ( HEX )
+7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER )
+B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT, )
+4000 000E !        ( aktiviert ^F = START )
+' DUMPZ 4 - LFA !  ( LFA zurueck auf Anfangsvokabular )
+
+DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG zurücksetzen )
+</sekt>
+
+<sekt inhalt="so, mit irgendwas muss das Compilieren losgehen">
+IMMEDIATE: ( 29 WORD 2DROP ;
+IMMEDIATE: { 0 STAT ! ; ( war ursprünglich mal [ )  
+: } 1 STAT ! ;
+IMMEDIATE: COMPILE 20 WORD FIND LCFA DROP COMPILE, ;
+COMPILE: (LIT,) R> DUP 1+ >R @ ;
+: LIT, ( a --> ) DUP 3FFF > OVER C000 LT OR IF COMPILE (LIT,) END_IF , ;
+COMPILE: (CONSTANT:) R> @ STAT @ IF LIT, END_IF ;
+</sekt>
+
+<sekt inhalt="Konstanten">
+: CONSTANT ( /name/  c --> ) CREATE COMPILE (CONSTANT:) , SMUDGE ;
+
+D001 CONSTANT SP
+D002 CONSTANT RP
+D003 CONSTANT PC
+
+( für das Folgende freigehaltene Adressen: 0040-0057 )
+40 CONSTANT XBIT
+41 CONSTANT SMUDGEBIT
+42 CONSTANT RP0 3000 RP0 !
+43 CONSTANT IRAMADR
+44 CONSTANT JRAMADR
+45 CONSTANT XOFF
+46 CONSTANT CRBZEIG BZEIG @ CRBZEIG !
+47 CONSTANT CRDP DP @ 8 - CRDP !
+
+48 CONSTANT BASE
+49 CONSTANT TIB
+4A CONSTANT IN1
+4B CONSTANT IN2
+4C CONSTANT IN3
+4D CONSTANT IN4
+4E CONSTANT ERRORNR 0 ERRORNR !
+4F CONSTANT DP
+50 CONSTANT STAT 0 STAT !
+51 CONSTANT LFA
+52 CONSTANT BANF
+53 CONSTANT BZEIG
+54 CONSTANT DPMERK
+55 CONSTANT CSP
+56 CONSTANT LOCALADDR
+
+VERSION 1+ CONSTANT VERSION VERSION .
+</sekt>
+
+<sekt inhalt="Maschinencode">
+A003 CONSTANT RETURN
+COMPILE: (MCODE:) R> STAT @ IF @ , ELSE EXECUTE END_IF ;
+: MCODE CREATE COMPILE (MCODE:) , RETURN , SMUDGE ;
+
+A000 MCODE MINUS
+A001 MCODE U+
+A002 MCODE U*
+A00D MCODE 0=
+A00F MCODE 0LT
+A005 MCODE EMITCODE
+A00B MCODE NOT
+A008 MCODE AND
+A00E MCODE OR
+A00C MCODE KEYCODE
+A007 MCODE +
+A009 MCODE !
+A00A MCODE @
+B412 MCODE SWAP
+B502 MCODE OVER
+B501 MCODE DUP
+B434 MCODE ROT
+B300 MCODE DROP
+B43C MCODE 2SWAP
+B60C MCODE 2OVER
+B603 MCODE 2DUP
+B200 MCODE 2DROP
+8000 MCODE NOOP
+</sekt>
+
+<sekt inhalt="ein Abschnitt für die Zeichenketten">
+: B, ( b --> ) BZEIG @ ! 1 BZEIG +! ;
+: Z, ( badr n --> ) BZEIG @ LIT, DUP ,
+  BEGIN SWAP DUP @ B, 1+ SWAP 1 - DUP 0= UNTIL
+  2DROP 20 B, ; 
+COMPILE: (WORD:) WORD STAT @ IF Z, R> COMPILE, END_IF ;
+: WORD: CREATE 1 STAT ! , COMPILE (WORD:) -1 CSP +! ;
+22 WORD: " ;
+22 WORD: ." TYPE ;
+</sekt>
+
+<sekt inhalt="weiter mit Programmstrukturen">
+: HERE DP @ ;
+: JRBIT 8 ;
+: JR0BIT 9 ;
+: XSETBT 1000 * SWAP 0FFF AND OR ;
+: ALLOT DP +! ;
+: BRANCH, HERE 1+ - JRBIT XSETBT , ;
+: 0BRANCH, HERE 1+ - JR0BIT XSETBT , ;
+IMMEDIATE: BEGIN HERE ;
+IMMEDIATE: AGAIN BRANCH, ;
+IMMEDIATE: UNTIL 0BRANCH, ;
+IMMEDIATE: IF JR0BIT 1 ALLOT HERE ;
+IMMEDIATE: END_IF HERE OVER - ROT XSETBT SWAP 1 - ! ;
+IMMEDIATE: ELSE 1 ALLOT COMPILE END_IF JRBIT HERE ;
+IMMEDIATE: WHILE COMPILE IF ;
+IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
+</sekt>
+
+<sekt inhalt="etliche kleinere Funktionen">
+: C@ @ ;
+: C! ! ;
+: 1+ ( a --> a+1 ) 1 + ;
+: - MINUS + ;
+: = - 0= ;
+: LT ( a b --> r ) 8000 + SWAP NOT 8000 + 0 U+ DROP 0= NOT ;
+: > ( a b --> r ) SWAP LT ;
+: * ( a b --> a*b ) 0 ROT ROT U* SWAP DROP ;
+: BYE BEGIN ." BYE " AGAIN ;
+: +! ( a adr --> adr+1 ) SWAP OVER @ + SWAP ! ;
+: R> RP @ 1+ @ RP @ 1+ RP 2DUP @ @ SWAP ! ! ;
+: >R RP @ DUP -1 + RP 2DUP @ @ SWAP DUP -1 + RP ! ! ! ! ; 
+: R RP @ 1+ @ ; ( bei R> >R nicht unterhalb RP speichern wegen INTXY )
+: , DP @ ! 1 DP +! ;
+: EXECUTE PC ! ;
+: KEY 12 EXECUTE ;
+: EMIT ' EMITCODE EXECUTE ;
+: SHL16 ( a --> t a' )
+  0 SWAP 10 U* SWAP ; ( t a' = SHL a )
+: DIG ( n --> c )
+  DUP 0A LT IF ELSE 7 + END_IF 30 + ;
+: TYPE
+  BEGIN DUP WHILE
+    SWAP DUP C@ EMIT 1+
+    SWAP 1 - REPEAT
+  2DROP ;
+: HG. SHL16 DIG EMIT SHL16 DIG EMIT SHL16 DIG EMIT
+  SHL16 DIG EMIT DROP ;
+: H. HG. 20 EMIT ;
+: . H. ;
+: ? @ . ;
+: CR 
+  CRDP @ DP @ - STAT @ 0= NOT OR XBIT @ 0= NOT AND IF 
+    3C EMIT ." fl>" CRDP @ . CRBZEIG @ . 3C EMIT ." /fl>"
+    3C EMIT ." fr>" DP @ . BZEIG @ . 3C EMIT ." /fr>"
+    DP @ CRDP ! BZEIG @ CRBZEIG ! 
+    END_IF
+  0A EMIT ;
+: FEHLERTEXT ( n --> n ) ;
+: DISABLE 
+  CR ." weiter nach Taste ESCAPE "
+  BEGIN 20 EMIT 8 EMIT KEY 1B = UNTIL ; 
+: ERROR
+  DUP ERRORNR !
+  0 STAT !
+  CR IN1 @ IN3 @ IN1 @ - 1 - TYPE ." ???"
+  " FEHLERTEXT" INTERPRET
+  CR ." ERROR - Fehler Nummer " . 
+  DISABLE QUIT ;
+: CSP! SP @ CSP ! ;
+: CSP? SP @ CSP @ - IF 9 ERROR END_IF ;
+</sekt>
+
+<sekt inhalt="lokale Variablen">
+: LOCAL ( n --> )
+  R> SWAP 
+  DUP MINUS RP @ + RP !
+  RP @ LOCALADDR @
+  >R LOCALADDR !
+  >R ( LOCALDIST )
+  >R ;
+: END_LOCAL
+  R>
+  R> ( LOCALDIST )
+  R> LOCALADDR ! 
+  RP @ + RP !
+  >R ;  
+: L0 LOCALADDR @ ;
+: L1 LOCALADDR @ 1+ ;
+: L2 LOCALADDR @ 2 + ;
+: L3 LOCALADDR @ 3 + ;
+: L4 LOCALADDR @ 4 + ;
+: L5 LOCALADDR @ 5 + ;
+: L6 LOCALADDR @ 6 + ;
+: L7 LOCALADDR @ 7 + ;
+</sekt>
+
+<sekt inhalt="alles zu KEY">
+IMMEDIATE: ' ( /name/ --> --> pfa ) 
+  20 WORD FIND LCFA DROP 1+ STAT @ IF LIT, END_IF ; 
+
+: INCR4 ( adr --> )
+  DUP @ 1 +
+  DUP 3FF AND 000 = IF 400 - END_IF 
+  SWAP !
+  ;
+
+: KEY_INT ( --> )
+  D000 @ 
+  DUP 08 LT IF 
+    18 + @ DUP IF DUP EXECUTE END_IF
+    DROP
+    ELSE
+      IRAMADR @ ! 
+      IRAMADR INCR4
+      IRAMADR @ JRAMADR @ - 3FF AND 
+      100 > IF XOFF @ 0= IF -1 XOFF ! 13 EMIT END_IF END_IF 
+      END_IF
+  0 D000 !
+  ;
+
+: KEYCODE2 ( --> c f )
+  JRAMADR @ IRAMADR @ = IF 0 0 
+    ELSE JRAMADR @ @ -1
+    JRAMADR INCR4
+    IRAMADR @ JRAMADR @ - 3FF AND
+    80 LT IF XOFF @ IF 0 XOFF ! 11 EMIT END_IF END_IF
+    END_IF
+  ;
+
+' KEY_INT 4000 + 26 !
+' KEYCODE2 4000 + 12 !
+</sekt>
+
+<sekt inhalt="es folgt der Interpreter">
+( ESCAPE durch EXPECT durchlaufen lassen )
+( und 7F in 08 umwandeln )
+( und nach n Zeichen kein 0D mehr lesen )
+: EXPECT ( /text/  adr n --> adr m )
+  5 LOCAL
+  L2 ! L1 ! L1 @ L4 !
+  BEGIN
+    KEY
+    DUP 14 ( 20 ) ( =^T, ^R=18 ) = IF 
+      DROP L1 @ C@ END_IF
+    DUP 7F = IF DROP 08 END_IF
+    DUP 08 = IF L4 @ L1 @ LT IF
+      -1 L1 +!
+      1 L2 +!
+      8 EMIT 20 ( 32 ) EMIT 8 EMIT
+      END_IF END_IF
+(    DUP 20 ( 32 ] LT NOT OVER 08 = OR OVER 1B = OR L2 @ 0= NOT AND WHILE
+      DUP 20 LT IF ( DROP ) ELSE
+        -1 L2 +!
+        L2 @ 0LT IF 6 ERROR END_IF
+        DUP EMIT
+        DUP L1 @ C! 1 L1 +!
+        END_IF 
+    DUP 20 LT OVER 08 = NOT AND SWAP 1B = NOT AND L2 @ 0= OR UNTIL
+(      REPEAT
+  20 ( 32 ) EMIT
+  L4 @ L1 @ L4 @ -
+  2DUP + 0 SWAP C!
+  END_LOCAL
+  ;
+
+
+: DIGIT ( z --> d r ) ( r=-1 wenn gueltig )
+  ( vorher r=0 wenn gueltig!!! )
+  DUP 30 ( 30 48 ) LT NOT OVER 3A ( 3A 58 ) LT AND
+  OVER 41 ( 41 65 ) LT NOT OR 
+  DUP IF ( z -1 wenn gueltig )
+    SWAP 30 ( 30 48 ) -
+    DUP 0A LT NOT IF 7 - END_IF
+    DUP BASE @ LT NOT IF DROP DROP 0 0 END_IF
+    SWAP END_IF ;
+
+: NUMBER ( badr n --> a r )
+  7 LOCAL ( L3 L4 nicht verwendet )
+  L1 ! L0 !
+  0 L1 @ IF
+    DUP L2 ! 1 L5 ! ( Vorzeichen )
+    BEGIN ( M23 Vorzeichen gucken )
+      -1 L6 ! 
+      L0 @ L2 @ + C@
+      2B ( 43 2B ) = IF L2 @ 1+ L2 ! 0 L6 ! ELSE
+        L0 @ L2 @ + C@
+        2D ( 45 2D ) = IF L2 @ 1+ L2 !
+          0 L6 !
+          L5 @ MINUS L5 ! END_IF
+        END_IF
+      L6 @ UNTIL
+    L2 @ L1 @ LT IF
+      BEGIN
+        L0 @ L2 @ + C@
+        DUP IF ( oo L1 auf Bytes )
+          DIGIT NOT IF DROP L1 @ MINUS L1 ! ELSE
+            SWAP BASE @ * +
+            L2 @ 1+ L2 ! 
+            END_IF
+          ELSE DROP L2 @ L1 ! END_IF
+        L2 @ L1 @ LT NOT UNTIL
+      END_IF ( M19 )
+    END_IF ( M19 )
+  L5 @ 0LT IF MINUS END_IF
+  L2 @ L1 @ - ( oo noch kein fadr )
+  END_LOCAL
+  ;
+
+: WORD ( b --> adr n )
+  >R
+  IN3 @ IN2 !
+  BEGIN 
+    IN3 @ C@ R = IN3 @ IN4 @ LT AND WHILE
+      1 IN3 +! REPEAT
+  IN3 @ IN2 !
+  BEGIN 
+    IN3 @ C@ 3C = IF IN3 @ IN4 ! END_IF ( alles nach 3C ist Kommentar )
+    IN3 @ C@ R = NOT IN3 @ IN4 @ LT AND WHILE
+      1 IN3 +! REPEAT
+  IN2 @ IN3 @ OVER -
+  DUP IF 1 IN3 +! END_IF
+  R> DROP
+  ;
+
+: Z= ( adr1 n1 adr2 n2 --> r )
+  >R OVER R - IF R> DROP DROP DROP DROP 0 ELSE
+    R> DROP SWAP 0 BEGIN 2DUP - WHILE >R >R
+      OVER C@ OVER C@ - IF DROP DROP 0 0 END_IF
+      DUP IF 1+ SWAP 1+ SWAP END_IF
+      R> R> 1+ REPEAT 2DROP ( neu bei 16 BIT ohne DO LOOP )
+    DROP IF -1 ELSE 0 END_IF
+    END_IF ;
+( : Z= DROP SWAP DROP SWAP @ SWAP @ = ;
+
+: FIND ( adr n --> lfa r )
+  >R >R 0 ( heisst noch nicht gefunden )
+  LFA @ 
+  SMUDGEBIT @ IF DUP @ + END_IF
+  BEGIN
+    DUP 1+ DUP @ ( lfa nfa adr )
+    SWAP 1+ @ ( lfa adr n1 )
+    ( 2DUP CR B. 2DUP TYPE
+    ( BEGIN 2DUP + 1 - C@ 0= WHILE 1 - REPEAT ( ??? momentan nicht )
+    R> R> 2DUP >R >R ( 0 lfa adr1 n1 adr2 n2 )
+    Z= IF SWAP 0= SWAP END_IF ( heisst gefunden )
+    OVER 0= OVER @ 0= NOT AND 
+    OVER DUP @ + LFA @ = NOT AND WHILE ( wegen 2xladen )
+      DUP @ + REPEAT
+  R> DROP R>
+  ROT 0= IF DROP DROP 0 0 END_IF
+  ( OVER LFA @ SWAP LT IF ." *" OVER . LFA @ . END_IF ( vref wenn gebraucht )
+  ;
+
+: LCFA ( lfa r --> cfa r ) SWAP 3 + SWAP ;
+
+: COMPILE, ( adr --> ) 4000 + , ;
+
+: CREATE ( /name/  --> )
+  CSP! ( Stapelbalance prüfen in ; )
+  DP @ LFA @ OVER - , LFA !
+  20 WORD Z,
+  1 SMUDGEBIT ! ( HERE 2 - DUP @ MINUS SWAP ! ( UNSMUDGE )
+  ;
+
+: INTERPRET ( adr n --> ... )
+  IN1 @ >R IN2 @ >R IN3 @ >R IN4 @ >R
+  OVER + IN4 !
+  DUP IN1 ! DUP IN2 ! IN3 !
+  BEGIN
+  ( ... qstack? Stapelpruefen )
+  20 WORD
+  DUP WHILE
+    2DUP FIND 
+    DUP IF ( gefunden )
+      >R >R 2DROP R> R> LCFA DROP EXECUTE
+      ELSE ( nicht gefunden )
+        2DROP
+        2DUP NUMBER IF ( keine Zahl )
+          2DROP DROP
+          3 ERROR
+         ( DROP BNUMBER
+         ( DUP IF DUP IN2 ! END_IF
+         ( IF 3 ERROR END_IF
+         ( STAT @ IF SWAP LIT, LIT, END_IF
+          ELSE ( eine Zahl )
+            ROT DROP SWAP DROP
+            STAT @ IF LIT, END_IF ( oo LIT, fuer gr )
+            END_IF
+        END_IF
+    REPEAT 2DROP
+  R> IN4 ! R> IN3 ! R> IN2 ! R> IN1 !
+  ;
+
+: QUIT
+  RP0 @ RP ! 
+  XBIT @ IF 3C EMIT ." /ok>" ELSE ." ok" END_IF
+  BEGIN ( im Prinzip nur BEGIN CR TIB @ 100 EXPECT INTERPRET AGAIN )
+    CR 
+    TIB @ 100 EXPECT
+    OVER @ 3C = IF 2DROP ELSE ( xml am Zeilenanfang gleich überlesen )
+      XBIT @ IF 
+        3C EMIT ." ok>" 
+        INTERPRET 
+        3C EMIT ." /ok>" 
+        ELSE
+          C2 EMIT 9B EMIT 33 EMIT 36 EMIT 6D EMIT
+          INTERPRET 
+          STAT @ 0= IF ." ok" END_IF 
+          C2 EMIT 9B EMIT 33 EMIT 39 EMIT 6D EMIT
+          END_IF 
+      END_IF
+    AGAIN 
+  ;
+
+
+: START ." FORTY-FORTH" CR CR QUIT ;
+
+
+: SMUDGE 0 SMUDGEBIT ! ( LFA @ 1+ DUP @ DUP 0LT IF MINUS END_IF SWAP ! ) ;
+
+: (IMMEDIATE:) R> >R ;
+:   (COMPILE:) R> COMPILE, ;
+:          (:) R> STAT @ IF COMPILE, ELSE >R END_IF ;
+
+: IMMEDIATE: CREATE 1 STAT ! COMPILE (IMMEDIATE:) ;
+:   COMPILE: CREATE 1 STAT ! COMPILE (COMPILE:) ;
+:          : CREATE 1 STAT ! COMPILE (:) ;
+
+( das hier jetzt mit dem neuen CREATE: )
+IMMEDIATE: ; 0 STAT ! CSP? A003 , SMUDGE { SMUDGE } ; 
+( tatsaechlich { SMUDGE } wegen 2x laden!!! ) 
+( Ende der Axiome. Hiermit enden die Axiome. )
+</sekt>
+
+0 DPMERK @ ! ( abkoppeln )
+HERE . BZEIG ?
+
+START
+</sekt>
+</AXIOME>
+
+<FFINIT2>
+<sekt inhalt="bis Adresse 0800H passt noch DUMPZ drauf (inzwischen nicht mehr)">
+( erste Forth Erweiterungen )
+( - DUMPZ )
+( RAMB-Inhaltsausgabe erzeugen: )
+: DUBIT HERE ;
+: LG. ( n --> )
+  DUBIT @ IF SHL16 DROP SHL16 DROP 
+    ELSE SHL16 DIG EMIT SHL16 DIG EMIT END_IF 
+  SHL16 DIG EMIT SHL16 DIG EMIT DROP ;
+: NG. ( n --> )
+  ." x" 22 EMIT LG. 22 EMIT ." ," ; 
+: DUMPZ ( bis+1 von dubit --> )
+  DUBIT ! XBIT @ >R 0 XBIT !
+  " ' START " INTERPRET 4000 + 10 !
+  CR 3C EMIT ." DUMPZ>"
+  BEGIN
+    CR ."   "
+    0000 BEGIN 
+      2DUP + 
+      DUP IRAMADR = IF DROP JRAMADR END_IF
+      @ NG. 1+ DUP 10 = 
+      UNTIL DROP
+    ."  -- " DUP HG. ." -" DUP 0F + . 
+    10 +
+    2DUP > NOT UNTIL 2DROP
+  CR 3C EMIT ." /DUMPZ>"
+  R> XBIT !
+  ; 
+
+HERE . BZEIG ?
+</sekt>
+
+<sekt inhalt="ProgRAM und ByteRAM für Step_9 und Step_10 erstellen">
+HERE 0 0 DUMPZ          ( generiert ProgRAM für P20_FFP.vhd Step_10 )
+BZEIG @ E000 -1 DUMPZ   ( generiert ByteRAM für P20_FFP.vhd Step_10 )
+</sekt>
+

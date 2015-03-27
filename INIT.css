@@ -1,0 +1,54 @@
+INIT { 
+  white-space: pre-wrap;
+  font-family:monospace;
+  font-size: 110%;
+  }
+
+AXIOME {
+  display: inline-block;
+  border:solid;
+  background-color: Magenta; 
+  padding: 10px;
+  }
+
+sekt {
+  display: inline-block;
+  border:solid;
+  margin: 5px;
+  padding: 10px;
+  background-color: white; 
+  }
+
+.VorSekt {
+  background-color: Aqua;
+  }
+
+ok {
+  background-color: Khaki; 
+  }
+
+fl {
+  background-color: LightGrey; 
+  float: left; 
+  }
+
+fr {
+  background-color: White; 
+  color: LightGrey;
+  float: right; 
+  }
+
+ul { 
+  white-space: nowrap;
+  }
+
+DUMPZ { 
+  background-color: Pink; 
+  white-space: pre;
+  overflow: hidden;
+  }
+
+.zurück { 
+  float: right;
+  }
+
