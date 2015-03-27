@@ -1,7 +1,8 @@
 # FORTY-FORTH
 Ohne Rundungsfehler Gleichungssysteme lösen
 
-Siehe http://OpaStefanVogel.github.io/FORTY-FORTH/
+Siehe http://OpaStefanVogel.github.io/FORTY-FORTH/ 
+und file:///your-master-repo/screenlog.xml in einem xml-Browser.
 
 Files in branch master:
 
