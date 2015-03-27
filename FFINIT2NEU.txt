@@ -781,7 +781,7 @@ OVER O. DUP N.
 ERGEBNIS ?
 ( herauskommen soll  [ [ 8FB77F0C000000 -FB811E55000000 ... ] ] 11F6EFE1800000 )
 
-( mehr geht erstmal nicht weil nicht mehr Platz
+( mehr geht erstmal nicht weil nicht mehr Platz )
 </sekt>
 
 <sekt inhalt="Reste die auch weggelassen werden können, wenn alles geht">
@@ -1217,9 +1217,6 @@ DUP .
 (        [ 432 -576 336 -72 ]       )
 (        [ -48 72 -48 12 ] ] ok     )
 ( und gemeinsamer Nenner: DUP . 288 )
-
 </sekt>
-
-0 XBIT ! ( schaltet xml-Ausgabemodus wieder zurück auf CSI-"ok" )
 </FFINIT2>
 </INIT>

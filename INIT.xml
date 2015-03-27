@@ -2,8 +2,6 @@
 <?xml-stylesheet type="text/xsl" href="INIT.xsl" ?>
 <!DOCTYPE INIT SYSTEM "INIT.DTD">
 <INIT>
--1 XBIT ! ( schaltet ab der nächsten Zeile die CSI-"ok"-Ausgabe auf xml-Modus um )
-
 <AXIOME>
 <sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen und sind deshalb separat zusammengefasst)">
 <sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen">
@@ -423,10 +421,10 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
         INTERPRET 
         3C EMIT ." /ok>" 
         ELSE
-          C2 EMIT 9B EMIT 33 EMIT 36 EMIT 6D EMIT
+          1B EMIT 5B EMIT 33 EMIT 36 EMIT 6D EMIT
           INTERPRET 
           STAT @ 0= IF ." ok" END_IF 
-          C2 EMIT 9B EMIT 33 EMIT 39 EMIT 6D EMIT
+          1B EMIT 5B EMIT 33 EMIT 39 EMIT 6D EMIT
           END_IF 
       END_IF
     AGAIN 
@@ -1280,7 +1278,7 @@ OVER O. DUP N.
 ERGEBNIS ?
 ( herauskommen soll  [ [ 8FB77F0C000000 -FB811E55000000 ... ] ] 11F6EFE1800000 )
 
-( mehr geht erstmal nicht weil nicht mehr Platz
+( mehr geht erstmal nicht weil nicht mehr Platz )
 </sekt>
 
 <sekt inhalt="Reste die auch weggelassen werden können, wenn alles geht">
@@ -1716,9 +1714,6 @@ DUP .
 (        [ 432 -576 336 -72 ]       )
 (        [ -48 72 -48 12 ] ] ok     )
 ( und gemeinsamer Nenner: DUP . 288 )
-
 </sekt>
-
-0 XBIT ! ( schaltet xml-Ausgabemodus wieder zurück auf CSI-"ok" )
 </FFINIT2>
 </INIT>
