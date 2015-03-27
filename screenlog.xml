@@ -1,0 +1,2392 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<?xml-stylesheet type="text/xsl" href="INIT.xsl" ?> 
+<!DOCTYPE INIT SYSTEM "INIT.DTD"> 
+<INIT> 
+<AXIOME> 
+<sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen und sind deshalb separat zusammengefasst)"> 
+<sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen"> 
+( wenn die Axiome so bleiben wie sie sind, ganz normal 1x hintereinanderweg compilieren ) <ok></ok>
+( wenn die Axiome verändert werden sollen, dann ) <ok></ok>
+  ( zuerst RESET und 1x die ursprünglichen Axiome laden )  <ok></ok>
+  ( anschließend die neuen Axiome compilieren, so: ) <ok></ok>
+    ( HERE 100 + DPMERK ! E800 BANF ! ) <ok></ok>
+    ( 2x neue Axiome compilieren <REF1/> ) <ok></ok>
+    ( 058 DPMERK ! E000 BANF ! ) <ok></ok>
+    ( 2x neue Axiome compilieren <REF1/> nochmal )  <ok></ok>
+    ( danach alles, was nach den AXIOMEN folgt, 1x compilieren ) <ok></ok>
+  ( bei verzwickten Veränderungen kann es vorkommen,  <ok></ok>
+  ( dass noch weitere Zwischenschritte eingefügt werden müssen. ) <ok></ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt"> 
+( zuerst alles Notwendige wieder auf Ausgangszustand schalten ) <ok></ok>
+2 2 * DUP * BASE ! ( HEX ) <ok></ok>
+7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER ) <ok></ok>
+B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT, ) <ok></ok>
+0010 001E !        ( aktiviert ^F = START ) <ok></ok>
+' DUMPZ 4 - LFA !  ( LFA zurueck auf Anfangsvokabular ) <ok></ok>
+ <ok></ok>
+DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG zurücksetzen ) <ok></ok><fl>11D6 E72D </fl><fr>0058 E000 </fr>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="so, mit irgendwas muss das Compilieren losgehen"> 
+IMMEDIATE: ( 29 WORD 2DROP ; <ok></ok><fl>0058 E000 </fl><fr>0060 E002 </fr>
+IMMEDIATE: { 0 STAT ! ; ( war ursprünglich mal [ )   <ok></ok><fl>0060 E002 </fl><fr>0068 E004 </fr>
+: } 1 STAT ! ; <ok></ok><fl>0068 E004 </fl><fr>0070 E006 </fr>
+IMMEDIATE: COMPILE 20 WORD FIND LCFA DROP COMPILE, ; <ok></ok><fl>0070 E006 </fl><fr>007B E00E </fr>
+COMPILE: (LIT,) R> DUP 1+ >R @ ; <ok></ok><fl>007B E00E </fl><fr>0085 E015 </fr>
+: LIT, ( a --> ) DUP 3FFF > OVER C000 LT OR IF COMPILE (LIT,) END_IF , ; <ok></ok><fl>0085 E015 </fl><fr>0094 E01A </fr>
+COMPILE: (CONSTANT:) R> @ STAT @ IF LIT, END_IF ; <ok></ok><fl>0094 E01A </fl><fr>009F E026 </fr>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="Konstanten"> 
+: CONSTANT ( /name/  c --> ) CREATE COMPILE (CONSTANT:) , SMUDGE ; <ok></ok><fl>009F E026 </fl><fr>00A8 E02F </fr>
+ <ok></ok>
+D001 CONSTANT SP <ok></ok><fl>00A8 E02F </fl><fr>00AD E032 </fr>
+D002 CONSTANT RP <ok></ok><fl>00AD E032 </fl><fr>00B2 E035 </fr>
+D003 CONSTANT PC <ok></ok><fl>00B2 E035 </fl><fr>00B7 E038 </fr>
+ <ok></ok>
+( für das Folgende freigehaltene Adressen: 0040-0057 ) <ok></ok>
+40 CONSTANT XBIT <ok></ok><fl>00B7 E038 </fl><fr>00BC E03D </fr>
+41 CONSTANT SMUDGEBIT <ok></ok><fl>00BC E03D </fl><fr>00C1 E047 </fr>
+42 CONSTANT RP0 3000 RP0 ! <ok></ok><fl>00C1 E047 </fl><fr>00C6 E04B </fr>
+43 CONSTANT IRAMADR <ok></ok><fl>00C6 E04B </fl><fr>00CB E053 </fr>
+44 CONSTANT JRAMADR <ok></ok><fl>00CB E053 </fl><fr>00D0 E05B </fr>
+45 CONSTANT XOFF <ok></ok><fl>00D0 E05B </fl><fr>00D5 E060 </fr>
+46 CONSTANT CRBZEIG BZEIG @ CRBZEIG ! <ok></ok><fl>00D5 E068 </fl><fr>00DA E068 </fr>
+47 CONSTANT CRDP DP @ 8 - CRDP ! <ok></ok><fl>00D7 E068 </fl><fr>00DF E06D </fr>
+ <ok></ok>
+48 CONSTANT BASE <ok></ok><fl>00DF E06D </fl><fr>00E4 E072 </fr>
+49 CONSTANT TIB <ok></ok><fl>00E4 E072 </fl><fr>00E9 E076 </fr>
+4A CONSTANT IN1 <ok></ok><fl>00E9 E076 </fl><fr>00EE E07A </fr>
+4B CONSTANT IN2 <ok></ok><fl>00EE E07A </fl><fr>00F3 E07E </fr>
+4C CONSTANT IN3 <ok></ok><fl>00F3 E07E </fl><fr>00F8 E082 </fr>
+4D CONSTANT IN4 <ok></ok><fl>00F8 E082 </fl><fr>00FD E086 </fr>
+4E CONSTANT ERRORNR 0 ERRORNR ! <ok></ok><fl>00FD E086 </fl><fr>0102 E08E </fr>
+4F CONSTANT DP <ok></ok><fl>0102 E08E </fl><fr>0107 E091 </fr>
+50 CONSTANT STAT 0 STAT ! <ok></ok><fl>0107 E091 </fl><fr>010C E096 </fr>
+51 CONSTANT LFA <ok></ok><fl>010C E096 </fl><fr>0111 E09A </fr>
+52 CONSTANT BANF <ok></ok><fl>0111 E09A </fl><fr>0116 E09F </fr>
+53 CONSTANT BZEIG <ok></ok><fl>0116 E09F </fl><fr>011B E0A5 </fr>
+54 CONSTANT DPMERK <ok></ok><fl>011B E0A5 </fl><fr>0120 E0AC </fr>
+55 CONSTANT CSP <ok></ok><fl>0120 E0AC </fl><fr>0125 E0B0 </fr>
+56 CONSTANT LOCALADDR <ok></ok><fl>0125 E0B0 </fl><fr>012A E0BA </fr>
+ <ok></ok>
+VERSION 1+ CONSTANT VERSION VERSION . <ok>01AC </ok><fl>012A E0BA </fl><fr>012F E0C2 </fr>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="Maschinencode"> 
+A003 CONSTANT RETURN <ok></ok><fl>012F E0C2 </fl><fr>0134 E0C9 </fr>
+COMPILE: (MCODE:) R> STAT @ IF @ , ELSE EXECUTE END_IF ; <ok></ok><fl>0134 E0C9 </fl><fr>0141 E0D2 </fr>
+: MCODE CREATE COMPILE (MCODE:) , RETURN , SMUDGE ; <ok></ok><fl>0141 E0D2 </fl><fr>014D E0D8 </fr>
+ <ok></ok>
+A000 MCODE MINUS <ok></ok><fl>014D E0D8 </fl><fr>0153 E0DE </fr>
+A001 MCODE U+ <ok></ok><fl>0153 E0DE </fl><fr>0159 E0E1 </fr>
+A002 MCODE U* <ok></ok><fl>0159 E0E1 </fl><fr>015F E0E4 </fr>
+A00D MCODE 0= <ok></ok><fl>015F E0E4 </fl><fr>0165 E0E7 </fr>
+A00F MCODE 0LT <ok></ok><fl>0165 E0E7 </fl><fr>016B E0EB </fr>
+A005 MCODE EMITCODE <ok></ok><fl>016B E0EB </fl><fr>0171 E0F4 </fr>
+A00B MCODE NOT <ok></ok><fl>0171 E0F4 </fl><fr>0177 E0F8 </fr>
+A008 MCODE AND <ok></ok><fl>0177 E0F8 </fl><fr>017D E0FC </fr>
+A00E MCODE OR <ok></ok><fl>017D E0FC </fl><fr>0183 E0FF </fr>
+A00C MCODE KEYCODE <ok></ok><fl>0183 E0FF </fl><fr>0189 E107 </fr>
+A007 MCODE + <ok></ok><fl>0189 E107 </fl><fr>018F E109 </fr>
+A009 MCODE ! <ok></ok><fl>018F E109 </fl><fr>0195 E10B </fr>
+A00A MCODE @ <ok></ok><fl>0195 E10B </fl><fr>019B E10D </fr>
+B412 MCODE SWAP <ok></ok><fl>019B E10D </fl><fr>01A1 E112 </fr>
+B502 MCODE OVER <ok></ok><fl>01A1 E112 </fl><fr>01A7 E117 </fr>
+B501 MCODE DUP <ok></ok><fl>01A7 E117 </fl><fr>01AD E11B </fr>
+B434 MCODE ROT <ok></ok><fl>01AD E11B </fl><fr>01B3 E11F </fr>
+B300 MCODE DROP <ok></ok><fl>01B3 E11F </fl><fr>01B9 E124 </fr>
+B43C MCODE 2SWAP <ok></ok><fl>01B9 E124 </fl><fr>01BF E12A </fr>
+B60C MCODE 2OVER <ok></ok><fl>01BF E12A </fl><fr>01C5 E130 </fr>
+B603 MCODE 2DUP <ok></ok><fl>01C5 E130 </fl><fr>01CB E135 </fr>
+B200 MCODE 2DROP <ok></ok><fl>01CB E135 </fl><fr>01D1 E13B </fr>
+8000 MCODE NOOP <ok></ok><fl>01D1 E13B </fl><fr>01D7 E140 </fr>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="ein Abschnitt für die Zeichenketten"> 
+: B, ( b --> ) BZEIG @ ! 1 BZEIG +! ; <ok></ok><fl>01D7 E140 </fl><fr>01E2 E143 </fr>
+: Z, ( badr n --> ) BZEIG @ LIT, DUP , <ok></ok><fl>01E2 E143 </fl><fr>01EB E146 </fr>
+  BEGIN SWAP DUP @ B, 1+ SWAP 1 - DUP 0= UNTIL <ok></ok><fl>01EB E146 </fl><fr>01F6 E146 </fr>
+  2DROP 20 B, ;  <ok></ok><fl>01F6 E146 </fl><fr>01FA E146 </fr>
+COMPILE: (WORD:) WORD STAT @ IF Z, R> COMPILE, END_IF ; <ok></ok><fl>01FA E146 </fl><fr>0206 E14E </fr>
+: WORD: CREATE 1 STAT ! , COMPILE (WORD:) -1 CSP +! ; <ok></ok><fl>0206 E14E </fl><fr>0214 E154 </fr>
+22 WORD: " ; <ok></ok><fl>0214 E154 </fl><fr>021A E156 </fr>
+22 WORD: ." TYPE ; <ok></ok><fl>021A E156 </fl><fr>0221 E159 </fr>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="weiter mit Programmstrukturen"> 
+: HERE DP @ ; <ok></ok><fl>0221 E159 </fl><fr>0228 E15E </fr>
+: JRBIT 8 ; <ok></ok><fl>0228 E15E </fl><fr>022E E164 </fr>
+: JR0BIT 9 ; <ok></ok><fl>022E E164 </fl><fr>0234 E16B </fr>
+: XSETBT 1000 * SWAP 0FFF AND OR ; <ok></ok><fl>0234 E16B </fl><fr>023F E172 </fr>
+: ALLOT DP +! ; <ok></ok><fl>023F E172 </fl><fr>0246 E178 </fr>
+: BRANCH, HERE 1+ - JRBIT XSETBT , ; <ok></ok><fl>0246 E178 </fl><fr>0251 E180 </fr>
+: 0BRANCH, HERE 1+ - JR0BIT XSETBT , ; <ok></ok><fl>0251 E180 </fl><fr>025C E189 </fr>
+IMMEDIATE: BEGIN HERE ; <ok></ok><fl>025C E189 </fl><fr>0262 E18F </fr>
+IMMEDIATE: AGAIN BRANCH, ; <ok></ok><fl>0262 E18F </fl><fr>0268 E195 </fr>
+IMMEDIATE: UNTIL 0BRANCH, ; <ok></ok><fl>0268 E195 </fl><fr>026E E19B </fr>
+IMMEDIATE: IF JR0BIT 1 ALLOT HERE ; <ok></ok><fl>026E E19B </fl><fr>0277 E19E </fr>
+IMMEDIATE: END_IF HERE OVER - ROT XSETBT SWAP 1 - ! ; <ok></ok><fl>0277 E19E </fl><fr>0285 E1A5 </fr>
+IMMEDIATE: ELSE 1 ALLOT COMPILE END_IF JRBIT HERE ; <ok></ok><fl>0285 E1A5 </fl><fr>028F E1AA </fr>
+IMMEDIATE: WHILE COMPILE IF ; <ok></ok><fl>028F E1AA </fl><fr>0295 E1B0 </fr>
+IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ; <ok></ok><fl>0295 E1B0 </fl><fr>029D E1B7 </fr>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="etliche kleinere Funktionen"> 
+: C@ @ ; <ok></ok><fl>029D E1B7 </fl><fr>02A3 E1BA </fr>
+: C! ! ; <ok></ok><fl>02A3 E1BA </fl><fr>02A9 E1BD </fr>
+: 1+ ( a --> a+1 ) 1 + ; <ok></ok><fl>02A9 E1BD </fl><fr>02B0 E1C0 </fr>
+: - MINUS + ; <ok></ok><fl>02B0 E1C0 </fl><fr>02B7 E1C2 </fr>
+: = - 0= ; <ok></ok><fl>02B7 E1C2 </fl><fr>02BE E1C4 </fr>
+: LT ( a b --> r ) 8000 + SWAP NOT 8000 + 0 U+ DROP 0= NOT ; <ok></ok><fl>02BE E1C4 </fl><fr>02D0 E1C7 </fr>
+: > ( a b --> r ) SWAP LT ; <ok></ok><fl>02D0 E1C7 </fl><fr>02D7 E1C9 </fr>
+: * ( a b --> a*b ) 0 ROT ROT U* SWAP DROP ; <ok></ok><fl>02D7 E1C9 </fl><fr>02E2 E1CB </fr>
+: BYE BEGIN ." BYE " AGAIN ; <ok></ok><fl>02E2 E1CB </fl><fr>02EB E1D4 </fr>
+: +! ( a adr --> adr+1 ) SWAP OVER @ + SWAP ! ; <ok></ok><fl>02EB E1D4 </fl><fr>02F6 E1D7 </fr>
+: R> RP @ 1+ @ RP @ 1+ RP 2DUP @ @ SWAP ! ! ; <ok></ok><fl>02F6 E1D7 </fl><fr>0309 E1DA </fr>
+: >R RP @ DUP -1 + RP 2DUP @ @ SWAP DUP -1 + RP ! ! ! ! ;  <ok></ok><fl>0309 E1DA </fl><fr>0320 E1DD </fr>
+: R RP @ 1+ @ ; ( bei R> >R nicht unterhalb RP speichern wegen INTXY ) <ok></ok><fl>0320 E1DD </fl><fr>0329 E1DF </fr>
+: , DP @ ! 1 DP +! ; <ok></ok><fl>0329 E1DF </fl><fr>0334 E1E1 </fr>
+: EXECUTE PC ! ; <ok></ok><fl>0334 E1E1 </fl><fr>033B E1E9 </fr>
+: KEY 12 EXECUTE ; <ok></ok><fl>033B E1E9 </fl><fr>0342 E1ED </fr>
+: EMIT ' EMITCODE EXECUTE ; <ok></ok><fl>0342 E1ED </fl><fr>0349 E1F2 </fr>
+: SHL16 ( a --> t a' ) <ok></ok><fl>0349 E1F2 </fl><fr>034D E1F8 </fr>
+  0 SWAP 10 U* SWAP ; ( t a' = SHL a ) <ok></ok><fl>034D E1F8 </fl><fr>0353 E1F8 </fr>
+: DIG ( n --> c ) <ok></ok><fl>0353 E1F8 </fl><fr>0357 E1FC </fr>
+  DUP 0A LT IF ELSE 7 + END_IF 30 + ; <ok></ok><fl>0357 E1FC </fl><fr>0361 E1FC </fr>
+: TYPE <ok></ok><fl>0361 E1FC </fl><fr>0365 E201 </fr>
+  BEGIN DUP WHILE <ok></ok><fl>0365 E201 </fl><fr>0367 E201 </fr>
+    SWAP DUP C@ EMIT 1+ <ok></ok><fl>0367 E201 </fl><fr>036C E201 </fr>
+    SWAP 1 - REPEAT <ok></ok><fl>036C E201 </fl><fr>0370 E201 </fr>
+  2DROP ; <ok></ok><fl>0370 E201 </fl><fr>0372 E201 </fr>
+: HG. SHL16 DIG EMIT SHL16 DIG EMIT SHL16 DIG EMIT <ok></ok><fl>0372 E201 </fl><fr>037F E205 </fr>
+  SHL16 DIG EMIT DROP ; <ok></ok><fl>037F E205 </fl><fr>0384 E205 </fr>
+: H. HG. 20 EMIT ; <ok></ok><fl>0384 E205 </fl><fr>038C E208 </fr>
+: . H. ; <ok></ok><fl>038C E208 </fl><fr>0392 E20A </fr>
+: ? @ . ; <ok></ok><fl>0392 E20A </fl><fr>0399 E20C </fr>
+: CR  <ok></ok><fl>0399 E20C </fl><fr>039D E20F </fr>
+  CRDP @ DP @ - STAT @ 0= NOT OR XBIT @ 0= NOT AND IF  <ok></ok><fl>039D E20F </fl><fr>03AD E20F </fr>
+    3C EMIT ." fl>" CRDP @ . CRBZEIG @ . 3C EMIT ." /fl>" <ok></ok><fl>03AD E20F </fl><fr>03BD E218 </fr>
+    3C EMIT ." fr>" DP @ . BZEIG @ . 3C EMIT ." /fr>" <ok></ok><fl>03BD E218 </fl><fr>03CD E221 </fr>
+    DP @ CRDP ! BZEIG @ CRBZEIG !  <ok></ok><fl>03CD E221 </fl><fr>03D5 E221 </fr>
+    END_IF <ok></ok><fl>03D5 E221 </fl><fr>03D5 E221 </fr>
+  0A EMIT ; <ok></ok><fl>03D5 E221 </fl><fr>03D8 E221 </fr>
+: FEHLERTEXT ( n --> n ) ; <ok></ok><fl>03D8 E221 </fl><fr>03DD E22C </fr>
+: DISABLE  <ok></ok><fl>03DD E22C </fl><fr>03E1 E234 </fr>
+  CR ." weiter nach Taste ESCAPE " <ok></ok><fl>03E1 E234 </fl><fr>03E5 E24E </fr>
+  BEGIN 20 EMIT 8 EMIT KEY 1B = UNTIL ;  <ok></ok><fl>03E5 E24E </fl><fr>03EE E24E </fr>
+: ERROR <ok></ok><fl>03EE E24E </fl><fr>03F2 E254 </fr>
+  DUP ERRORNR ! <ok></ok><fl>03F2 E254 </fl><fr>03F5 E254 </fr>
+  0 STAT ! <ok></ok><fl>03F5 E254 </fl><fr>03F8 E254 </fr>
+  CR IN1 @ IN3 @ IN1 @ - 1 - TYPE ." ???" <ok></ok><fl>03F8 E254 </fl><fr>0406 E258 </fr>
+  " FEHLERTEXT" INTERPRET <ok></ok><fl>0406 E258 </fl><fr>040A E263 </fr>
+  CR ." ERROR - Fehler Nummer " .  <ok></ok><fl>040A E263 </fl><fr>040F E27A </fr>
+  DISABLE QUIT ; <ok></ok><fl>040F E27A </fl><fr>0412 E27A </fr>
+: CSP! SP @ CSP ! ; <ok></ok><fl>0412 E27A </fl><fr>041B E27F </fr>
+: CSP? SP @ CSP @ - IF 9 ERROR END_IF ; <ok></ok><fl>041B E27F </fl><fr>0428 E284 </fr>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="lokale Variablen"> 
+: LOCAL ( n --> ) <ok></ok><fl>0428 E284 </fl><fr>042C E28A </fr>
+  R> SWAP  <ok></ok><fl>042C E28A </fl><fr>042E E28A </fr>
+  DUP MINUS RP @ + RP ! <ok></ok><fl>042E E28A </fl><fr>0435 E28A </fr>
+  RP @ LOCALADDR @ <ok></ok><fl>0435 E28A </fl><fr>0439 E28A </fr>
+  >R LOCALADDR ! <ok></ok><fl>0439 E28A </fl><fr>043C E28A </fr>
+  >R ( LOCALDIST ) <ok></ok><fl>043C E28A </fl><fr>043D E28A </fr>
+  >R ; <ok></ok><fl>043D E28A </fl><fr>043F E28A </fr>
+: END_LOCAL <ok></ok><fl>043F E28A </fl><fr>0443 E294 </fr>
+  R> <ok></ok><fl>0443 E294 </fl><fr>0444 E294 </fr>
+  R> ( LOCALDIST ) <ok></ok><fl>0444 E294 </fl><fr>0445 E294 </fr>
+  R> LOCALADDR !  <ok></ok><fl>0445 E294 </fl><fr>0448 E294 </fr>
+  RP @ + RP ! <ok></ok><fl>0448 E294 </fl><fr>044D E294 </fr>
+  >R ;   <ok></ok><fl>044D E294 </fl><fr>044F E294 </fr>
+: L0 LOCALADDR @ ; <ok></ok><fl>044F E294 </fl><fr>0456 E297 </fr>
+: L1 LOCALADDR @ 1+ ; <ok></ok><fl>0456 E297 </fl><fr>045E E29A </fr>
+: L2 LOCALADDR @ 2 + ; <ok></ok><fl>045E E29A </fl><fr>0467 E29D </fr>
+: L3 LOCALADDR @ 3 + ; <ok></ok><fl>0467 E29D </fl><fr>0470 E2A0 </fr>
+: L4 LOCALADDR @ 4 + ; <ok></ok><fl>0470 E2A0 </fl><fr>0479 E2A3 </fr>
+: L5 LOCALADDR @ 5 + ; <ok></ok><fl>0479 E2A3 </fl><fr>0482 E2A6 </fr>
+: L6 LOCALADDR @ 6 + ; <ok></ok><fl>0482 E2A6 </fl><fr>048B E2A9 </fr>
+: L7 LOCALADDR @ 7 + ; <ok></ok><fl>048B E2A9 </fl><fr>0494 E2AC </fr>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="alles zu KEY"> 
+IMMEDIATE: ' ( /name/ --> --> pfa )  <ok></ok><fl>0494 E2AC </fl><fr>0498 E2AE </fr>
+  20 WORD FIND LCFA DROP 1+ STAT @ IF LIT, END_IF ;  <ok></ok><fl>0498 E2AE </fl><fr>04A3 E2AE </fr>
+ <ok></ok>
+: INCR4 ( adr --> ) <ok></ok><fl>04A3 E2AE </fl><fr>04A7 E2B4 </fr>
+  DUP @ 1 + <ok></ok><fl>04A7 E2B4 </fl><fr>04AB E2B4 </fr>
+  DUP 3FF AND 000 = IF 400 - END_IF  <ok></ok><fl>04AB E2B4 </fl><fr>04B3 E2B4 </fr>
+  SWAP ! <ok></ok><fl>04B3 E2B4 </fl><fr>04B5 E2B4 </fr>
+  ; <ok></ok><fl>04B5 E2B4 </fl><fr>04B6 E2B4 </fr>
+ <ok></ok>
+: KEY_INT ( --> ) <ok></ok><fl>04B6 E2B4 </fl><fr>04BA E2BC </fr>
+  D000 @  <ok></ok><fl>04BA E2BC </fl><fr>04BC E2BC </fr>
+  DUP 08 LT IF  <ok></ok><fl>04BC E2BC </fl><fr>04C0 E2BC </fr>
+    18 + @ DUP IF DUP EXECUTE END_IF <ok></ok><fl>04C0 E2BC </fl><fr>04C7 E2BC </fr>
+    DROP <ok></ok><fl>04C7 E2BC </fl><fr>04C8 E2BC </fr>
+    ELSE <ok></ok><fl>04C8 E2BC </fl><fr>04C9 E2BC </fr>
+      IRAMADR @ !  <ok></ok><fl>04C9 E2BC </fl><fr>04CC E2BC </fr>
+      IRAMADR INCR4 <ok></ok><fl>04CC E2BC </fl><fr>04CE E2BC </fr>
+      IRAMADR @ JRAMADR @ - 3FF AND  <ok></ok><fl>04CE E2BC </fl><fr>04D5 E2BC </fr>
+      100 > IF XOFF @ 0= IF -1 XOFF ! 13 EMIT END_IF END_IF  <ok></ok><fl>04D5 E2BC </fl><fr>04E1 E2BC </fr>
+      END_IF <ok></ok><fl>04E1 E2BC </fl><fr>04E1 E2BC </fr>
+  0 D000 ! <ok></ok><fl>04E1 E2BC </fl><fr>04E4 E2BC </fr>
+  ; <ok></ok><fl>04E4 E2BC </fl><fr>04E5 E2BC </fr>
+ <ok></ok>
+: KEYCODE2 ( --> c f ) <ok></ok><fl>04E5 E2BC </fl><fr>04E9 E2C5 </fr>
+  JRAMADR @ IRAMADR @ = IF 0 0  <ok></ok><fl>04E9 E2C5 </fl><fr>04F1 E2C5 </fr>
+    ELSE JRAMADR @ @ -1 <ok></ok><fl>04F1 E2C5 </fl><fr>04F6 E2C5 </fr>
+    JRAMADR INCR4 <ok></ok><fl>04F6 E2C5 </fl><fr>04F8 E2C5 </fr>
+    IRAMADR @ JRAMADR @ - 3FF AND <ok></ok><fl>04F8 E2C5 </fl><fr>04FF E2C5 </fr>
+    80 LT IF XOFF @ IF 0 XOFF ! 11 EMIT END_IF END_IF <ok></ok><fl>04FF E2C5 </fl><fr>050A E2C5 </fr>
+    END_IF <ok></ok><fl>050A E2C5 </fl><fr>050A E2C5 </fr>
+  ; <ok></ok><fl>050A E2C5 </fl><fr>050B E2C5 </fr>
+ <ok></ok>
+' KEY_INT 4000 + 26 ! <ok></ok>
+' KEYCODE2 4000 + 12 ! <ok></ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="es folgt der Interpreter"> 
+( ESCAPE durch EXPECT durchlaufen lassen ) <ok></ok>
+( und 7F in 08 umwandeln ) <ok></ok>
+( und nach n Zeichen kein 0D mehr lesen ) <ok></ok>
+: EXPECT ( /text/  adr n --> adr m ) <ok></ok><fl>050B E2C5 </fl><fr>050F E2CC </fr>
+  5 LOCAL <ok></ok><fl>050F E2CC </fl><fr>0511 E2CC </fr>
+  L2 ! L1 ! L1 @ L4 ! <ok></ok><fl>0511 E2CC </fl><fr>0519 E2CC </fr>
+  BEGIN <ok></ok><fl>0519 E2CC </fl><fr>0519 E2CC </fr>
+    KEY <ok></ok><fl>0519 E2CC </fl><fr>051A E2CC </fr>
+    DUP 14 ( 20 ) ( =^T, ^R=18 ) = IF  <ok></ok><fl>051A E2CC </fl><fr>051E E2CC </fr>
+      DROP L1 @ C@ END_IF <ok></ok><fl>051E E2CC </fl><fr>0522 E2CC </fr>
+    DUP 7F = IF DROP 08 END_IF <ok></ok><fl>0522 E2CC </fl><fr>0528 E2CC </fr>
+    DUP 08 = IF L4 @ L1 @ LT IF <ok></ok><fl>0528 E2CC </fl><fr>0532 E2CC </fr>
+      -1 L1 +! <ok></ok><fl>0532 E2CC </fl><fr>0535 E2CC </fr>
+      1 L2 +! <ok></ok><fl>0535 E2CC </fl><fr>0538 E2CC </fr>
+      8 EMIT 20 ( 32 ) EMIT 8 EMIT <ok></ok><fl>0538 E2CC </fl><fr>053E E2CC </fr>
+      END_IF END_IF <ok></ok><fl>053E E2CC </fl><fr>053E E2CC </fr>
+(    DUP 20 ( 32 ] LT NOT OVER 08 = OR OVER 1B = OR L2 @ 0= NOT AND WHILE <ok></ok><fl>053E E2CC </fl><fr>053E E2CC </fr>
+      DUP 20 LT IF ( DROP ) ELSE <ok></ok><fl>053E E2CC </fl><fr>0543 E2CC </fr>
+        -1 L2 +! <ok></ok><fl>0543 E2CC </fl><fr>0546 E2CC </fr>
+        L2 @ 0LT IF 6 ERROR END_IF <ok></ok><fl>0546 E2CC </fl><fr>054C E2CC </fr>
+        DUP EMIT <ok></ok><fl>054C E2CC </fl><fr>054E E2CC </fr>
+        DUP L1 @ C! 1 L1 +! <ok></ok><fl>054E E2CC </fl><fr>0555 E2CC </fr>
+        END_IF  <ok></ok><fl>0555 E2CC </fl><fr>0555 E2CC </fr>
+    DUP 20 LT OVER 08 = NOT AND SWAP 1B = NOT AND L2 @ 0= OR UNTIL <ok></ok><fl>0555 E2CC </fl><fr>0567 E2CC </fr>
+(      REPEAT <ok></ok><fl>0567 E2CC </fl><fr>0567 E2CC </fr>
+  20 ( 32 ) EMIT <ok></ok><fl>0567 E2CC </fl><fr>0569 E2CC </fr>
+  L4 @ L1 @ L4 @ - <ok></ok><fl>0569 E2CC </fl><fr>0570 E2CC </fr>
+  2DUP + 0 SWAP C! <ok></ok><fl>0570 E2CC </fl><fr>0575 E2CC </fr>
+  END_LOCAL <ok></ok><fl>0575 E2CC </fl><fr>0576 E2CC </fr>
+  ; <ok></ok><fl>0576 E2CC </fl><fr>0577 E2CC </fr>
+ <ok></ok>
+ <ok></ok>
+: DIGIT ( z --> d r ) ( r=-1 wenn gueltig ) <ok></ok><fl>0577 E2CC </fl><fr>057B E2D2 </fr>
+  ( vorher r=0 wenn gueltig!!! ) <ok></ok><fl>057B E2D2 </fl><fr>057B E2D2 </fr>
+  DUP 30 ( 30 48 ) LT NOT OVER 3A ( 3A 58 ) LT AND <ok></ok><fl>057B E2D2 </fl><fr>0583 E2D2 </fr>
+  OVER 41 ( 41 65 ) LT NOT OR  <ok></ok><fl>0583 E2D2 </fl><fr>0588 E2D2 </fr>
+  DUP IF ( z -1 wenn gueltig ) <ok></ok><fl>0588 E2D2 </fl><fr>058A E2D2 </fr>
+    SWAP 30 ( 30 48 ) - <ok></ok><fl>058A E2D2 </fl><fr>058D E2D2 </fr>
+    DUP 0A LT NOT IF 7 - END_IF <ok></ok><fl>058D E2D2 </fl><fr>0594 E2D2 </fr>
+    DUP BASE @ LT NOT IF DROP DROP 0 0 END_IF <ok></ok><fl>0594 E2D2 </fl><fr>059E E2D2 </fr>
+    SWAP END_IF ; <ok></ok><fl>059E E2D2 </fl><fr>05A0 E2D2 </fr>
+ <ok></ok>
+: NUMBER ( badr n --> a r ) <ok></ok><fl>05A0 E2D2 </fl><fr>05A4 E2D9 </fr>
+  7 LOCAL ( L3 L4 nicht verwendet ) <ok></ok><fl>05A4 E2D9 </fl><fr>05A6 E2D9 </fr>
+  L1 ! L0 ! <ok></ok><fl>05A6 E2D9 </fl><fr>05AA E2D9 </fr>
+  0 L1 @ IF <ok></ok><fl>05AA E2D9 </fl><fr>05AE E2D9 </fr>
+    DUP L2 ! 1 L5 ! ( Vorzeichen ) <ok></ok><fl>05AE E2D9 </fl><fr>05B4 E2D9 </fr>
+    BEGIN ( M23 Vorzeichen gucken ) <ok></ok><fl>05B4 E2D9 </fl><fr>05B4 E2D9 </fr>
+      -1 L6 !  <ok></ok><fl>05B4 E2D9 </fl><fr>05B7 E2D9 </fr>
+      L0 @ L2 @ + C@ <ok></ok><fl>05B7 E2D9 </fl><fr>05BD E2D9 </fr>
+      2B ( 43 2B ) = IF L2 @ 1+ L2 ! 0 L6 ! ELSE <ok></ok><fl>05BD E2D9 </fl><fr>05C9 E2D9 </fr>
+        L0 @ L2 @ + C@ <ok></ok><fl>05C9 E2D9 </fl><fr>05CF E2D9 </fr>
+        2D ( 45 2D ) = IF L2 @ 1+ L2 ! <ok></ok><fl>05CF E2D9 </fl><fr>05D7 E2D9 </fr>
+          0 L6 ! <ok></ok><fl>05D7 E2D9 </fl><fr>05DA E2D9 </fr>
+          L5 @ MINUS L5 ! END_IF <ok></ok><fl>05DA E2D9 </fl><fr>05DF E2D9 </fr>
+        END_IF <ok></ok><fl>05DF E2D9 </fl><fr>05DF E2D9 </fr>
+      L6 @ UNTIL <ok></ok><fl>05DF E2D9 </fl><fr>05E2 E2D9 </fr>
+    L2 @ L1 @ LT IF <ok></ok><fl>05E2 E2D9 </fl><fr>05E8 E2D9 </fr>
+      BEGIN <ok></ok><fl>05E8 E2D9 </fl><fr>05E8 E2D9 </fr>
+        L0 @ L2 @ + C@ <ok></ok><fl>05E8 E2D9 </fl><fr>05EE E2D9 </fr>
+        DUP IF ( oo L1 auf Bytes ) <ok></ok><fl>05EE E2D9 </fl><fr>05F0 E2D9 </fr>
+          DIGIT NOT IF DROP L1 @ MINUS L1 ! ELSE <ok></ok><fl>05F0 E2D9 </fl><fr>05FA E2D9 </fr>
+            SWAP BASE @ * + <ok></ok><fl>05FA E2D9 </fl><fr>05FF E2D9 </fr>
+            L2 @ 1+ L2 !  <ok></ok><fl>05FF E2D9 </fl><fr>0604 E2D9 </fr>
+            END_IF <ok></ok><fl>0604 E2D9 </fl><fr>0604 E2D9 </fr>
+          ELSE DROP L2 @ L1 ! END_IF <ok></ok><fl>0604 E2D9 </fl><fr>060A E2D9 </fr>
+        L2 @ L1 @ LT NOT UNTIL <ok></ok><fl>060A E2D9 </fl><fr>0611 E2D9 </fr>
+      END_IF ( M19 ) <ok></ok><fl>0611 E2D9 </fl><fr>0611 E2D9 </fr>
+    END_IF ( M19 ) <ok></ok><fl>0611 E2D9 </fl><fr>0611 E2D9 </fr>
+  L5 @ 0LT IF MINUS END_IF <ok></ok><fl>0611 E2D9 </fl><fr>0616 E2D9 </fr>
+  L2 @ L1 @ - ( oo noch kein fadr ) <ok></ok><fl>0616 E2D9 </fl><fr>061B E2D9 </fr>
+  END_LOCAL <ok></ok><fl>061B E2D9 </fl><fr>061C E2D9 </fr>
+  ; <ok></ok><fl>061C E2D9 </fl><fr>061D E2D9 </fr>
+ <ok></ok>
+: WORD ( b --> adr n ) <ok></ok><fl>061D E2D9 </fl><fr>0621 E2DE </fr>
+  >R <ok></ok><fl>0621 E2DE </fl><fr>0622 E2DE </fr>
+  IN3 @ IN2 ! <ok></ok><fl>0622 E2DE </fl><fr>0626 E2DE </fr>
+  BEGIN  <ok></ok><fl>0626 E2DE </fl><fr>0626 E2DE </fr>
+    IN3 @ C@ R = IN3 @ IN4 @ LT AND WHILE <ok></ok><fl>0626 E2DE </fl><fr>0632 E2DE </fr>
+      1 IN3 +! REPEAT <ok></ok><fl>0632 E2DE </fl><fr>0636 E2DE </fr>
+  IN3 @ IN2 ! <ok></ok><fl>0636 E2DE </fl><fr>063A E2DE </fr>
+  BEGIN  <ok></ok><fl>063A E2DE </fl><fr>063A E2DE </fr>
+    IN3 @ C@ 3C = IF IN3 @ IN4 ! END_IF ( alles nach 3C ist Kommentar ) <ok></ok><fl>063A E2DE </fl><fr>0644 E2DE </fr>
+    IN3 @ C@ R = NOT IN3 @ IN4 @ LT AND WHILE <ok></ok><fl>0644 E2DE </fl><fr>0651 E2DE </fr>
+      1 IN3 +! REPEAT <ok></ok><fl>0651 E2DE </fl><fr>0655 E2DE </fr>
+  IN2 @ IN3 @ OVER - <ok></ok><fl>0655 E2DE </fl><fr>065B E2DE </fr>
+  DUP IF 1 IN3 +! END_IF <ok></ok><fl>065B E2DE </fl><fr>0660 E2DE </fr>
+  R> DROP <ok></ok><fl>0660 E2DE </fl><fr>0662 E2DE </fr>
+  ; <ok></ok><fl>0662 E2DE </fl><fr>0663 E2DE </fr>
+ <ok></ok>
+: Z= ( adr1 n1 adr2 n2 --> r ) <ok></ok><fl>0663 E2DE </fl><fr>0667 E2E1 </fr>
+  >R OVER R - IF R> DROP DROP DROP DROP 0 ELSE <ok></ok><fl>0667 E2E1 </fl><fr>0673 E2E1 </fr>
+    R> DROP SWAP 0 BEGIN 2DUP - WHILE >R >R <ok></ok><fl>0673 E2E1 </fl><fr>067C E2E1 </fr>
+      OVER C@ OVER C@ - IF DROP DROP 0 0 END_IF <ok></ok><fl>067C E2E1 </fl><fr>0686 E2E1 </fr>
+      DUP IF 1+ SWAP 1+ SWAP END_IF <ok></ok><fl>0686 E2E1 </fl><fr>068C E2E1 </fr>
+      R> R> 1+ REPEAT 2DROP ( neu bei 16 BIT ohne DO LOOP ) <ok></ok><fl>068C E2E1 </fl><fr>0691 E2E1 </fr>
+    DROP IF -1 ELSE 0 END_IF <ok></ok><fl>0691 E2E1 </fl><fr>0696 E2E1 </fr>
+    END_IF ; <ok></ok><fl>0696 E2E1 </fl><fr>0697 E2E1 </fr>
+( : Z= DROP SWAP DROP SWAP @ SWAP @ = ; <ok></ok>
+ <ok></ok>
+: FIND ( adr n --> lfa r ) <ok></ok><fl>0697 E2E1 </fl><fr>069B E2E6 </fr>
+  >R >R 0 ( heisst noch nicht gefunden ) <ok></ok><fl>069B E2E6 </fl><fr>069E E2E6 </fr>
+  LFA @  <ok></ok><fl>069E E2E6 </fl><fr>06A0 E2E6 </fr>
+  SMUDGEBIT @ IF DUP @ + END_IF <ok></ok><fl>06A0 E2E6 </fl><fr>06A6 E2E6 </fr>
+  BEGIN <ok></ok><fl>06A6 E2E6 </fl><fr>06A6 E2E6 </fr>
+    DUP 1+ DUP @ ( lfa nfa adr ) <ok></ok><fl>06A6 E2E6 </fl><fr>06AA E2E6 </fr>
+    SWAP 1+ @ ( lfa adr n1 ) <ok></ok><fl>06AA E2E6 </fl><fr>06AD E2E6 </fr>
+    ( 2DUP CR B. 2DUP TYPE <ok></ok><fl>06AD E2E6 </fl><fr>06AD E2E6 </fr>
+    ( BEGIN 2DUP + 1 - C@ 0= WHILE 1 - REPEAT ( ??? momentan nicht ) <ok></ok><fl>06AD E2E6 </fl><fr>06AD E2E6 </fr>
+    R> R> 2DUP >R >R ( 0 lfa adr1 n1 adr2 n2 ) <ok></ok><fl>06AD E2E6 </fl><fr>06B2 E2E6 </fr>
+    Z= IF SWAP 0= SWAP END_IF ( heisst gefunden ) <ok></ok><fl>06B2 E2E6 </fl><fr>06B7 E2E6 </fr>
+    OVER 0= OVER @ 0= NOT AND  <ok></ok><fl>06B7 E2E6 </fl><fr>06BE E2E6 </fr>
+    OVER DUP @ + LFA @ = NOT AND WHILE ( wegen 2xladen ) <ok></ok><fl>06BE E2E6 </fl><fr>06C8 E2E6 </fr>
+      DUP @ + REPEAT <ok></ok><fl>06C8 E2E6 </fl><fr>06CC E2E6 </fr>
+  R> DROP R> <ok></ok><fl>06CC E2E6 </fl><fr>06CF E2E6 </fr>
+  ROT 0= IF DROP DROP 0 0 END_IF <ok></ok><fl>06CF E2E6 </fl><fr>06D6 E2E6 </fr>
+  ( OVER LFA @ SWAP LT IF ." *" OVER . LFA @ . END_IF ( vref wenn gebraucht ) <ok></ok><fl>06D6 E2E6 </fl><fr>06D6 E2E6 </fr>
+  ; <ok></ok><fl>06D6 E2E6 </fl><fr>06D7 E2E6 </fr>
+ <ok></ok>
+: LCFA ( lfa r --> cfa r ) SWAP 3 + SWAP ; <ok></ok><fl>06D7 E2E6 </fl><fr>06E0 E2EB </fr>
+ <ok></ok>
+: COMPILE, ( adr --> ) 4000 + , ; <ok></ok><fl>06E0 E2EB </fl><fr>06E9 E2F4 </fr>
+ <ok></ok>
+: CREATE ( /name/  --> ) <ok></ok><fl>06E9 E2F4 </fl><fr>06ED E2FB </fr>
+  CSP! ( Stapelbalance prüfen in ; ) <ok></ok><fl>06ED E2FB </fl><fr>06EE E2FB </fr>
+  DP @ LFA @ OVER - , LFA ! <ok></ok><fl>06EE E2FB </fl><fr>06F7 E2FB </fr>
+  20 WORD Z, <ok></ok><fl>06F7 E2FB </fl><fr>06FA E2FB </fr>
+  1 SMUDGEBIT ! ( HERE 2 - DUP @ MINUS SWAP ! ( UNSMUDGE ) <ok></ok><fl>06FA E2FB </fl><fr>06FD E2FB </fr>
+  ; <ok></ok><fl>06FD E2FB </fl><fr>06FE E2FB </fr>
+ <ok></ok>
+: INTERPRET ( adr n --> ... ) <ok></ok><fl>06FE E2FB </fl><fr>0702 E305 </fr>
+  IN1 @ >R IN2 @ >R IN3 @ >R IN4 @ >R <ok></ok><fl>0702 E305 </fl><fr>070E E305 </fr>
+  OVER + IN4 ! <ok></ok><fl>070E E305 </fl><fr>0712 E305 </fr>
+  DUP IN1 ! DUP IN2 ! IN3 ! <ok></ok><fl>0712 E305 </fl><fr>071A E305 </fr>
+  BEGIN <ok></ok><fl>071A E305 </fl><fr>071A E305 </fr>
+  ( ... qstack? Stapelpruefen ) <ok></ok><fl>071A E305 </fl><fr>071A E305 </fr>
+  20 WORD <ok></ok><fl>071A E305 </fl><fr>071C E305 </fr>
+  DUP WHILE <ok></ok><fl>071C E305 </fl><fr>071E E305 </fr>
+    2DUP FIND  <ok></ok><fl>071E E305 </fl><fr>0720 E305 </fr>
+    DUP IF ( gefunden ) <ok></ok><fl>0720 E305 </fl><fr>0722 E305 </fr>
+      >R >R 2DROP R> R> LCFA DROP EXECUTE <ok></ok><fl>0722 E305 </fl><fr>072A E305 </fr>
+      ELSE ( nicht gefunden ) <ok></ok><fl>072A E305 </fl><fr>072B E305 </fr>
+        2DROP <ok></ok><fl>072B E305 </fl><fr>072C E305 </fr>
+        2DUP NUMBER IF ( keine Zahl ) <ok></ok><fl>072C E305 </fl><fr>072F E305 </fr>
+          2DROP DROP <ok></ok><fl>072F E305 </fl><fr>0731 E305 </fr>
+          3 ERROR <ok></ok><fl>0731 E305 </fl><fr>0733 E305 </fr>
+         ( DROP BNUMBER <ok></ok><fl>0733 E305 </fl><fr>0733 E305 </fr>
+         ( DUP IF DUP IN2 ! END_IF <ok></ok><fl>0733 E305 </fl><fr>0733 E305 </fr>
+         ( IF 3 ERROR END_IF <ok></ok><fl>0733 E305 </fl><fr>0733 E305 </fr>
+         ( STAT @ IF SWAP LIT, LIT, END_IF <ok></ok><fl>0733 E305 </fl><fr>0733 E305 </fr>
+          ELSE ( eine Zahl ) <ok></ok><fl>0733 E305 </fl><fr>0734 E305 </fr>
+            ROT DROP SWAP DROP <ok></ok><fl>0734 E305 </fl><fr>0738 E305 </fr>
+            STAT @ IF LIT, END_IF ( oo LIT, fuer gr ) <ok></ok><fl>0738 E305 </fl><fr>073C E305 </fr>
+            END_IF <ok></ok><fl>073C E305 </fl><fr>073C E305 </fr>
+        END_IF <ok></ok><fl>073C E305 </fl><fr>073C E305 </fr>
+    REPEAT 2DROP <ok></ok><fl>073C E305 </fl><fr>073E E305 </fr>
+  R> IN4 ! R> IN3 ! R> IN2 ! R> IN1 ! <ok></ok><fl>073E E305 </fl><fr>074A E305 </fr>
+  ; <ok></ok><fl>074A E305 </fl><fr>074B E305 </fr>
+ <ok></ok>
+: QUIT <ok></ok><fl>074B E305 </fl><fr>074F E30A </fr>
+  RP0 @ RP !  <ok></ok><fl>074F E30A </fl><fr>0753 E30A </fr>
+  XBIT @ IF 3C EMIT ." /ok>" ELSE ." ok" END_IF <ok></ok><fl>0753 E30A </fl><fr>075F E312 </fr>
+  BEGIN ( im Prinzip nur BEGIN CR TIB @ 100 EXPECT INTERPRET AGAIN ) <ok></ok><fl>075F E312 </fl><fr>075F E312 </fr>
+    CR  <ok></ok><fl>075F E312 </fl><fr>0760 E312 </fr>
+    TIB @ 100 EXPECT <ok></ok><fl>0760 E312 </fl><fr>0764 E312 </fr>
+    OVER @ 3C = IF 2DROP ELSE ( xml am Zeilenanfang gleich überlesen ) <ok></ok><fl>0764 E312 </fl><fr>076B E312 </fr>
+      XBIT @ IF  <ok></ok><fl>076B E312 </fl><fr>076E E312 </fr>
+        3C EMIT ." ok>"  <ok></ok><fl>076E E312 </fl><fr>0773 E316 </fr>
+        INTERPRET  <ok></ok><fl>0773 E316 </fl><fr>0774 E316 </fr>
+        3C EMIT ." /ok>"  <ok></ok><fl>0774 E316 </fl><fr>0779 E31B </fr>
+        ELSE <ok></ok><fl>0779 E31B </fl><fr>077A E31B </fr>
+          1B EMIT 5B EMIT 33 EMIT 36 EMIT 6D EMIT <ok></ok><fl>077A E31B </fl><fr>0784 E31B </fr>
+          INTERPRET  <ok></ok><fl>0784 E31B </fl><fr>0785 E31B </fr>
+          STAT @ 0= IF ." ok" END_IF  <ok></ok><fl>0785 E31B </fl><fr>078C E31E </fr>
+          1B EMIT 5B EMIT 33 EMIT 39 EMIT 6D EMIT <ok></ok><fl>078C E31E </fl><fr>0796 E31E </fr>
+          END_IF  <ok></ok><fl>0796 E31E </fl><fr>0796 E31E </fr>
+      END_IF <ok></ok><fl>0796 E31E </fl><fr>0796 E31E </fr>
+    AGAIN  <ok></ok><fl>0796 E31E </fl><fr>0797 E31E </fr>
+  ; <ok></ok><fl>0797 E31E </fl><fr>0798 E31E </fr>
+ <ok></ok>
+ <ok></ok>
+: START ." FORTY-FORTH" CR CR QUIT ; <ok></ok><fl>0798 E31E </fl><fr>07A3 E330 </fr>
+ <ok></ok>
+ <ok></ok>
+: SMUDGE 0 SMUDGEBIT ! ( LFA @ 1+ DUP @ DUP 0LT IF MINUS END_IF SWAP ! ) ; <ok></ok><fl>07A3 E330 </fl><fr>07AB E337 </fr>
+ <ok></ok>
+: (IMMEDIATE:) R> >R ; <ok></ok><fl>07AB E337 </fl><fr>07B2 E344 </fr>
+:   (COMPILE:) R> COMPILE, ; <ok></ok><fl>07B2 E344 </fl><fr>07B9 E34F </fr>
+:          (:) R> STAT @ IF COMPILE, ELSE >R END_IF ; <ok></ok><fl>07B9 E34F </fl><fr>07C5 E353 </fr>
+ <ok></ok>
+: IMMEDIATE: CREATE 1 STAT ! COMPILE (IMMEDIATE:) ; <ok></ok><fl>07C5 E353 </fl><fr>07CF E35E </fr>
+:   COMPILE: CREATE 1 STAT ! COMPILE (COMPILE:) ; <ok></ok><fl>07CF E35E </fl><fr>07D9 E367 </fr>
+:          : CREATE 1 STAT ! COMPILE (:) ; <ok></ok><fl>07D9 E367 </fl><fr>07E3 E369 </fr>
+ <ok></ok>
+( das hier jetzt mit dem neuen CREATE: ) <ok></ok>
+IMMEDIATE: ; 0 STAT ! CSP? A003 , SMUDGE { SMUDGE } ;  <ok></ok><fl>07E3 E369 </fl><fr>07F0 E36B </fr>
+( tatsaechlich { SMUDGE } wegen 2x laden!!! )  <ok></ok>
+( Ende der Axiome. Hiermit enden die Axiome. ) <ok></ok>
+</sekt> 
+ <ok></ok>
+0 DPMERK @ ! ( abkoppeln ) <ok></ok>
+HERE . BZEIG ? <ok>07F0 E36B </ok>
+ <ok></ok>
+START <ok>FORTY-FORTH
+
+</ok>
+</sekt> 
+</AXIOME> 
+ <ok></ok>
+<FFINIT2> 
+<sekt inhalt="bis Adresse 0800H passt noch DUMPZ drauf (inzwischen nicht mehr)"> 
+( erste Forth Erweiterungen ) <ok></ok>
+( - DUMPZ ) <ok></ok>
+( RAMB-Inhaltsausgabe erzeugen: ) <ok></ok>
+: DUBIT HERE ; <ok></ok><fl>07F0 E36B </fl><fr>07F6 E371 </fr>
+: LG. ( n --> ) <ok></ok><fl>07F6 E371 </fl><fr>07FA E375 </fr>
+  DUBIT @ IF SHL16 DROP SHL16 DROP  <ok></ok><fl>07FA E375 </fl><fr>0801 E375 </fr>
+    ELSE SHL16 DIG EMIT SHL16 DIG EMIT END_IF  <ok></ok><fl>0801 E375 </fl><fr>0808 E375 </fr>
+  SHL16 DIG EMIT SHL16 DIG EMIT DROP ; <ok></ok><fl>0808 E375 </fl><fr>0810 E375 </fr>
+: NG. ( n --> ) <ok></ok><fl>0810 E375 </fl><fr>0814 E379 </fr>
+  ." x" 22 EMIT LG. 22 EMIT ." ," ;  <ok></ok><fl>0814 E379 </fl><fr>0820 E37D </fr>
+: DUMPZ ( bis+1 von dubit --> ) <ok></ok><fl>0820 E37D </fl><fr>0824 E383 </fr>
+  DUBIT ! XBIT @ >R 0 XBIT ! <ok></ok><fl>0824 E383 </fl><fr>082C E383 </fr>
+  " ' START " INTERPRET 4000 + 10 ! <ok></ok><fl>082C E383 </fl><fr>0835 E38C </fr>
+  CR 3C EMIT ." DUMPZ>" <ok></ok><fl>0835 E38C </fl><fr>083B E393 </fr>
+  BEGIN <ok></ok><fl>083B E393 </fl><fr>083B E393 </fr>
+    CR ."   " <ok></ok><fl>083B E393 </fl><fr>083F E396 </fr>
+    0000 BEGIN  <ok></ok><fl>083F E396 </fl><fr>0840 E396 </fr>
+      2DUP +  <ok></ok><fl>0840 E396 </fl><fr>0842 E396 </fr>
+      DUP IRAMADR = IF DROP JRAMADR END_IF <ok></ok><fl>0842 E396 </fl><fr>0848 E396 </fr>
+      @ NG. 1+ DUP 10 =  <ok></ok><fl>0848 E396 </fl><fr>084E E396 </fr>
+      UNTIL DROP <ok></ok><fl>084E E396 </fl><fr>0850 E396 </fr>
+    ."  -- " DUP HG. ." -" DUP 0F + .  <ok></ok><fl>0850 E396 </fl><fr>085C E39D </fr>
+    10 + <ok></ok><fl>085C E39D </fl><fr>085E E39D </fr>
+    2DUP > NOT UNTIL 2DROP <ok></ok><fl>085E E39D </fl><fr>0863 E39D </fr>
+  CR 3C EMIT ." /DUMPZ>" <ok></ok><fl>0863 E39D </fl><fr>0869 E3A5 </fr>
+  R> XBIT ! <ok></ok><fl>0869 E3A5 </fl><fr>086C E3A5 </fr>
+  ;  <ok></ok><fl>086C E3A5 </fl><fr>086D E3A5 </fr>
+ <ok></ok>
+HERE . BZEIG ? <ok>086D E3A5 </ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="ProgRAM und ByteRAM für Step_9 und Step_10 erstellen"> 
+HERE 0 0 DUMPZ          ( generiert ProgRAM für P20_FFP.vhd Step_10 ) <ok>
+<DUMPZ>
+  x"4010",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 0000-000F 
+  x"479C",x"A003",x"44E9",x"9001",x"A003",x"B300",x"8000",x"8FFA",x"0000",x"111C",x"0000",x"0000",x"0000",x"0000",x"0010",x"1107", -- 0010-001F 
+  x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"44BA",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003", -- 0020-002F 
+  x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003", -- 0030-003F 
+  x"0000",x"0000",x"3000",x"FED1",x"FED1",x"FFFF",x"E3A5",x"086D",x"0010",x"FB00",x"FB00",x"FB09",x"FB0F",x"FB46",x"0000",x"086D", -- 0040-004F 
+  x"0000",x"0820",x"E000",x"E3A5",x"0058",x"0026",x"0000",x"2FEF",x"0000",x"E000",x"0001",x"47AF",x"0029",x"4621",x"B200",x"A003", -- 0050-005F 
+  x"FFF8",x"E002",x"0001",x"47AF",x"0000",x"0050",x"A009",x"A003",x"FFF8",x"E004",x"0001",x"47BD",x"0001",x"0050",x"A009",x"A003", -- 0060-006F 
+  x"FFF8",x"E006",x"0007",x"47AF",x"0020",x"4621",x"469B",x"46DB",x"B300",x"46E4",x"A003",x"FFF5",x"E00E",x"0006",x"47B6",x"42FA", -- 0070-007F 
+  x"B501",x"42AD",x"430D",x"A00A",x"A003",x"FFF6",x"E015",x"0004",x"47BD",x"B501",x"3FFF",x"42D4",x"B502",x"C000",x"42C2",x"A00E", -- 0080-008F 
+  x"9001",x"407E",x"432D",x"A003",x"FFF1",x"E01A",x"000B",x"47B6",x"42FA",x"A00A",x"0050",x"A00A",x"9001",x"4089",x"A003",x"FFF5", -- 0090-009F 
+  x"E026",x"0008",x"47BD",x"46ED",x"4097",x"432D",x"47A7",x"A003",x"FFF7",x"E02F",x"0002",x"4098",x"D001",x"FFFB",x"E032",x"0002", -- 00A0-00AF 
+  x"4098",x"D002",x"FFFB",x"E035",x"0002",x"4098",x"D003",x"FFFB",x"E038",x"0004",x"4098",x"0040",x"FFFB",x"E03D",x"0009",x"4098", -- 00B0-00BF 
+  x"0041",x"FFFB",x"E047",x"0003",x"4098",x"0042",x"FFFB",x"E04B",x"0007",x"4098",x"0043",x"FFFB",x"E053",x"0007",x"4098",x"0044", -- 00C0-00CF 
+  x"FFFB",x"E05B",x"0004",x"4098",x"0045",x"FFFB",x"E060",x"0007",x"4098",x"0046",x"FFFB",x"E068",x"0004",x"4098",x"0047",x"FFFB", -- 00D0-00DF 
+  x"E06D",x"0004",x"4098",x"0048",x"FFFB",x"E072",x"0003",x"4098",x"0049",x"FFFB",x"E076",x"0003",x"4098",x"004A",x"FFFB",x"E07A", -- 00E0-00EF 
+  x"0003",x"4098",x"004B",x"FFFB",x"E07E",x"0003",x"4098",x"004C",x"FFFB",x"E082",x"0003",x"4098",x"004D",x"FFFB",x"E086",x"0007", -- 00F0-00FF 
+  x"4098",x"004E",x"FFFB",x"E08E",x"0002",x"4098",x"004F",x"FFFB",x"E091",x"0004",x"4098",x"0050",x"FFFB",x"E096",x"0003",x"4098", -- 0100-010F 
+  x"0051",x"FFFB",x"E09A",x"0004",x"4098",x"0052",x"FFFB",x"E09F",x"0005",x"4098",x"0053",x"FFFB",x"E0A5",x"0006",x"4098",x"0054", -- 0110-011F 
+  x"FFFB",x"E0AC",x"0003",x"4098",x"0055",x"FFFB",x"E0B0",x"0009",x"4098",x"0056",x"FFFB",x"E0BA",x"0007",x"4098",x"01AC",x"FFFB", -- 0120-012F 
+  x"E0C2",x"0006",x"4098",x"A003",x"FFFB",x"E0C9",x"0008",x"47B6",x"42FA",x"0050",x"A00A",x"9003",x"A00A",x"432D",x"8001",x"4338", -- 0130-013F 
+  x"A003",x"FFF3",x"E0D2",x"0005",x"47BD",x"46ED",x"4137",x"432D",x"407F",x"A003",x"432D",x"47A7",x"A003",x"FFF4",x"E0D8",x"0005", -- 0140-014F 
+  x"4138",x"A000",x"A003",x"FFFA",x"E0DE",x"0002",x"4138",x"A001",x"A003",x"FFFA",x"E0E1",x"0002",x"4138",x"A002",x"A003",x"FFFA", -- 0150-015F 
+  x"E0E4",x"0002",x"4138",x"A00D",x"A003",x"FFFA",x"E0E7",x"0003",x"4138",x"A00F",x"A003",x"FFFA",x"E0EB",x"0008",x"4138",x"A005", -- 0160-016F 
+  x"A003",x"FFFA",x"E0F4",x"0003",x"4138",x"A00B",x"A003",x"FFFA",x"E0F8",x"0003",x"4138",x"A008",x"A003",x"FFFA",x"E0FC",x"0002", -- 0170-017F 
+  x"4138",x"A00E",x"A003",x"FFFA",x"E0FF",x"0007",x"4138",x"A00C",x"A003",x"FFFA",x"E107",x"0001",x"4138",x"A007",x"A003",x"FFFA", -- 0180-018F 
+  x"E109",x"0001",x"4138",x"A009",x"A003",x"FFFA",x"E10B",x"0001",x"4138",x"A00A",x"A003",x"FFFA",x"E10D",x"0004",x"4138",x"B412", -- 0190-019F 
+  x"A003",x"FFFA",x"E112",x"0004",x"4138",x"B502",x"A003",x"FFFA",x"E117",x"0003",x"4138",x"B501",x"A003",x"FFFA",x"E11B",x"0003", -- 01A0-01AF 
+  x"4138",x"B434",x"A003",x"FFFA",x"E11F",x"0004",x"4138",x"B300",x"A003",x"FFFA",x"E124",x"0005",x"4138",x"B43C",x"A003",x"FFFA", -- 01B0-01BF 
+  x"E12A",x"0005",x"4138",x"B60C",x"A003",x"FFFA",x"E130",x"0004",x"4138",x"B603",x"A003",x"FFFA",x"E135",x"0005",x"4138",x"B200", -- 01C0-01CF 
+  x"A003",x"FFFA",x"E13B",x"0004",x"4138",x"8000",x"A003",x"FFFA",x"E140",x"0002",x"47BD",x"0053",x"A00A",x"A009",x"0001",x"0053", -- 01D0-01DF 
+  x"42EF",x"A003",x"FFF5",x"E143",x"0002",x"47BD",x"0053",x"A00A",x"4089",x"B501",x"432D",x"B412",x"B501",x"A00A",x"41DB",x"42AD", -- 01E0-01EF 
+  x"B412",x"0001",x"42B4",x"B501",x"A00D",x"9FF5",x"B200",x"0020",x"41DB",x"A003",x"FFE8",x"E146",x"0007",x"47B6",x"4621",x"0050", -- 01F0-01FF 
+  x"A00A",x"9003",x"41E6",x"42FA",x"46E4",x"A003",x"FFF4",x"E14E",x"0005",x"47BD",x"46ED",x"0001",x"0050",x"A009",x"432D",x"41FD", -- 0200-020F 
+  x"FFFF",x"0055",x"42EF",x"A003",x"FFF2",x"E154",x"0001",x"0022",x"41FE",x"A003",x"FFFA",x"E156",x"0002",x"0022",x"41FE",x"4365", -- 0210-021F 
+  x"A003",x"FFF9",x"E159",x"0004",x"47BD",x"004F",x"A00A",x"A003",x"FFF9",x"E15E",x"0005",x"47BD",x"0008",x"A003",x"FFFA",x"E164", -- 0220-022F 
+  x"0006",x"47BD",x"0009",x"A003",x"FFFA",x"E16B",x"0006",x"47BD",x"1000",x"42DB",x"B412",x"0FFF",x"A008",x"A00E",x"A003",x"FFF5", -- 0230-023F 
+  x"E172",x"0005",x"47BD",x"004F",x"42EF",x"A003",x"FFF9",x"E178",x"0007",x"47BD",x"4225",x"42AD",x"42B4",x"422C",x"4238",x"432D", -- 0240-024F 
+  x"A003",x"FFF5",x"E180",x"0008",x"47BD",x"4225",x"42AD",x"42B4",x"4232",x"4238",x"432D",x"A003",x"FFF5",x"E189",x"0005",x"47AF", -- 0250-025F 
+  x"4225",x"A003",x"FFFA",x"E18F",x"0005",x"47AF",x"424A",x"A003",x"FFFA",x"E195",x"0005",x"47AF",x"4255",x"A003",x"FFFA",x"E19B", -- 0260-026F 
+  x"0002",x"47AF",x"4232",x"0001",x"4243",x"4225",x"A003",x"FFF7",x"E19E",x"0006",x"47AF",x"4225",x"B502",x"42B4",x"B434",x"4238", -- 0270-027F 
+  x"B412",x"0001",x"42B4",x"A009",x"A003",x"FFF2",x"E1A5",x"0004",x"47AF",x"0001",x"4243",x"427A",x"422C",x"4225",x"A003",x"FFF6", -- 0280-028F 
+  x"E1AA",x"0005",x"47AF",x"4271",x"A003",x"FFFA",x"E1B0",x"0006",x"47AF",x"B434",x"4265",x"427A",x"A003",x"FFF8",x"E1B7",x"0002", -- 0290-029F 
+  x"47BD",x"A00A",x"A003",x"FFFA",x"E1BA",x"0002",x"47BD",x"A009",x"A003",x"FFFA",x"E1BD",x"0002",x"47BD",x"0001",x"A007",x"A003", -- 02A0-02AF 
+  x"FFF9",x"E1C0",x"0001",x"47BD",x"A000",x"A007",x"A003",x"FFF9",x"E1C2",x"0001",x"47BD",x"42B4",x"A00D",x"A003",x"FFF9",x"E1C4", -- 02B0-02BF 
+  x"0002",x"47BD",x"407F",x"8000",x"A007",x"B412",x"A00B",x"407F",x"8000",x"A007",x"0000",x"A001",x"B300",x"A00D",x"A00B",x"A003", -- 02C0-02CF 
+  x"FFEE",x"E1C7",x"0001",x"47BD",x"B412",x"42C2",x"A003",x"FFF9",x"E1C9",x"0001",x"47BD",x"0000",x"B434",x"B434",x"A002",x"B412", -- 02D0-02DF 
+  x"B300",x"A003",x"FFF5",x"E1CB",x"0003",x"47BD",x"E1CF",x"0004",x"421F",x"8FFC",x"A003",x"FFF7",x"E1D4",x"0002",x"47BD",x"B412", -- 02E0-02EF 
+  x"B502",x"A00A",x"A007",x"B412",x"A009",x"A003",x"FFF5",x"E1D7",x"0002",x"47BD",x"D002",x"A00A",x"42AD",x"A00A",x"D002",x"A00A", -- 02F0-02FF 
+  x"42AD",x"D002",x"B603",x"A00A",x"A00A",x"B412",x"A009",x"A009",x"A003",x"FFED",x"E1DA",x"0002",x"47BD",x"D002",x"A00A",x"B501", -- 0300-030F 
+  x"FFFF",x"A007",x"D002",x"B603",x"A00A",x"A00A",x"B412",x"B501",x"FFFF",x"A007",x"D002",x"A009",x"A009",x"A009",x"A009",x"A003", -- 0310-031F 
+  x"FFE9",x"E1DD",x"0001",x"47BD",x"D002",x"A00A",x"42AD",x"A00A",x"A003",x"FFF7",x"E1DF",x"0001",x"47BD",x"004F",x"A00A",x"A009", -- 0320-032F 
+  x"0001",x"004F",x"42EF",x"A003",x"FFF5",x"E1E1",x"0007",x"47BD",x"D003",x"A009",x"A003",x"FFF9",x"E1E9",x"0003",x"47BD",x"0012", -- 0330-033F 
+  x"4338",x"A003",x"FFF9",x"E1ED",x"0004",x"47BD",x"016F",x"4338",x"A003",x"FFF9",x"E1F2",x"0005",x"47BD",x"0000",x"B412",x"0010", -- 0340-034F 
+  x"A002",x"B412",x"A003",x"FFF6",x"E1F8",x"0003",x"47BD",x"B501",x"000A",x"42C2",x"9001",x"8002",x"0007",x"A007",x"0030",x"A007", -- 0350-035F 
+  x"A003",x"FFF2",x"E1FC",x"0004",x"47BD",x"B501",x"9009",x"B412",x"B501",x"42A1",x"4346",x"42AD",x"B412",x"0001",x"42B4",x"8FF5", -- 0360-036F 
+  x"B200",x"A003",x"FFEF",x"E201",x"0003",x"47BD",x"434D",x"4357",x"4346",x"434D",x"4357",x"4346",x"434D",x"4357",x"4346",x"434D", -- 0370-037F 
+  x"4357",x"4346",x"B300",x"A003",x"FFEE",x"E205",x"0002",x"47BD",x"4376",x"0020",x"4346",x"A003",x"FFF8",x"E208",x"0001",x"47BD", -- 0380-038F 
+  x"4388",x"A003",x"FFFA",x"E20A",x"0001",x"47BD",x"A00A",x"4390",x"A003",x"FFF9",x"E20C",x"0002",x"47BD",x"0047",x"A00A",x"004F", -- 0390-039F 
+  x"A00A",x"42B4",x"0050",x"A00A",x"A00D",x"A00B",x"A00E",x"0040",x"A00A",x"A00D",x"A00B",x"A008",x"9028",x"003C",x"4346",x"E20F", -- 03A0-03AF 
+  x"0003",x"421F",x"0047",x"A00A",x"4390",x"0046",x"A00A",x"4390",x"003C",x"4346",x"E213",x"0004",x"421F",x"003C",x"4346",x"E218", -- 03B0-03BF 
+  x"0003",x"421F",x"004F",x"A00A",x"4390",x"0053",x"A00A",x"4390",x"003C",x"4346",x"E21C",x"0004",x"421F",x"004F",x"A00A",x"0047", -- 03C0-03CF 
+  x"A009",x"0053",x"A00A",x"0046",x"A009",x"000A",x"4346",x"A003",x"FFC1",x"E221",x"000A",x"47BD",x"A003",x"FFFB",x"E22C",x"0007", -- 03D0-03DF 
+  x"47BD",x"439D",x"E234",x"0019",x"421F",x"0020",x"4346",x"0008",x"4346",x"433F",x"001B",x"42BB",x"9FF8",x"A003",x"FFEF",x"E24E", -- 03E0-03EF 
+  x"0005",x"47BD",x"B501",x"004E",x"A009",x"0000",x"0050",x"A009",x"439D",x"004A",x"A00A",x"004C",x"A00A",x"004A",x"A00A",x"42B4", -- 03F0-03FF 
+  x"0001",x"42B4",x"4365",x"E254",x"0003",x"421F",x"E258",x"000A",x"4219",x"4702",x"439D",x"E263",x"0016",x"421F",x"4390",x"43E1", -- 0400-040F 
+  x"474F",x"A003",x"FFDC",x"E27A",x"0004",x"47BD",x"D001",x"A00A",x"0055",x"A009",x"A003",x"FFF7",x"E27F",x"0004",x"47BD",x"D001", -- 0410-041F 
+  x"A00A",x"0055",x"A00A",x"42B4",x"9002",x"0009",x"43F2",x"A003",x"FFF3",x"E284",x"0005",x"47BD",x"42FA",x"B412",x"B501",x"A000", -- 0420-042F 
+  x"D002",x"A00A",x"A007",x"D002",x"A009",x"D002",x"A00A",x"0056",x"A00A",x"430D",x"0056",x"A009",x"430D",x"430D",x"A003",x"FFE9", -- 0430-043F 
+  x"E28A",x"0009",x"47BD",x"42FA",x"42FA",x"42FA",x"0056",x"A009",x"D002",x"A00A",x"A007",x"D002",x"A009",x"430D",x"A003",x"FFF0", -- 0440-044F 
+  x"E294",x"0002",x"47BD",x"0056",x"A00A",x"A003",x"FFF9",x"E297",x"0002",x"47BD",x"0056",x"A00A",x"42AD",x"A003",x"FFF8",x"E29A", -- 0450-045F 
+  x"0002",x"47BD",x"0056",x"A00A",x"0002",x"A007",x"A003",x"FFF7",x"E29D",x"0002",x"47BD",x"0056",x"A00A",x"0003",x"A007",x"A003", -- 0460-046F 
+  x"FFF7",x"E2A0",x"0002",x"47BD",x"0056",x"A00A",x"0004",x"A007",x"A003",x"FFF7",x"E2A3",x"0002",x"47BD",x"0056",x"A00A",x"0005", -- 0470-047F 
+  x"A007",x"A003",x"FFF7",x"E2A6",x"0002",x"47BD",x"0056",x"A00A",x"0006",x"A007",x"A003",x"FFF7",x"E2A9",x"0002",x"47BD",x"0056", -- 0480-048F 
+  x"A00A",x"0007",x"A007",x"A003",x"FFF7",x"E2AC",x"0001",x"47AF",x"0020",x"4621",x"469B",x"46DB",x"B300",x"42AD",x"0050",x"A00A", -- 0490-049F 
+  x"9001",x"4089",x"A003",x"FFF1",x"E2AE",x"0005",x"47BD",x"B501",x"A00A",x"0001",x"A007",x"B501",x"03FF",x"A008",x"0000",x"42BB", -- 04A0-04AF 
+  x"9002",x"0400",x"42B4",x"B412",x"A009",x"A003",x"FFED",x"E2B4",x"0007",x"47BD",x"D000",x"A00A",x"B501",x"0008",x"42C2",x"9009", -- 04B0-04BF 
+  x"0018",x"A007",x"A00A",x"B501",x"9002",x"B501",x"4338",x"B300",x"8018",x"0043",x"A00A",x"A009",x"0043",x"44A7",x"0043",x"A00A", -- 04C0-04CF 
+  x"0044",x"A00A",x"42B4",x"03FF",x"A008",x"0100",x"42D4",x"9009",x"0045",x"A00A",x"A00D",x"9005",x"FFFF",x"0045",x"A009",x"0013", -- 04D0-04DF 
+  x"4346",x"0000",x"D000",x"A009",x"A003",x"FFD1",x"E2BC",x"0008",x"47BD",x"0044",x"A00A",x"0043",x"A00A",x"42BB",x"9003",x"0000", -- 04E0-04EF 
+  x"0000",x"8018",x"0044",x"A00A",x"A00A",x"FFFF",x"0044",x"44A7",x"0043",x"A00A",x"0044",x"A00A",x"42B4",x"03FF",x"A008",x"0080", -- 04F0-04FF 
+  x"42C2",x"9008",x"0045",x"A00A",x"9005",x"0000",x"0045",x"A009",x"0011",x"4346",x"A003",x"FFDA",x"E2C5",x"0006",x"47BD",x"0005", -- 0500-050F 
+  x"442C",x"4462",x"A009",x"445A",x"A009",x"445A",x"A00A",x"4474",x"A009",x"433F",x"B501",x"0014",x"42BB",x"9004",x"B300",x"445A", -- 0510-051F 
+  x"A00A",x"42A1",x"B501",x"007F",x"42BB",x"9002",x"B300",x"0008",x"B501",x"0008",x"42BB",x"9012",x"4474",x"A00A",x"445A",x"A00A", -- 0520-052F 
+  x"42C2",x"900C",x"FFFF",x"445A",x"42EF",x"0001",x"4462",x"42EF",x"0008",x"4346",x"0020",x"4346",x"0008",x"4346",x"B501",x"0020", -- 0530-053F 
+  x"42C2",x"9001",x"8012",x"FFFF",x"4462",x"42EF",x"4462",x"A00A",x"A00F",x"9002",x"0006",x"43F2",x"B501",x"4346",x"B501",x"445A", -- 0540-054F 
+  x"A00A",x"42A7",x"0001",x"445A",x"42EF",x"B501",x"0020",x"42C2",x"B502",x"0008",x"42BB",x"A00B",x"A008",x"B412",x"001B",x"42BB", -- 0550-055F 
+  x"A00B",x"A008",x"4462",x"A00A",x"A00D",x"A00E",x"9FB2",x"0020",x"4346",x"4474",x"A00A",x"445A",x"A00A",x"4474",x"A00A",x"42B4", -- 0560-056F 
+  x"B603",x"A007",x"0000",x"B412",x"42A7",x"4443",x"A003",x"FF94",x"E2CC",x"0005",x"47BD",x"B501",x"0030",x"42C2",x"A00B",x"B502", -- 0570-057F 
+  x"003A",x"42C2",x"A008",x"B502",x"0041",x"42C2",x"A00B",x"A00E",x"B501",x"9015",x"B412",x"0030",x"42B4",x"B501",x"000A",x"42C2", -- 0580-058F 
+  x"A00B",x"9002",x"0007",x"42B4",x"B501",x"0048",x"A00A",x"42C2",x"A00B",x"9004",x"B300",x"B300",x"0000",x"0000",x"B412",x"A003", -- 0590-059F 
+  x"FFD7",x"E2D2",x"0006",x"47BD",x"0007",x"442C",x"445A",x"A009",x"4453",x"A009",x"0000",x"445A",x"A00A",x"9063",x"B501",x"4462", -- 05A0-05AF 
+  x"A009",x"0001",x"447D",x"A009",x"FFFF",x"4486",x"A009",x"4453",x"A00A",x"4462",x"A00A",x"A007",x"42A1",x"002B",x"42BB",x"9009", -- 05B0-05BF 
+  x"4462",x"A00A",x"42AD",x"4462",x"A009",x"0000",x"4486",x"A009",x"8016",x"4453",x"A00A",x"4462",x"A00A",x"A007",x"42A1",x"002D", -- 05C0-05CF 
+  x"42BB",x"900D",x"4462",x"A00A",x"42AD",x"4462",x"A009",x"0000",x"4486",x"A009",x"447D",x"A00A",x"A000",x"447D",x"A009",x"4486", -- 05D0-05DF 
+  x"A00A",x"9FD2",x"4462",x"A00A",x"445A",x"A00A",x"42C2",x"9029",x"4453",x"A00A",x"4462",x"A00A",x"A007",x"42A1",x"B501",x"9015", -- 05E0-05EF 
+  x"457B",x"A00B",x"9007",x"B300",x"445A",x"A00A",x"A000",x"445A",x"A009",x"800A",x"B412",x"0048",x"A00A",x"42DB",x"A007",x"4462", -- 05F0-05FF 
+  x"A00A",x"42AD",x"4462",x"A009",x"8005",x"B300",x"4462",x"A00A",x"445A",x"A009",x"4462",x"A00A",x"445A",x"A00A",x"42C2",x"A00B", -- 0600-060F 
+  x"9FD7",x"447D",x"A00A",x"A00F",x"9001",x"A000",x"4462",x"A00A",x"445A",x"A00A",x"42B4",x"4443",x"A003",x"FF83",x"E2D9",x"0004", -- 0610-061F 
+  x"47BD",x"430D",x"004C",x"A00A",x"004B",x"A009",x"004C",x"A00A",x"42A1",x"4324",x"42BB",x"004C",x"A00A",x"004D",x"A00A",x"42C2", -- 0620-062F 
+  x"A008",x"9004",x"0001",x"004C",x"42EF",x"8FF0",x"004C",x"A00A",x"004B",x"A009",x"004C",x"A00A",x"42A1",x"003C",x"42BB",x"9004", -- 0630-063F 
+  x"004C",x"A00A",x"004D",x"A009",x"004C",x"A00A",x"42A1",x"4324",x"42BB",x"A00B",x"004C",x"A00A",x"004D",x"A00A",x"42C2",x"A008", -- 0640-064F 
+  x"9004",x"0001",x"004C",x"42EF",x"8FE5",x"004B",x"A00A",x"004C",x"A00A",x"B502",x"42B4",x"B501",x"9003",x"0001",x"004C",x"42EF", -- 0650-065F 
+  x"42FA",x"B300",x"A003",x"FFBA",x"E2DE",x"0002",x"47BD",x"430D",x"B502",x"4324",x"42B4",x"9007",x"42FA",x"B300",x"B300",x"B300", -- 0660-066F 
+  x"B300",x"0000",x"8023",x"42FA",x"B300",x"B412",x"0000",x"B603",x"42B4",x"9016",x"430D",x"430D",x"B502",x"42A1",x"B502",x"42A1", -- 0670-067F 
+  x"42B4",x"9004",x"B300",x"B300",x"0000",x"0000",x"B501",x"9004",x"42AD",x"B412",x"42AD",x"B412",x"42FA",x"42FA",x"42AD",x"8FE7", -- 0680-068F 
+  x"B200",x"B300",x"9002",x"FFFF",x"8001",x"0000",x"A003",x"FFCC",x"E2E1",x"0004",x"47BD",x"430D",x"430D",x"0000",x"0051",x"A00A", -- 0690-069F 
+  x"0041",x"A00A",x"9003",x"B501",x"A00A",x"A007",x"B501",x"42AD",x"B501",x"A00A",x"B412",x"42AD",x"A00A",x"42FA",x"42FA",x"B603", -- 06A0-06AF 
+  x"430D",x"430D",x"4667",x"9003",x"B412",x"A00D",x"B412",x"B502",x"A00D",x"B502",x"A00A",x"A00D",x"A00B",x"A008",x"B502",x"B501", -- 06B0-06BF 
+  x"A00A",x"A007",x"0051",x"A00A",x"42BB",x"A00B",x"A008",x"9004",x"B501",x"A00A",x"A007",x"8FDA",x"42FA",x"B300",x"42FA",x"B434", -- 06C0-06CF 
+  x"A00D",x"9004",x"B300",x"B300",x"0000",x"0000",x"A003",x"FFC0",x"E2E6",x"0004",x"47BD",x"B412",x"0003",x"A007",x"B412",x"A003", -- 06D0-06DF 
+  x"FFF7",x"E2EB",x"0008",x"47BD",x"407F",x"4000",x"A007",x"432D",x"A003",x"FFF7",x"E2F4",x"0006",x"47BD",x"4416",x"004F",x"A00A", -- 06E0-06EF 
+  x"0051",x"A00A",x"B502",x"42B4",x"432D",x"0051",x"A009",x"0020",x"4621",x"41E6",x"0001",x"0041",x"A009",x"A003",x"FFEB",x"E2FB", -- 06F0-06FF 
+  x"0009",x"47BD",x"004A",x"A00A",x"430D",x"004B",x"A00A",x"430D",x"004C",x"A00A",x"430D",x"004D",x"A00A",x"430D",x"B502",x"A007", -- 0700-070F 
+  x"004D",x"A009",x"B501",x"004A",x"A009",x"B501",x"004B",x"A009",x"004C",x"A009",x"0020",x"4621",x"B501",x"901F",x"B603",x"469B", -- 0710-071F 
+  x"B501",x"9009",x"430D",x"430D",x"B200",x"42FA",x"42FA",x"46DB",x"B300",x"4338",x"8011",x"B200",x"B603",x"45A4",x"9005",x"B200", -- 0720-072F 
+  x"B300",x"0003",x"43F2",x"8008",x"B434",x"B300",x"B412",x"B300",x"0050",x"A00A",x"9001",x"4089",x"8FDD",x"B200",x"42FA",x"004D", -- 0730-073F 
+  x"A009",x"42FA",x"004C",x"A009",x"42FA",x"004B",x"A009",x"42FA",x"004A",x"A009",x"A003",x"FFB3",x"E305",x"0004",x"47BD",x"0042", -- 0740-074F 
+  x"A00A",x"D002",x"A009",x"0040",x"A00A",x"9006",x"003C",x"4346",x"E30A",x"0004",x"421F",x"8003",x"E30F",x"0002",x"421F",x"439D", -- 0750-075F 
+  x"0049",x"A00A",x"0100",x"450F",x"B502",x"A00A",x"003C",x"42BB",x"9002",x"B200",x"802B",x"0040",x"A00A",x"900C",x"003C",x"4346", -- 0760-076F 
+  x"E312",x"0003",x"421F",x"4702",x"003C",x"4346",x"E316",x"0004",x"421F",x"801C",x"001B",x"4346",x"005B",x"4346",x"0033",x"4346", -- 0770-077F 
+  x"0036",x"4346",x"006D",x"4346",x"4702",x"0050",x"A00A",x"A00D",x"9003",x"E31B",x"0002",x"421F",x"001B",x"4346",x"005B",x"4346", -- 0780-078F 
+  x"0033",x"4346",x"0039",x"4346",x"006D",x"4346",x"8FC8",x"A003",x"FFB3",x"E31E",x"0005",x"47BD",x"E324",x"000B",x"421F",x"439D", -- 0790-079F 
+  x"439D",x"474F",x"A003",x"FFF5",x"E330",x"0006",x"47BD",x"0000",x"0041",x"A009",x"A003",x"FFF8",x"E337",x"000C",x"47BD",x"42FA", -- 07A0-07AF 
+  x"430D",x"A003",x"FFF9",x"E344",x"000A",x"47BD",x"42FA",x"46E4",x"A003",x"FFF9",x"E34F",x"0003",x"47BD",x"42FA",x"0050",x"A00A", -- 07B0-07BF 
+  x"9002",x"46E4",x"8001",x"430D",x"A003",x"FFF4",x"E353",x"000A",x"47BD",x"46ED",x"0001",x"0050",x"A009",x"47AE",x"A003",x"FFF6", -- 07C0-07CF 
+  x"E35E",x"0008",x"47BD",x"46ED",x"0001",x"0050",x"A009",x"47B5",x"A003",x"FFF6",x"E367",x"0001",x"47BD",x"46ED",x"0001",x"0050", -- 07D0-07DF 
+  x"A009",x"47BC",x"A003",x"FFF6",x"E369",x"0001",x"47AF",x"0000",x"0050",x"A009",x"441F",x"407F",x"A003",x"432D",x"47A7",x"A003", -- 07E0-07EF 
+  x"FFF3",x"E36B",x"0005",x"47BD",x"4225",x"A003",x"FFFA",x"E371",x"0003",x"47BD",x"47F4",x"A00A",x"9005",x"434D",x"B300",x"434D", -- 07F0-07FF 
+  x"B300",x"8006",x"434D",x"4357",x"4346",x"434D",x"4357",x"4346",x"434D",x"4357",x"4346",x"434D",x"4357",x"4346",x"B300",x"A003", -- 0800-080F 
+  x"FFE6",x"E375",x"0003",x"47BD",x"E379",x"0001",x"421F",x"0022",x"4346",x"47FA",x"0022",x"4346",x"E37B",x"0001",x"421F",x"A003", -- 0810-081F 
+  x"FFF0",x"E37D",x"0005",x"47BD",x"47F4",x"A009",x"0040",x"A00A",x"430D",x"0000",x"0040",x"A009",x"E383",x"0008",x"4219",x"4702", -- 0820-082F 
+  x"407F",x"4000",x"A007",x"0010",x"A009",x"439D",x"003C",x"4346",x"E38C",x"0006",x"421F",x"439D",x"E393",x"0002",x"421F",x"0000", -- 0830-083F 
+  x"B603",x"A007",x"B501",x"0043",x"42BB",x"9002",x"B300",x"0044",x"A00A",x"4814",x"42AD",x"B501",x"0010",x"42BB",x"9FF1",x"B300", -- 0840-084F 
+  x"E396",x"0004",x"421F",x"B501",x"4376",x"E39B",x"0001",x"421F",x"B501",x"000F",x"A007",x"4390",x"0010",x"A007",x"B603",x"42D4", -- 0850-085F 
+  x"A00B",x"9FD9",x"B200",x"439D",x"003C",x"4346",x"E39D",x"0007",x"421F",x"42FA",x"0040",x"A009",x"A003",x"0000",x"E3A5",x"0005", -- 0860-086F 
+</DUMPZ></ok>
+BZEIG @ E000 -1 DUMPZ   ( generiert ByteRAM für P20_FFP.vhd Step_10 ) <ok>
+<DUMPZ>
+  x"28",x"20",x"7B",x"20",x"7D",x"20",x"43",x"4F",x"4D",x"50",x"49",x"4C",x"45",x"20",x"28",x"4C", -- E000-E00F 
+  x"49",x"54",x"2C",x"29",x"20",x"4C",x"49",x"54",x"2C",x"20",x"28",x"43",x"4F",x"4E",x"53",x"54", -- E010-E01F 
+  x"41",x"4E",x"54",x"3A",x"29",x"20",x"43",x"4F",x"4E",x"53",x"54",x"41",x"4E",x"54",x"20",x"53", -- E020-E02F 
+  x"50",x"20",x"52",x"50",x"20",x"50",x"43",x"20",x"58",x"42",x"49",x"54",x"20",x"53",x"4D",x"55", -- E030-E03F 
+  x"44",x"47",x"45",x"42",x"49",x"54",x"20",x"52",x"50",x"30",x"20",x"49",x"52",x"41",x"4D",x"41", -- E040-E04F 
+  x"44",x"52",x"20",x"4A",x"52",x"41",x"4D",x"41",x"44",x"52",x"20",x"58",x"4F",x"46",x"46",x"20", -- E050-E05F 
+  x"43",x"52",x"42",x"5A",x"45",x"49",x"47",x"20",x"43",x"52",x"44",x"50",x"20",x"42",x"41",x"53", -- E060-E06F 
+  x"45",x"20",x"54",x"49",x"42",x"20",x"49",x"4E",x"31",x"20",x"49",x"4E",x"32",x"20",x"49",x"4E", -- E070-E07F 
+  x"33",x"20",x"49",x"4E",x"34",x"20",x"45",x"52",x"52",x"4F",x"52",x"4E",x"52",x"20",x"44",x"50", -- E080-E08F 
+  x"20",x"53",x"54",x"41",x"54",x"20",x"4C",x"46",x"41",x"20",x"42",x"41",x"4E",x"46",x"20",x"42", -- E090-E09F 
+  x"5A",x"45",x"49",x"47",x"20",x"44",x"50",x"4D",x"45",x"52",x"4B",x"20",x"43",x"53",x"50",x"20", -- E0A0-E0AF 
+  x"4C",x"4F",x"43",x"41",x"4C",x"41",x"44",x"44",x"52",x"20",x"56",x"45",x"52",x"53",x"49",x"4F", -- E0B0-E0BF 
+  x"4E",x"20",x"52",x"45",x"54",x"55",x"52",x"4E",x"20",x"28",x"4D",x"43",x"4F",x"44",x"45",x"3A", -- E0C0-E0CF 
+  x"29",x"20",x"4D",x"43",x"4F",x"44",x"45",x"20",x"4D",x"49",x"4E",x"55",x"53",x"20",x"55",x"2B", -- E0D0-E0DF 
+  x"20",x"55",x"2A",x"20",x"30",x"3D",x"20",x"30",x"4C",x"54",x"20",x"45",x"4D",x"49",x"54",x"43", -- E0E0-E0EF 
+  x"4F",x"44",x"45",x"20",x"4E",x"4F",x"54",x"20",x"41",x"4E",x"44",x"20",x"4F",x"52",x"20",x"4B", -- E0F0-E0FF 
+  x"45",x"59",x"43",x"4F",x"44",x"45",x"20",x"2B",x"20",x"21",x"20",x"40",x"20",x"53",x"57",x"41", -- E100-E10F 
+  x"50",x"20",x"4F",x"56",x"45",x"52",x"20",x"44",x"55",x"50",x"20",x"52",x"4F",x"54",x"20",x"44", -- E110-E11F 
+  x"52",x"4F",x"50",x"20",x"32",x"53",x"57",x"41",x"50",x"20",x"32",x"4F",x"56",x"45",x"52",x"20", -- E120-E12F 
+  x"32",x"44",x"55",x"50",x"20",x"32",x"44",x"52",x"4F",x"50",x"20",x"4E",x"4F",x"4F",x"50",x"20", -- E130-E13F 
+  x"42",x"2C",x"20",x"5A",x"2C",x"20",x"28",x"57",x"4F",x"52",x"44",x"3A",x"29",x"20",x"57",x"4F", -- E140-E14F 
+  x"52",x"44",x"3A",x"20",x"22",x"20",x"2E",x"22",x"20",x"48",x"45",x"52",x"45",x"20",x"4A",x"52", -- E150-E15F 
+  x"42",x"49",x"54",x"20",x"4A",x"52",x"30",x"42",x"49",x"54",x"20",x"58",x"53",x"45",x"54",x"42", -- E160-E16F 
+  x"54",x"20",x"41",x"4C",x"4C",x"4F",x"54",x"20",x"42",x"52",x"41",x"4E",x"43",x"48",x"2C",x"20", -- E170-E17F 
+  x"30",x"42",x"52",x"41",x"4E",x"43",x"48",x"2C",x"20",x"42",x"45",x"47",x"49",x"4E",x"20",x"41", -- E180-E18F 
+  x"47",x"41",x"49",x"4E",x"20",x"55",x"4E",x"54",x"49",x"4C",x"20",x"49",x"46",x"20",x"45",x"4E", -- E190-E19F 
+  x"44",x"5F",x"49",x"46",x"20",x"45",x"4C",x"53",x"45",x"20",x"57",x"48",x"49",x"4C",x"45",x"20", -- E1A0-E1AF 
+  x"52",x"45",x"50",x"45",x"41",x"54",x"20",x"43",x"40",x"20",x"43",x"21",x"20",x"31",x"2B",x"20", -- E1B0-E1BF 
+  x"2D",x"20",x"3D",x"20",x"4C",x"54",x"20",x"3E",x"20",x"2A",x"20",x"42",x"59",x"45",x"20",x"42", -- E1C0-E1CF 
+  x"59",x"45",x"20",x"20",x"2B",x"21",x"20",x"52",x"3E",x"20",x"3E",x"52",x"20",x"52",x"20",x"2C", -- E1D0-E1DF 
+  x"20",x"45",x"58",x"45",x"43",x"55",x"54",x"45",x"20",x"4B",x"45",x"59",x"20",x"45",x"4D",x"49", -- E1E0-E1EF 
+  x"54",x"20",x"53",x"48",x"4C",x"31",x"36",x"20",x"44",x"49",x"47",x"20",x"54",x"59",x"50",x"45", -- E1F0-E1FF 
+  x"20",x"48",x"47",x"2E",x"20",x"48",x"2E",x"20",x"2E",x"20",x"3F",x"20",x"43",x"52",x"20",x"66", -- E200-E20F 
+  x"6C",x"3E",x"20",x"2F",x"66",x"6C",x"3E",x"20",x"66",x"72",x"3E",x"20",x"2F",x"66",x"72",x"3E", -- E210-E21F 
+  x"20",x"46",x"45",x"48",x"4C",x"45",x"52",x"54",x"45",x"58",x"54",x"20",x"44",x"49",x"53",x"41", -- E220-E22F 
+  x"42",x"4C",x"45",x"20",x"77",x"65",x"69",x"74",x"65",x"72",x"20",x"6E",x"61",x"63",x"68",x"20", -- E230-E23F 
+  x"54",x"61",x"73",x"74",x"65",x"20",x"45",x"53",x"43",x"41",x"50",x"45",x"20",x"20",x"45",x"52", -- E240-E24F 
+  x"52",x"4F",x"52",x"20",x"3F",x"3F",x"3F",x"20",x"46",x"45",x"48",x"4C",x"45",x"52",x"54",x"45", -- E250-E25F 
+  x"58",x"54",x"20",x"45",x"52",x"52",x"4F",x"52",x"20",x"2D",x"20",x"46",x"65",x"68",x"6C",x"65", -- E260-E26F 
+  x"72",x"20",x"4E",x"75",x"6D",x"6D",x"65",x"72",x"20",x"20",x"43",x"53",x"50",x"21",x"20",x"43", -- E270-E27F 
+  x"53",x"50",x"3F",x"20",x"4C",x"4F",x"43",x"41",x"4C",x"20",x"45",x"4E",x"44",x"5F",x"4C",x"4F", -- E280-E28F 
+  x"43",x"41",x"4C",x"20",x"4C",x"30",x"20",x"4C",x"31",x"20",x"4C",x"32",x"20",x"4C",x"33",x"20", -- E290-E29F 
+  x"4C",x"34",x"20",x"4C",x"35",x"20",x"4C",x"36",x"20",x"4C",x"37",x"20",x"27",x"20",x"49",x"4E", -- E2A0-E2AF 
+  x"43",x"52",x"34",x"20",x"4B",x"45",x"59",x"5F",x"49",x"4E",x"54",x"20",x"4B",x"45",x"59",x"43", -- E2B0-E2BF 
+  x"4F",x"44",x"45",x"32",x"20",x"45",x"58",x"50",x"45",x"43",x"54",x"20",x"44",x"49",x"47",x"49", -- E2C0-E2CF 
+  x"54",x"20",x"4E",x"55",x"4D",x"42",x"45",x"52",x"20",x"57",x"4F",x"52",x"44",x"20",x"5A",x"3D", -- E2D0-E2DF 
+  x"20",x"46",x"49",x"4E",x"44",x"20",x"4C",x"43",x"46",x"41",x"20",x"43",x"4F",x"4D",x"50",x"49", -- E2E0-E2EF 
+  x"4C",x"45",x"2C",x"20",x"43",x"52",x"45",x"41",x"54",x"45",x"20",x"49",x"4E",x"54",x"45",x"52", -- E2F0-E2FF 
+  x"50",x"52",x"45",x"54",x"20",x"51",x"55",x"49",x"54",x"20",x"2F",x"6F",x"6B",x"3E",x"20",x"6F", -- E300-E30F 
+  x"6B",x"20",x"6F",x"6B",x"3E",x"20",x"2F",x"6F",x"6B",x"3E",x"20",x"6F",x"6B",x"20",x"53",x"54", -- E310-E31F 
+  x"41",x"52",x"54",x"20",x"46",x"4F",x"52",x"54",x"59",x"2D",x"46",x"4F",x"52",x"54",x"48",x"20", -- E320-E32F 
+  x"53",x"4D",x"55",x"44",x"47",x"45",x"20",x"28",x"49",x"4D",x"4D",x"45",x"44",x"49",x"41",x"54", -- E330-E33F 
+  x"45",x"3A",x"29",x"20",x"28",x"43",x"4F",x"4D",x"50",x"49",x"4C",x"45",x"3A",x"29",x"20",x"28", -- E340-E34F 
+  x"3A",x"29",x"20",x"49",x"4D",x"4D",x"45",x"44",x"49",x"41",x"54",x"45",x"3A",x"20",x"43",x"4F", -- E350-E35F 
+  x"4D",x"50",x"49",x"4C",x"45",x"3A",x"20",x"3A",x"20",x"3B",x"20",x"44",x"55",x"42",x"49",x"54", -- E360-E36F 
+  x"20",x"4C",x"47",x"2E",x"20",x"4E",x"47",x"2E",x"20",x"78",x"20",x"2C",x"20",x"44",x"55",x"4D", -- E370-E37F 
+  x"50",x"5A",x"20",x"27",x"20",x"53",x"54",x"41",x"52",x"54",x"20",x"20",x"44",x"55",x"4D",x"50", -- E380-E38F 
+  x"5A",x"3E",x"20",x"20",x"20",x"20",x"20",x"2D",x"2D",x"20",x"20",x"2D",x"20",x"2F",x"44",x"55", -- E390-E39F 
+  x"4D",x"50",x"5A",x"3E",x"20",x"52",x"41",x"4D",x"50",x"31",x"20",x"56",x"41",x"52",x"49",x"41", -- E3A0-E3AF 
+</DUMPZ></ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="Variablen"> 
+2F00 CONSTANT RAMP1 RAMP1 1+ RAMP1 ! <ok></ok><fl>086D E3A5 </fl><fr>0872 E3AB </fr>
+: VARIABLE RAMP1 @ DUP CONSTANT DUP 1+ RAMP1 ! ! ; <ok></ok><fl>0872 E3AB </fl><fr>0880 E3B4 </fr>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="noch paar hilfreiche Funktionen"> 
+: MOVE ( adr1 adr2 n --> ) <ok></ok><fl>0880 E3B4 </fl><fr>0884 E3B9 </fr>
+  BEGIN DUP WHILE >R OVER @ OVER ! SWAP 1+ SWAP 1+ R> 1 - REPEAT DROP 2DROP ; <ok></ok><fl>0884 E3B9 </fl><fr>0896 E3B9 </fr>
+: FILL ( adr n b --> ) <ok></ok><fl>0896 E3B9 </fl><fr>089A E3BE </fr>
+  ROT ROT BEGIN DUP WHILE >R 2DUP ! 1 + R> 1 - REPEAT DROP 2DROP ; <ok></ok><fl>089A E3BE </fl><fr>08AA E3BE </fr>
+ <ok></ok>
+: DUMP ( addr n --> ) <ok></ok><fl>08AA E3BE </fl><fr>08AE E3C3 </fr>
+  BEGIN SWAP ( CR DUP . ) DUP @ . 1 + SWAP 1 - DUP 0= UNTIL DROP ; <ok></ok><fl>08AE E3C3 </fl><fr>08BC E3C3 </fr>
+ <ok></ok>
+: MAX ( a b --> c ) <ok></ok><fl>08BC E3C3 </fl><fr>08C0 E3C7 </fr>
+  2DUP LT IF SWAP END_IF DROP ; <ok></ok><fl>08C0 E3C7 </fl><fr>08C6 E3C7 </fr>
+: MIN ( a b --> c ) <ok></ok><fl>08C6 E3C7 </fl><fr>08CA E3CB </fr>
+  2DUP > IF SWAP END_IF DROP ; <ok></ok><fl>08CA E3CB </fl><fr>08D0 E3CB </fr>
+: ABS DUP 0LT IF MINUS END_IF ; <ok></ok><fl>08D0 E3CB </fl><fr>08D9 E3CF </fr>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="Multiplikation"> 
+A017 MCODE MULT_I <ok></ok><fl>08D9 E3CF </fl><fr>08DF E3D6 </fr>
+A018 MCODE MULT_II <ok></ok><fl>08DF E3D6 </fl><fr>08E5 E3DE </fr>
+: SUPERMULT ( a u adrc adrb n --> a u' adrc' adrb' ) <ok></ok><fl>08E5 E3DE </fl><fr>08E9 E3E8 </fr>
+  >R <ok></ok><fl>08E9 E3E8 </fl><fr>08EA E3E8 </fr>
+  BEGIN MULT_I MULT_II UNTIL <ok></ok><fl>08EA E3E8 </fl><fr>08ED E3E8 </fr>
+  R> DROP ; ( /;> ) <ok></ok><fl>08ED E3E8 </fl><fr>08F0 E3E8 </fr>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+1401 CONSTANT A <ok></ok><fl>08F0 E3E8 </fl><fr>08F5 E3EA </fr>
+1601 CONSTANT B <ok></ok><fl>08F5 E3EA </fl><fr>08FA E3EC </fr>
+1801 CONSTANT C <ok></ok><fl>08FA E3EC </fl><fr>08FF E3EE </fr>
+A 1FF 1111 FILL <ok></ok>
+B 1FF 1111 FILL <ok></ok>
+C 3FF 0000 FILL <ok></ok>
+ <ok></ok>
+1111 0 C B 4 SUPERMULT . . . . <ok>1605 1805 0123 1111 </ok>
+C 8 DUMP <ok>4321 4444 4444 4444 0000 0000 0000 0000 </ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+: SMUL ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3) <ok></ok><fl>08FF E3EE </fl><fr>0903 E3F3 </fr>
+       ( L0 L1 L2 L3 L4 L5 L6 ) <ok></ok><fl>0903 E3F3 </fl><fr>0903 E3F3 </fr>
+  7 LOCAL <ok></ok><fl>0903 E3F3 </fl><fr>0905 E3F3 </fr>
+  L6 ! L5 ! L4 ! L3 ! L2 ! L1 ! L0 ! <ok></ok><fl>0905 E3F3 </fl><fr>0913 E3F3 </fr>
+  L0 @ L3 @ IF NOT END_IF <ok></ok><fl>0913 E3F3 </fl><fr>0919 E3F3 </fr>
+  L1 @ L4 @ + 1+ <ok></ok><fl>0919 E3F3 </fl><fr>091F E3F3 </fr>
+  L6 @ OVER 0 FILL <ok></ok><fl>091F E3F3 </fl><fr>0924 E3F3 </fr>
+  L6 @  <ok></ok><fl>0924 E3F3 </fl><fr>0926 E3F3 </fr>
+  DUP L2 @ L1 @ BEGIN <ok></ok><fl>0926 E3F3 </fl><fr>092B E3F3 </fr>
+    0 2OVER @ ROT ROT L5 @ L4 @ ( ... a u  adrc  adrb n ) <ok></ok><fl>092B E3F3 </fl><fr>0934 E3F3 </fr>
+    SUPERMULT                   ( ... a u' adrc' adrb' ) <ok></ok><fl>0934 E3F3 </fl><fr>0935 E3F3 </fr>
+    DROP ! DROP <ok></ok><fl>0935 E3F3 </fl><fr>0938 E3F3 </fr>
+ <ok></ok><fl>0938 E3F3 </fl><fr>0938 E3F3 </fr>
+(    vorher: ) <ok></ok><fl>0938 E3F3 </fl><fr>0938 E3F3 </fr>
+(    L4 @ 0  <ok></ok><fl>0938 E3F3 </fl><fr>0938 E3F3 </fr>
+(    BEGIN OVER WHILE SWAP -1 + SWAP <ok></ok><fl>0938 E3F3 </fl><fr>0938 E3F3 </fr>
+(      0 SWAP  <ok></ok><fl>0938 E3F3 </fl><fr>0938 E3F3 </fr>
+(      L6 @ @ L5 @ @ L2 @ @ U* D+  <ok></ok><fl>0938 E3F3 </fl><fr>0938 E3F3 </fr>
+(      L6 @ DUP 1 + L6 ! ! <ok></ok><fl>0938 E3F3 </fl><fr>0938 E3F3 </fr>
+(      L5 @ 1 + L5 ! <ok></ok><fl>0938 E3F3 </fl><fr>0938 E3F3 </fr>
+(      REPEAT <ok></ok><fl>0938 E3F3 </fl><fr>0938 E3F3 </fr>
+(    L6 @ ! DROP <ok></ok><fl>0938 E3F3 </fl><fr>0938 E3F3 </fr>
+ <ok></ok><fl>0938 E3F3 </fl><fr>0938 E3F3 </fr>
+    ROT 1 + ROT 1 + ROT -1 + ( 1 L2 +! 1 L6 +! <ok></ok><fl>0938 E3F3 </fl><fr>0941 E3F3 </fr>
+    DUP 0= UNTIL DROP 2DROP <ok></ok><fl>0941 E3F3 </fl><fr>0946 E3F3 </fr>
+  END_LOCAL <ok></ok><fl>0946 E3F3 </fl><fr>0947 E3F3 </fr>
+  ; <ok></ok><fl>0947 E3F3 </fl><fr>0948 E3F3 </fr>
+ <ok></ok>
+C 8 0 FILL <ok></ok>
+0 2 A 0 2 B C SMUL . . . <ok>1801 0005 0000 </ok>
+C 8 DUMP <ok>4321 8765 4567 0123 0000 0000 0000 0000 </ok>
+ <ok></ok>
+C 201 0 FILL <ok></ok>
+0 100 A 0 100 B C SMUL . . . <ok>1801 0201 0000 </ok>
+C 8 DUMP <ok>4321 8765 CBA9 0FED 5432 9876 DCBA 20FE </ok>
+ <ok></ok>
+C 101 0 FILL <ok></ok>
+0 80 A 0 80 B C SMUL . . . <ok>1801 0101 0000 </ok>
+C 8 DUMP <ok>4321 8765 CBA9 0FED 5432 9876 DCBA 20FE </ok>
+ <ok></ok>
+( C 2001 0 FILL <ok></ok>
+( 0 1000 A 0 1000 B C SMUL . . . <ok></ok>
+( C 8 DUMP <ok></ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="Addition">  
+: ADDIER ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3 ) <ok></ok><fl>0948 E3F3 </fl><fr>094C E3FA </fr>
+         ( L0 L1 L2 L3 L4 L5 L6 ) <ok></ok><fl>094C E3FA </fl><fr>094C E3FA </fr>
+  7 LOCAL <ok></ok><fl>094C E3FA </fl><fr>094E E3FA </fr>
+  L6 ! L5 ! L4 ! L3 ! L2 ! L1 ! L0 ! <ok></ok><fl>094E E3FA </fl><fr>095C E3FA </fr>
+  L0 @ L1 @ L4 @ MAX 1+ L6 @ <ok></ok><fl>095C E3FA </fl><fr>0966 E3FA </fr>
+  L0 @ L3 @ = IF <ok></ok><fl>0966 E3FA </fl><fr>096C E3FA </fr>
+    0 L1 @ L4 @ MAX 0 BEGIN ROT <ok></ok><fl>096C E3FA </fl><fr>0974 E3FA </fr>
+                 ( hier ist mal ! @ gewesen!!! ) <ok></ok><fl>0974 E3FA </fl><fr>0974 E3FA </fr>
+      OVER DUP L1 @ LT IF L2 @ DUP @ SWAP 1+ L2 ! ELSE 0 END_IF <ok></ok><fl>0974 E3FA </fl><fr>0984 E3FA </fr>
+      SWAP L4 @ LT IF L5 @ DUP @ SWAP 1+ L5 ! ELSE 0 END_IF <ok></ok><fl>0984 E3FA </fl><fr>0993 E3FA </fr>
+      U+ L6 @ DUP 1+ L6 ! ! <ok></ok><fl>0993 E3FA </fl><fr>099B E3FA </fr>
+      ROT ROT 1 + 2DUP - 0= UNTIL 2DROP L6 @ ! <ok></ok><fl>099B E3FA </fl><fr>09A7 E3FA </fr>
+    ELSE SWAP 1 - SWAP <ok></ok><fl>09A7 E3FA </fl><fr>09AC E3FA </fr>
+      1 L1 @ L4 @ MAX 0 BEGIN ROT <ok></ok><fl>09AC E3FA </fl><fr>09B4 E3FA </fr>
+        OVER DUP L1 @ LT IF L2 @ DUP @ SWAP 1+ L2 ! ELSE 0 END_IF <ok></ok><fl>09B4 E3FA </fl><fr>09C4 E3FA </fr>
+        SWAP L4 @ LT IF L5 @ DUP @ SWAP 1+ L5 ! NOT ELSE -1 END_IF <ok></ok><fl>09C4 E3FA </fl><fr>09D4 E3FA </fr>
+        U+ L6 @ DUP 1+ L6 ! ! <ok></ok><fl>09D4 E3FA </fl><fr>09DC E3FA </fr>
+        ROT ROT 1 + 2DUP - 0= UNTIL 2DROP ( DUP . <ok></ok><fl>09DC E3FA </fl><fr>09E5 E3FA </fr>
+        0= IF DUP L6 ! <ok></ok><fl>09E5 E3FA </fl><fr>09EA E3FA </fr>
+          ROT NOT ROT ROT <ok></ok><fl>09EA E3FA </fl><fr>09EE E3FA </fr>
+          1 L1 @ L4 @ MAX 0 BEGIN ROT <ok></ok><fl>09EE E3FA </fl><fr>09F6 E3FA </fr>
+            0 L6 @ @ NOT U+  <ok></ok><fl>09F6 E3FA </fl><fr>09FC E3FA </fr>
+            L6 @ DUP 1+ L6 ! ! <ok></ok><fl>09FC E3FA </fl><fr>0A03 E3FA </fr>
+            ROT ROT 1 + 2DUP - 0= UNTIL 2DROP DROP <ok></ok><fl>0A03 E3FA </fl><fr>0A0D E3FA </fr>
+          END_IF <ok></ok><fl>0A0D E3FA </fl><fr>0A0D E3FA </fr>
+      END_IF  <ok></ok><fl>0A0D E3FA </fl><fr>0A0D E3FA </fr>
+  END_LOCAL ; <ok></ok><fl>0A0D E3FA </fl><fr>0A0F E3FA </fr>
+ <ok></ok>
+ <ok></ok>
+C 8 0 FILL <ok></ok>
+0 2 A 0 2 B C ADDIER . . . <ok>1801 0003 0000 </ok>
+C 8 DUMP <ok>2222 2222 0000 0000 0000 0000 0000 0000 </ok>
+ <ok></ok>
+C 8 0 FILL <ok></ok>
+0 5 A 0 7 B C ADDIER . . . <ok>1801 0008 0000 </ok>
+C 8 DUMP <ok>2222 2222 2222 2222 2222 1111 1111 0000 </ok>
+ <ok></ok>
+C 8 0 FILL <ok></ok>
+0 7 A 0 3 B C ADDIER . . . <ok>1801 0008 0000 </ok>
+C 8 DUMP <ok>2222 2222 2222 1111 1111 1111 1111 0000 </ok>
+ <ok></ok>
+A 8 FFFF FILL <ok></ok>
+C 8 0 FILL <ok></ok>
+0 2 A 0 2 B C ADDIER . . . <ok>1801 0003 0000 </ok>
+C 8 DUMP ( 1110 1111 0001 0000 ) <ok>1110 1111 0001 0000 0000 0000 0000 0000 </ok>
+ <ok></ok>
+ <ok></ok>
+A 8 2222 FILL <ok></ok>
+C 8 0 FILL <ok></ok>
+0 2 A -1 2 B C ADDIER . . . <ok>1801 0002 0000 </ok>
+C 8 DUMP <ok>1111 1111 0000 0000 0000 0000 0000 0000 </ok>
+ <ok></ok>
+C 8 0 FILL <ok></ok>
+-1 2 A 0 2 B C ADDIER . . . <ok>1801 0002 FFFF </ok>
+C 8 DUMP <ok>1111 1111 0000 0000 0000 0000 0000 0000 </ok>
+ <ok></ok>
+C 8 0 FILL <ok></ok>
+0 2 B -1 2 A C ADDIER . . . <ok>1801 0002 FFFF </ok>
+C 8 DUMP <ok>1111 1111 0000 0000 0000 0000 0000 0000 </ok>
+ <ok></ok>
+C 8 0 FILL <ok></ok>
+-1 2 B 0 2 A C ADDIER . . . <ok>1801 0002 0000 </ok>
+C 8 DUMP <ok>1111 1111 0000 0000 0000 0000 0000 0000 </ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="Division"> 
+A014 MCODE DI32  <ok></ok><fl>0A0F E3FA </fl><fr>0A15 E3FF </fr>
+: DIV32 ( a b d --> r q ) <ok></ok><fl>0A15 E3FF </fl><fr>0A19 E405 </fr>
+  10 BEGIN >R DI32 R> 1 - DUP 0= UNTIL 2DROP ; <ok></ok><fl>0A19 E405 </fl><fr>0A24 E405 </fr>
+: /MOD ( b d --> r q ) 0 ROT ROT DIV32 ; <ok></ok><fl>0A24 E405 </fl><fr>0A2D E40A </fr>
+: /MOD ( a b --> r q ) <ok></ok><fl>0A2D E40A </fl><fr>0A31 E40F </fr>
+  OVER 0LT IF SWAP MINUS SWAP <ok></ok><fl>0A31 E40F </fl><fr>0A37 E40F </fr>
+    DUP 0LT IF MINUS /MOD SWAP MINUS SWAP <ok></ok><fl>0A37 E40F </fl><fr>0A3F E40F </fr>
+      ELSE /MOD MINUS SWAP MINUS SWAP END_IF <ok></ok><fl>0A3F E40F </fl><fr>0A45 E40F </fr>
+    ELSE DUP 0LT IF MINUS /MOD MINUS <ok></ok><fl>0A45 E40F </fl><fr>0A4C E40F </fr>
+      ELSE /MOD END_IF END_IF <ok></ok><fl>0A4C E40F </fl><fr>0A4E E40F </fr>
+  ; <ok></ok><fl>0A4E E40F </fl><fr>0A4F E40F </fr>
+: / ( b d --> q ) /MOD SWAP DROP ; <ok></ok><fl>0A4F E40F </fl><fr>0A57 E411 </fr>
+: MOD ( b d --> r ) /MOD DROP ; <ok></ok><fl>0A57 E411 </fl><fr>0A5E E415 </fr>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+: SDIV ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3 s4 l4 r4 ) <ok></ok><fl>0A5E E415 </fl><fr>0A62 E41A </fr>
+       ( L0 L1 L2 L3 L4 L5 L6 ) <ok></ok><fl>0A62 E41A </fl><fr>0A62 E41A </fr>
+  7 LOCAL <ok></ok><fl>0A62 E41A </fl><fr>0A64 E41A </fr>
+  L6 ! L5 ! L4 ! L3 ! L2 ! L1 ! L0 ! <ok></ok><fl>0A64 E41A </fl><fr>0A72 E41A </fr>
+L1 @ L4 @ LT IF L0 @ L1 @ L2 @ 0 0 0 ELSE <ok></ok><fl>0A72 E41A </fl><fr>0A82 E41A </fr>
+  L1 @ 0 BEGIN <ok></ok><fl>0A82 E41A </fl><fr>0A85 E41A </fr>
+    L2 @ OVER + @ NOT OVER L6 @ + ! <ok></ok><fl>0A85 E41A </fl><fr>0A90 E41A </fr>
+    1 + 2DUP - 0= UNTIL 2DROP <ok></ok><fl>0A90 E41A </fl><fr>0A97 E41A </fr>
+  L6 @ L1 @ + L4 @ - L2 ! <ok></ok><fl>0A97 E41A </fl><fr>0AA1 E41A </fr>
+  -1 L6 @ L1 @ + ! 1 L1 +! <ok></ok><fl>0AA1 E41A </fl><fr>0AAB E41A </fr>
+  L1 @ L4 @ - 0 BEGIN <ok></ok><fl>0AAB E41A </fl><fr>0AB1 E41A </fr>
+    L2 @ L4 @ + @ NOT <ok></ok><fl>0AB1 E41A </fl><fr>0AB8 E41A </fr>
+    L2 @ L4 @ + 1 - @ NOT <ok></ok><fl>0AB8 E41A </fl><fr>0AC1 E41A </fr>
+    L5 @ L4 @ + 1 - @      ( a b c ) <ok></ok><fl>0AC1 E41A </fl><fr>0AC9 E41A </fr>
+    DIV32  <ok></ok><fl>0AC9 E41A </fl><fr>0ACA E41A </fr>
+    SWAP DROP              ( q ) <ok></ok><fl>0ACA E41A </fl><fr>0ACC E41A </fr>
+    DUP L2 @ L4 @ + 1+ ! <ok></ok><fl>0ACC E41A </fl><fr>0AD4 E41A </fr>
+    0 L2 @ L5 @ L4 @       ( c ü adrc adrb n ) <ok></ok><fl>0AD4 E41A </fl><fr>0ADB E41A </fr>
+    SUPERMULT <ok></ok><fl>0ADB E41A </fl><fr>0ADC E41A </fr>
+    2DROP SWAP DROP <ok></ok><fl>0ADC E41A </fl><fr>0ADF E41A </fr>
+    0 L2 @ L4 @ + @ U+ L2 @ L4 @ + ! <ok></ok><fl>0ADF E41A </fl><fr>0AED E41A </fr>
+BEGIN WHILE <ok></ok><fl>0AED E41A </fl><fr>0AEE E41A </fr>
+ 1 L4 @ 0 BEGIN ROT <ok></ok><fl>0AEE E41A </fl><fr>0AF3 E41A </fr>
+   OVER L2 @ OVER + @ <ok></ok><fl>0AF3 E41A </fl><fr>0AF9 E41A </fr>
+   SWAP L5 @ + @ NOT <ok></ok><fl>0AF9 E41A </fl><fr>0AFF E41A </fr>
+   U+ SWAP >R OVER L2 @ + ! R> <ok></ok><fl>0AFF E41A </fl><fr>0B08 E41A </fr>
+   ROT ROT 1 + 2DUP - 0= UNTIL 2DROP <ok></ok><fl>0B08 E41A </fl><fr>0B11 E41A </fr>
+(   0 L2 @ L4 @ + @ U+ L2 @ L4 @ + ! <ok></ok><fl>0B11 E41A </fl><fr>0B11 E41A </fr>
+(   DUP . 7 EMIT <ok></ok><fl>0B11 E41A </fl><fr>0B11 E41A </fr>
+ -1 L2 @ L4 @ + 1+ +! <ok></ok><fl>0B11 E41A </fl><fr>0B19 E41A </fr>
+REPEAT <ok></ok><fl>0B19 E41A </fl><fr>0B1A E41A </fr>
+    -1 L2 +! <ok></ok><fl>0B1A E41A </fl><fr>0B1D E41A </fr>
+    1 + 2DUP - 0= UNTIL 2DROP <ok></ok><fl>0B1D E41A </fl><fr>0B24 E41A </fr>
+  L4 @ 0 BEGIN <ok></ok><fl>0B24 E41A </fl><fr>0B27 E41A </fr>
+    L6 @ OVER + @ NOT OVER L6 @ + ! <ok></ok><fl>0B27 E41A </fl><fr>0B32 E41A </fr>
+    1 + 2DUP - 0= UNTIL 2DROP <ok></ok><fl>0B32 E41A </fl><fr>0B39 E41A </fr>
+  L4 @ L6 @ 1 - ! <ok></ok><fl>0B39 E41A </fl><fr>0B40 E41A </fr>
+  L1 @ L4 @ - L6 @ L4 @ + ! <ok></ok><fl>0B40 E41A </fl><fr>0B4B E41A </fr>
+( CR ." ++" L6 @ L1 @ 1 + DUMP ." ++" <ok></ok><fl>0B4B E41A </fl><fr>0B4B E41A </fr>
+  L0 @ L4 @ L6 @ <ok></ok><fl>0B4B E41A </fl><fr>0B51 E41A </fr>
+  L0 @ L3 @ IF NOT END_IF <ok></ok><fl>0B51 E41A </fl><fr>0B57 E41A </fr>
+  L1 @ L4 @ - <ok></ok><fl>0B57 E41A </fl><fr>0B5C E41A </fr>
+  L6 @ L4 @ + 1 + <ok></ok><fl>0B5C E41A </fl><fr>0B63 E41A </fr>
+ END_IF <ok></ok><fl>0B63 E41A </fl><fr>0B63 E41A </fr>
+  END_LOCAL <ok></ok><fl>0B63 E41A </fl><fr>0B64 E41A </fr>
+  ; <ok></ok><fl>0B64 E41A </fl><fr>0B65 E41A </fr>
+ <ok></ok>
+( 333333 4 N^ 10 N* VARIABLE NA <ok></ok>
+( 333333 DUP N* 10 N* VARIABLE NB <ok></ok>
+( NA @ 10 DUMP <ok></ok>
+( NA @ NB @ 2OPERANDEN->2SLX OVER . DUP . SDIV <ok></ok>
+ <ok></ok>
+654321 A ! <ok></ok>
+234567 A 1+ ! <ok></ok>
+000001 A 2 + ! <ok></ok>
+432101 B ! <ok></ok>
+A98765 B 1+ ! <ok></ok>
+ <ok></ok>
+0 3 A 0 2 B C SMUL . . . <ok>1801 0006 0000 </ok>
+C 8 DUMP <ok>8421 7813 0017 AC1A 0000 0000 0000 0000 </ok>
+ <ok></ok>
+0 4 C 0 2 B A SDIV . . . . . . <ok>1404 0003 0000 1401 0002 0000 </ok>
+A 8 DUMP <ok>0000 0000 0003 4321 4567 0001 2222 2222 </ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="Zahlenspeicher"> 
+0 VARIABLE OPERAND1 <ok></ok><fl>0B65 E41A </fl><fr>0B6A E423 </fr>
+0 VARIABLE OPERAND2 <ok></ok><fl>0B6A E423 </fl><fr>0B6F E42C </fr>
+1400 VARIABLE ERGEBNIS <ok></ok><fl>0B6F E42C </fl><fr>0B74 E435 </fr>
+1400 VARIABLE ZAHLENSPEICHER <ok></ok><fl>0B74 E435 </fl><fr>0B79 E444 </fr>
+2000 VARIABLE SPEICHERENDE <ok></ok><fl>0B79 E444 </fl><fr>0B7E E451 </fr>
+0 VARIABLE SCHIEB <ok></ok><fl>0B7E E451 </fl><fr>0B83 E458 </fr>
+ <ok></ok>
+ <ok></ok>
+: SLX->ERGEBNIS ( sz lz az --> z ) <ok></ok><fl>0B83 E458 </fl><fr>0B87 E466 </fr>
+  OVER 0= IF 2DROP DROP 0 ELSE ( 0 bei 1/7 ) <ok></ok><fl>0B87 E466 </fl><fr>0B8E E466 </fr>
+    2DUP + BEGIN 1 - DUP @ 0= NOT UNTIL  <ok></ok><fl>0B8E E466 </fl><fr>0B97 E466 </fr>
+    1 + OVER MAX ( sz lz az ez ) <ok></ok><fl>0B97 E466 </fl><fr>0B9B E466 </fr>
+    ( DUP ERGEBNIS ! ( nicht wegen 0 1 OPERAND1 ) <ok></ok><fl>0B9B E466 </fl><fr>0B9B E466 </fr>
+    2DUP = IF 2DROP 2DROP 0 ELSE <ok></ok><fl>0B9B E466 </fl><fr>0BA2 E466 </fr>
+      OVER - ( sz lz az lneu ) <ok></ok><fl>0BA2 E466 </fl><fr>0BA4 E466 </fr>
+      OVER @ C000 AND 0= <ok></ok><fl>0BA4 E466 </fl><fr>0BA9 E466 </fr>
+      OVER 1 = AND IF <ok></ok><fl>0BA9 E466 </fl><fr>0BAE E466 </fr>
+        DROP @ ELSE ( warum war da -1 ERGEBNIS +! ) <ok></ok><fl>0BAE E466 </fl><fr>0BB1 E466 </fr>
+          OVER 1 - ! <ok></ok><fl>0BB1 E466 </fl><fr>0BB5 E466 </fr>
+          1 - 4000 OR <ok></ok><fl>0BB5 E466 </fl><fr>0BBA E466 </fr>
+          END_IF  <ok></ok><fl>0BBA E466 </fl><fr>0BBA E466 </fr>
+      SWAP DROP  <ok></ok><fl>0BBA E466 </fl><fr>0BBC E466 </fr>
+      SWAP IF MINUS END_IF <ok></ok><fl>0BBC E466 </fl><fr>0BBF E466 </fr>
+      END_IF <ok></ok><fl>0BBF E466 </fl><fr>0BBF E466 </fr>
+    END_IF <ok></ok><fl>0BBF E466 </fl><fr>0BBF E466 </fr>
+  ; <ok></ok><fl>0BBF E466 </fl><fr>0BC0 E466 </fr>
+0 8 C SLX->ERGEBNIS . <ok>5800 </ok>
+ <ok></ok>
+: OPERAND->SLX ( op --> sx lx ax ) <ok></ok><fl>0BC0 E466 </fl><fr>0BC4 E473 </fr>
+  DUP @ ( op x ) <ok></ok><fl>0BC4 E473 </fl><fr>0BC6 E473 </fr>
+  DUP 0LT IF MINUS -1 ELSE 0 END_IF <ok></ok><fl>0BC6 E473 </fl><fr>0BCD E473 </fr>
+  ROT ROT ( sx op xabs ) <ok></ok><fl>0BCD E473 </fl><fr>0BCF E473 </fr>
+  DUP 4000 AND IF <ok></ok><fl>0BCF E473 </fl><fr>0BD4 E473 </fr>
+    SWAP DROP <ok></ok><fl>0BD4 E473 </fl><fr>0BD6 E473 </fr>
+    3FFF AND <ok></ok><fl>0BD6 E473 </fl><fr>0BD8 E473 </fr>
+    DUP @ SWAP 1+ <ok></ok><fl>0BD8 E473 </fl><fr>0BDC E473 </fr>
+    ELSE <ok></ok><fl>0BDC E473 </fl><fr>0BDD E473 </fr>
+      OVER ! 1 SWAP  <ok></ok><fl>0BDD E473 </fl><fr>0BE1 E473 </fr>
+      END_IF <ok></ok><fl>0BE1 E473 </fl><fr>0BE1 E473 </fr>
+  ; <ok></ok><fl>0BE1 E473 </fl><fr>0BE2 E473 </fr>
+ <ok></ok>
+77 OPERAND1 ! <ok></ok>
+OPERAND1 OPERAND->SLX . . . <ok>2F01 0001 0000 </ok>
+-77 OPERAND1 ! <ok></ok>
+OPERAND1 OPERAND->SLX . . . <ok>2F01 0001 FFFF </ok>
+5800 OPERAND1 ! <ok></ok>
+OPERAND1 OPERAND->SLX . . . <ok>1801 0004 0000 </ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+: SPEICHERHOL ( l --> addr ) <ok></ok><fl>0BE2 E473 </fl><fr>0BE6 E47F </fr>
+  ERGEBNIS @ 2DUP ! <ok></ok><fl>0BE6 E47F </fl><fr>0BEA E47F </fr>
+  1+ 2DUP + ERGEBNIS ! <ok></ok><fl>0BEA E47F </fl><fr>0BEF E47F </fr>
+  2DUP SWAP 0 FILL <ok></ok><fl>0BEF E47F </fl><fr>0BF3 E47F </fr>
+  SWAP DROP <ok></ok><fl>0BF3 E47F </fl><fr>0BF5 E47F </fr>
+ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF <ok></ok><fl>0BF5 E47F </fl><fr>0BFE E47F </fr>
+  ; <ok></ok><fl>0BFE E47F </fl><fr>0BFF E47F </fr>
+ <ok></ok>
+ <ok></ok>
+: 2OPERANDEN->2SLX ( op1 op2 --> sx lx ax sy ly ay az ) <ok></ok><fl>0BFF E47F </fl><fr>0C03 E490 </fr>
+  OPERAND2 ! <ok></ok><fl>0C03 E490 </fl><fr>0C05 E490 </fr>
+  OPERAND1 ! <ok></ok><fl>0C05 E490 </fl><fr>0C07 E490 </fr>
+  OPERAND1 OPERAND->SLX <ok></ok><fl>0C07 E490 </fl><fr>0C09 E490 </fr>
+  OVER >R <ok></ok><fl>0C09 E490 </fl><fr>0C0B E490 </fr>
+  OPERAND2 OPERAND->SLX <ok></ok><fl>0C0B E490 </fl><fr>0C0D E490 </fr>
+  OVER R> + 1+ <ok></ok><fl>0C0D E490 </fl><fr>0C11 E490 </fr>
+  SPEICHERHOL <ok></ok><fl>0C11 E490 </fl><fr>0C12 E490 </fr>
+  ; <ok></ok><fl>0C12 E490 </fl><fr>0C13 E490 </fr>
+ <ok></ok>
+77 88 2OPERANDEN->2SLX . . . . . . . <ok>1401 2F02 0001 0000 2F01 0001 0000 </ok>
+77 5800 2OPERANDEN->2SLX . . . . . . . <ok>1405 1801 0004 0000 2F01 0001 0000 </ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="N+ N- N* N/MOD N."> 
+: N+ ( x y --> z ) <ok></ok><fl>0C13 E490 </fl><fr>0C17 E493 </fr>
+  2OPERANDEN->2SLX ADDIER SLX->ERGEBNIS ; <ok></ok><fl>0C17 E493 </fl><fr>0C1B E493 </fr>
+: N- ( x y --> z ) <ok></ok><fl>0C1B E493 </fl><fr>0C1F E496 </fr>
+  MINUS N+ ; <ok></ok><fl>0C1F E496 </fl><fr>0C22 E496 </fr>
+: N* ( x y --> z ) <ok></ok><fl>0C22 E496 </fl><fr>0C26 E499 </fr>
+  2OPERANDEN->2SLX SMUL SLX->ERGEBNIS ; <ok></ok><fl>0C26 E499 </fl><fr>0C2A E499 </fr>
+ <ok></ok>
+ <ok></ok>
+IMMEDIATE: RECURSE LFA @ 4 + COMPILE, ; <ok></ok><fl>0C2A E499 </fl><fr>0C34 E4A1 </fr>
+: N/MOD ( x y --> r q ) <ok></ok><fl>0C34 E4A1 </fl><fr>0C38 E4A7 </fr>
+  DUP 0= IF 0 ERROR END_IF <ok></ok><fl>0C38 E4A7 </fl><fr>0C3D E4A7 </fr>
+  DUP OPERAND1 ! <ok></ok><fl>0C3D E4A7 </fl><fr>0C40 E4A7 </fr>
+  OPERAND1 OPERAND->SLX  <ok></ok><fl>0C40 E4A7 </fl><fr>0C42 E4A7 </fr>
+  ROT DROP OVER + 1 - @ ( ly ty ) <ok></ok><fl>0C42 E4A7 </fl><fr>0C49 E4A7 </fr>
+  SWAP 1 > IF <ok></ok><fl>0C49 E4A7 </fl><fr>0C4D E4A7 </fr>
+    1 BEGIN OVER 0LT NOT WHILE  <ok></ok><fl>0C4D E4A7 </fl><fr>0C52 E4A7 </fr>
+      SWAP DUP + SWAP DUP N+ REPEAT <ok></ok><fl>0C52 E4A7 </fl><fr>0C59 E4A7 </fr>
+    SWAP DROP DUP SCHIEB ! <ok></ok><fl>0C59 E4A7 </fl><fr>0C5E E4A7 </fr>
+    ROT OVER N* <ok></ok><fl>0C5E E4A7 </fl><fr>0C61 E4A7 </fr>
+    ROT ROT N* <ok></ok><fl>0C61 E4A7 </fl><fr>0C64 E4A7 </fr>
+    ELSE DROP 1 SCHIEB ! END_IF  <ok></ok><fl>0C64 E4A7 </fl><fr>0C69 E4A7 </fr>
+  2OPERANDEN->2SLX SDIV <ok></ok><fl>0C69 E4A7 </fl><fr>0C6B E4A7 </fr>
+  SLX->ERGEBNIS >R  <ok></ok><fl>0C6B E4A7 </fl><fr>0C6D E4A7 </fr>
+  SLX->ERGEBNIS R> <ok></ok><fl>0C6D E4A7 </fl><fr>0C6F E4A7 </fr>
+  SCHIEB @ 1 - IF  <ok></ok><fl>0C6F E4A7 </fl><fr>0C74 E4A7 </fr>
+    SWAP SCHIEB @ RECURSE SWAP DROP <ok></ok><fl>0C74 E4A7 </fl><fr>0C7A E4A7 </fr>
+    SWAP END_IF <ok></ok><fl>0C7A E4A7 </fl><fr>0C7B E4A7 </fr>
+  ; <ok></ok><fl>0C7B E4A7 </fl><fr>0C7C E4A7 </fr>
+ <ok></ok>
+: HG0. ( n -->  /hexstring/ ) <ok></ok><fl>0C7C E4A7 </fl><fr>0C80 E4AC </fr>
+  0 >R <ok></ok><fl>0C80 E4AC </fl><fr>0C82 E4AC </fr>
+  SHL16 DUP IF DIG EMIT R> DROP -1 >R ELSE DROP END_IF <ok></ok><fl>0C82 E4AC </fl><fr>0C8D E4AC </fr>
+  SHL16 DUP R OR IF DIG EMIT R> DROP -1 >R ELSE DROP END_IF <ok></ok><fl>0C8D E4AC </fl><fr>0C9A E4AC </fr>
+  SHL16 DUP R OR IF DIG EMIT ELSE DROP END_IF <ok></ok><fl>0C9A E4AC </fl><fr>0CA3 E4AC </fr>
+  SHL16 DIG EMIT DROP R> DROP ; <ok></ok><fl>0CA3 E4AC </fl><fr>0CAA E4AC </fr>
+ <ok></ok>
+: N. ( n --> ) ( erstmal nur hexadezimale Ausgabe ) <ok></ok><fl>0CAA E4AC </fl><fr>0CAE E4AF </fr>
+  OPERAND1 ! <ok></ok><fl>0CAE E4AF </fl><fr>0CB0 E4AF </fr>
+  OPERAND1 OPERAND->SLX ( sx lx ax ) <ok></ok><fl>0CB0 E4AF </fl><fr>0CB2 E4AF </fr>
+  ROT IF ." -" END_IF <ok></ok><fl>0CB2 E4AF </fl><fr>0CB7 E4B1 </fr>
+  OVER +  <ok></ok><fl>0CB7 E4B1 </fl><fr>0CB9 E4B1 </fr>
+  1 - DUP @ HG0. SWAP 1 - SWAP <ok></ok><fl>0CB9 E4B1 </fl><fr>0CC2 E4B1 </fr>
+  BEGIN OVER WHILE 1 - DUP @ HG. SWAP 1 - SWAP REPEAT DROP <ok></ok><fl>0CC2 E4B1 </fl><fr>0CCF E4B1 </fr>
+  DROP  <ok></ok><fl>0CCF E4B1 </fl><fr>0CD0 E4B1 </fr>
+  20 EMIT <ok></ok><fl>0CD0 E4B1 </fl><fr>0CD2 E4B1 </fr>
+  ; <ok></ok><fl>0CD2 E4B1 </fl><fr>0CD3 E4B1 </fr>
+ <ok></ok>
+1111 1111 N* N. <ok>1234321 </ok>
+ <ok></ok>
+: NB. SWAP N. N. ; <ok></ok><fl>0CD3 E4B1 </fl><fr>0CDB E4B5 </fr>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+7 3 N/MOD N. N.  <ok>2 1 </ok>
+3333 DUP N* DUP N* 10 N* DUP N. <ok>68D9E840B77E910 </ok>
+3333 DUP N* 10 N* DUP N. <ok>A3D5C290 </ok>
+N/MOD NB. <ok>0 A3D5C29 </ok>
+3333 DUP N* N. <ok>A3D5C29 </ok>
+ <ok></ok>
+1111 DUP N* 8 N* DUP N. <ok>91A1908 </ok>
+1111 8 N* DUP N. <ok>8888 </ok>
+N/MOD NB. <ok>0 1111 </ok>
+ <ok></ok>
+1111 DUP N* DUP N. <ok>1234321 </ok>
+1111 DUP N. <ok>1111 </ok>
+N/MOD NB. <ok>0 1111 </ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="Zwischenergebnisse nicht unnötig speichern"> 
+ZAHLENSPEICHER @ VARIABLE BLOCKANFANG <ok></ok><fl>0CDB E4B5 </fl><fr>0CE0 E4C1 </fr>
+ZAHLENSPEICHER @ VARIABLE BLOCKENDE <ok></ok><fl>0CE0 E4C1 </fl><fr>0CE5 E4CB </fr>
+: NEBENRECHNUNG ( --> erg ) ERGEBNIS @ ; <ok></ok><fl>0CE5 E4CB </fl><fr>0CEC E4D9 </fr>
+: HAUPTRECHNUNG ( erg --> ) ERGEBNIS ! ; <ok></ok><fl>0CEC E4D9 </fl><fr>0CF3 E4E7 </fr>
+: RECHENBLOCK BLOCKENDE @ BLOCKANFANG ! <ok></ok><fl>0CF3 E4E7 </fl><fr>0CFB E4F3 </fr>
+  ERGEBNIS @ BLOCKENDE ! ; <ok></ok><fl>0CFB E4F3 </fl><fr>0D00 E4F3 </fr>
+: INIT ZAHLENSPEICHER @ ERGEBNIS ! RECHENBLOCK RECHENBLOCK ; <ok></ok><fl>0D00 E4F3 </fl><fr>0D0B E4F8 </fr>
+INIT <ok></ok>
+ <ok></ok>
+: A+0 ( a --> a+0 )  <ok></ok><fl>0D0B E4F8 </fl><fr>0D0F E4FC </fr>
+  OPERAND1 ! <ok></ok><fl>0D0F E4FC </fl><fr>0D11 E4FC </fr>
+  OPERAND1 OPERAND->SLX <ok></ok><fl>0D11 E4FC </fl><fr>0D13 E4FC </fr>
+  OVER ERGEBNIS @ 1+ SWAP MOVE <ok></ok><fl>0D13 E4FC </fl><fr>0D19 E4FC </fr>
+  ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz ) <ok></ok><fl>0D19 E4FC </fl><fr>0D20 E4FC </fr>
+  SLX->ERGEBNIS <ok></ok><fl>0D20 E4FC </fl><fr>0D21 E4FC </fr>
+  ; <ok></ok><fl>0D21 E4FC </fl><fr>0D22 E4FC </fr>
+: B+0 ( a b --> a+0 b+0 ) <ok></ok><fl>0D22 E4FC </fl><fr>0D26 E500 </fr>
+  SWAP A+0 SWAP A+0 ; <ok></ok><fl>0D26 E500 </fl><fr>0D2B E500 </fr>
+</sekt> 
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+<sekt inhalt="Anwenden in N/ NMOD NGGT NBK..."> 
+: N/ ( b d --> q ) <ok></ok><fl>0D2B E500 </fl><fr>0D2F E503 </fr>
+  NEBENRECHNUNG ROT ROT  <ok></ok><fl>0D2F E503 </fl><fr>0D32 E503 </fr>
+  N/MOD SWAP DROP <ok></ok><fl>0D32 E503 </fl><fr>0D35 E503 </fr>
+  SWAP HAUPTRECHNUNG A+0 <ok></ok><fl>0D35 E503 </fl><fr>0D38 E503 </fr>
+  ; <ok></ok><fl>0D38 E503 </fl><fr>0D39 E503 </fr>
+: NMOD ( b d --> r )  <ok></ok><fl>0D39 E503 </fl><fr>0D3D E508 </fr>
+  NEBENRECHNUNG ROT ROT  <ok></ok><fl>0D3D E508 </fl><fr>0D40 E508 </fr>
+  N/MOD DROP  <ok></ok><fl>0D40 E508 </fl><fr>0D42 E508 </fr>
+  SWAP HAUPTRECHNUNG A+0 <ok></ok><fl>0D42 E508 </fl><fr>0D45 E508 </fr>
+  ; <ok></ok><fl>0D45 E508 </fl><fr>0D46 E508 </fr>
+ <ok></ok>
+: NGGT ( a b --> ggt ) <ok></ok><fl>0D46 E508 </fl><fr>0D4A E50D </fr>
+  NEBENRECHNUNG ROT ROT <ok></ok><fl>0D4A E50D </fl><fr>0D4D E50D </fr>
+  BEGIN DUP WHILE <ok></ok><fl>0D4D E50D </fl><fr>0D4F E50D </fr>
+    SWAP OVER NMOD REPEAT DROP  <ok></ok><fl>0D4F E50D </fl><fr>0D54 E50D </fr>
+  SWAP HAUPTRECHNUNG A+0 ; <ok></ok><fl>0D54 E50D </fl><fr>0D58 E50D </fr>
+: NBK ( a b --> a/ggt b/ggt )  <ok></ok><fl>0D58 E50D </fl><fr>0D5C E511 </fr>
+  NEBENRECHNUNG ROT ROT <ok></ok><fl>0D5C E511 </fl><fr>0D5F E511 </fr>
+  2DUP NGGT ROT OVER N/ ROT ROT N/  <ok></ok><fl>0D5F E511 </fl><fr>0D67 E511 </fr>
+  ROT HAUPTRECHNUNG B+0 ; <ok></ok><fl>0D67 E511 </fl><fr>0D6B E511 </fr>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+777 99 NBK NB. <ok>27D 33 </ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+( je einmal N* und N+ in NNUMBER ) <ok></ok>
+: NNUMBER ( baddr n --> a faddr ) <ok></ok><fl>0D6B E511 </fl><fr>0D6F E519 </fr>
+  NEBENRECHNUNG ROT ROT <ok></ok><fl>0D6F E519 </fl><fr>0D72 E519 </fr>
+  7 LOCAL ( L3 L4 nicht verwendet <ok></ok><fl>0D72 E519 </fl><fr>0D74 E519 </fr>
+  L1 ! L0 ! <ok></ok><fl>0D74 E519 </fl><fr>0D78 E519 </fr>
+  0 L1 @ IF <ok></ok><fl>0D78 E519 </fl><fr>0D7C E519 </fr>
+    DUP L2 ! 1 L5 ! ( Vorzeichen ) <ok></ok><fl>0D7C E519 </fl><fr>0D82 E519 </fr>
+    BEGIN ( M23 Vorzeichen gucken ) <ok></ok><fl>0D82 E519 </fl><fr>0D82 E519 </fr>
+      -1 L6 !  <ok></ok><fl>0D82 E519 </fl><fr>0D85 E519 </fr>
+      L0 @ L2 @ + C@ <ok></ok><fl>0D85 E519 </fl><fr>0D8B E519 </fr>
+      2B ( 43 2B ) = IF L2 @ 1+ L2 ! 0 L6 ! ELSE <ok></ok><fl>0D8B E519 </fl><fr>0D97 E519 </fr>
+        L0 @ L2 @ + C@ <ok></ok><fl>0D97 E519 </fl><fr>0D9D E519 </fr>
+        2D ( 45 2D ) = IF L2 @ 1+ L2 ! <ok></ok><fl>0D9D E519 </fl><fr>0DA5 E519 </fr>
+          0 L6 ! <ok></ok><fl>0DA5 E519 </fl><fr>0DA8 E519 </fr>
+          L5 @ MINUS L5 ! END_IF <ok></ok><fl>0DA8 E519 </fl><fr>0DAD E519 </fr>
+        END_IF <ok></ok><fl>0DAD E519 </fl><fr>0DAD E519 </fr>
+      L6 @ UNTIL <ok></ok><fl>0DAD E519 </fl><fr>0DB0 E519 </fr>
+    L2 @ L1 @ LT IF <ok></ok><fl>0DB0 E519 </fl><fr>0DB6 E519 </fr>
+      BEGIN <ok></ok><fl>0DB6 E519 </fl><fr>0DB6 E519 </fr>
+        L0 @ L2 @ + C@ <ok></ok><fl>0DB6 E519 </fl><fr>0DBC E519 </fr>
+        DUP IF ( oo L1 auf Bytes ) <ok></ok><fl>0DBC E519 </fl><fr>0DBE E519 </fr>
+          DIGIT NOT IF DROP L1 @ MINUS L1 ! ELSE <ok></ok><fl>0DBE E519 </fl><fr>0DC8 E519 </fr>
+            SWAP BASE @ N* N+ <ok></ok><fl>0DC8 E519 </fl><fr>0DCD E519 </fr>
+            L2 @ 1+ L2 !  <ok></ok><fl>0DCD E519 </fl><fr>0DD2 E519 </fr>
+            END_IF <ok></ok><fl>0DD2 E519 </fl><fr>0DD2 E519 </fr>
+          ELSE DROP L2 @ L1 ! END_IF <ok></ok><fl>0DD2 E519 </fl><fr>0DD8 E519 </fr>
+        L2 @ L1 @ LT NOT UNTIL <ok></ok><fl>0DD8 E519 </fl><fr>0DDF E519 </fr>
+      END_IF ( M19 ) <ok></ok><fl>0DDF E519 </fl><fr>0DDF E519 </fr>
+    END_IF ( M19 ) <ok></ok><fl>0DDF E519 </fl><fr>0DDF E519 </fr>
+  L5 @ 0LT IF MINUS END_IF <ok></ok><fl>0DDF E519 </fl><fr>0DE4 E519 </fr>
+  L2 @ L1 @ - ( oo noch kein fadr !!!!!!!!!!!! siehe NNUMBER ) <ok></ok><fl>0DE4 E519 </fl><fr>0DE9 E519 </fr>
+  DUP IF DROP L0 @ L2 @ + END_IF ( jetzt faddr ) <ok></ok><fl>0DE9 E519 </fl><fr>0DF1 E519 </fr>
+  END_LOCAL <ok></ok><fl>0DF1 E519 </fl><fr>0DF2 E519 </fr>
+  ROT HAUPTRECHNUNG SWAP A+0 SWAP <ok></ok><fl>0DF2 E519 </fl><fr>0DF7 E519 </fr>
+  ; <ok></ok><fl>0DF7 E519 </fl><fr>0DF8 E519 </fr>
+ <ok></ok>
+22 WORD: N" ( /number/  --> n ) NNUMBER DROP ; <ok></ok><fl>0DF8 E519 </fl><fr>0E00 E51C </fr>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+( REPLACE: NUMBER NNUMBER ; <ok></ok>
+ <ok></ok>
+N" 111111111111111" DUP N* DUP N. <ok>123456789ABCDEFEDCBA987654321 </ok>
+N" 111111111111111" DUP N. <ok>111111111111111 </ok>
+N/MOD NB. <ok>0 111111111111111 </ok>
+ <ok></ok>
+N" 0026D4346A00" DUP N. <ok>26D4346A00 </ok>
+N" 00000FC82800" DUP N. <ok>FC82800 </ok>
+2DUP N/MOD NB. <ok>D6A2200 275 </ok>
+2DUP NBK NB.  <ok>3135 14 </ok>
+( richtig wäre D6A2200 275 bei N/MOD ) <ok></ok>
+( richtig wäre 3135 14 bei NBK ) <ok></ok>
+ <ok></ok>
+N" 00A7426290A8C945E959A780" DUP N. <ok>A7426290A8C945E959A780 </ok>
+N" 000002330657FDD698" DUP N. <ok>2330657FDD698 </ok>
+N/MOD NB.  <ok>158B5843D5ED0 4C0CF598D2 </ok>
+( richtig wäre 158B5843D5ED0 4C0CF598D2 ) <ok></ok>
+( und nicht   0325AF2C3F8838 4C0CF598D3 ) <ok></ok>
+ <ok></ok>
+( als vorlaeufigen Abschluss nochmal ) <ok></ok>
+" 111111111111111" NNUMBER DROP DUP N* N. <ok>123456789ABCDEFEDCBA987654321 </ok>
+ <ok></ok>
+N" 000002330657FDD698" N" 4C0CF598D3" N* N. <ok>A7426290A9A396BD1A1F48 </ok>
+N" 000002330657FDD698" N" 4C0CF598D2" N* N. <ok>A7426290A77090651C48B0 </ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+: N^ ( a n --> a^n ) <ok></ok><fl>0E00 E51C </fl><fr>0E04 E51F </fr>
+  NEBENRECHNUNG ROT ROT ( erg a n ) <ok></ok><fl>0E04 E51F </fl><fr>0E07 E51F </fr>
+  4 LOCAL <ok></ok><fl>0E07 E51F </fl><fr>0E09 E51F </fr>
+  DUP 0LT IF 12 ERROR END_IF     <ok></ok><fl>0E09 E51F </fl><fr>0E0E E51F </fr>
+  2           ( a n 2 )         <ok></ok><fl>0E0E E51F </fl><fr>0E0F E51F </fr>
+  L3 ! L2 ! L1 !    (  R1-3: a  n  2 ) <ok></ok><fl>0E0F E51F </fl><fr>0E15 E51F </fr>
+  1           ( p=1          a  n  2 ) <ok></ok><fl>0E15 E51F </fl><fr>0E16 E51F </fr>
+  BEGIN       ( p            a  n  2 ) <ok></ok><fl>0E16 E51F </fl><fr>0E16 E51F </fr>
+    L2 @ L3 @ ( p n 2        a  n  2 ) <ok></ok><fl>0E16 E51F </fl><fr>0E1A E51F </fr>
+    /MOD      ( p r n/2      a  n  2 ) <ok></ok><fl>0E1A E51F </fl><fr>0E1B E51F </fr>
+    L2 !      ( p r          a n/2 2 ) <ok></ok><fl>0E1B E51F </fl><fr>0E1D E51F </fr>
+    IF        ( p            a n/2 2 ) <ok></ok><fl>0E1D E51F </fl><fr>0E1E E51F </fr>
+      L1 @    ( p a          a n/2 2 ) <ok></ok><fl>0E1E E51F </fl><fr>0E20 E51F </fr>
+      N*      ( p*a          a n/2 2 ) <ok></ok><fl>0E20 E51F </fl><fr>0E21 E51F </fr>
+      END_IF  ( p*a          a n/2 2 ) <ok></ok><fl>0E21 E51F </fl><fr>0E21 E51F </fr>
+    L2 @      ( p*a n/2      a n/2 2 ) <ok></ok><fl>0E21 E51F </fl><fr>0E23 E51F </fr>
+    WHILE     ( p*a          a n/2 2 ) <ok></ok><fl>0E23 E51F </fl><fr>0E24 E51F </fr>
+      L1 @    ( p*a a        a n/2 2 ) <ok></ok><fl>0E24 E51F </fl><fr>0E26 E51F </fr>
+      L1 @    ( p*a a a      a n/2 2 ) <ok></ok><fl>0E26 E51F </fl><fr>0E28 E51F </fr>
+      N*      ( p*a a*a      a n/2 2 ) <ok></ok><fl>0E28 E51F </fl><fr>0E29 E51F </fr>
+      L1 !    ( p*a        a*a n/2 2 ) <ok></ok><fl>0E29 E51F </fl><fr>0E2B E51F </fr>
+      REPEAT  ( p*a        a*a n/2 2 ) <ok></ok><fl>0E2B E51F </fl><fr>0E2C E51F </fr>
+  END_LOCAL   ( a^n ) <ok></ok><fl>0E2C E51F </fl><fr>0E2D E51F </fr>
+  SWAP HAUPTRECHNUNG A+0 <ok></ok><fl>0E2D E51F </fl><fr>0E30 E51F </fr>
+  ;           ( a^n ) <ok></ok><fl>0E30 E51F </fl><fr>0E31 E51F </fr>
+ <ok></ok>
+ <ok></ok>
+3333 2 N^ 10 N* N. <ok>A3D5C290 </ok>
+1111 2 N^ N. <ok>1234321 </ok>
+ <ok></ok>
+ <ok></ok>
+10 20 N^ 10 10 N^ DUP -1 N+ SWAP 1 N+ N* N- N. <ok>1 </ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="nochmal N. für beliebige Zahlenbasis"> 
+: N. ( a -->  /zahl/ ) <ok></ok><fl>0E31 E51F </fl><fr>0E35 E522 </fr>
+  BASE @ 10 = IF N. ELSE <ok></ok><fl>0E35 E522 </fl><fr>0E3C E522 </fr>
+    NEBENRECHNUNG SWAP <ok></ok><fl>0E3C E522 </fl><fr>0E3E E522 </fr>
+    DUP 0LT IF MINUS ." -" END_IF <ok></ok><fl>0E3E E522 </fl><fr>0E45 E524 </fr>
+    DUP 0= IF ." 0 " DROP ELSE <ok></ok><fl>0E45 E524 </fl><fr>0E4D E527 </fr>
+      -1 SWAP ( Stapelmarkierung ) <ok></ok><fl>0E4D E527 </fl><fr>0E4F E527 </fr>
+      BEGIN DUP WHILE BASE @ N/MOD REPEAT DROP <ok></ok><fl>0E4F E527 </fl><fr>0E56 E527 </fr>
+      BEGIN DUP 0LT NOT WHILE 30 + DUP 39 > IF 7 + END_IF EMIT REPEAT <ok></ok><fl>0E56 E527 </fl><fr>0E64 E527 </fr>
+      20 EMIT DROP END_IF <ok></ok><fl>0E64 E527 </fl><fr>0E67 E527 </fr>
+    HAUPTRECHNUNG <ok></ok><fl>0E67 E527 </fl><fr>0E68 E527 </fr>
+    END_IF <ok></ok><fl>0E68 E527 </fl><fr>0E68 E527 </fr>
+  ; <ok></ok><fl>0E68 E527 </fl><fr>0E69 E527 </fr>
+ <ok></ok>
+: NB. SWAP N. N. ; <ok></ok><fl>0E69 E527 </fl><fr>0E71 E52B </fr>
+ <ok></ok>
+777 99 NBK NB. <ok>27D 33 </ok>
+INIT <ok></ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="Array-Objekte"> 
+: ZERLEG ( a --> adr i ) <ok></ok><fl>0E71 E52B </fl><fr>0E75 E532 </fr>
+  3FFF AND DUP 1+ SWAP @ ; <ok></ok><fl>0E75 E532 </fl><fr>0E7C E532 </fr>
+ <ok></ok>
+N" 111111111111111" DUP N* DUP N. <ok>123456789ABCDEFEDCBA987654321 </ok>
+DUP ZERLEG SWAP . . <ok>1406 0008 </ok>
+ <ok></ok>
+: OBJ? ( a --> flag ) <ok></ok><fl>0E7C E532 </fl><fr>0E80 E537 </fr>
+  ABS DUP 4000 LT IF DROP 0 ELSE <ok></ok><fl>0E80 E537 </fl><fr>0E89 E537 </fr>
+    ZERLEG SWAP DROP 4000 LT IF 0 ELSE -1  <ok></ok><fl>0E89 E537 </fl><fr>0E93 E537 </fr>
+      END_IF END_IF <ok></ok><fl>0E93 E537 </fl><fr>0E93 E537 </fr>
+  ; <ok></ok><fl>0E93 E537 </fl><fr>0E94 E537 </fr>
+ <ok></ok>
+: L ( a i -> b ) OVER OBJ? IF <ok></ok><fl>0E94 E537 </fl><fr>0E9B E539 </fr>
+    SWAP ZERLEG 3FFF AND ( i adr j ) <ok></ok><fl>0E9B E539 </fl><fr>0E9F E539 </fr>
+    ROT 2DUP ( adr j i j i ) <ok></ok><fl>0E9F E539 </fl><fr>0EA1 E539 </fr>
+    > IF SWAP DROP + @ ELSE 2DROP DROP 0 END_IF <ok></ok><fl>0EA1 E539 </fl><fr>0EAB E539 </fr>
+    ELSE IF DROP 0 END_IF END_IF ; <ok></ok><fl>0EAB E539 </fl><fr>0EB0 E539 </fr>
+ <ok></ok>
+: G ( a i -> a i b ) 2DUP L ; <ok></ok><fl>0EB0 E539 </fl><fr>0EB7 E53B </fr>
+ <ok></ok>
+: H ( a i b --> a' ) <ok></ok><fl>0EB7 E53B </fl><fr>0EBB E53D </fr>
+  DUP >R <ok></ok><fl>0EBB E53D </fl><fr>0EBD E53D </fr>
+  ROT ROT ( b a i ) <ok></ok><fl>0EBD E53D </fl><fr>0EBF E53D </fr>
+  OVER OBJ? 0= OVER 0= AND R> OBJ? 0= AND IF 2DROP ELSE <ok></ok><fl>0EBF E53D </fl><fr>0ECC E53D </fr>
+    OVER OBJ? 0= IF  <ok></ok><fl>0ECC E53D </fl><fr>0ED0 E53D </fr>
+      DUP 1+ SPEICHERHOL ( b a i addrneu ) <ok></ok><fl>0ED0 E53D </fl><fr>0ED3 E53D </fr>
+      ROT OVER ! ( b i addrneu ) <ok></ok><fl>0ED3 E53D </fl><fr>0ED6 E53D </fr>
+(      OVER 1+ OVER 1 - ! ( b i addrneu ( aha, macht schon SPEICHERHOL ) <ok></ok><fl>0ED6 E53D </fl><fr>0ED6 E53D </fr>
+      4000 OVER 1 - +! ( das ist jetzt neu fuer OBJ? ) <ok></ok><fl>0ED6 E53D </fl><fr>0EDC E53D </fr>
+      DUP >R + ! R> ( addrneu ) <ok></ok><fl>0EDC E53D </fl><fr>0EE1 E53D </fr>
+      1 - 4000 + <ok></ok><fl>0EE1 E53D </fl><fr>0EE6 E53D </fr>
+      ELSE <ok></ok><fl>0EE6 E53D </fl><fr>0EE7 E53D </fr>
+        OVER                 ( b a i a ) <ok></ok><fl>0EE7 E53D </fl><fr>0EE8 E53D </fr>
+        ZERLEG 3FFF AND      ( b a i addr j ) <ok></ok><fl>0EE8 E53D </fl><fr>0EEB E53D </fr>
+        ROT                  ( b a addr j i ) <ok></ok><fl>0EEB E53D </fl><fr>0EEC E53D </fr>
+        2DUP > IF SWAP DROP ROT >R + ! R> ELSE <ok></ok><fl>0EEC E53D </fl><fr>0EF7 E53D </fr>
+          DUP 1+ SPEICHERHOL ( b a addr j i addrneu ) <ok></ok><fl>0EF7 E53D </fl><fr>0EFA E53D </fr>
+          SWAP >R DUP >R     ( b a addr j addrneu      addrneu i ) <ok></ok><fl>0EFA E53D </fl><fr>0EFE E53D </fr>
+          SWAP MOVE DROP R>  ( b addrneu            i ) <ok></ok><fl>0EFE E53D </fl><fr>0F02 E53D </fr>
+(          R 1+ OVER 1 - !    ( b addrneu                i ) <ok></ok><fl>0F02 E53D </fl><fr>0F02 E53D </fr>
+          4000 OVER 1 - +!   ( das ist jetzt neu fuer OBJ? ) <ok></ok><fl>0F02 E53D </fl><fr>0F08 E53D </fr>
+          SWAP OVER R> + !   ( addrneu ) <ok></ok><fl>0F08 E53D </fl><fr>0F0D E53D </fr>
+          1 - 4000 +         ( a' ) <ok></ok><fl>0F0D E53D </fl><fr>0F12 E53D </fr>
+          END_IF <ok></ok><fl>0F12 E53D </fl><fr>0F12 E53D </fr>
+        ZERLEG 3FFF AND      ( adr l ) <ok></ok><fl>0F12 E53D </fl><fr>0F15 E53D </fr>
+        BEGIN 2DUP + 1 - @ 0= OVER 1 > AND WHILE 1 - REPEAT ( adr lneu ) <ok></ok><fl>0F15 E53D </fl><fr>0F23 E53D </fr>
+        OVER @ OBJ? 0= OVER 1 = AND IF DROP @ ELSE <ok></ok><fl>0F23 E53D </fl><fr>0F2F E53D </fr>
+          SWAP 1 - SWAP      ( addr-1 lneu ) <ok></ok><fl>0F2F E53D </fl><fr>0F33 E53D </fr>
+          4000 + OVER ! 4000 + <ok></ok><fl>0F33 E53D </fl><fr>0F3B E53D </fr>
+          END_IF   <ok></ok><fl>0F3B E53D </fl><fr>0F3B E53D </fr>
+        END_IF <ok></ok><fl>0F3B E53D </fl><fr>0F3B E53D </fr>
+    END_IF <ok></ok><fl>0F3B E53D </fl><fr>0F3B E53D </fr>
+  ; <ok></ok><fl>0F3B E53D </fl><fr>0F3C E53D </fr>
+   <ok></ok>
+: O. ( obj --> ) <ok></ok><fl>0F3C E53D </fl><fr>0F40 E540 </fr>
+  DUP OBJ? IF <ok></ok><fl>0F40 E540 </fl><fr>0F43 E540 </fr>
+    ." [ " <ok></ok><fl>0F43 E540 </fl><fr>0F46 E543 </fr>
+    ZERLEG 3FFF AND OVER + SWAP ( eadr+1 aadr ) <ok></ok><fl>0F46 E543 </fl><fr>0F4C E543 </fr>
+    BEGIN 2DUP > WHILE DUP @ RECURSE 1 + REPEAT 2DROP <ok></ok><fl>0F4C E543 </fl><fr>0F56 E543 </fr>
+     ." ] " <ok></ok><fl>0F56 E543 </fl><fr>0F59 E546 </fr>
+    ELSE N. END_IF <ok></ok><fl>0F59 E546 </fl><fr>0F5B E546 </fr>
+  ; <ok></ok><fl>0F5B E546 </fl><fr>0F5C E546 </fr>
+ <ok></ok>
+7 DUP O. <ok>7 </ok>
+2 9 H DUP O. <ok>[ 7 0 9 ] </ok>
+3 11 H DUP O. <ok>[ 7 0 9 11 ] </ok>
+1 4 1 6 H H DUP O. <ok>[ 7 [ 4 6 ] 9 11 ] </ok>
+1 G 2 88 H H DUP O.  <ok>[ 7 [ 4 6 88 ] 9 11 ] </ok>
+1 G 2 0 H H DUP O. <ok>[ 7 [ 4 6 ] 9 11 ] </ok>
+0 G 2 1987 H H DUP O. <ok>[ [ 7 0 1987 ] [ 4 6 ] 9 11 ] </ok>
+1 0 H DUP O. <ok>[ [ 7 0 1987 ] 0 9 11 ] </ok>
+3 0 H DUP O. <ok>[ [ 7 0 1987 ] 0 9 ] </ok>
+2 0 H DUP O. <ok>[ [ 7 0 1987 ] ] </ok>
+2 2444 H DUP O. <ok>[ [ 7 0 1987 ] 0 2444 ] </ok>
+0 N" 7777777" H DUP O. <ok>[ 7777777 0 2444 ] </ok>
+2 0 H DUP O. <ok>7777777 </ok>
+ <ok></ok>
+ <ok></ok>
+0 <ok></ok>
+0 0 0 1 H 1 2 H 2 5 H H DUP O. <ok>[ [ 1 2 5 ] ] </ok>
+1 0 0 3 H 1 4 H 2 8 H H DUP O. <ok>[ [ 1 2 5 ] [ 3 4 8 ] ] </ok>
+2 0 0 9 H 1 2 H 2 1 H H CR DUP O. <ok>
+[ [ 1 2 5 ] [ 3 4 8 ] [ 9 2 1 ] ] </ok>
+ <ok></ok>
+0 1 4 H DUP O. <ok>[ 0 4 ] </ok>
+0 0 0 1 4 H H O. <ok>[ [ 0 4 ] ] </ok>
+ <ok></ok>
+0  <ok></ok>
+0 0 0 60 H 1 30 H 2 20 H H DUP O. <ok>[ [ 60 30 20 ] ] </ok>
+1 0 0 30 H 1 20 H 2 15 H H DUP O. <ok>[ [ 60 30 20 ] [ 30 20 15 ] ] </ok>
+2 0 0 20 H 1 15 H 2 12 H H CR DUP O. <ok>
+[ [ 60 30 20 ] [ 30 20 15 ] [ 20 15 12 ] ] </ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="Invertieren"> 
+0 VARIABLE SPMERK <ok></ok><fl>0F5C E546 </fl><fr>0F61 E54D </fr>
+: [ ( ---> spmerk ) <ok></ok><fl>0F61 E54D </fl><fr>0F65 E54F </fr>
+  SPMERK @ SP @ SPMERK ! <ok></ok><fl>0F65 E54F </fl><fr>0F6B E54F </fr>
+  ; <ok></ok><fl>0F6B E54F </fl><fr>0F6C E54F </fr>
+ <ok></ok>
+: ] ( spmerk a b c d ... z --> matrix ) <ok></ok><fl>0F6C E54F </fl><fr>0F70 E551 </fr>
+  0 BEGIN SP @ 1 - SPMERK @ - WHILE <ok></ok><fl>0F70 E551 </fl><fr>0F79 E551 </fr>
+    SP @ 2 - SPMERK @ - ROT H REPEAT <ok></ok><fl>0F79 E551 </fl><fr>0F83 E551 </fr>
+  SWAP SPMERK ! <ok></ok><fl>0F83 E551 </fl><fr>0F86 E551 </fr>
+  ; <ok></ok><fl>0F86 E551 </fl><fr>0F87 E551 </fr>
+ <ok></ok>
+(   zuallerletzt nochmal NEBENRECHNUNG checken zuguterletzt dann auch noch B Y Z ) <ok></ok>
+( NENNER als LOCAL und O. rein, uff, das ist ein Brocken. .. L0 war doch zuviel... ) <ok></ok>
+ <ok></ok>
+: INVERTIEREN ( matrix dim --> invmat nenner ) <ok></ok><fl>0F87 E551 </fl><fr>0F8B E55D </fr>
+  ( L0=mat L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner ) <ok></ok><fl>0F8B E55D </fl><fr>0F8B E55D </fr>
+  8 LOCAL <ok></ok><fl>0F8B E55D </fl><fr>0F8D E55D </fr>
+  L1 ! L0 ! 0 L5 ! 0 L6 ! <ok></ok><fl>0F8D E55D </fl><fr>0F97 E55D </fr>
+  L0 @ 1 ( mat nenner ) <ok></ok><fl>0F97 E55D </fl><fr>0F9A E55D </fr>
+  L1 @ L2 ! BEGIN -1 L2 +! <ok></ok><fl>0F9A E55D </fl><fr>0FA1 E55D </fr>
+    L7 ! ( mat ) <ok></ok><fl>0FA1 E55D </fl><fr>0FA3 E55D </fr>
+    L0 @ L2 @ L L2 @ L ( mat neuernenner ) <ok></ok><fl>0FA3 E55D </fl><fr>0FAB E55D </fr>
+    L1 @ L3 ! BEGIN -1 L3 +! <ok></ok><fl>0FAB E55D </fl><fr>0FB2 E55D </fr>
+      OVER L3 @ L L2 @ L L5 @ L3 @ ROT H L5 ! <ok></ok><fl>0FB2 E55D </fl><fr>0FC1 E55D </fr>
+      OVER L2 @ L L3 @ L L6 @ L3 @ ROT H L6 ! <ok></ok><fl>0FC1 E55D </fl><fr>0FD0 E55D </fr>
+      L3 @ 0= UNTIL <ok></ok><fl>0FD0 E55D </fl><fr>0FD4 E55D </fr>
+    L5 @ L2 @ L L7 @ N+ L5 @ L2 @ ROT H L5 ! <ok></ok><fl>0FD4 E55D </fl><fr>0FE4 E55D </fr>
+    L6 @ L2 @ L L7 @ N- L6 @ L2 @ ROT H L6 ! <ok></ok><fl>0FE4 E55D </fl><fr>0FF4 E55D </fr>
+    L1 @ L3 ! BEGIN -1 L3 +! <ok></ok><fl>0FF4 E55D </fl><fr>0FFB E55D </fr>
+      OVER L3 @ L ( mat nenner mat[L3] ) <ok></ok><fl>0FFB E55D </fl><fr>0FFF E55D </fr>
+      L1 @ L4 ! BEGIN -1 L4 +! <ok></ok><fl>0FFF E55D </fl><fr>1006 E55D </fr>
+        NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner ) <ok></ok><fl>1006 E55D </fl><fr>100A E55D </fr>
+        OVER L4 @ L OVER N* <ok></ok><fl>100A E55D </fl><fr>1010 E55D </fr>
+        L5 @ L3 @ L L6 @ L4 @ L N* N- <ok></ok><fl>1010 E55D </fl><fr>101C E55D </fr>
+        L7 @ N/ ( mat erg mat[L3] nenner bijneu ) <ok></ok><fl>101C E55D </fl><fr>101F E55D </fr>
+        2SWAP SWAP ( mat nenner bijneu mat[L3] erg ) <ok></ok><fl>101F E55D </fl><fr>1021 E55D </fr>
+        HAUPTRECHNUNG SWAP A+0 ( mat nenner mat[L3] bijneu+0 ) <ok></ok><fl>1021 E55D </fl><fr>1024 E55D </fr>
+        SWAP L4 @ ROT H ( mat nenner mat[L3]neu ) <ok></ok><fl>1024 E55D </fl><fr>1029 E55D </fr>
+        L4 @ 0= UNTIL <ok></ok><fl>1029 E55D </fl><fr>102D E55D </fr>
+      ROT L3 @ ROT H SWAP ( matneu nenner ) <ok></ok><fl>102D E55D </fl><fr>1033 E55D </fr>
+      L3 @ 0= UNTIL <ok></ok><fl>1033 E55D </fl><fr>1037 E55D </fr>
+    ( RECHENBLOCK ) <ok></ok><fl>1037 E55D </fl><fr>1037 E55D </fr>
+    L2 @ 0= UNTIL <ok></ok><fl>1037 E55D </fl><fr>103B E55D </fr>
+  END_LOCAL <ok></ok><fl>103B E55D </fl><fr>103C E55D </fr>
+  ; <ok></ok><fl>103C E55D </fl><fr>103D E55D </fr>
+ <ok></ok>
+ <ok></ok>
+( so und jetzt anwenden ) <ok></ok>
+ <ok></ok>
+[ [ 3C 1E 14 ] ( dezimal 60 30 20 ) <ok></ok>
+  [ 1E 14 0F ] ( dezimal 30 20 15 ) <ok></ok>
+  [ 14 0F 0C ] ( dezimal 20 15 12 ) <ok></ok>
+  ] 3 <ok></ok>
+OVER O. DUP . <ok>[ [ 3C 1E 14 ] [ 1E 14 F ] [ 14 F C ] ] 0003 </ok>
+INVERTIEREN <ok></ok>
+OVER O. DUP N. <ok>[ [ F -3C 32 ] [ -3C 140 -12C ] [ 32 -12C 12C ] ] 64 </ok>
+( herauskommen muss dabei ) <ok></ok>
+(             [ [ F -3C 32 ] [ -3C 140 -12C ] [ 32 -12C 12C ] ] 0064 ) <ok></ok>
+( dezimal        15 -60 ...                                      100 ) <ok></ok>
+ <ok></ok>
+ <ok></ok>
+( paar Vandermonde-Matrizen invertieren: ) <ok></ok>
+INIT <ok></ok>
+[ [ 1 1 1 1 ] <ok></ok>
+  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ ] <ok></ok>
+  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ ] <ok></ok>
+  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ ] <ok></ok>
+  ] <ok></ok>
+4 INVERTIEREN <ok></ok>
+OVER O. DUP N. <ok>[ [ 480 -360 180 -48 ] [ -4E0 558 -2A0 84 ] [ 1B0 -240 150 -48 ] [ -30 48 -30 C ] ] 120 </ok>
+ERGEBNIS ? <ok>14DB </ok>
+( herauskommen soll [ [ 480 -360 180 -48 ] [ -4E0 558 -2A0 84 ] [ 1B0 -240 150 -48 ] ) <ok></ok>
+ <ok></ok>
+INIT <ok></ok>
+[ [ 1 1 1 1 1 ] <ok></ok>
+  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ ] <ok></ok>
+  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ ] <ok></ok>
+  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ ] <ok></ok>
+  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ ] <ok></ok>
+  ] <ok></ok>
+5 INVERTIEREN <ok></ok>
+OVER O. DUP N. <ok>[ [ 2A300 -2A300 1C200 -A8C0 1B00 ] [ -36240 4B3C0 -36D80 15720 -3840 ] [ 18F60 -297C0 22740 -E6A0 2760 ] [ -4EC0 9240 -8700 3DE0 -B40 ] [ 5A0 -B40 B40 -5A0 120 ] ] 8700 </ok>
+ERGEBNIS ? <ok>15B7 </ok>
+( herauskommen soll  [ [ 2A300 -2A300 ... ] ] 8700 ) <ok></ok>
+ <ok></ok>
+INIT <ok></ok>
+[ [ 1 1 1 1 1 1 ] <ok></ok>
+  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ 2 6 N^ ] <ok></ok>
+  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ 3 6 N^ ] <ok></ok>
+  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ 4 6 N^ ] <ok></ok>
+  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ 5 6 N^ ] <ok></ok>
+  [ 6 1 N^ 6 2 N^ 6 3 N^ 6 4 N^ 6 5 N^ 6 6 N^ ] <ok></ok>
+  ] <ok></ok>
+6 INVERTIEREN <ok></ok>
+OVER O. DUP N. <ok>[ [ 8E62000 -B1FA800 9E34000 -58FD400 1C7A000 -3F4800 ] [ -CE74800 15B0EE00 -14EDD000 C3C6C00 -4012800 907E00 ] [ 72B2800 -E3E9500 F537000 -97C6B00 336A800 -76A700 ] [ -1EA6E00 43BB100 -4FC2C00 34E6300 -12C9600 2CD300 ] [ 3F4800 -964B00 BDD800 -867900 32A000 -7E900 ] [ -32A00 7E900 -A8C00 7E900 -32A00 8700 ] ] 17BB000 </ok>
+ERGEBNIS ? <ok>172D </ok>
+( herauskommen soll  [ [ 8E62000 -B1FA800 ... ] ] 17BB000 ) <ok></ok>
+ <ok></ok>
+INIT <ok></ok>
+[ [ 1 1 1 1 1 1 1 ] <ok></ok>
+  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ 2 6 N^ 2 7 N^ ] <ok></ok>
+  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ 3 6 N^ 3 7 N^ ] <ok></ok>
+  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ 4 6 N^ 4 7 N^ ] <ok></ok>
+  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ 5 6 N^ 5 7 N^ ] <ok></ok>
+  [ 6 1 N^ 6 2 N^ 6 3 N^ 6 4 N^ 6 5 N^ 6 6 N^ 6 7 N^ ] <ok></ok>
+  [ 7 1 N^ 7 2 N^ 7 3 N^ 7 4 N^ 7 5 N^ 7 6 N^ 7 7 N^ ] <ok></ok>
+  ] <ok></ok>
+7 INVERTIEREN <ok></ok>
+OVER O. DUP N. <ok>[ [ CC65AF0000 -13298868000 154A9790000 -FF7F1AC000 7AA3690000 -2210F28000 42BDF0000 ] [ -1459356C000 281A9456000 -301BBE14000 25697808000 -12574BB4000 52A6ADE000 -A3848C000 ] [ CEFE230000 -1DE0593F000 277092A8000 -2040FF81000 104D98A0000 -4AFC775000 968A48000 ] [ -438629D000 ACC3A94000 -F72EC73000 D621620000 -708A45B000 21414E4000 -4421E5000 ] [ BF6B6B000 -20D97C2000 3215DE7000 -2DD3C02000 192F459000 -7B4986000 1038D5000 ] [ -11850F000 329CD6000 -511C29000 4DDD98000 -2CC5D1000 E467E000 -1F257000 ] [ A61D000 -1F257000 33E91000 -33E91000 1F257000 -A61D000 17BB000 ] ] 1D33190000 </ok>
+ERGEBNIS ? <ok>19F0 </ok>
+( herauskommen soll  [ [ CC65AF0000 -13298868000 ... ] ] 1D33190000 ) <ok></ok>
+ <ok></ok>
+INIT <ok></ok>
+[ [ 1 1 1 1 1 1 1 1 ] <ok></ok>
+  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ 2 6 N^ 2 7 N^ 2 8 N^ ] <ok></ok>
+  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ 3 6 N^ 3 7 N^ 3 8 N^ ] <ok></ok>
+  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ 4 6 N^ 4 7 N^ 4 8 N^ ] <ok></ok>
+  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ 5 6 N^ 5 7 N^ 5 8 N^ ] <ok></ok>
+  [ 6 1 N^ 6 2 N^ 6 3 N^ 6 4 N^ 6 5 N^ 6 6 N^ 6 7 N^ 6 8 N^ ] <ok></ok>
+  [ 7 1 N^ 7 2 N^ 7 3 N^ 7 4 N^ 7 5 N^ 7 6 N^ 7 7 N^ 7 8 N^ ] <ok></ok>
+  [ 8 1 N^ 8 2 N^ 8 3 N^ 8 4 N^ 8 5 N^ 8 6 N^ 8 7 N^ 8 8 N^ ] <ok></ok>
+  ] <ok></ok>
+8 INVERTIEREN <ok></ok>
+OVER O. DUP N. <ok>[ [ 8FB77F0C000000 -FB811E55000000 14F56D31C000000 -13A6165EA400000 C9341844000000 -53D5B4C7000000 1487ED94000000 -23EDDFC300000 ] [ -F6E288E0800000 22DCCFEB3600000 -31F9FCC1E800000 307D897DAC80000 -1FA9A063D800000 D5E0E67E200000 -34DE03C3800000 5D28C602C0000 ] [ AE2823BBE00000 -1C9EC2EB7F80000 2CBE3A40D600000 -2D711339F600000 1E82356CEA00000 -D1F6139B880000 3498AA68200000 -5D9D9266C0000 ] [ -41ABAB79C00000 BEBC9341DC0000 -140F7ACCE000000 156DB085D760000 -EE217721C00000 68E7E0455C0000 -1ABF4E66800000 3041418090000 ] [ E58C320880000 -2CA977ED100000 4FB7C878A80000 -5952EFDA200000 4065E96AD80000 -1D3145CE700000 79C292BF80000 -DF8F37680000 ] [ -1D247F7380000 5F69773080000 -B272C64880000 D096C4D6C0000 -9C17A72480000 490E580C80000 -138FBB3F80000 24BA45720000 ] [ 1FEFE3580000 -6C9604F80000 D2C8DC780000 -FF7F1AC00000 C60281880000 -5FCFAA080000 1A764EA80000 -33196BC0000 ] [ -E998C80000 33196BC0000 -6632D780000 7FBF8D60000 -6632D780000 33196BC0000 -E998C80000 1D33190000 ] ] 11F6EFE1800000 </ok>
+ERGEBNIS ? <ok>1E4E </ok>
+( herauskommen soll  [ [ 8FB77F0C000000 -FB811E55000000 ... ] ] 11F6EFE1800000 ) <ok></ok>
+ <ok></ok>
+( mehr geht erstmal nicht weil nicht mehr Platz ) <ok></ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="Reste die auch weggelassen werden können, wenn alles geht"> 
+: VLIST <ok></ok><fl>103D E55D </fl><fr>1041 E563 </fr>
+  LFA @ BEGIN  <ok></ok><fl>1041 E563 </fl><fr>1043 E563 </fr>
+    DUP 1+ @ OVER 2 + @ TYPE 20 EMIT  <ok></ok><fl>1043 E563 </fl><fr>104D E563 </fr>
+    DUP @ WHILE DUP @ + REPEAT <ok></ok><fl>104D E563 </fl><fr>1054 E563 </fr>
+  DROP ; <ok></ok><fl>1054 E563 </fl><fr>1056 E563 </fr>
+ <ok></ok>
+: WLIST <ok></ok><fl>1056 E563 </fl><fr>105A E569 </fr>
+  LFA @ BEGIN ( CR ) DUP . <ok></ok><fl>105A E569 </fl><fr>105E E569 </fr>
+    DUP 1+ @ OVER 2 + @ TYPE 20 EMIT  <ok></ok><fl>105E E569 </fl><fr>1068 E569 </fr>
+    DUP @ WHILE DUP @ + REPEAT <ok></ok><fl>1068 E569 </fl><fr>106F E569 </fr>
+  DROP <ok></ok><fl>106F E569 </fl><fr>1070 E569 </fr>
+  ; <ok></ok><fl>1070 E569 </fl><fr>1071 E569 </fr>
+ <ok></ok>
+A003 CONSTANT RETURN <ok></ok><fl>1071 E569 </fl><fr>1076 E570 </fr>
+: REPLACE: ( /name/ )  <ok></ok><fl>1076 E570 </fl><fr>107A E579 </fr>
+  CSP! ( oo ) <ok></ok><fl>107A E579 </fl><fr>107B E579 </fr>
+  20 WORD FIND DUP IF  <ok></ok><fl>107B E579 </fl><fr>1080 E579 </fr>
+    LCFA DROP 1+ ( pfa <ok></ok><fl>1080 E579 </fl><fr>1083 E579 </fr>
+(    HERE OVER - 1 - JRBIT XSETBT SWAP ! <ok></ok><fl>1083 E579 </fl><fr>1083 E579 </fr>
+    HERE SWAP DP ! DUP COMPILE, RETURN , DP ! <ok></ok><fl>1083 E579 </fl><fr>108E E579 </fr>
+    1 STAT ! <ok></ok><fl>108E E579 </fl><fr>1091 E579 </fr>
+    ELSE 2DROP 3 ERROR END_IF ; <ok></ok><fl>1091 E579 </fl><fr>1096 E579 </fr>
+ <ok></ok>
+: FORGET ( /name/ ) <ok></ok><fl>1096 E579 </fl><fr>109A E580 </fr>
+  20 WORD FIND IF  <ok></ok><fl>109A E580 </fl><fr>109E E580 </fr>
+    DP ! <ok></ok><fl>109E E580 </fl><fr>10A0 E580 </fr>
+    HERE DUP @ + LFA ! <ok></ok><fl>10A0 E580 </fl><fr>10A6 E580 </fr>
+    HERE 1+ @ BZEIG ! <ok></ok><fl>10A6 E580 </fl><fr>10AB E580 </fr>
+    ELSE DROP ." nicht gefunden " END_IF <ok></ok><fl>10AB E580 </fl><fr>10B0 E590 </fr>
+  ; <ok></ok><fl>10B0 E590 </fl><fr>10B1 E590 </fr>
+ <ok></ok>
+: FEHLERTEXT ( n --> n ) <ok></ok><fl>10B1 E590 </fl><fr>10B5 E59B </fr>
+  CR <ok></ok><fl>10B5 E59B </fl><fr>10B6 E59B </fr>
+  DUP 0 = IF ." Division durch Null" END_IF <ok></ok><fl>10B6 E59B </fl><fr>10BD E5AF </fr>
+  DUP 3 = IF ." Wort nicht definiert" END_IF <ok></ok><fl>10BD E5AF </fl><fr>10C4 E5C4 </fr>
+  DUP 6 = IF ." Eingabezeile zu lang" END_IF <ok></ok><fl>10C4 E5C4 </fl><fr>10CB E5D9 </fr>
+  DUP 9 = IF ." Strukturfehler in IF END_IF BEGIN UNTIL DO LOOP " END_IF <ok></ok><fl>10CB E5D9 </fl><fr>10D2 E60A </fr>
+  DUP 12 = IF ." negativer Exponent" END_IF <ok></ok><fl>10D2 E60A </fl><fr>10D9 E61D </fr>
+  DUP 369 = IF ." Zahlenspeicher voll" END_IF <ok></ok><fl>10D9 E61D </fl><fr>10E0 E631 </fr>
+  DUP 1234 = IF ." große ganze Zahlen kompilieren geht momentan nicht, siehe TESTFUERNEUES.TXT" END_IF <ok></ok><fl>10E0 E631 </fl><fr>10E7 E67E </fr>
+  ; <ok></ok><fl>10E7 E67E </fl><fr>10E8 E67E </fr>
+ <ok></ok>
+( ganz neu: Steuerungstasten: ^A bis ^G, weiter ^H=^A ^L=^B ... ) <ok></ok>
+18 8 0 FILL <ok></ok>
+: STRG: : HERE 3 - DUP . @ 1+ DUP . @ DUP . 40 - HERE SWAP 7 AND 18 + ! ; <ok></ok><fl>10E8 E67E </fl><fr>1103 E684 </fr>
+STRG: ^G 7 EMIT ." /1xPIEP/" ; <ok>1104 E685 0047 </ok><fl>1103 E684 </fl><fr>110D E690 </fr>
+STRG: ^F 7 EMIT ." QUIT" QUIT ; <ok>110E E691 0046 </ok><fl>110D E690 </fl><fr>1118 E698 </fr>
+STRG: ^A ." Angehalten für genau eine Eingabezeile: "  <ok>1119 E699 0041 </ok><fl>1118 E698 </fl><fr>111F E6C5 </fr>
+  CR FA00 100 EXPECT INTERPRET ." ok"; <ok></ok><fl>111F E6C5 </fl><fr>1128 E6C8 </fr>
+ <ok></ok>
+: QUERY ( adr --> n ) TIB @ 100 EXPECT ; <ok></ok><fl>1128 E6C8 </fl><fr>1131 E6CE </fr>
+ <ok></ok>
+IMMEDIATE: (*REM*)  <ok></ok><fl>1131 E6CE </fl><fr>1135 E6D6 </fr>
+  3C EMIT ." /ok>" <ok></ok><fl>1135 E6D6 </fl><fr>113A E6DB </fr>
+  BEGIN CR QUERY " (*END*)" Z= UNTIL <ok></ok><fl>113A E6DB </fl><fr>1141 E6E3 </fr>
+  3C EMIT ." ok>" <ok></ok><fl>1141 E6E3 </fl><fr>1146 E6E7 </fr>
+  ; <ok></ok><fl>1146 E6E7 </fl><fr>1147 E6E7 </fr>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="Reste, die schon weggelassen sind"> 
+(*REM*) <ok></ok>
+  RAMP1 VARIABLE RAMP3 ( RAMP3 TIB RAMP1 
+: RAMBUF ( /name/  n --> ) 
+  MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her ) 
+ 
+( - LOOP's - sind aber sehr langsam ) 
+: I RP @ 1 + @ ; 
+: J RP @ 3 + @ ; 
+: K RP @ 5 + @ ; 
+: (DO) SWAP R> ROT ROT >R >R >R ; 
+: (LOOP) R> R> 1+ DUP R LT IF >R 0  
+  ELSE R> DROP DROP -1 END_IF SWAP >R ; 
+: (+LOOP) R> R>  ROT DUP  0LT IF + R OVER 
+  ELSE + DUP R END_IF LT IF >R 0  
+  ELSE R> DROP DROP -1 END_IF SWAP >R  ; 
+IMMEDIATE: DO COMPILE (DO) HERE ; 
+IMMEDIATE: LOOP COMPILE (LOOP) 0BRANCH, ; 
+IMMEDIATE: +LOOP COMPILE (+LOOP) 0BRANCH, ; 
+( : LL 0 DO I . LOOP ; 7 LL ( ok geht ) 
+ 
+ 
+IMMEDIATE: () 0 WORD 2DROP ; 
+: B. ( a b --> ) SWAP . . ; 
+: 2@ ( adr --> a b ) 
+  DUP 1+ @ SWAP @ ; 
+: 2! ( a b adr --> ) 
+  SWAP OVER ! 1+ ! ; 
+: 2? 2@ B. ; 
+ 
+: LDUMP LFA @ HERE OVER - DUMP ; 
+ 
+A012 MCODE D+ 
+A013 MCODE D- 
+ 
+ 
+( - paar Geraeteadressen: ) 
+D004 CONSTANT UHR 
+D005 CONSTANT SWTI 
+D00D CONSTANT UHRL 
+2D05 CONSTANT XOFFINPUT 
+ 
+( - "Platinen befestigen und entfernen" ) 
+20 RAMBUF TLISTE 
+TLISTE VARIABLE TLISTENZEIGER 
+: TLISTY  
+  TLISTENZEIGER @ TLISTE BEGIN  
+    DUP @ CR DUP . 3 - 2@ SWAP TYPE  
+    1 + 2DUP = UNTIL 2DROP ; 
+ 
+0 VARIABLE REMOPFA 
+0 VARIABLE STATMERK 
+0 VARIABLE EXXIUHR 
+: EXXI 
+  UHRL @ >R 
+  STAT @ STATMERK ! 0 STAT ! ( eigentlich >R ) 
+  TLISTE 
+  BEGIN DUP TLISTENZEIGER @ LT WHILE 
+    DUP >R @ EXECUTE R> 1+ REPEAT DROP 
+  STATMERK @ STAT !  
+  UHRL @ R> - EXXIUHR !  
+  ; 
+( ' EXXI 6 1+ - 6000 OR 6 ! 
+' EXXI 4000 + 16 ! ( CR geht momentan +F9XX ) 
+ 
+: ENTFERNE  
+  20 WORD FIND LCFA DROP 1+ 
+  ( DUP 0= IF 3 ERROR END_IF ) 
+  0 REMOPFA ! 
+  TLISTENZEIGER @ TLISTE > IF 
+    TLISTENZEIGER @ TLISTE DO 
+      DUP I @ = IF 
+        1 REMOPFA ! 
+        -1 TLISTENZEIGER +! 
+        END_IF 
+      REMOPFA @ IF 
+        I 1+ @ I ! 
+        END_IF 
+      LOOP END_IF 
+  REMOPFA ! 
+  ; 
+   
+: BEFESTIGE ENTFERNE 
+  REMOPFA @ TLISTENZEIGER @ ! 
+  1 TLISTENZEIGER +!  
+  ; 
+ 
+ 
+: DABS ( h l --> h' l' ) 
+  OVER 0LT IF 0 0 2SWAP D- END_IF ; 
+ 
+ 
+( CASEOFS aus'm PSION: ) 
+: CASEOFS ( n  /name/ --> ) 
+  DUP RAMBUF 
+  0 DO 
+    0 I RAMP3 @ + ! 
+    LOOP 
+  ; 
+ 
+: CASEOF: ( fn en --> ) 
+  + HERE DPMERK @ - SWAP ! 
+  CSP! 1 STAT ! 
+  ; 
+ 
+: CASEOF ( fn en --> ) 
+  + @ DUP IF 
+    DPMERK @ + EXECUTE 
+    ELSE DROP END_IF ; 
+ 
+( - CASE ) 
+( : BIT ( i n --> bit ) 
+(   2 ROT DUP 0LT IF 99 ERROR ELSE  
+(   ^ AND 0= 1 + END_IF ;  
+ 
+: (OF) ( n r i --> f r' ) 
+  ROT = DUP ROT OR ; 
+: (RANGE-OF) ( n1 n2 r i --> f r' ) 
+  DUP >R ROT > ROT R> > OR 0= DUP ROT OR ; 
+( : (BIT-OF) ( n r i --> f r' ) 
+(   ROT BIT DUP ROT OR ; 
+ 
+IMMEDIATE: CASE ( n --> ) 
+  " >R 0 >R"  
+  INTERPRET ; 
+IMMEDIATE: END_CASE ( --> ) 
+  " R> R> 2DROP"  
+  INTERPRET ; 
+IMMEDIATE: OF ( n --> ) 
+  " R> R (OF) >R IF"  
+  INTERPRET ;               
+IMMEDIATE: RANGE-OF ( n1 n2 --> ) 
+  " R> R (RANGE-OF) >R IF"  
+  INTERPRET ; 
+IMMEDIATE: BIT-OF ( m --> ) 
+  " R> R (BIT-OF) >R IF"  
+  INTERPRET ; 
+IMMEDIATE: ELSEOF ( --> ) 
+  " R 0= IF" INTERPRET ; 
+IMMEDIATE: END_OF ( --> ) 
+  " END_IF" INTERPRET ; 
+: ERR ." keine gültige RAM-Adresse" QUIT ; 
+' ERR 4000 OR 22 ! 
+' ERR 4000 OR 20 ! 
+ 
+IMMEDIATE: /; 0 STAT ! CSP? HERE 1 - @ 800 OR HERE 1 - ! SMUDGE [ SMUDGE ] ;  
+( : T 77 88 DROP /;  
+( ' T 8 DUMP 
+( : W PAUSENBIT ! /; 
+( ' W 8 DUMP 
+ 
+ 
+( Ausgabe von ESCAPE-Sequenzen: sie vertragen sich aber nicht mit xml, besser CSI nehmen ) 
+20 WORD: ESC 1B EMIT BEGIN OVER C@ EMIT SWAP 1 + SWAP 1 - DUP 0= UNTIL DROP ; 
+ESC ]0;FORTY-FORTH 07 EMIT ( 07 EMIT schließt ] 
+: FESTPOSITION ESC [s ESC [1;1H ESC [31m ; ( saveC Pos1,1 redcolor 
+: RUCKPOSITION ESC [u ESC [39m ; ( restoreC defaultcolor 
+ 
+( Alternativer Start mit ESCAPE-Sequenzen ) 
+ 
+: QUIT2  
+  RP0 @ RP ! 
+  BEGIN  
+    STAT @ 0= IF ESC [34m ." ok" END_IF CR ESC [39m  
+    TIB @ 100 EXPECT ESC [36m INTERPRET  
+    AGAIN ; 
+ 
+( REPLACE: QUIT QUIT2 ; 
+( QUIT 
+ 
+: QUIT3 
+  RP0 @ RP ! 
+  BEGIN  
+    STAT @ 0= IF ."   " END_IF 
+    CR   
+    CRBIT @ 2 AND IF 3C EMIT ." /ok>" END_IF 
+    CRBIT @ 4 AND IF C2 EMIT 9B EMIT 33 EMIT 36 EMIT 6D EMIT END_IF 
+    TIB @ 100 EXPECT  
+    CRBIT @ 4 AND IF C2 EMIT 9B EMIT 33 EMIT 39 EMIT 6D EMIT END_IF 
+    CRBIT @ 2 AND IF 3C EMIT ." ok>" END_IF 
+    INTERPRET 
+    AGAIN ; 
+ 
+ 
+: IOSTART 
+  2C40 2C00 DO I @ I ! LOOP 
+  2D30 2D14 DO I @ I ! LOOP 
+  ; 
+IOSTART 
+ 
+( wozu das RBIT war? für relatives CR ) 
+: COMPILE, ( adr --> ) 
+  RBIT @ IF 4000 ELSE  
+    DP @ 1+ - 0FFF AND 3000 END_IF 
+    0000 + + , ; 
+ 
+: a*a;;  
+  A 2000 111111 FILL 
+  B 2000 111111 FILL 
+  C 4001 000000 FILL 
+  0 2000 A 0 2000 B C SMUL 7 EMIT ; 
+(*END*) <ok></ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="DEMO"> 
+56 89 * . <ok>2E06 </ok>
+77 88 + . <ok>00FF </ok>
+ <ok></ok>
+( aktuelles Vokabular <ok></ok>
+ <ok></ok>
+VLIST <ok>(*REM*) QUERY ^A ^F ^G STRG: FEHLERTEXT FORGET REPLACE: RETURN WLIST VLIST INVERTIEREN ] [ SPMERK O. H G L OBJ? ZERLEG NB. N. N^ N" NNUMBER NBK NGGT NMOD N/ B+0 A+0 INIT RECHENBLOCK HAUPTRECHNUNG NEBENRECHNUNG BLOCKENDE BLOCKANFANG NB. N. HG0. N/MOD RECURSE N* N- N+ 2OPERANDEN->2SLX SPEICHERHOL OPERAND->SLX SLX->ERGEBNIS SCHIEB SPEICHERENDE ZAHLENSPEICHER ERGEBNIS OPERAND2 OPERAND1 SDIV MOD / /MOD /MOD DIV32 DI32 ADDIER SMUL C B A SUPERMULT MULT_II MULT_I ABS MIN MAX DUMP FILL MOVE VARIABLE RAMP1 DUMPZ NG. LG. DUBIT ; : COMPILE: IMMEDIATE: (:) (COMPILE:) (IMMEDIATE:) SMUDGE START QUIT INTERPRET CREATE COMPILE, LCFA FIND Z= WORD NUMBER DIGIT EXPECT KEYCODE2 KEY_INT INCR4 ' L7 L6 L5 L4 L3 L2 L1 L0 END_LOCAL LOCAL CSP? CSP! ERROR DISABLE FEHLERTEXT CR ? . H. HG. TYPE DIG SHL16 EMIT KEY EXECUTE , R >R R> +! BYE * > LT = - 1+ C! C@ REPEAT WHILE ELSE END_IF IF UNTIL AGAIN BEGIN 0BRANCH, BRANCH, ALLOT XSETBT JR0BIT JRBIT HERE ." " WORD: (WORD:) Z, B, NOOP 2DROP 2DUP 2OVER 2SWAP DROP ROT DUP OVER SWAP @ ! + KEYCODE OR AND NOT EMITCODE 0LT 0= U* U+ MINUS MCODE (MCODE:) RETURN VERSION LOCALADDR CSP DPMERK BZEIG BANF LFA STAT DP ERRORNR IN4 IN3 IN2 IN1 TIB BASE CRDP CRBZEIG XOFF JRAMADR IRAMADR RP0 SMUDGEBIT XBIT PC RP SP CONSTANT (CONSTANT:) LIT, (LIT,) COMPILE } { ( </ok>
+ <ok></ok>
+( nochmal mit Speicheradressen, vor jedem Wort steht dessen Aufruf-Adresse ) <ok></ok>
+ <ok></ok>
+WLIST <ok>1131 (*REM*) 1128 QUERY 1118 ^A 110D ^F 1103 ^G 10E8 STRG: 10B1 FEHLERTEXT 1096 FORGET 1076 REPLACE: 1071 RETURN 1056 WLIST 103D VLIST 0F87 INVERTIEREN 0F6C ] 0F61 [ 0F5C SPMERK 0F3C O. 0EB7 H 0EB0 G 0E94 L 0E7C OBJ? 0E71 ZERLEG 0E69 NB. 0E31 N. 0E00 N^ 0DF8 N" 0D6B NNUMBER 0D58 NBK 0D46 NGGT 0D39 NMOD 0D2B N/ 0D22 B+0 0D0B A+0 0D00 INIT 0CF3 RECHENBLOCK 0CEC HAUPTRECHNUNG 0CE5 NEBENRECHNUNG 0CE0 BLOCKENDE 0CDB BLOCKANFANG 0CD3 NB. 0CAA N. 0C7C HG0. 0C34 N/MOD 0C2A RECURSE 0C22 N* 0C1B N- 0C13 N+ 0BFF 2OPERANDEN->2SLX 0BE2 SPEICHERHOL 0BC0 OPERAND->SLX 0B83 SLX->ERGEBNIS 0B7E SCHIEB 0B79 SPEICHERENDE 0B74 ZAHLENSPEICHER 0B6F ERGEBNIS 0B6A OPERAND2 0B65 OPERAND1 0A5E SDIV 0A57 MOD 0A4F / 0A2D /MOD 0A24 /MOD 0A15 DIV32 0A0F DI32 0948 ADDIER 08FF SMUL 08FA C 08F5 B 08F0 A 08E5 SUPERMULT 08DF MULT_II 08D9 MULT_I 08D0 ABS 08C6 MIN 08BC MAX 08AA DUMP 0896 FILL 0880 MOVE 0872 VARIABLE 086D RAMP1 0820 DUMPZ 0810 NG. 07F6 LG. 07F0 DUBIT 07E3 ; 07D9 : 07CF COMPILE: 07C5 IMMEDIATE: 07B9 (:) 07B2 (COMPILE:) 07AB (IMMEDIATE:) 07A3 SMUDGE 0798 START 074B QUIT 06FE INTERPRET 06E9 CREATE 06E0 COMPILE, 06D7 LCFA 0697 FIND 0663 Z= 061D WORD 05A0 NUMBER 0577 DIGIT 050B EXPECT 04E5 KEYCODE2 04B6 KEY_INT 04A3 INCR4 0494 ' 048B L7 0482 L6 0479 L5 0470 L4 0467 L3 045E L2 0456 L1 044F L0 043F END_LOCAL 0428 LOCAL 041B CSP? 0412 CSP! 03EE ERROR 03DD DISABLE 03D8 FEHLERTEXT 0399 CR 0392 ? 038C . 0384 H. 0372 HG. 0361 TYPE 0353 DIG 0349 SHL16 0342 EMIT 033B KEY 0334 EXECUTE 0329 , 0320 R 0309 >R 02F6 R> 02EB +! 02E2 BYE 02D7 * 02D0 > 02BE LT 02B7 = 02B0 - 02A9 1+ 02A3 C! 029D C@ 0295 REPEAT 028F WHILE 0285 ELSE 0277 END_IF 026E IF 0268 UNTIL 0262 AGAIN 025C BEGIN 0251 0BRANCH, 0246 BRANCH, 023F ALLOT 0234 XSETBT 022E JR0BIT 0228 JRBIT 0221 HERE 021A ." 0214 " 0206 WORD: 01FA (WORD:) 01E2 Z, 01D7 B, 01D1 NOOP 01CB 2DROP 01C5 2DUP 01BF 2OVER 01B9 2SWAP 01B3 DROP 01AD ROT 01A7 DUP 01A1 OVER 019B SWAP 0195 @ 018F ! 0189 + 0183 KEYCODE 017D OR 0177 AND 0171 NOT 016B EMITCODE 0165 0LT 015F 0= 0159 U* 0153 U+ 014D MINUS 0141 MCODE 0134 (MCODE:) 012F RETURN 012A VERSION 0125 LOCALADDR 0120 CSP 011B DPMERK 0116 BZEIG 0111 BANF 010C LFA 0107 STAT 0102 DP 00FD ERRORNR 00F8 IN4 00F3 IN3 00EE IN2 00E9 IN1 00E4 TIB 00DF BASE 00DA CRDP 00D5 CRBZEIG 00D0 XOFF 00CB JRAMADR 00C6 IRAMADR 00C1 RP0 00BC SMUDGEBIT 00B7 XBIT 00B2 PC 00AD RP 00A8 SP 009F CONSTANT 0094 (CONSTANT:) 0085 LIT, 007B (LIT,) 0070 COMPILE 0068 } 0060 { 0058 ( </ok>
+ <ok></ok>
+( LED's zum Leuchten bringen, also auf Adresse 2D04 ausgeben ) <ok></ok>
+ <ok></ok>
+2D04 CONSTANT LEDS <ok></ok><fl>1147 E6E7 </fl><fr>114C E6EC </fr>
+55 LEDS ! <ok></ok>
+ <ok></ok>
+( erreichte Programmdresse in 0000-1FFF ) <ok></ok>
+ <ok></ok>
+HERE . <ok>114C </ok>
+ <ok></ok>
+( erreichte Adresse in Textspeicher E000-FFFF ) <ok></ok>
+ <ok></ok>
+BZEIG ? <ok>E6EC </ok>
+ <ok></ok>
+( aktuelle Stapelhoehe ) <ok></ok>
+ <ok></ok>
+SP ? <ok>0047 </ok>
+ <ok></ok>
+SP ? <ok>0047 </ok>
+ <ok></ok>
+( Ein neues Wort definieren ) <ok></ok>
+ <ok></ok>
+: H ." Hallo Welt " ; <ok></ok><fl>114C E6EC </fl><fr>1154 E6FA </fr>
+ <ok></ok>
+H <ok>Hallo Welt </ok>
+ <ok></ok>
+( Bedingung IF ) <ok></ok>
+ <ok></ok>
+: W ( n --> )  <ok></ok><fl>1154 E6FA </fl><fr>1158 E6FC </fr>
+  ." Das ist eine "  <ok></ok><fl>1158 E6FC </fl><fr>115B E70A </fr>
+  1 AND IF ." un" END_IF  <ok></ok><fl>115B E70A </fl><fr>1161 E70D </fr>
+  ." gerade Zahl " ;  <ok></ok><fl>1161 E70D </fl><fr>1165 E71A </fr>
+ <ok></ok>
+7 W <ok>Das ist eine ungerade Zahl </ok>
+8 W <ok>Das ist eine gerade Zahl </ok>
+ <ok></ok>
+( Programmschleifen, die für DO LOOP ist aber momentan stillgelegt. ) <ok></ok>
+ <ok></ok>
+( : X ( n --> ) <ok></ok>
+(   0 DO I . LOOP ; <ok></ok>
+( 13 X  <ok></ok>
+ <ok></ok>
+( oder ) <ok></ok>
+ <ok></ok>
+: Y ( n --> ) <ok></ok><fl>1165 E71A </fl><fr>1169 E71C </fr>
+  0 BEGIN DUP . 1+ 2DUP = UNTIL 2DROP ; <ok></ok><fl>1169 E71C </fl><fr>1172 E71C </fr>
+ <ok></ok>
+13 Y <ok>0000 0001 0002 0003 0004 0005 0006 0007 0008 0009 000A 000B 000C 000D 000E 000F 0010 0011 0012 </ok>
+ <ok></ok>
+( oder ) <ok></ok>
+ <ok></ok>
+: Z ( n --> ) <ok></ok><fl>1172 E71C </fl><fr>1176 E71E </fr>
+  0 BEGIN 2DUP > WHILE DUP . 1+ REPEAT 2DROP ; <ok></ok><fl>1176 E71E </fl><fr>1180 E71E </fr>
+ <ok></ok>
+13 Z <ok>0000 0001 0002 0003 0004 0005 0006 0007 0008 0009 000A 000B 000C 000D 000E 000F 0010 0011 0012 </ok>
+ <ok></ok>
+( alles ab LEDS wieder vergessen ) <ok></ok>
+ <ok></ok>
+HERE . BZEIG ? <ok>1180 E71E </ok>
+FORGET LEDS <ok></ok><fl>1180 E71E </fl><fr>1147 E6E7 </fr>
+HERE . BZEIG ? <ok>1147 E6E7 </ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+ <ok></ok>
+( Also an der Stelle nach FFINIT1SMUL.TXT hab ich jetzt ) <ok></ok>
+( N" ( /number/  -> n        liest bis " eine grosse ganze Zahl ein <ok></ok>
+(                            kleine ganze Zahlen wie bisher eingeben <ok></ok>
+( N+ N- N* N/ N/MOD NMOD N^  und rechnet damit <ok></ok>
+( N.   a -->                 und gibt sie aus <ok></ok>
+( NBK  a b --> a' b'         Kürzen <ok></ok>
+( NGGT a b --> ggt           groesster gemeinsamer Teiler <ok></ok>
+(  <ok></ok>
+( also direkt eingeben und mit + - * / rechnen geht hier noch nicht <ok></ok>
+ <ok></ok>
+ <ok></ok>
+( ERGEBNIS ist unpassend gewählter Variablenname,  <ok></ok>
+( bezeichnet ab welcher Adresse das nächste Ergebnis gespeichert wird, <ok></ok>
+( Platz dafür ist von 1400H bis 1FFFH, aktuell erreicht: ) <ok></ok>
+  <ok></ok>
+ERGEBNIS ? ( Zahlenspeicher gefuellt bis )  <ok>1E4E </ok>
+ <ok></ok>
+ZAHLENSPEICHER @ ERGEBNIS ! ( Zahlenspeicher leeren ) <ok></ok>
+ <ok></ok>
+ERGEBNIS ? <ok>1400 </ok>
+ <ok></ok>
+N" 111111111111111" DUP N* N. <ok>123456789ABCDEFEDCBA987654321 </ok>
+ <ok></ok>
+ERGEBNIS ? <ok>140F </ok>
+ <ok></ok>
+( dritte binomische Formel 10^20-{10^10+1}*{10^10-1}=1 ) <ok></ok>
+10 20 N^ 10 10 N^ 1 N- 10 10 N^ 1 N+ N* N- N. <ok>1 </ok>
+ <ok></ok>
+ERGEBNIS ? <ok>1453 </ok>
+ <ok></ok>
+ <ok></ok>
+( Zahlenbasis wechseln ) <ok></ok>
+ <ok></ok>
+: HEX 10 BASE ! ; <ok></ok><fl>1147 E6E7 </fl><fr>114F E6EB </fr>
+: DECIMAL 0A BASE ! ; <ok></ok><fl>114F E6EB </fl><fr>1157 E6F3 </fr>
+ <ok></ok>
+HEX N" 10000" <ok></ok>
+DECIMAL DUP N. <ok>65536 </ok>
+HEX DUP N. <ok>10000 </ok>
+ <ok></ok>
+HEX N" 100000000" <ok></ok>
+DECIMAL DUP N. <ok>4294967296 </ok>
+HEX DUP N. <ok>100000000 </ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="in den Zustand für Step_11 bringen und wieder RAM generieren"> 
+: NLIT, ( a --> ) DUP 3FFF > OVER C000 LT OR IF 1234 ERROR END_IF , ; <ok></ok><fl>1157 E6F3 </fl><fr>1167 E6F9 </fr>
+REPLACE: LIT, NLIT, ;  <ok></ok><fl>1167 E6F9 </fl><fr>1169 E6F9 </fr>
+REPLACE: NUMBER NNUMBER ; <ok></ok><fl>1169 E6F9 </fl><fr>116B E6F9 </fr>
+: M. . ; : M+ + ; : M- - ; : M* * ; : M/ / ; : M/MOD /MOD ; : MMOD MOD ; <ok></ok><fl>116B E6F9 </fl><fr>1195 E713 </fr>
+: . O. ; : + N+ ; : - N- ; : * N* ; : / N/ ; : /MOD N/MOD : : MOD NMOD ;  <ok></ok><fl>1195 E713 </fl><fr>11BD E722 </fr>
+: GGT NGGT ; : BK NBK ; : ^ N^ ; : ? @ . ; <ok></ok><fl>11BD E722 </fl><fr>11D6 E72D </fr>
+ <ok></ok>
+( jetzt rechnen auch + - * / mit großen ganzen Zahlen,  <ok></ok>
+( allerdings beim Compilieren von großen ganzen Zahlen im Moment noch 1234 ERROR <ok></ok>
+ <ok></ok>
+ <ok></ok>
+111111111111111 DUP * . <ok>123456789ABCDEFEDCBA987654321 </ok>
+ <ok></ok>
+( an der Stelle Programm-VHDL-Quelltext für Step_11 ausgeben ) <ok></ok>
+HEX INIT  <ok></ok>
+HERE 0 0 DUMPZ           ( generiert progRAM für P20_FFP.vhd Step_11 <ok>
+<DUMPZ>
+  x"4010",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 0000-000F 
+  x"479C",x"A003",x"44E9",x"9001",x"A003",x"B300",x"8000",x"8FFA",x"0000",x"111C",x"0000",x"0000",x"0000",x"0000",x"1111",x"1107", -- 0010-001F 
+  x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"44BA",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003", -- 0020-002F 
+  x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003", -- 0030-003F 
+  x"0000",x"0000",x"3000",x"FC73",x"FC73",x"FFFF",x"E72D",x"11D6",x"0010",x"FB00",x"FB00",x"FB09",x"FB0F",x"FB45",x"0000",x"11D6", -- 0040-004F 
+  x"0000",x"11CF",x"E000",x"E72D",x"0058",x"0049",x"0000",x"2FEF",x"0000",x"E000",x"0001",x"47AF",x"0029",x"4621",x"B200",x"A003", -- 0050-005F 
+  x"FFF8",x"E002",x"0001",x"47AF",x"0000",x"0050",x"A009",x"A003",x"FFF8",x"E004",x"0001",x"47BD",x"0001",x"0050",x"A009",x"A003", -- 0060-006F 
+  x"FFF8",x"E006",x"0007",x"47AF",x"0020",x"4621",x"469B",x"46DB",x"B300",x"46E4",x"A003",x"FFF5",x"E00E",x"0006",x"47B6",x"42FA", -- 0070-007F 
+  x"B501",x"42AD",x"430D",x"A00A",x"A003",x"FFF6",x"E015",x"0004",x"47BD",x"5167",x"A003",x"42D4",x"B502",x"C000",x"42C2",x"A00E", -- 0080-008F 
+  x"9001",x"407E",x"432D",x"A003",x"FFF1",x"E01A",x"000B",x"47B6",x"42FA",x"A00A",x"0050",x"A00A",x"9001",x"4089",x"A003",x"FFF5", -- 0090-009F 
+  x"E026",x"0008",x"47BD",x"46ED",x"4097",x"432D",x"47A7",x"A003",x"FFF7",x"E02F",x"0002",x"4098",x"D001",x"FFFB",x"E032",x"0002", -- 00A0-00AF 
+  x"4098",x"D002",x"FFFB",x"E035",x"0002",x"4098",x"D003",x"FFFB",x"E038",x"0004",x"4098",x"0040",x"FFFB",x"E03D",x"0009",x"4098", -- 00B0-00BF 
+  x"0041",x"FFFB",x"E047",x"0003",x"4098",x"0042",x"FFFB",x"E04B",x"0007",x"4098",x"0043",x"FFFB",x"E053",x"0007",x"4098",x"0044", -- 00C0-00CF 
+  x"FFFB",x"E05B",x"0004",x"4098",x"0045",x"FFFB",x"E060",x"0007",x"4098",x"0046",x"FFFB",x"E068",x"0004",x"4098",x"0047",x"FFFB", -- 00D0-00DF 
+  x"E06D",x"0004",x"4098",x"0048",x"FFFB",x"E072",x"0003",x"4098",x"0049",x"FFFB",x"E076",x"0003",x"4098",x"004A",x"FFFB",x"E07A", -- 00E0-00EF 
+  x"0003",x"4098",x"004B",x"FFFB",x"E07E",x"0003",x"4098",x"004C",x"FFFB",x"E082",x"0003",x"4098",x"004D",x"FFFB",x"E086",x"0007", -- 00F0-00FF 
+  x"4098",x"004E",x"FFFB",x"E08E",x"0002",x"4098",x"004F",x"FFFB",x"E091",x"0004",x"4098",x"0050",x"FFFB",x"E096",x"0003",x"4098", -- 0100-010F 
+  x"0051",x"FFFB",x"E09A",x"0004",x"4098",x"0052",x"FFFB",x"E09F",x"0005",x"4098",x"0053",x"FFFB",x"E0A5",x"0006",x"4098",x"0054", -- 0110-011F 
+  x"FFFB",x"E0AC",x"0003",x"4098",x"0055",x"FFFB",x"E0B0",x"0009",x"4098",x"0056",x"FFFB",x"E0BA",x"0007",x"4098",x"01AC",x"FFFB", -- 0120-012F 
+  x"E0C2",x"0006",x"4098",x"A003",x"FFFB",x"E0C9",x"0008",x"47B6",x"42FA",x"0050",x"A00A",x"9003",x"A00A",x"432D",x"8001",x"4338", -- 0130-013F 
+  x"A003",x"FFF3",x"E0D2",x"0005",x"47BD",x"46ED",x"4137",x"432D",x"407F",x"A003",x"432D",x"47A7",x"A003",x"FFF4",x"E0D8",x"0005", -- 0140-014F 
+  x"4138",x"A000",x"A003",x"FFFA",x"E0DE",x"0002",x"4138",x"A001",x"A003",x"FFFA",x"E0E1",x"0002",x"4138",x"A002",x"A003",x"FFFA", -- 0150-015F 
+  x"E0E4",x"0002",x"4138",x"A00D",x"A003",x"FFFA",x"E0E7",x"0003",x"4138",x"A00F",x"A003",x"FFFA",x"E0EB",x"0008",x"4138",x"A005", -- 0160-016F 
+  x"A003",x"FFFA",x"E0F4",x"0003",x"4138",x"A00B",x"A003",x"FFFA",x"E0F8",x"0003",x"4138",x"A008",x"A003",x"FFFA",x"E0FC",x"0002", -- 0170-017F 
+  x"4138",x"A00E",x"A003",x"FFFA",x"E0FF",x"0007",x"4138",x"A00C",x"A003",x"FFFA",x"E107",x"0001",x"4138",x"A007",x"A003",x"FFFA", -- 0180-018F 
+  x"E109",x"0001",x"4138",x"A009",x"A003",x"FFFA",x"E10B",x"0001",x"4138",x"A00A",x"A003",x"FFFA",x"E10D",x"0004",x"4138",x"B412", -- 0190-019F 
+  x"A003",x"FFFA",x"E112",x"0004",x"4138",x"B502",x"A003",x"FFFA",x"E117",x"0003",x"4138",x"B501",x"A003",x"FFFA",x"E11B",x"0003", -- 01A0-01AF 
+  x"4138",x"B434",x"A003",x"FFFA",x"E11F",x"0004",x"4138",x"B300",x"A003",x"FFFA",x"E124",x"0005",x"4138",x"B43C",x"A003",x"FFFA", -- 01B0-01BF 
+  x"E12A",x"0005",x"4138",x"B60C",x"A003",x"FFFA",x"E130",x"0004",x"4138",x"B603",x"A003",x"FFFA",x"E135",x"0005",x"4138",x"B200", -- 01C0-01CF 
+  x"A003",x"FFFA",x"E13B",x"0004",x"4138",x"8000",x"A003",x"FFFA",x"E140",x"0002",x"47BD",x"0053",x"A00A",x"A009",x"0001",x"0053", -- 01D0-01DF 
+  x"42EF",x"A003",x"FFF5",x"E143",x"0002",x"47BD",x"0053",x"A00A",x"4089",x"B501",x"432D",x"B412",x"B501",x"A00A",x"41DB",x"42AD", -- 01E0-01EF 
+  x"B412",x"0001",x"42B4",x"B501",x"A00D",x"9FF5",x"B200",x"0020",x"41DB",x"A003",x"FFE8",x"E146",x"0007",x"47B6",x"4621",x"0050", -- 01F0-01FF 
+  x"A00A",x"9003",x"41E6",x"42FA",x"46E4",x"A003",x"FFF4",x"E14E",x"0005",x"47BD",x"46ED",x"0001",x"0050",x"A009",x"432D",x"41FD", -- 0200-020F 
+  x"FFFF",x"0055",x"42EF",x"A003",x"FFF2",x"E154",x"0001",x"0022",x"41FE",x"A003",x"FFFA",x"E156",x"0002",x"0022",x"41FE",x"4365", -- 0210-021F 
+  x"A003",x"FFF9",x"E159",x"0004",x"47BD",x"004F",x"A00A",x"A003",x"FFF9",x"E15E",x"0005",x"47BD",x"0008",x"A003",x"FFFA",x"E164", -- 0220-022F 
+  x"0006",x"47BD",x"0009",x"A003",x"FFFA",x"E16B",x"0006",x"47BD",x"1000",x"42DB",x"B412",x"0FFF",x"A008",x"A00E",x"A003",x"FFF5", -- 0230-023F 
+  x"E172",x"0005",x"47BD",x"004F",x"42EF",x"A003",x"FFF9",x"E178",x"0007",x"47BD",x"4225",x"42AD",x"42B4",x"422C",x"4238",x"432D", -- 0240-024F 
+  x"A003",x"FFF5",x"E180",x"0008",x"47BD",x"4225",x"42AD",x"42B4",x"4232",x"4238",x"432D",x"A003",x"FFF5",x"E189",x"0005",x"47AF", -- 0250-025F 
+  x"4225",x"A003",x"FFFA",x"E18F",x"0005",x"47AF",x"424A",x"A003",x"FFFA",x"E195",x"0005",x"47AF",x"4255",x"A003",x"FFFA",x"E19B", -- 0260-026F 
+  x"0002",x"47AF",x"4232",x"0001",x"4243",x"4225",x"A003",x"FFF7",x"E19E",x"0006",x"47AF",x"4225",x"B502",x"42B4",x"B434",x"4238", -- 0270-027F 
+  x"B412",x"0001",x"42B4",x"A009",x"A003",x"FFF2",x"E1A5",x"0004",x"47AF",x"0001",x"4243",x"427A",x"422C",x"4225",x"A003",x"FFF6", -- 0280-028F 
+  x"E1AA",x"0005",x"47AF",x"4271",x"A003",x"FFFA",x"E1B0",x"0006",x"47AF",x"B434",x"4265",x"427A",x"A003",x"FFF8",x"E1B7",x"0002", -- 0290-029F 
+  x"47BD",x"A00A",x"A003",x"FFFA",x"E1BA",x"0002",x"47BD",x"A009",x"A003",x"FFFA",x"E1BD",x"0002",x"47BD",x"0001",x"A007",x"A003", -- 02A0-02AF 
+  x"FFF9",x"E1C0",x"0001",x"47BD",x"A000",x"A007",x"A003",x"FFF9",x"E1C2",x"0001",x"47BD",x"42B4",x"A00D",x"A003",x"FFF9",x"E1C4", -- 02B0-02BF 
+  x"0002",x"47BD",x"407F",x"8000",x"A007",x"B412",x"A00B",x"407F",x"8000",x"A007",x"0000",x"A001",x"B300",x"A00D",x"A00B",x"A003", -- 02C0-02CF 
+  x"FFEE",x"E1C7",x"0001",x"47BD",x"B412",x"42C2",x"A003",x"FFF9",x"E1C9",x"0001",x"47BD",x"0000",x"B434",x"B434",x"A002",x"B412", -- 02D0-02DF 
+  x"B300",x"A003",x"FFF5",x"E1CB",x"0003",x"47BD",x"E1CF",x"0004",x"421F",x"8FFC",x"A003",x"FFF7",x"E1D4",x"0002",x"47BD",x"B412", -- 02E0-02EF 
+  x"B502",x"A00A",x"A007",x"B412",x"A009",x"A003",x"FFF5",x"E1D7",x"0002",x"47BD",x"D002",x"A00A",x"42AD",x"A00A",x"D002",x"A00A", -- 02F0-02FF 
+  x"42AD",x"D002",x"B603",x"A00A",x"A00A",x"B412",x"A009",x"A009",x"A003",x"FFED",x"E1DA",x"0002",x"47BD",x"D002",x"A00A",x"B501", -- 0300-030F 
+  x"FFFF",x"A007",x"D002",x"B603",x"A00A",x"A00A",x"B412",x"B501",x"FFFF",x"A007",x"D002",x"A009",x"A009",x"A009",x"A009",x"A003", -- 0310-031F 
+  x"FFE9",x"E1DD",x"0001",x"47BD",x"D002",x"A00A",x"42AD",x"A00A",x"A003",x"FFF7",x"E1DF",x"0001",x"47BD",x"004F",x"A00A",x"A009", -- 0320-032F 
+  x"0001",x"004F",x"42EF",x"A003",x"FFF5",x"E1E1",x"0007",x"47BD",x"D003",x"A009",x"A003",x"FFF9",x"E1E9",x"0003",x"47BD",x"0012", -- 0330-033F 
+  x"4338",x"A003",x"FFF9",x"E1ED",x"0004",x"47BD",x"016F",x"4338",x"A003",x"FFF9",x"E1F2",x"0005",x"47BD",x"0000",x"B412",x"0010", -- 0340-034F 
+  x"A002",x"B412",x"A003",x"FFF6",x"E1F8",x"0003",x"47BD",x"B501",x"000A",x"42C2",x"9001",x"8002",x"0007",x"A007",x"0030",x"A007", -- 0350-035F 
+  x"A003",x"FFF2",x"E1FC",x"0004",x"47BD",x"B501",x"9009",x"B412",x"B501",x"42A1",x"4346",x"42AD",x"B412",x"0001",x"42B4",x"8FF5", -- 0360-036F 
+  x"B200",x"A003",x"FFEF",x"E201",x"0003",x"47BD",x"434D",x"4357",x"4346",x"434D",x"4357",x"4346",x"434D",x"4357",x"4346",x"434D", -- 0370-037F 
+  x"4357",x"4346",x"B300",x"A003",x"FFEE",x"E205",x"0002",x"47BD",x"4376",x"0020",x"4346",x"A003",x"FFF8",x"E208",x"0001",x"47BD", -- 0380-038F 
+  x"4388",x"A003",x"FFFA",x"E20A",x"0001",x"47BD",x"A00A",x"4390",x"A003",x"FFF9",x"E20C",x"0002",x"47BD",x"0047",x"A00A",x"004F", -- 0390-039F 
+  x"A00A",x"42B4",x"0050",x"A00A",x"A00D",x"A00B",x"A00E",x"0040",x"A00A",x"A00D",x"A00B",x"A008",x"9028",x"003C",x"4346",x"E20F", -- 03A0-03AF 
+  x"0003",x"421F",x"0047",x"A00A",x"4390",x"0046",x"A00A",x"4390",x"003C",x"4346",x"E213",x"0004",x"421F",x"003C",x"4346",x"E218", -- 03B0-03BF 
+  x"0003",x"421F",x"004F",x"A00A",x"4390",x"0053",x"A00A",x"4390",x"003C",x"4346",x"E21C",x"0004",x"421F",x"004F",x"A00A",x"0047", -- 03C0-03CF 
+  x"A009",x"0053",x"A00A",x"0046",x"A009",x"000A",x"4346",x"A003",x"FFC1",x"E221",x"000A",x"47BD",x"A003",x"FFFB",x"E22C",x"0007", -- 03D0-03DF 
+  x"47BD",x"439D",x"E234",x"0019",x"421F",x"0020",x"4346",x"0008",x"4346",x"433F",x"001B",x"42BB",x"9FF8",x"A003",x"FFEF",x"E24E", -- 03E0-03EF 
+  x"0005",x"47BD",x"B501",x"004E",x"A009",x"0000",x"0050",x"A009",x"439D",x"004A",x"A00A",x"004C",x"A00A",x"004A",x"A00A",x"42B4", -- 03F0-03FF 
+  x"0001",x"42B4",x"4365",x"E254",x"0003",x"421F",x"E258",x"000A",x"4219",x"4702",x"439D",x"E263",x"0016",x"421F",x"4390",x"43E1", -- 0400-040F 
+  x"474F",x"A003",x"FFDC",x"E27A",x"0004",x"47BD",x"D001",x"A00A",x"0055",x"A009",x"A003",x"FFF7",x"E27F",x"0004",x"47BD",x"D001", -- 0410-041F 
+  x"A00A",x"0055",x"A00A",x"42B4",x"9002",x"0009",x"43F2",x"A003",x"FFF3",x"E284",x"0005",x"47BD",x"42FA",x"B412",x"B501",x"A000", -- 0420-042F 
+  x"D002",x"A00A",x"A007",x"D002",x"A009",x"D002",x"A00A",x"0056",x"A00A",x"430D",x"0056",x"A009",x"430D",x"430D",x"A003",x"FFE9", -- 0430-043F 
+  x"E28A",x"0009",x"47BD",x"42FA",x"42FA",x"42FA",x"0056",x"A009",x"D002",x"A00A",x"A007",x"D002",x"A009",x"430D",x"A003",x"FFF0", -- 0440-044F 
+  x"E294",x"0002",x"47BD",x"0056",x"A00A",x"A003",x"FFF9",x"E297",x"0002",x"47BD",x"0056",x"A00A",x"42AD",x"A003",x"FFF8",x"E29A", -- 0450-045F 
+  x"0002",x"47BD",x"0056",x"A00A",x"0002",x"A007",x"A003",x"FFF7",x"E29D",x"0002",x"47BD",x"0056",x"A00A",x"0003",x"A007",x"A003", -- 0460-046F 
+  x"FFF7",x"E2A0",x"0002",x"47BD",x"0056",x"A00A",x"0004",x"A007",x"A003",x"FFF7",x"E2A3",x"0002",x"47BD",x"0056",x"A00A",x"0005", -- 0470-047F 
+  x"A007",x"A003",x"FFF7",x"E2A6",x"0002",x"47BD",x"0056",x"A00A",x"0006",x"A007",x"A003",x"FFF7",x"E2A9",x"0002",x"47BD",x"0056", -- 0480-048F 
+  x"A00A",x"0007",x"A007",x"A003",x"FFF7",x"E2AC",x"0001",x"47AF",x"0020",x"4621",x"469B",x"46DB",x"B300",x"42AD",x"0050",x"A00A", -- 0490-049F 
+  x"9001",x"4089",x"A003",x"FFF1",x"E2AE",x"0005",x"47BD",x"B501",x"A00A",x"0001",x"A007",x"B501",x"03FF",x"A008",x"0000",x"42BB", -- 04A0-04AF 
+  x"9002",x"0400",x"42B4",x"B412",x"A009",x"A003",x"FFED",x"E2B4",x"0007",x"47BD",x"D000",x"A00A",x"B501",x"0008",x"42C2",x"9009", -- 04B0-04BF 
+  x"0018",x"A007",x"A00A",x"B501",x"9002",x"B501",x"4338",x"B300",x"8018",x"0043",x"A00A",x"A009",x"0043",x"44A7",x"0043",x"A00A", -- 04C0-04CF 
+  x"0044",x"A00A",x"42B4",x"03FF",x"A008",x"0100",x"42D4",x"9009",x"0045",x"A00A",x"A00D",x"9005",x"FFFF",x"0045",x"A009",x"0013", -- 04D0-04DF 
+  x"4346",x"0000",x"D000",x"A009",x"A003",x"FFD1",x"E2BC",x"0008",x"47BD",x"0044",x"A00A",x"0043",x"A00A",x"42BB",x"9003",x"0000", -- 04E0-04EF 
+  x"0000",x"8018",x"0044",x"A00A",x"A00A",x"FFFF",x"0044",x"44A7",x"0043",x"A00A",x"0044",x"A00A",x"42B4",x"03FF",x"A008",x"0080", -- 04F0-04FF 
+  x"42C2",x"9008",x"0045",x"A00A",x"9005",x"0000",x"0045",x"A009",x"0011",x"4346",x"A003",x"FFDA",x"E2C5",x"0006",x"47BD",x"0005", -- 0500-050F 
+  x"442C",x"4462",x"A009",x"445A",x"A009",x"445A",x"A00A",x"4474",x"A009",x"433F",x"B501",x"0014",x"42BB",x"9004",x"B300",x"445A", -- 0510-051F 
+  x"A00A",x"42A1",x"B501",x"007F",x"42BB",x"9002",x"B300",x"0008",x"B501",x"0008",x"42BB",x"9012",x"4474",x"A00A",x"445A",x"A00A", -- 0520-052F 
+  x"42C2",x"900C",x"FFFF",x"445A",x"42EF",x"0001",x"4462",x"42EF",x"0008",x"4346",x"0020",x"4346",x"0008",x"4346",x"B501",x"0020", -- 0530-053F 
+  x"42C2",x"9001",x"8012",x"FFFF",x"4462",x"42EF",x"4462",x"A00A",x"A00F",x"9002",x"0006",x"43F2",x"B501",x"4346",x"B501",x"445A", -- 0540-054F 
+  x"A00A",x"42A7",x"0001",x"445A",x"42EF",x"B501",x"0020",x"42C2",x"B502",x"0008",x"42BB",x"A00B",x"A008",x"B412",x"001B",x"42BB", -- 0550-055F 
+  x"A00B",x"A008",x"4462",x"A00A",x"A00D",x"A00E",x"9FB2",x"0020",x"4346",x"4474",x"A00A",x"445A",x"A00A",x"4474",x"A00A",x"42B4", -- 0560-056F 
+  x"B603",x"A007",x"0000",x"B412",x"42A7",x"4443",x"A003",x"FF94",x"E2CC",x"0005",x"47BD",x"B501",x"0030",x"42C2",x"A00B",x"B502", -- 0570-057F 
+  x"003A",x"42C2",x"A008",x"B502",x"0041",x"42C2",x"A00B",x"A00E",x"B501",x"9015",x"B412",x"0030",x"42B4",x"B501",x"000A",x"42C2", -- 0580-058F 
+  x"A00B",x"9002",x"0007",x"42B4",x"B501",x"0048",x"A00A",x"42C2",x"A00B",x"9004",x"B300",x"B300",x"0000",x"0000",x"B412",x"A003", -- 0590-059F 
+  x"FFD7",x"E2D2",x"0006",x"47BD",x"5169",x"A003",x"445A",x"A009",x"4453",x"A009",x"0000",x"445A",x"A00A",x"9063",x"B501",x"4462", -- 05A0-05AF 
+  x"A009",x"0001",x"447D",x"A009",x"FFFF",x"4486",x"A009",x"4453",x"A00A",x"4462",x"A00A",x"A007",x"42A1",x"002B",x"42BB",x"9009", -- 05B0-05BF 
+  x"4462",x"A00A",x"42AD",x"4462",x"A009",x"0000",x"4486",x"A009",x"8016",x"4453",x"A00A",x"4462",x"A00A",x"A007",x"42A1",x"002D", -- 05C0-05CF 
+  x"42BB",x"900D",x"4462",x"A00A",x"42AD",x"4462",x"A009",x"0000",x"4486",x"A009",x"447D",x"A00A",x"A000",x"447D",x"A009",x"4486", -- 05D0-05DF 
+  x"A00A",x"9FD2",x"4462",x"A00A",x"445A",x"A00A",x"42C2",x"9029",x"4453",x"A00A",x"4462",x"A00A",x"A007",x"42A1",x"B501",x"9015", -- 05E0-05EF 
+  x"457B",x"A00B",x"9007",x"B300",x"445A",x"A00A",x"A000",x"445A",x"A009",x"800A",x"B412",x"0048",x"A00A",x"42DB",x"A007",x"4462", -- 05F0-05FF 
+  x"A00A",x"42AD",x"4462",x"A009",x"8005",x"B300",x"4462",x"A00A",x"445A",x"A009",x"4462",x"A00A",x"445A",x"A00A",x"42C2",x"A00B", -- 0600-060F 
+  x"9FD7",x"447D",x"A00A",x"A00F",x"9001",x"A000",x"4462",x"A00A",x"445A",x"A00A",x"42B4",x"4443",x"A003",x"FF83",x"E2D9",x"0004", -- 0610-061F 
+  x"47BD",x"430D",x"004C",x"A00A",x"004B",x"A009",x"004C",x"A00A",x"42A1",x"4324",x"42BB",x"004C",x"A00A",x"004D",x"A00A",x"42C2", -- 0620-062F 
+  x"A008",x"9004",x"0001",x"004C",x"42EF",x"8FF0",x"004C",x"A00A",x"004B",x"A009",x"004C",x"A00A",x"42A1",x"003C",x"42BB",x"9004", -- 0630-063F 
+  x"004C",x"A00A",x"004D",x"A009",x"004C",x"A00A",x"42A1",x"4324",x"42BB",x"A00B",x"004C",x"A00A",x"004D",x"A00A",x"42C2",x"A008", -- 0640-064F 
+  x"9004",x"0001",x"004C",x"42EF",x"8FE5",x"004B",x"A00A",x"004C",x"A00A",x"B502",x"42B4",x"B501",x"9003",x"0001",x"004C",x"42EF", -- 0650-065F 
+  x"42FA",x"B300",x"A003",x"FFBA",x"E2DE",x"0002",x"47BD",x"430D",x"B502",x"4324",x"42B4",x"9007",x"42FA",x"B300",x"B300",x"B300", -- 0660-066F 
+  x"B300",x"0000",x"8023",x"42FA",x"B300",x"B412",x"0000",x"B603",x"42B4",x"9016",x"430D",x"430D",x"B502",x"42A1",x"B502",x"42A1", -- 0670-067F 
+  x"42B4",x"9004",x"B300",x"B300",x"0000",x"0000",x"B501",x"9004",x"42AD",x"B412",x"42AD",x"B412",x"42FA",x"42FA",x"42AD",x"8FE7", -- 0680-068F 
+  x"B200",x"B300",x"9002",x"FFFF",x"8001",x"0000",x"A003",x"FFCC",x"E2E1",x"0004",x"47BD",x"430D",x"430D",x"0000",x"0051",x"A00A", -- 0690-069F 
+  x"0041",x"A00A",x"9003",x"B501",x"A00A",x"A007",x"B501",x"42AD",x"B501",x"A00A",x"B412",x"42AD",x"A00A",x"42FA",x"42FA",x"B603", -- 06A0-06AF 
+  x"430D",x"430D",x"4667",x"9003",x"B412",x"A00D",x"B412",x"B502",x"A00D",x"B502",x"A00A",x"A00D",x"A00B",x"A008",x"B502",x"B501", -- 06B0-06BF 
+  x"A00A",x"A007",x"0051",x"A00A",x"42BB",x"A00B",x"A008",x"9004",x"B501",x"A00A",x"A007",x"8FDA",x"42FA",x"B300",x"42FA",x"B434", -- 06C0-06CF 
+  x"A00D",x"9004",x"B300",x"B300",x"0000",x"0000",x"A003",x"FFC0",x"E2E6",x"0004",x"47BD",x"B412",x"0003",x"A007",x"B412",x"A003", -- 06D0-06DF 
+  x"FFF7",x"E2EB",x"0008",x"47BD",x"407F",x"4000",x"A007",x"432D",x"A003",x"FFF7",x"E2F4",x"0006",x"47BD",x"4416",x"004F",x"A00A", -- 06E0-06EF 
+  x"0051",x"A00A",x"B502",x"42B4",x"432D",x"0051",x"A009",x"0020",x"4621",x"41E6",x"0001",x"0041",x"A009",x"A003",x"FFEB",x"E2FB", -- 06F0-06FF 
+  x"0009",x"47BD",x"004A",x"A00A",x"430D",x"004B",x"A00A",x"430D",x"004C",x"A00A",x"430D",x"004D",x"A00A",x"430D",x"B502",x"A007", -- 0700-070F 
+  x"004D",x"A009",x"B501",x"004A",x"A009",x"B501",x"004B",x"A009",x"004C",x"A009",x"0020",x"4621",x"B501",x"901F",x"B603",x"469B", -- 0710-071F 
+  x"B501",x"9009",x"430D",x"430D",x"B200",x"42FA",x"42FA",x"46DB",x"B300",x"4338",x"8011",x"B200",x"B603",x"45A4",x"9005",x"B200", -- 0720-072F 
+  x"B300",x"0003",x"43F2",x"8008",x"B434",x"B300",x"B412",x"B300",x"0050",x"A00A",x"9001",x"4089",x"8FDD",x"B200",x"42FA",x"004D", -- 0730-073F 
+  x"A009",x"42FA",x"004C",x"A009",x"42FA",x"004B",x"A009",x"42FA",x"004A",x"A009",x"A003",x"FFB3",x"E305",x"0004",x"47BD",x"0042", -- 0740-074F 
+  x"A00A",x"D002",x"A009",x"0040",x"A00A",x"9006",x"003C",x"4346",x"E30A",x"0004",x"421F",x"8003",x"E30F",x"0002",x"421F",x"439D", -- 0750-075F 
+  x"0049",x"A00A",x"0100",x"450F",x"B502",x"A00A",x"003C",x"42BB",x"9002",x"B200",x"802B",x"0040",x"A00A",x"900C",x"003C",x"4346", -- 0760-076F 
+  x"E312",x"0003",x"421F",x"4702",x"003C",x"4346",x"E316",x"0004",x"421F",x"801C",x"001B",x"4346",x"005B",x"4346",x"0033",x"4346", -- 0770-077F 
+  x"0036",x"4346",x"006D",x"4346",x"4702",x"0050",x"A00A",x"A00D",x"9003",x"E31B",x"0002",x"421F",x"001B",x"4346",x"005B",x"4346", -- 0780-078F 
+  x"0033",x"4346",x"0039",x"4346",x"006D",x"4346",x"8FC8",x"A003",x"FFB3",x"E31E",x"0005",x"47BD",x"E324",x"000B",x"421F",x"439D", -- 0790-079F 
+  x"439D",x"474F",x"A003",x"FFF5",x"E330",x"0006",x"47BD",x"0000",x"0041",x"A009",x"A003",x"FFF8",x"E337",x"000C",x"47BD",x"42FA", -- 07A0-07AF 
+  x"430D",x"A003",x"FFF9",x"E344",x"000A",x"47BD",x"42FA",x"46E4",x"A003",x"FFF9",x"E34F",x"0003",x"47BD",x"42FA",x"0050",x"A00A", -- 07B0-07BF 
+  x"9002",x"46E4",x"8001",x"430D",x"A003",x"FFF4",x"E353",x"000A",x"47BD",x"46ED",x"0001",x"0050",x"A009",x"47AE",x"A003",x"FFF6", -- 07C0-07CF 
+  x"E35E",x"0008",x"47BD",x"46ED",x"0001",x"0050",x"A009",x"47B5",x"A003",x"FFF6",x"E367",x"0001",x"47BD",x"46ED",x"0001",x"0050", -- 07D0-07DF 
+  x"A009",x"47BC",x"A003",x"FFF6",x"E369",x"0001",x"47AF",x"0000",x"0050",x"A009",x"441F",x"407F",x"A003",x"432D",x"47A7",x"A003", -- 07E0-07EF 
+  x"FFF3",x"E36B",x"0005",x"47BD",x"4225",x"A003",x"FFFA",x"E371",x"0003",x"47BD",x"47F4",x"A00A",x"9005",x"434D",x"B300",x"434D", -- 07F0-07FF 
+  x"B300",x"8006",x"434D",x"4357",x"4346",x"434D",x"4357",x"4346",x"434D",x"4357",x"4346",x"434D",x"4357",x"4346",x"B300",x"A003", -- 0800-080F 
+  x"FFE6",x"E375",x"0003",x"47BD",x"E379",x"0001",x"421F",x"0022",x"4346",x"47FA",x"0022",x"4346",x"E37B",x"0001",x"421F",x"A003", -- 0810-081F 
+  x"FFF0",x"E37D",x"0005",x"47BD",x"47F4",x"A009",x"0040",x"A00A",x"430D",x"0000",x"0040",x"A009",x"E383",x"0008",x"4219",x"4702", -- 0820-082F 
+  x"407F",x"4000",x"A007",x"0010",x"A009",x"439D",x"003C",x"4346",x"E38C",x"0006",x"421F",x"439D",x"E393",x"0002",x"421F",x"0000", -- 0830-083F 
+  x"B603",x"A007",x"B501",x"0043",x"42BB",x"9002",x"B300",x"0044",x"A00A",x"4814",x"42AD",x"B501",x"0010",x"42BB",x"9FF1",x"B300", -- 0840-084F 
+  x"E396",x"0004",x"421F",x"B501",x"4376",x"E39B",x"0001",x"421F",x"B501",x"000F",x"A007",x"4390",x"0010",x"A007",x"B603",x"42D4", -- 0850-085F 
+  x"A00B",x"9FD9",x"B200",x"439D",x"003C",x"4346",x"E39D",x"0007",x"421F",x"42FA",x"0040",x"A009",x"A003",x"FFB3",x"E3A5",x"0005", -- 0860-086F 
+  x"4098",x"2F00",x"FFFB",x"E3AB",x"0008",x"47BD",x"2F00",x"A00A",x"B501",x"40A3",x"B501",x"42AD",x"2F00",x"A009",x"A009",x"A003", -- 0870-087F 
+  x"FFF2",x"E3B4",x"0004",x"47BD",x"B501",x"900D",x"430D",x"B502",x"A00A",x"B502",x"A009",x"B412",x"42AD",x"B412",x"42AD",x"42FA", -- 0880-088F 
+  x"0001",x"42B4",x"8FF1",x"B300",x"B200",x"A003",x"FFEA",x"E3B9",x"0004",x"47BD",x"B434",x"B434",x"B501",x"9009",x"430D",x"B603", -- 0890-089F 
+  x"A009",x"0001",x"A007",x"42FA",x"0001",x"42B4",x"8FF5",x"B300",x"B200",x"A003",x"FFEC",x"E3BE",x"0004",x"47BD",x"B412",x"B501", -- 08A0-08AF 
+  x"A00A",x"4390",x"0001",x"A007",x"B412",x"0001",x"42B4",x"B501",x"A00D",x"9FF4",x"B300",x"A003",x"FFEE",x"E3C3",x"0003",x"47BD", -- 08B0-08BF 
+  x"B603",x"42C2",x"9001",x"B412",x"B300",x"A003",x"FFF6",x"E3C7",x"0003",x"47BD",x"B603",x"42D4",x"9001",x"B412",x"B300",x"A003", -- 08C0-08CF 
+  x"FFF6",x"E3CB",x"0003",x"47BD",x"B501",x"A00F",x"9001",x"A000",x"A003",x"FFF7",x"E3CF",x"0006",x"4138",x"A017",x"A003",x"FFFA", -- 08D0-08DF 
+  x"E3D6",x"0007",x"4138",x"A018",x"A003",x"FFFA",x"E3DE",x"0009",x"47BD",x"430D",x"A017",x"A018",x"9FFD",x"42FA",x"B300",x"A003", -- 08E0-08EF 
+  x"FFF5",x"E3E8",x"0001",x"4098",x"1401",x"FFFB",x"E3EA",x"0001",x"4098",x"1601",x"FFFB",x"E3EC",x"0001",x"4098",x"1801",x"FFFB", -- 08F0-08FF 
+  x"E3EE",x"0004",x"47BD",x"0007",x"442C",x"4486",x"A009",x"447D",x"A009",x"4474",x"A009",x"446B",x"A009",x"4462",x"A009",x"445A", -- 0900-090F 
+  x"A009",x"4453",x"A009",x"4453",x"A00A",x"446B",x"A00A",x"9001",x"A00B",x"445A",x"A00A",x"4474",x"A00A",x"A007",x"42AD",x"4486", -- 0910-091F 
+  x"A00A",x"B502",x"0000",x"489A",x"4486",x"A00A",x"B501",x"4462",x"A00A",x"445A",x"A00A",x"0000",x"B60C",x"A00A",x"B434",x"B434", -- 0920-092F 
+  x"447D",x"A00A",x"4474",x"A00A",x"48E9",x"B300",x"A009",x"B300",x"B434",x"0001",x"A007",x"B434",x"0001",x"A007",x"B434",x"FFFF", -- 0930-093F 
+  x"A007",x"B501",x"A00D",x"9FE7",x"B300",x"B200",x"4443",x"A003",x"FFB7",x"E3F3",x"0006",x"47BD",x"0007",x"442C",x"4486",x"A009", -- 0940-094F 
+  x"447D",x"A009",x"4474",x"A009",x"446B",x"A009",x"4462",x"A009",x"445A",x"A009",x"4453",x"A009",x"4453",x"A00A",x"445A",x"A00A", -- 0950-095F 
+  x"4474",x"A00A",x"48C0",x"42AD",x"4486",x"A00A",x"4453",x"A00A",x"446B",x"A00A",x"42BB",x"903C",x"0000",x"445A",x"A00A",x"4474", -- 0960-096F 
+  x"A00A",x"48C0",x"0000",x"B434",x"B502",x"B501",x"445A",x"A00A",x"42C2",x"9009",x"4462",x"A00A",x"B501",x"A00A",x"B412",x"42AD", -- 0970-097F 
+  x"4462",x"A009",x"8001",x"0000",x"B412",x"4474",x"A00A",x"42C2",x"9009",x"447D",x"A00A",x"B501",x"A00A",x"B412",x"42AD",x"447D", -- 0980-098F 
+  x"A009",x"8001",x"0000",x"A001",x"4486",x"A00A",x"B501",x"42AD",x"4486",x"A009",x"A009",x"B434",x"B434",x"0001",x"A007",x"B603", -- 0990-099F 
+  x"42B4",x"A00D",x"9FD0",x"B200",x"4486",x"A00A",x"A009",x"8065",x"B412",x"0001",x"42B4",x"B412",x"0001",x"445A",x"A00A",x"4474", -- 09A0-09AF 
+  x"A00A",x"48C0",x"0000",x"B434",x"B502",x"B501",x"445A",x"A00A",x"42C2",x"9009",x"4462",x"A00A",x"B501",x"A00A",x"B412",x"42AD", -- 09B0-09BF 
+  x"4462",x"A009",x"8001",x"0000",x"B412",x"4474",x"A00A",x"42C2",x"900A",x"447D",x"A00A",x"B501",x"A00A",x"B412",x"42AD",x"447D", -- 09C0-09CF 
+  x"A009",x"A00B",x"8001",x"FFFF",x"A001",x"4486",x"A00A",x"B501",x"42AD",x"4486",x"A009",x"A009",x"B434",x"B434",x"0001",x"A007", -- 09D0-09DF 
+  x"B603",x"42B4",x"A00D",x"9FCF",x"B200",x"A00D",x"9026",x"B501",x"4486",x"A009",x"B434",x"A00B",x"B434",x"B434",x"0001",x"445A", -- 09E0-09EF 
+  x"A00A",x"4474",x"A00A",x"48C0",x"0000",x"B434",x"0000",x"4486",x"A00A",x"A00A",x"A00B",x"A001",x"4486",x"A00A",x"B501",x"42AD", -- 09F0-09FF 
+  x"4486",x"A009",x"A009",x"B434",x"B434",x"0001",x"A007",x"B603",x"42B4",x"A00D",x"9FEA",x"B200",x"B300",x"4443",x"A003",x"FF39", -- 0A00-0A0F 
+  x"E3FA",x"0004",x"4138",x"A014",x"A003",x"FFFA",x"E3FF",x"0005",x"47BD",x"0010",x"430D",x"A014",x"42FA",x"0001",x"42B4",x"B501", -- 0A10-0A1F 
+  x"A00D",x"9FF8",x"B200",x"A003",x"FFF1",x"E405",x"0004",x"47BD",x"0000",x"B434",x"B434",x"4A19",x"A003",x"FFF7",x"E40A",x"0004", -- 0A20-0A2F 
+  x"47BD",x"B502",x"A00F",x"9012",x"B412",x"A000",x"B412",x"B501",x"A00F",x"9006",x"A000",x"4A28",x"B412",x"A000",x"B412",x"8005", -- 0A30-0A3F 
+  x"4A28",x"A000",x"B412",x"A000",x"B412",x"8008",x"B501",x"A00F",x"9004",x"A000",x"4A28",x"A000",x"8001",x"4A28",x"A003",x"FFDE", -- 0A40-0A4F 
+  x"E40F",x"0001",x"47BD",x"4A31",x"B412",x"B300",x"A003",x"FFF8",x"E411",x"0003",x"47BD",x"4A31",x"B300",x"A003",x"FFF9",x"E415", -- 0A50-0A5F 
+  x"0004",x"47BD",x"0007",x"442C",x"4486",x"A009",x"447D",x"A009",x"4474",x"A009",x"446B",x"A009",x"4462",x"A009",x"445A",x"A009", -- 0A60-0A6F 
+  x"4453",x"A009",x"445A",x"A00A",x"4474",x"A00A",x"42C2",x"900A",x"4453",x"A00A",x"445A",x"A00A",x"4462",x"A00A",x"0000",x"0000", -- 0A70-0A7F 
+  x"0000",x"80E1",x"445A",x"A00A",x"0000",x"4462",x"A00A",x"B502",x"A007",x"A00A",x"A00B",x"B502",x"4486",x"A00A",x"A007",x"A009", -- 0A80-0A8F 
+  x"0001",x"A007",x"B603",x"42B4",x"A00D",x"9FEF",x"B200",x"4486",x"A00A",x"445A",x"A00A",x"A007",x"4474",x"A00A",x"42B4",x"4462", -- 0A90-0A9F 
+  x"A009",x"FFFF",x"4486",x"A00A",x"445A",x"A00A",x"A007",x"A009",x"0001",x"445A",x"42EF",x"445A",x"A00A",x"4474",x"A00A",x"42B4", -- 0AA0-0AAF 
+  x"0000",x"4462",x"A00A",x"4474",x"A00A",x"A007",x"A00A",x"A00B",x"4462",x"A00A",x"4474",x"A00A",x"A007",x"0001",x"42B4",x"A00A", -- 0AB0-0ABF 
+  x"A00B",x"447D",x"A00A",x"4474",x"A00A",x"A007",x"0001",x"42B4",x"A00A",x"4A19",x"B412",x"B300",x"B501",x"4462",x"A00A",x"4474", -- 0AC0-0ACF 
+  x"A00A",x"A007",x"42AD",x"A009",x"0000",x"4462",x"A00A",x"447D",x"A00A",x"4474",x"A00A",x"48E9",x"B200",x"B412",x"B300",x"0000", -- 0AD0-0ADF 
+  x"4462",x"A00A",x"4474",x"A00A",x"A007",x"A00A",x"A001",x"4462",x"A00A",x"4474",x"A00A",x"A007",x"A009",x"902C",x"0001",x"4474", -- 0AE0-0AEF 
+  x"A00A",x"0000",x"B434",x"B502",x"4462",x"A00A",x"B502",x"A007",x"A00A",x"B412",x"447D",x"A00A",x"A007",x"A00A",x"A00B",x"A001", -- 0AF0-0AFF 
+  x"B412",x"430D",x"B502",x"4462",x"A00A",x"A007",x"A009",x"42FA",x"B434",x"B434",x"0001",x"A007",x"B603",x"42B4",x"A00D",x"9FE2", -- 0B00-0B0F 
+  x"B200",x"FFFF",x"4462",x"A00A",x"4474",x"A00A",x"A007",x"42AD",x"42EF",x"8FD3",x"FFFF",x"4462",x"42EF",x"0001",x"A007",x"B603", -- 0B10-0B1F 
+  x"42B4",x"A00D",x"9F8E",x"B200",x"4474",x"A00A",x"0000",x"4486",x"A00A",x"B502",x"A007",x"A00A",x"A00B",x"B502",x"4486",x"A00A", -- 0B20-0B2F 
+  x"A007",x"A009",x"0001",x"A007",x"B603",x"42B4",x"A00D",x"9FEF",x"B200",x"4474",x"A00A",x"4486",x"A00A",x"0001",x"42B4",x"A009", -- 0B30-0B3F 
+  x"445A",x"A00A",x"4474",x"A00A",x"42B4",x"4486",x"A00A",x"4474",x"A00A",x"A007",x"A009",x"4453",x"A00A",x"4474",x"A00A",x"4486", -- 0B40-0B4F 
+  x"A00A",x"4453",x"A00A",x"446B",x"A00A",x"9001",x"A00B",x"445A",x"A00A",x"4474",x"A00A",x"42B4",x"4486",x"A00A",x"4474",x"A00A", -- 0B50-0B5F 
+  x"A007",x"0001",x"A007",x"4443",x"A003",x"FEF9",x"E41A",x"0008",x"4098",x"2F01",x"FFFB",x"E423",x"0008",x"4098",x"2F02",x"FFFB", -- 0B60-0B6F 
+  x"E42C",x"0008",x"4098",x"2F03",x"FFFB",x"E435",x"000E",x"4098",x"2F04",x"FFFB",x"E444",x"000C",x"4098",x"2F05",x"FFFB",x"E451", -- 0B70-0B7F 
+  x"0006",x"4098",x"2F06",x"FFFB",x"E458",x"000D",x"47BD",x"B502",x"A00D",x"9004",x"B200",x"B300",x"0000",x"8031",x"B603",x"A007", -- 0B80-0B8F 
+  x"0001",x"42B4",x"B501",x"A00A",x"A00D",x"A00B",x"9FF9",x"0001",x"A007",x"B502",x"48C0",x"B603",x"42BB",x"9004",x"B200",x"B200", -- 0B90-0B9F 
+  x"0000",x"801D",x"B502",x"42B4",x"B502",x"A00A",x"C000",x"A008",x"A00D",x"B502",x"0001",x"42BB",x"A008",x"9003",x"B300",x"A00A", -- 0BA0-0BAF 
+  x"8009",x"B502",x"0001",x"42B4",x"A009",x"0001",x"42B4",x"407F",x"4000",x"A00E",x"B412",x"B300",x"B412",x"9001",x"A000",x"A003", -- 0BB0-0BBF 
+  x"FFC3",x"E466",x"000C",x"47BD",x"B501",x"A00A",x"B501",x"A00F",x"9003",x"A000",x"FFFF",x"8001",x"0000",x"B434",x"B434",x"B501", -- 0BC0-0BCF 
+  x"407F",x"4000",x"A008",x"9009",x"B412",x"B300",x"3FFF",x"A008",x"B501",x"A00A",x"B412",x"42AD",x"8004",x"B502",x"A009",x"0001", -- 0BD0-0BDF 
+  x"B412",x"A003",x"FFDE",x"E473",x"000B",x"47BD",x"2F03",x"A00A",x"B603",x"A009",x"42AD",x"B603",x"A007",x"2F03",x"A009",x"B603", -- 0BE0-0BEF 
+  x"B412",x"0000",x"489A",x"B412",x"B300",x"2F03",x"A00A",x"2F05",x"A00A",x"42C2",x"A00B",x"9002",x"0369",x"43F2",x"A003",x"FFE3", -- 0BF0-0BFF 
+  x"E47F",x"0010",x"47BD",x"2F02",x"A009",x"2F01",x"A009",x"2F01",x"4BC4",x"B502",x"430D",x"2F02",x"4BC4",x"B502",x"42FA",x"A007", -- 0C00-0C0F 
+  x"42AD",x"4BE6",x"A003",x"FFEC",x"E490",x"0002",x"47BD",x"4C03",x"494C",x"4B87",x"A003",x"FFF8",x"E493",x"0002",x"47BD",x"A000", -- 0C10-0C1F 
+  x"4C17",x"A003",x"FFF9",x"E496",x"0002",x"47BD",x"4C03",x"4903",x"4B87",x"A003",x"FFF8",x"E499",x"0007",x"47AF",x"0051",x"A00A", -- 0C20-0C2F 
+  x"0004",x"A007",x"46E4",x"A003",x"FFF6",x"E4A1",x"0005",x"47BD",x"B501",x"A00D",x"9002",x"0000",x"43F2",x"B501",x"2F01",x"A009", -- 0C30-0C3F 
+  x"2F01",x"4BC4",x"B434",x"B300",x"B502",x"A007",x"0001",x"42B4",x"A00A",x"B412",x"0001",x"42D4",x"9018",x"0001",x"B502",x"A00F", -- 0C40-0C4F 
+  x"A00B",x"9007",x"B412",x"B501",x"A007",x"B412",x"B501",x"4C17",x"8FF5",x"B412",x"B300",x"B501",x"2F06",x"A009",x"B434",x"B502", -- 0C50-0C5F 
+  x"4C26",x"B434",x"B434",x"4C26",x"8004",x"B300",x"0001",x"2F06",x"A009",x"4C03",x"4A62",x"4B87",x"430D",x"4B87",x"42FA",x"2F06", -- 0C60-0C6F 
+  x"A00A",x"0001",x"42B4",x"9007",x"B412",x"2F06",x"A00A",x"4C38",x"B412",x"B300",x"B412",x"A003",x"FFB8",x"E4A7",x"0004",x"47BD", -- 0C70-0C7F 
+  x"0000",x"430D",x"434D",x"B501",x"9007",x"4357",x"4346",x"42FA",x"B300",x"FFFF",x"430D",x"8001",x"B300",x"434D",x"B501",x"4324", -- 0C80-0C8F 
+  x"A00E",x"9007",x"4357",x"4346",x"42FA",x"B300",x"FFFF",x"430D",x"8001",x"B300",x"434D",x"B501",x"4324",x"A00E",x"9003",x"4357", -- 0C90-0C9F 
+  x"4346",x"8001",x"B300",x"434D",x"4357",x"4346",x"B300",x"42FA",x"B300",x"A003",x"FFD2",x"E4AC",x"0002",x"47BD",x"2F01",x"A009", -- 0CA0-0CAF 
+  x"2F01",x"4BC4",x"B434",x"9003",x"E4AF",x"0001",x"421F",x"B502",x"A007",x"0001",x"42B4",x"B501",x"A00A",x"4C80",x"B412",x"0001", -- 0CB0-0CBF 
+  x"42B4",x"B412",x"B502",x"900A",x"0001",x"42B4",x"B501",x"A00A",x"4376",x"B412",x"0001",x"42B4",x"B412",x"8FF4",x"B300",x"B300", -- 0CC0-0CCF 
+  x"0020",x"4346",x"A003",x"FFD7",x"E4B1",x"0003",x"47BD",x"B412",x"4CAE",x"4CAE",x"A003",x"FFF8",x"E4B5",x"000B",x"4098",x"2F07", -- 0CD0-0CDF 
+  x"FFFB",x"E4C1",x"0009",x"4098",x"2F08",x"FFFB",x"E4CB",x"000D",x"47BD",x"2F03",x"A00A",x"A003",x"FFF9",x"E4D9",x"000D",x"47BD", -- 0CE0-0CEF 
+  x"2F03",x"A009",x"A003",x"FFF9",x"E4E7",x"000B",x"47BD",x"2F08",x"A00A",x"2F07",x"A009",x"2F03",x"A00A",x"2F08",x"A009",x"A003", -- 0CF0-0CFF 
+  x"FFF3",x"E4F3",x"0004",x"47BD",x"2F04",x"A00A",x"2F03",x"A009",x"4CF7",x"4CF7",x"A003",x"FFF5",x"E4F8",x"0003",x"47BD",x"2F01", -- 0D00-0D0F 
+  x"A009",x"2F01",x"4BC4",x"B502",x"2F03",x"A00A",x"42AD",x"B412",x"4884",x"2F03",x"A00A",x"42AD",x"B502",x"42AD",x"2F03",x"42EF", -- 0D10-0D1F 
+  x"4B87",x"A003",x"FFE9",x"E4FC",x"0003",x"47BD",x"B412",x"4D0F",x"B412",x"4D0F",x"A003",x"FFF7",x"E500",x"0002",x"47BD",x"4CE9", -- 0D20-0D2F 
+  x"B434",x"B434",x"4C38",x"B412",x"B300",x"B412",x"4CF0",x"4D0F",x"A003",x"FFF2",x"E503",x"0004",x"47BD",x"4CE9",x"B434",x"B434", -- 0D30-0D3F 
+  x"4C38",x"B300",x"B412",x"4CF0",x"4D0F",x"A003",x"FFF3",x"E508",x"0004",x"47BD",x"4CE9",x"B434",x"B434",x"B501",x"9004",x"B412", -- 0D40-0D4F 
+  x"B502",x"4D3D",x"8FFA",x"B300",x"B412",x"4CF0",x"4D0F",x"A003",x"FFEE",x"E50D",x"0003",x"47BD",x"4CE9",x"B434",x"B434",x"B603", -- 0D50-0D5F 
+  x"4D4A",x"B434",x"B502",x"4D2F",x"B434",x"B434",x"4D2F",x"B434",x"4CF0",x"4D26",x"A003",x"FFED",x"E511",x"0007",x"47BD",x"4CE9", -- 0D60-0D6F 
+  x"B434",x"B434",x"0007",x"442C",x"445A",x"A009",x"4453",x"A009",x"0000",x"445A",x"A00A",x"9063",x"B501",x"4462",x"A009",x"0001", -- 0D70-0D7F 
+  x"447D",x"A009",x"FFFF",x"4486",x"A009",x"4453",x"A00A",x"4462",x"A00A",x"A007",x"42A1",x"002B",x"42BB",x"9009",x"4462",x"A00A", -- 0D80-0D8F 
+  x"42AD",x"4462",x"A009",x"0000",x"4486",x"A009",x"8016",x"4453",x"A00A",x"4462",x"A00A",x"A007",x"42A1",x"002D",x"42BB",x"900D", -- 0D90-0D9F 
+  x"4462",x"A00A",x"42AD",x"4462",x"A009",x"0000",x"4486",x"A009",x"447D",x"A00A",x"A000",x"447D",x"A009",x"4486",x"A00A",x"9FD2", -- 0DA0-0DAF 
+  x"4462",x"A00A",x"445A",x"A00A",x"42C2",x"9029",x"4453",x"A00A",x"4462",x"A00A",x"A007",x"42A1",x"B501",x"9015",x"457B",x"A00B", -- 0DB0-0DBF 
+  x"9007",x"B300",x"445A",x"A00A",x"A000",x"445A",x"A009",x"800A",x"B412",x"0048",x"A00A",x"4C26",x"4C17",x"4462",x"A00A",x"42AD", -- 0DC0-0DCF 
+  x"4462",x"A009",x"8005",x"B300",x"4462",x"A00A",x"445A",x"A009",x"4462",x"A00A",x"445A",x"A00A",x"42C2",x"A00B",x"9FD7",x"447D", -- 0DD0-0DDF 
+  x"A00A",x"A00F",x"9001",x"A000",x"4462",x"A00A",x"445A",x"A00A",x"42B4",x"B501",x"9006",x"B300",x"4453",x"A00A",x"4462",x"A00A", -- 0DE0-0DEF 
+  x"A007",x"4443",x"B434",x"4CF0",x"B412",x"4D0F",x"B412",x"A003",x"FF73",x"E519",x"0002",x"0022",x"41FE",x"4D6F",x"B300",x"A003", -- 0DF0-0DFF 
+  x"FFF8",x"E51C",x"0002",x"47BD",x"4CE9",x"B434",x"B434",x"0004",x"442C",x"B501",x"A00F",x"9002",x"0012",x"43F2",x"0002",x"446B", -- 0E00-0E0F 
+  x"A009",x"4462",x"A009",x"445A",x"A009",x"0001",x"4462",x"A00A",x"446B",x"A00A",x"4A31",x"4462",x"A009",x"9003",x"445A",x"A00A", -- 0E10-0E1F 
+  x"4C26",x"4462",x"A00A",x"9008",x"445A",x"A00A",x"445A",x"A00A",x"4C26",x"445A",x"A009",x"8FEA",x"4443",x"B412",x"4CF0",x"4D0F", -- 0E20-0E2F 
+  x"A003",x"FFCF",x"E51F",x"0002",x"47BD",x"0048",x"A00A",x"0010",x"42BB",x"9002",x"4CAE",x"802C",x"4CE9",x"B412",x"B501",x"A00F", -- 0E30-0E3F 
+  x"9004",x"A000",x"E522",x"0001",x"421F",x"B501",x"A00D",x"9005",x"E524",x"0002",x"421F",x"B300",x"801A",x"FFFF",x"B412",x"B501", -- 0E40-0E4F 
+  x"9004",x"0048",x"A00A",x"4C38",x"8FFA",x"B300",x"B501",x"A00F",x"A00B",x"900A",x"0030",x"A007",x"B501",x"0039",x"42D4",x"9002", -- 0E50-0E5F 
+  x"0007",x"A007",x"4346",x"8FF2",x"0020",x"4346",x"B300",x"4CF0",x"A003",x"FFC8",x"E527",x"0003",x"47BD",x"B412",x"4E35",x"4E35", -- 0E60-0E6F 
+  x"A003",x"FFF8",x"E52B",x"0006",x"47BD",x"3FFF",x"A008",x"B501",x"42AD",x"B412",x"A00A",x"A003",x"FFF5",x"E532",x"0004",x"47BD", -- 0E70-0E7F 
+  x"48D4",x"B501",x"407F",x"4000",x"42C2",x"9003",x"B300",x"0000",x"800A",x"4E75",x"B412",x"B300",x"407F",x"4000",x"42C2",x"9002", -- 0E80-0E8F 
+  x"0000",x"8001",x"FFFF",x"A003",x"FFE8",x"E537",x"0001",x"47BD",x"B502",x"4E80",x"9011",x"B412",x"4E75",x"3FFF",x"A008",x"B434", -- 0E90-0E9F 
+  x"B603",x"42D4",x"9005",x"B412",x"B300",x"A007",x"A00A",x"8003",x"B200",x"B300",x"0000",x"8003",x"9002",x"B300",x"0000",x"A003", -- 0EA0-0EAF 
+  x"FFE4",x"E539",x"0001",x"47BD",x"B603",x"4E98",x"A003",x"FFF9",x"E53B",x"0001",x"47BD",x"B501",x"430D",x"B434",x"B434",x"B502", -- 0EB0-0EBF 
+  x"4E80",x"A00D",x"B502",x"A00D",x"A008",x"42FA",x"4E80",x"A00D",x"A008",x"9002",x"B200",x"806F",x"B502",x"4E80",x"A00D",x"9017", -- 0EC0-0ECF 
+  x"B501",x"42AD",x"4BE6",x"B434",x"B502",x"A009",x"407F",x"4000",x"B502",x"0001",x"42B4",x"42EF",x"B501",x"430D",x"A007",x"A009", -- 0ED0-0EDF 
+  x"42FA",x"0001",x"42B4",x"407F",x"4000",x"A007",x"8054",x"B502",x"4E75",x"3FFF",x"A008",x"B434",x"B603",x"42D4",x"9008",x"B412", -- 0EE0-0EEF 
+  x"B300",x"B434",x"430D",x"A007",x"A009",x"42FA",x"801B",x"B501",x"42AD",x"4BE6",x"B412",x"430D",x"B501",x"430D",x"B412",x"4884", -- 0EF0-0EFF 
+  x"B300",x"42FA",x"407F",x"4000",x"B502",x"0001",x"42B4",x"42EF",x"B412",x"B502",x"42FA",x"A007",x"A009",x"0001",x"42B4",x"407F", -- 0F00-0F0F 
+  x"4000",x"A007",x"4E75",x"3FFF",x"A008",x"B603",x"A007",x"0001",x"42B4",x"A00A",x"A00D",x"B502",x"0001",x"42D4",x"A008",x"9003", -- 0F10-0F1F 
+  x"0001",x"42B4",x"8FF2",x"B502",x"A00A",x"4E80",x"A00D",x"B502",x"0001",x"42BB",x"A008",x"9003",x"B300",x"A00A",x"800C",x"B412", -- 0F20-0F2F 
+  x"0001",x"42B4",x"B412",x"407F",x"4000",x"A007",x"B502",x"A009",x"407F",x"4000",x"A007",x"A003",x"FF7B",x"E53D",x"0002",x"47BD", -- 0F30-0F3F 
+  x"B501",x"4E80",x"9017",x"E540",x"0002",x"421F",x"4E75",x"3FFF",x"A008",x"B502",x"A007",x"B412",x"B603",x"42D4",x"9006",x"B501", -- 0F40-0F4F 
+  x"A00A",x"4F40",x"0001",x"A007",x"8FF7",x"B200",x"E543",x"0002",x"421F",x"8001",x"4E35",x"A003",x"FFE0",x"E546",x"0006",x"4098", -- 0F50-0F5F 
+  x"2F09",x"FFFB",x"E54D",x"0001",x"47BD",x"2F09",x"A00A",x"D001",x"A00A",x"2F09",x"A009",x"A003",x"FFF5",x"E54F",x"0001",x"47BD", -- 0F60-0F6F 
+  x"0000",x"D001",x"A00A",x"0001",x"42B4",x"2F09",x"A00A",x"42B4",x"900A",x"D001",x"A00A",x"0002",x"42B4",x"2F09",x"A00A",x"42B4", -- 0F70-0F7F 
+  x"B434",x"4EBB",x"8FEE",x"B412",x"2F09",x"A009",x"A003",x"FFE5",x"E551",x"000B",x"47BD",x"0008",x"442C",x"445A",x"A009",x"4453", -- 0F80-0F8F 
+  x"A009",x"0000",x"447D",x"A009",x"0000",x"4486",x"A009",x"4453",x"A00A",x"0001",x"445A",x"A00A",x"4462",x"A009",x"FFFF",x"4462", -- 0F90-0F9F 
+  x"42EF",x"448F",x"A009",x"4453",x"A00A",x"4462",x"A00A",x"4E98",x"4462",x"A00A",x"4E98",x"445A",x"A00A",x"446B",x"A009",x"FFFF", -- 0FA0-0FAF 
+  x"446B",x"42EF",x"B502",x"446B",x"A00A",x"4E98",x"4462",x"A00A",x"4E98",x"447D",x"A00A",x"446B",x"A00A",x"B434",x"4EBB",x"447D", -- 0FB0-0FBF 
+  x"A009",x"B502",x"4462",x"A00A",x"4E98",x"446B",x"A00A",x"4E98",x"4486",x"A00A",x"446B",x"A00A",x"B434",x"4EBB",x"4486",x"A009", -- 0FC0-0FCF 
+  x"446B",x"A00A",x"A00D",x"9FDB",x"447D",x"A00A",x"4462",x"A00A",x"4E98",x"448F",x"A00A",x"4C17",x"447D",x"A00A",x"4462",x"A00A", -- 0FD0-0FDF 
+  x"B434",x"4EBB",x"447D",x"A009",x"4486",x"A00A",x"4462",x"A00A",x"4E98",x"448F",x"A00A",x"4C1F",x"4486",x"A00A",x"4462",x"A00A", -- 0FE0-0FEF 
+  x"B434",x"4EBB",x"4486",x"A009",x"445A",x"A00A",x"446B",x"A009",x"FFFF",x"446B",x"42EF",x"B502",x"446B",x"A00A",x"4E98",x"445A", -- 0FF0-0FFF 
+  x"A00A",x"4474",x"A009",x"FFFF",x"4474",x"42EF",x"4CE9",x"B434",x"B434",x"B412",x"B502",x"4474",x"A00A",x"4E98",x"B502",x"4C26", -- 1000-100F 
+  x"447D",x"A00A",x"446B",x"A00A",x"4E98",x"4486",x"A00A",x"4474",x"A00A",x"4E98",x"4C26",x"4C1F",x"448F",x"A00A",x"4D2F",x"B43C", -- 1010-101F 
+  x"B412",x"4CF0",x"B412",x"4D0F",x"B412",x"4474",x"A00A",x"B434",x"4EBB",x"4474",x"A00A",x"A00D",x"9FD6",x"B434",x"446B",x"A00A", -- 1020-102F 
+  x"B434",x"4EBB",x"B412",x"446B",x"A00A",x"A00D",x"9FC1",x"4462",x"A00A",x"A00D",x"9F63",x"4443",x"A003",x"FF4A",x"E55D",x"0005", -- 1030-103F 
+  x"47BD",x"0051",x"A00A",x"B501",x"42AD",x"A00A",x"B502",x"0002",x"A007",x"A00A",x"4365",x"0020",x"4346",x"B501",x"A00A",x"9004", -- 1040-104F 
+  x"B501",x"A00A",x"A007",x"8FEF",x"B300",x"A003",x"FFE7",x"E563",x"0005",x"47BD",x"0051",x"A00A",x"B501",x"4390",x"B501",x"42AD", -- 1050-105F 
+  x"A00A",x"B502",x"0002",x"A007",x"A00A",x"4365",x"0020",x"4346",x"B501",x"A00A",x"9004",x"B501",x"A00A",x"A007",x"8FED",x"B300", -- 1060-106F 
+  x"A003",x"FFE5",x"E569",x"0006",x"4098",x"A003",x"FFFB",x"E570",x"0008",x"47BD",x"4416",x"0020",x"4621",x"469B",x"B501",x"9012", -- 1070-107F 
+  x"46DB",x"B300",x"42AD",x"4225",x"B412",x"004F",x"A009",x"B501",x"46E4",x"407F",x"A003",x"432D",x"004F",x"A009",x"0001",x"0050", -- 1080-108F 
+  x"A009",x"8003",x"B200",x"0003",x"43F2",x"A003",x"FFE0",x"E579",x"0006",x"47BD",x"0020",x"4621",x"469B",x"900E",x"004F",x"A009", -- 1090-109F 
+  x"4225",x"B501",x"A00A",x"A007",x"0051",x"A009",x"4225",x"42AD",x"A00A",x"0053",x"A009",x"8004",x"B300",x"E580",x"000F",x"421F", -- 10A0-10AF 
+  x"A003",x"FFE5",x"E590",x"000A",x"47BD",x"439D",x"B501",x"0000",x"42BB",x"9003",x"E59B",x"0013",x"421F",x"B501",x"0003",x"42BB", -- 10B0-10BF 
+  x"9003",x"E5AF",x"0014",x"421F",x"B501",x"0006",x"42BB",x"9003",x"E5C4",x"0014",x"421F",x"B501",x"0009",x"42BB",x"9003",x"E5D9", -- 10C0-10CF 
+  x"0030",x"421F",x"B501",x"0012",x"42BB",x"9003",x"E60A",x"0012",x"421F",x"B501",x"0369",x"42BB",x"9003",x"E61D",x"0013",x"421F", -- 10D0-10DF 
+  x"B501",x"1234",x"42BB",x"9003",x"E631",x"004C",x"421F",x"A003",x"FFC9",x"E67E",x"0005",x"47BD",x"47DD",x"4225",x"0003",x"42B4", -- 10E0-10EF 
+  x"B501",x"4390",x"A00A",x"42AD",x"B501",x"4390",x"A00A",x"B501",x"4390",x"0040",x"42B4",x"4225",x"B412",x"0007",x"A008",x"0018", -- 10F0-10FF 
+  x"A007",x"A009",x"A003",x"FFE5",x"E684",x"0002",x"47BD",x"0007",x"4346",x"E687",x"0008",x"421F",x"A003",x"FFF6",x"E690",x"0002", -- 1100-110F 
+  x"47BD",x"0007",x"4346",x"E693",x"0004",x"421F",x"474F",x"A003",x"FFF5",x"E698",x"0002",x"47BD",x"E69B",x"0029",x"421F",x"439D", -- 1110-111F 
+  x"FA00",x"0100",x"450F",x"4702",x"E6C5",x"0002",x"421F",x"A003",x"FFF0",x"E6C8",x"0005",x"47BD",x"0049",x"A00A",x"0100",x"450F", -- 1120-112F 
+  x"A003",x"FFF7",x"E6CE",x"0007",x"47AF",x"003C",x"4346",x"E6D6",x"0004",x"421F",x"439D",x"512C",x"E6DB",x"0007",x"4219",x"4667", -- 1130-113F 
+  x"9FF9",x"003C",x"4346",x"E6E3",x"0003",x"421F",x"A003",x"FFEA",x"E6E7",x"0003",x"47BD",x"0010",x"0048",x"A009",x"A003",x"FFF8", -- 1140-114F 
+  x"E6EB",x"0007",x"47BD",x"000A",x"0048",x"A009",x"A003",x"FFF8",x"E6F3",x"0005",x"47BD",x"B501",x"3FFF",x"42D4",x"B502",x"C000", -- 1150-115F 
+  x"42C2",x"A00E",x"9002",x"1234",x"43F2",x"432D",x"A003",x"515B",x"A003",x"4D6F",x"A003",x"FFEC",x"E6F9",x"0002",x"47BD",x"4390", -- 1160-116F 
+  x"A003",x"FFFA",x"E6FC",x"0002",x"47BD",x"A007",x"A003",x"FFFA",x"E6FF",x"0002",x"47BD",x"42B4",x"A003",x"FFFA",x"E702",x"0002", -- 1170-117F 
+  x"47BD",x"42DB",x"A003",x"FFFA",x"E705",x"0002",x"47BD",x"4A53",x"A003",x"FFFA",x"E708",x"0005",x"47BD",x"4A31",x"A003",x"FFFA", -- 1180-118F 
+  x"E70E",x"0004",x"47BD",x"4A5B",x"A003",x"FFFA",x"E713",x"0001",x"47BD",x"4F40",x"A003",x"FFFA",x"E715",x"0001",x"47BD",x"4C17", -- 1190-119F 
+  x"A003",x"FFFA",x"E717",x"0001",x"47BD",x"4C1F",x"A003",x"FFFA",x"E719",x"0001",x"47BD",x"4C26",x"A003",x"FFFA",x"E71B",x"0001", -- 11A0-11AF 
+  x"47BD",x"4D2F",x"A003",x"FFFA",x"E71D",x"0004",x"47BD",x"4C38",x"47DD",x"47DD",x"4A5B",x"4D3D",x"A003",x"FFF6",x"E722",x"0003", -- 11B0-11BF 
+  x"47BD",x"4D4A",x"A003",x"FFFA",x"E726",x"0002",x"47BD",x"4D5C",x"A003",x"FFFA",x"E729",x"0001",x"47BD",x"4E04",x"A003",x"FFFA", -- 11C0-11CF 
+  x"E72B",x"0001",x"47BD",x"A00A",x"5199",x"A003",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 11D0-11DF 
+</DUMPZ></ok>
+BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM für P20_FFP.vhd Step_11 <ok>
+<DUMPZ>
+  x"28",x"20",x"7B",x"20",x"7D",x"20",x"43",x"4F",x"4D",x"50",x"49",x"4C",x"45",x"20",x"28",x"4C", -- E000-E00F 
+  x"49",x"54",x"2C",x"29",x"20",x"4C",x"49",x"54",x"2C",x"20",x"28",x"43",x"4F",x"4E",x"53",x"54", -- E010-E01F 
+  x"41",x"4E",x"54",x"3A",x"29",x"20",x"43",x"4F",x"4E",x"53",x"54",x"41",x"4E",x"54",x"20",x"53", -- E020-E02F 
+  x"50",x"20",x"52",x"50",x"20",x"50",x"43",x"20",x"58",x"42",x"49",x"54",x"20",x"53",x"4D",x"55", -- E030-E03F 
+  x"44",x"47",x"45",x"42",x"49",x"54",x"20",x"52",x"50",x"30",x"20",x"49",x"52",x"41",x"4D",x"41", -- E040-E04F 
+  x"44",x"52",x"20",x"4A",x"52",x"41",x"4D",x"41",x"44",x"52",x"20",x"58",x"4F",x"46",x"46",x"20", -- E050-E05F 
+  x"43",x"52",x"42",x"5A",x"45",x"49",x"47",x"20",x"43",x"52",x"44",x"50",x"20",x"42",x"41",x"53", -- E060-E06F 
+  x"45",x"20",x"54",x"49",x"42",x"20",x"49",x"4E",x"31",x"20",x"49",x"4E",x"32",x"20",x"49",x"4E", -- E070-E07F 
+  x"33",x"20",x"49",x"4E",x"34",x"20",x"45",x"52",x"52",x"4F",x"52",x"4E",x"52",x"20",x"44",x"50", -- E080-E08F 
+  x"20",x"53",x"54",x"41",x"54",x"20",x"4C",x"46",x"41",x"20",x"42",x"41",x"4E",x"46",x"20",x"42", -- E090-E09F 
+  x"5A",x"45",x"49",x"47",x"20",x"44",x"50",x"4D",x"45",x"52",x"4B",x"20",x"43",x"53",x"50",x"20", -- E0A0-E0AF 
+  x"4C",x"4F",x"43",x"41",x"4C",x"41",x"44",x"44",x"52",x"20",x"56",x"45",x"52",x"53",x"49",x"4F", -- E0B0-E0BF 
+  x"4E",x"20",x"52",x"45",x"54",x"55",x"52",x"4E",x"20",x"28",x"4D",x"43",x"4F",x"44",x"45",x"3A", -- E0C0-E0CF 
+  x"29",x"20",x"4D",x"43",x"4F",x"44",x"45",x"20",x"4D",x"49",x"4E",x"55",x"53",x"20",x"55",x"2B", -- E0D0-E0DF 
+  x"20",x"55",x"2A",x"20",x"30",x"3D",x"20",x"30",x"4C",x"54",x"20",x"45",x"4D",x"49",x"54",x"43", -- E0E0-E0EF 
+  x"4F",x"44",x"45",x"20",x"4E",x"4F",x"54",x"20",x"41",x"4E",x"44",x"20",x"4F",x"52",x"20",x"4B", -- E0F0-E0FF 
+  x"45",x"59",x"43",x"4F",x"44",x"45",x"20",x"2B",x"20",x"21",x"20",x"40",x"20",x"53",x"57",x"41", -- E100-E10F 
+  x"50",x"20",x"4F",x"56",x"45",x"52",x"20",x"44",x"55",x"50",x"20",x"52",x"4F",x"54",x"20",x"44", -- E110-E11F 
+  x"52",x"4F",x"50",x"20",x"32",x"53",x"57",x"41",x"50",x"20",x"32",x"4F",x"56",x"45",x"52",x"20", -- E120-E12F 
+  x"32",x"44",x"55",x"50",x"20",x"32",x"44",x"52",x"4F",x"50",x"20",x"4E",x"4F",x"4F",x"50",x"20", -- E130-E13F 
+  x"42",x"2C",x"20",x"5A",x"2C",x"20",x"28",x"57",x"4F",x"52",x"44",x"3A",x"29",x"20",x"57",x"4F", -- E140-E14F 
+  x"52",x"44",x"3A",x"20",x"22",x"20",x"2E",x"22",x"20",x"48",x"45",x"52",x"45",x"20",x"4A",x"52", -- E150-E15F 
+  x"42",x"49",x"54",x"20",x"4A",x"52",x"30",x"42",x"49",x"54",x"20",x"58",x"53",x"45",x"54",x"42", -- E160-E16F 
+  x"54",x"20",x"41",x"4C",x"4C",x"4F",x"54",x"20",x"42",x"52",x"41",x"4E",x"43",x"48",x"2C",x"20", -- E170-E17F 
+  x"30",x"42",x"52",x"41",x"4E",x"43",x"48",x"2C",x"20",x"42",x"45",x"47",x"49",x"4E",x"20",x"41", -- E180-E18F 
+  x"47",x"41",x"49",x"4E",x"20",x"55",x"4E",x"54",x"49",x"4C",x"20",x"49",x"46",x"20",x"45",x"4E", -- E190-E19F 
+  x"44",x"5F",x"49",x"46",x"20",x"45",x"4C",x"53",x"45",x"20",x"57",x"48",x"49",x"4C",x"45",x"20", -- E1A0-E1AF 
+  x"52",x"45",x"50",x"45",x"41",x"54",x"20",x"43",x"40",x"20",x"43",x"21",x"20",x"31",x"2B",x"20", -- E1B0-E1BF 
+  x"2D",x"20",x"3D",x"20",x"4C",x"54",x"20",x"3E",x"20",x"2A",x"20",x"42",x"59",x"45",x"20",x"42", -- E1C0-E1CF 
+  x"59",x"45",x"20",x"20",x"2B",x"21",x"20",x"52",x"3E",x"20",x"3E",x"52",x"20",x"52",x"20",x"2C", -- E1D0-E1DF 
+  x"20",x"45",x"58",x"45",x"43",x"55",x"54",x"45",x"20",x"4B",x"45",x"59",x"20",x"45",x"4D",x"49", -- E1E0-E1EF 
+  x"54",x"20",x"53",x"48",x"4C",x"31",x"36",x"20",x"44",x"49",x"47",x"20",x"54",x"59",x"50",x"45", -- E1F0-E1FF 
+  x"20",x"48",x"47",x"2E",x"20",x"48",x"2E",x"20",x"2E",x"20",x"3F",x"20",x"43",x"52",x"20",x"66", -- E200-E20F 
+  x"6C",x"3E",x"20",x"2F",x"66",x"6C",x"3E",x"20",x"66",x"72",x"3E",x"20",x"2F",x"66",x"72",x"3E", -- E210-E21F 
+  x"20",x"46",x"45",x"48",x"4C",x"45",x"52",x"54",x"45",x"58",x"54",x"20",x"44",x"49",x"53",x"41", -- E220-E22F 
+  x"42",x"4C",x"45",x"20",x"77",x"65",x"69",x"74",x"65",x"72",x"20",x"6E",x"61",x"63",x"68",x"20", -- E230-E23F 
+  x"54",x"61",x"73",x"74",x"65",x"20",x"45",x"53",x"43",x"41",x"50",x"45",x"20",x"20",x"45",x"52", -- E240-E24F 
+  x"52",x"4F",x"52",x"20",x"3F",x"3F",x"3F",x"20",x"46",x"45",x"48",x"4C",x"45",x"52",x"54",x"45", -- E250-E25F 
+  x"58",x"54",x"20",x"45",x"52",x"52",x"4F",x"52",x"20",x"2D",x"20",x"46",x"65",x"68",x"6C",x"65", -- E260-E26F 
+  x"72",x"20",x"4E",x"75",x"6D",x"6D",x"65",x"72",x"20",x"20",x"43",x"53",x"50",x"21",x"20",x"43", -- E270-E27F 
+  x"53",x"50",x"3F",x"20",x"4C",x"4F",x"43",x"41",x"4C",x"20",x"45",x"4E",x"44",x"5F",x"4C",x"4F", -- E280-E28F 
+  x"43",x"41",x"4C",x"20",x"4C",x"30",x"20",x"4C",x"31",x"20",x"4C",x"32",x"20",x"4C",x"33",x"20", -- E290-E29F 
+  x"4C",x"34",x"20",x"4C",x"35",x"20",x"4C",x"36",x"20",x"4C",x"37",x"20",x"27",x"20",x"49",x"4E", -- E2A0-E2AF 
+  x"43",x"52",x"34",x"20",x"4B",x"45",x"59",x"5F",x"49",x"4E",x"54",x"20",x"4B",x"45",x"59",x"43", -- E2B0-E2BF 
+  x"4F",x"44",x"45",x"32",x"20",x"45",x"58",x"50",x"45",x"43",x"54",x"20",x"44",x"49",x"47",x"49", -- E2C0-E2CF 
+  x"54",x"20",x"4E",x"55",x"4D",x"42",x"45",x"52",x"20",x"57",x"4F",x"52",x"44",x"20",x"5A",x"3D", -- E2D0-E2DF 
+  x"20",x"46",x"49",x"4E",x"44",x"20",x"4C",x"43",x"46",x"41",x"20",x"43",x"4F",x"4D",x"50",x"49", -- E2E0-E2EF 
+  x"4C",x"45",x"2C",x"20",x"43",x"52",x"45",x"41",x"54",x"45",x"20",x"49",x"4E",x"54",x"45",x"52", -- E2F0-E2FF 
+  x"50",x"52",x"45",x"54",x"20",x"51",x"55",x"49",x"54",x"20",x"2F",x"6F",x"6B",x"3E",x"20",x"6F", -- E300-E30F 
+  x"6B",x"20",x"6F",x"6B",x"3E",x"20",x"2F",x"6F",x"6B",x"3E",x"20",x"6F",x"6B",x"20",x"53",x"54", -- E310-E31F 
+  x"41",x"52",x"54",x"20",x"46",x"4F",x"52",x"54",x"59",x"2D",x"46",x"4F",x"52",x"54",x"48",x"20", -- E320-E32F 
+  x"53",x"4D",x"55",x"44",x"47",x"45",x"20",x"28",x"49",x"4D",x"4D",x"45",x"44",x"49",x"41",x"54", -- E330-E33F 
+  x"45",x"3A",x"29",x"20",x"28",x"43",x"4F",x"4D",x"50",x"49",x"4C",x"45",x"3A",x"29",x"20",x"28", -- E340-E34F 
+  x"3A",x"29",x"20",x"49",x"4D",x"4D",x"45",x"44",x"49",x"41",x"54",x"45",x"3A",x"20",x"43",x"4F", -- E350-E35F 
+  x"4D",x"50",x"49",x"4C",x"45",x"3A",x"20",x"3A",x"20",x"3B",x"20",x"44",x"55",x"42",x"49",x"54", -- E360-E36F 
+  x"20",x"4C",x"47",x"2E",x"20",x"4E",x"47",x"2E",x"20",x"78",x"20",x"2C",x"20",x"44",x"55",x"4D", -- E370-E37F 
+  x"50",x"5A",x"20",x"27",x"20",x"53",x"54",x"41",x"52",x"54",x"20",x"20",x"44",x"55",x"4D",x"50", -- E380-E38F 
+  x"5A",x"3E",x"20",x"20",x"20",x"20",x"20",x"2D",x"2D",x"20",x"20",x"2D",x"20",x"2F",x"44",x"55", -- E390-E39F 
+  x"4D",x"50",x"5A",x"3E",x"20",x"52",x"41",x"4D",x"50",x"31",x"20",x"56",x"41",x"52",x"49",x"41", -- E3A0-E3AF 
+  x"42",x"4C",x"45",x"20",x"4D",x"4F",x"56",x"45",x"20",x"46",x"49",x"4C",x"4C",x"20",x"44",x"55", -- E3B0-E3BF 
+  x"4D",x"50",x"20",x"4D",x"41",x"58",x"20",x"4D",x"49",x"4E",x"20",x"41",x"42",x"53",x"20",x"4D", -- E3C0-E3CF 
+  x"55",x"4C",x"54",x"5F",x"49",x"20",x"4D",x"55",x"4C",x"54",x"5F",x"49",x"49",x"20",x"53",x"55", -- E3D0-E3DF 
+  x"50",x"45",x"52",x"4D",x"55",x"4C",x"54",x"20",x"41",x"20",x"42",x"20",x"43",x"20",x"53",x"4D", -- E3E0-E3EF 
+  x"55",x"4C",x"20",x"41",x"44",x"44",x"49",x"45",x"52",x"20",x"44",x"49",x"33",x"32",x"20",x"44", -- E3F0-E3FF 
+  x"49",x"56",x"33",x"32",x"20",x"2F",x"4D",x"4F",x"44",x"20",x"2F",x"4D",x"4F",x"44",x"20",x"2F", -- E400-E40F 
+  x"20",x"4D",x"4F",x"44",x"20",x"53",x"44",x"49",x"56",x"20",x"4F",x"50",x"45",x"52",x"41",x"4E", -- E410-E41F 
+  x"44",x"31",x"20",x"4F",x"50",x"45",x"52",x"41",x"4E",x"44",x"32",x"20",x"45",x"52",x"47",x"45", -- E420-E42F 
+  x"42",x"4E",x"49",x"53",x"20",x"5A",x"41",x"48",x"4C",x"45",x"4E",x"53",x"50",x"45",x"49",x"43", -- E430-E43F 
+  x"48",x"45",x"52",x"20",x"53",x"50",x"45",x"49",x"43",x"48",x"45",x"52",x"45",x"4E",x"44",x"45", -- E440-E44F 
+  x"20",x"53",x"43",x"48",x"49",x"45",x"42",x"20",x"53",x"4C",x"58",x"2D",x"3E",x"45",x"52",x"47", -- E450-E45F 
+  x"45",x"42",x"4E",x"49",x"53",x"20",x"4F",x"50",x"45",x"52",x"41",x"4E",x"44",x"2D",x"3E",x"53", -- E460-E46F 
+  x"4C",x"58",x"20",x"53",x"50",x"45",x"49",x"43",x"48",x"45",x"52",x"48",x"4F",x"4C",x"20",x"32", -- E470-E47F 
+  x"4F",x"50",x"45",x"52",x"41",x"4E",x"44",x"45",x"4E",x"2D",x"3E",x"32",x"53",x"4C",x"58",x"20", -- E480-E48F 
+  x"4E",x"2B",x"20",x"4E",x"2D",x"20",x"4E",x"2A",x"20",x"52",x"45",x"43",x"55",x"52",x"53",x"45", -- E490-E49F 
+  x"20",x"4E",x"2F",x"4D",x"4F",x"44",x"20",x"48",x"47",x"30",x"2E",x"20",x"4E",x"2E",x"20",x"2D", -- E4A0-E4AF 
+  x"20",x"4E",x"42",x"2E",x"20",x"42",x"4C",x"4F",x"43",x"4B",x"41",x"4E",x"46",x"41",x"4E",x"47", -- E4B0-E4BF 
+  x"20",x"42",x"4C",x"4F",x"43",x"4B",x"45",x"4E",x"44",x"45",x"20",x"4E",x"45",x"42",x"45",x"4E", -- E4C0-E4CF 
+  x"52",x"45",x"43",x"48",x"4E",x"55",x"4E",x"47",x"20",x"48",x"41",x"55",x"50",x"54",x"52",x"45", -- E4D0-E4DF 
+  x"43",x"48",x"4E",x"55",x"4E",x"47",x"20",x"52",x"45",x"43",x"48",x"45",x"4E",x"42",x"4C",x"4F", -- E4E0-E4EF 
+  x"43",x"4B",x"20",x"49",x"4E",x"49",x"54",x"20",x"41",x"2B",x"30",x"20",x"42",x"2B",x"30",x"20", -- E4F0-E4FF 
+  x"4E",x"2F",x"20",x"4E",x"4D",x"4F",x"44",x"20",x"4E",x"47",x"47",x"54",x"20",x"4E",x"42",x"4B", -- E500-E50F 
+  x"20",x"4E",x"4E",x"55",x"4D",x"42",x"45",x"52",x"20",x"4E",x"22",x"20",x"4E",x"5E",x"20",x"4E", -- E510-E51F 
+  x"2E",x"20",x"2D",x"20",x"30",x"20",x"20",x"4E",x"42",x"2E",x"20",x"5A",x"45",x"52",x"4C",x"45", -- E520-E52F 
+  x"47",x"20",x"4F",x"42",x"4A",x"3F",x"20",x"4C",x"20",x"47",x"20",x"48",x"20",x"4F",x"2E",x"20", -- E530-E53F 
+  x"5B",x"20",x"20",x"5D",x"20",x"20",x"53",x"50",x"4D",x"45",x"52",x"4B",x"20",x"5B",x"20",x"5D", -- E540-E54F 
+  x"20",x"49",x"4E",x"56",x"45",x"52",x"54",x"49",x"45",x"52",x"45",x"4E",x"20",x"56",x"4C",x"49", -- E550-E55F 
+  x"53",x"54",x"20",x"57",x"4C",x"49",x"53",x"54",x"20",x"52",x"45",x"54",x"55",x"52",x"4E",x"20", -- E560-E56F 
+  x"52",x"45",x"50",x"4C",x"41",x"43",x"45",x"3A",x"20",x"46",x"4F",x"52",x"47",x"45",x"54",x"20", -- E570-E57F 
+  x"6E",x"69",x"63",x"68",x"74",x"20",x"67",x"65",x"66",x"75",x"6E",x"64",x"65",x"6E",x"20",x"20", -- E580-E58F 
+  x"46",x"45",x"48",x"4C",x"45",x"52",x"54",x"45",x"58",x"54",x"20",x"44",x"69",x"76",x"69",x"73", -- E590-E59F 
+  x"69",x"6F",x"6E",x"20",x"64",x"75",x"72",x"63",x"68",x"20",x"4E",x"75",x"6C",x"6C",x"20",x"57", -- E5A0-E5AF 
+  x"6F",x"72",x"74",x"20",x"6E",x"69",x"63",x"68",x"74",x"20",x"64",x"65",x"66",x"69",x"6E",x"69", -- E5B0-E5BF 
+  x"65",x"72",x"74",x"20",x"45",x"69",x"6E",x"67",x"61",x"62",x"65",x"7A",x"65",x"69",x"6C",x"65", -- E5C0-E5CF 
+  x"20",x"7A",x"75",x"20",x"6C",x"61",x"6E",x"67",x"20",x"53",x"74",x"72",x"75",x"6B",x"74",x"75", -- E5D0-E5DF 
+  x"72",x"66",x"65",x"68",x"6C",x"65",x"72",x"20",x"69",x"6E",x"20",x"49",x"46",x"20",x"45",x"4E", -- E5E0-E5EF 
+  x"44",x"5F",x"49",x"46",x"20",x"42",x"45",x"47",x"49",x"4E",x"20",x"55",x"4E",x"54",x"49",x"4C", -- E5F0-E5FF 
+  x"20",x"44",x"4F",x"20",x"4C",x"4F",x"4F",x"50",x"20",x"20",x"6E",x"65",x"67",x"61",x"74",x"69", -- E600-E60F 
+  x"76",x"65",x"72",x"20",x"45",x"78",x"70",x"6F",x"6E",x"65",x"6E",x"74",x"20",x"5A",x"61",x"68", -- E610-E61F 
+  x"6C",x"65",x"6E",x"73",x"70",x"65",x"69",x"63",x"68",x"65",x"72",x"20",x"76",x"6F",x"6C",x"6C", -- E620-E62F 
+  x"20",x"67",x"72",x"6F",x"C3",x"9F",x"65",x"20",x"67",x"61",x"6E",x"7A",x"65",x"20",x"5A",x"61", -- E630-E63F 
+  x"68",x"6C",x"65",x"6E",x"20",x"6B",x"6F",x"6D",x"70",x"69",x"6C",x"69",x"65",x"72",x"65",x"6E", -- E640-E64F 
+  x"20",x"67",x"65",x"68",x"74",x"20",x"6D",x"6F",x"6D",x"65",x"6E",x"74",x"61",x"6E",x"20",x"6E", -- E650-E65F 
+  x"69",x"63",x"68",x"74",x"2C",x"20",x"73",x"69",x"65",x"68",x"65",x"20",x"54",x"45",x"53",x"54", -- E660-E66F 
+  x"46",x"55",x"45",x"52",x"4E",x"45",x"55",x"45",x"53",x"2E",x"54",x"58",x"54",x"20",x"53",x"54", -- E670-E67F 
+  x"52",x"47",x"3A",x"20",x"5E",x"47",x"20",x"2F",x"31",x"78",x"50",x"49",x"45",x"50",x"2F",x"20", -- E680-E68F 
+  x"5E",x"46",x"20",x"51",x"55",x"49",x"54",x"20",x"5E",x"41",x"20",x"41",x"6E",x"67",x"65",x"68", -- E690-E69F 
+  x"61",x"6C",x"74",x"65",x"6E",x"20",x"66",x"C3",x"BC",x"72",x"20",x"67",x"65",x"6E",x"61",x"75", -- E6A0-E6AF 
+  x"20",x"65",x"69",x"6E",x"65",x"20",x"45",x"69",x"6E",x"67",x"61",x"62",x"65",x"7A",x"65",x"69", -- E6B0-E6BF 
+  x"6C",x"65",x"3A",x"20",x"20",x"6F",x"6B",x"20",x"51",x"55",x"45",x"52",x"59",x"20",x"28",x"2A", -- E6C0-E6CF 
+  x"52",x"45",x"4D",x"2A",x"29",x"20",x"2F",x"6F",x"6B",x"3E",x"20",x"28",x"2A",x"45",x"4E",x"44", -- E6D0-E6DF 
+  x"2A",x"29",x"20",x"6F",x"6B",x"3E",x"20",x"48",x"45",x"58",x"20",x"44",x"45",x"43",x"49",x"4D", -- E6E0-E6EF 
+  x"41",x"4C",x"20",x"4E",x"4C",x"49",x"54",x"2C",x"20",x"4D",x"2E",x"20",x"4D",x"2B",x"20",x"4D", -- E6F0-E6FF 
+  x"2D",x"20",x"4D",x"2A",x"20",x"4D",x"2F",x"20",x"4D",x"2F",x"4D",x"4F",x"44",x"20",x"4D",x"4D", -- E700-E70F 
+  x"4F",x"44",x"20",x"2E",x"20",x"2B",x"20",x"2D",x"20",x"2A",x"20",x"2F",x"20",x"2F",x"4D",x"4F", -- E710-E71F 
+  x"44",x"20",x"47",x"47",x"54",x"20",x"42",x"4B",x"20",x"5E",x"20",x"3F",x"20",x"00",x"00",x"00", -- E720-E72F 
+</DUMPZ></ok>
+3000 2C00 0 DUMPZ        ( generiert stapR   für P20_FFP.vhd Step_11 <ok>
+<DUMPZ>
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C00-2C0F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C10-2C1F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C20-2C2F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C30-2C3F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C40-2C4F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C50-2C5F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C60-2C6F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C70-2C7F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C80-2C8F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C90-2C9F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2CA0-2CAF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2CB0-2CBF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2CC0-2CCF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2CD0-2CDF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2CE0-2CEF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2CF0-2CFF 
+  x"0000",x"0000",x"0000",x"0000",x"0055",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2D00-2D0F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2D10-2D1F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2D20-2D2F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2D30-2D3F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2D40-2D4F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2D50-2D5F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2D60-2D6F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2D70-2D7F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2D80-2D8F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2D90-2D9F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2DA0-2DAF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2DB0-2DBF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2DC0-2DCF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2DD0-2DDF 
+  x"FFCE",x"012C",x"FF38",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2DE0-2DEF 
+  x"0032",x"FED4",x"0190",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2DF0-2DFF 
+  x"000F",x"FFC4",x"0032",x"FFC4",x"0140",x"FED4",x"0032",x"FED4",x"012C",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2E00-2E0F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2E10-2E1F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2E20-2E2F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2E30-2E3F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2E40-2E4F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2E50-2E5F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2E60-2E6F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2E70-2E7F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2E80-2E8F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2E90-2E9F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2EA0-2EAF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2EB0-2EBF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2EC0-2ECF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2ED0-2EDF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2EE0-2EEF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2EF0-2EFF 
+  x"2F0A",x"0000",x"0000",x"140C",x"1400",x"2000",x"0001",x"1400",x"1400",x"0000",x"0000",x"2EE0",x"0000",x"0000",x"0000",x"0000", -- 2F00-2F0F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F10-2F1F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F20-2F2F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F30-2F3F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F40-2F4F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F50-2F5F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F60-2F6F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F70-2F7F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F80-2F8F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F90-2F9F 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2FA0-2FAF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2FB0-2FBF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2FC0-2FCF 
+  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0301",x"0301",x"0301",x"0301",x"0301",x"0301",x"0301",x"0301", -- 2FD0-2FDF 
+  x"0301",x"0301",x"0301",x"0301",x"0446",x"0446",x"0000",x"0001",x"0301",x"0083",x"02C9",x"0301",x"0301",x"068E",x"0301",x"0083", -- 2FE0-2FEF 
+  x"0301",x"0301",x"0301",x"0083",x"0348",x"036F",x"0220",x"02BC",x"0845",x"FFFF",x"072A",x"FB05",x"FB06",x"FB00",x"FB00",x"0774", -- 2FF0-2FFF 
+</DUMPZ></ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="noch ein wenig DEMO"> 
+111111111111111 DUP * . <ok>123456789ABCDEFEDCBA987654321 </ok>
+ <ok></ok>
+( jetzt eine Matrix invertieren ) <ok></ok>
+ <ok></ok>
+DECIMAL <ok></ok>
+ <ok></ok>
+[ [ 1 1 ^ 1 2 ^ 1 3 ^ 1 1 ^ ] <ok></ok>
+  [ 2 1 ^ 2 2 ^ 2 3 ^ 2 4 ^ ] <ok></ok>
+  [ 3 1 ^ 3 2 ^ 3 3 ^ 3 4 ^ ] <ok></ok>
+  [ 4 1 ^ 4 2 ^ 4 3 ^ 4 4 ^ ] <ok></ok>
+  ]  <ok></ok>
+DUP . <ok>[ [ 1 1 1 1 ] [ 2 4 8 16 ] [ 3 9 27 81 ] [ 4 16 64 256 ] ] </ok>
+4 INVERTIEREN ( mat dim --> invmat nenner ) <ok></ok>
+OVER . <ok>[ [ 1152 -864 384 -72 ] [ -1248 1368 -672 132 ] [ 432 -576 336 -72 ] [ -48 72 -48 12 ] ] </ok>
+DUP . <ok>288 </ok>
+( Ergebnis sollte sein: OVER .      ) <ok></ok>
+(      [ [ 1152 -864 384 -72 ]      ) <ok></ok>
+(        [ -1248 1368 -672 132 ]    )  <ok></ok>
+(        [ 432 -576 336 -72 ]       ) <ok></ok>
+(        [ -48 72 -48 12 ] ] ok     ) <ok></ok>
+( und gemeinsamer Nenner: DUP . 288 ) <ok></ok>
+</sekt> 
+</FFINIT2> 
+</INIT> 
