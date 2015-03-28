@@ -38,12 +38,12 @@ type REG is array(0 to 3) of STD_LOGIC_VECTOR (15 downto 0);
 type RAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (15 downto 0);
 -- Programmspeicher 0000H-1FFFH
 signal ProgRAM: RAMTYPE:=(
-
   x"4010",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 0000-000F 
   x"479C",x"A003",x"44E9",x"9001",x"A003",x"B300",x"8000",x"8FFA",x"0000",x"111C",x"0000",x"0000",x"0000",x"0000",x"1111",x"1107", -- 0010-001F 
   x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"44BA",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003", -- 0020-002F 
   x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003", -- 0030-003F 
-  x"0000",x"0000",x"3000",x"FC73",x"FC73",x"FFFF",x"E72D",x"11D6",x"0010",x"FB00",x"FB00",x"FB09",x"FB0F",x"FB45",x"0000",x"11D6", -- 0040-004F 
+--                --RP0--
+  x"0000",x"0000",x"4000",x"FC73",x"FC73",x"FFFF",x"E72D",x"11D6",x"0010",x"FB00",x"FB00",x"FB09",x"FB0F",x"FB45",x"0000",x"11D6", -- 0040-004F 
   x"0000",x"11CF",x"E000",x"E72D",x"0058",x"0049",x"0000",x"2FEF",x"0000",x"E000",x"0001",x"47AF",x"0029",x"4621",x"B200",x"A003", -- 0050-005F 
   x"FFF8",x"E002",x"0001",x"47AF",x"0000",x"0050",x"A009",x"A003",x"FFF8",x"E004",x"0001",x"47BD",x"0001",x"0050",x"A009",x"A003", -- 0060-006F 
   x"FFF8",x"E006",x"0007",x"47AF",x"0020",x"4621",x"469B",x"46DB",x"B300",x"46E4",x"A003",x"FFF5",x"E00E",x"0006",x"47B6",x"42FA", -- 0070-007F 
@@ -327,10 +327,9 @@ signal ProgRAM: RAMTYPE:=(
   x"E72B",x"0001",x"47BD",x"A00A",x"5199",x"A003",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 11D0-11DF 
   others=>x"0000");
 
--- Textspeicher
+-- Textspeicher E000H-FFFFH
 type ByteRAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (7 downto 0);
 signal ByteRAM: ByteRAMTYPE:=(
-
   x"28",x"20",x"7B",x"20",x"7D",x"20",x"43",x"4F",x"4D",x"50",x"49",x"4C",x"45",x"20",x"28",x"4C", -- E000-E00F 
   x"49",x"54",x"2C",x"29",x"20",x"4C",x"49",x"54",x"2C",x"20",x"28",x"43",x"4F",x"4E",x"53",x"54", -- E010-E01F 
   x"41",x"4E",x"54",x"3A",x"29",x"20",x"43",x"4F",x"4E",x"53",x"54",x"41",x"4E",x"54",x"20",x"53", -- E020-E02F 
@@ -448,10 +447,9 @@ signal ByteRAM: ByteRAMTYPE:=(
   x"44",x"20",x"47",x"47",x"54",x"20",x"42",x"4B",x"20",x"5E",x"20",x"3F",x"20",x"00",x"00",x"00", -- E720-E72F 
   others=>x"00");
 
--- Rückkehrstapel
+-- Daten 2C00H-2FFFH
 type stapRAMTYPE is array(0 to 1024-1) of STD_LOGIC_VECTOR (15 downto 0);
 shared variable stapR: stapRAMTYPE:=(
-
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C00-2C0F 
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C10-2C1F 
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C20-2C2F 
@@ -518,7 +516,12 @@ shared variable stapR: stapRAMTYPE:=(
   x"0301",x"0301",x"0301",x"0083",x"0348",x"036F",x"0220",x"02BC",x"0845",x"FFFF",x"072A",x"FB05",x"FB06",x"FB00",x"FB00",x"0774", -- 2FF0-2FFF 
   others=>x"0000");
 
---diese Funktion übernimmt von SP nur die beiden niedrigsten Bits
+-- Rueckkehrstapel 3FC0-3FFFH, TRUE_DUAL_PORT
+type stapRAMNEUTYPE is array(0 to 63) of STD_LOGIC_VECTOR (15 downto 0);
+shared variable stapRNEU: stapRAMNEUTYPE:=(
+  others=>x"0000");
+
+-- diese Funktion übernimmt von SP nur die beiden niedrigsten Bits
   function P(SP : integer) return integer is begin
 --    return CONV_INTEGER(CONV_UNSIGNED(SP,2));
     return SP mod 4;
@@ -531,13 +534,13 @@ type STAPELTYPE is array(0 to 31) of STD_LOGIC_VECTOR (15 downto 0);
 signal stap1,stap2,stap3,stap0: STAPELTYPE:=(others=>x"0000");
 -- Rueckkehrstapel
 signal RPC,RPCC: STD_LOGIC_VECTOR (15 downto 0);
-signal RP: STD_LOGIC_VECTOR (15 downto 0):=x"3000";
+signal RP: STD_LOGIC_VECTOR (15 downto 0):=x"4000"; --auch RP0 auf 4000H setzen.
 signal RW: STD_LOGIC;
 -- kompletten Speicher anschliessen
 signal PC_ZUM_ProgRAM,PD_VOM_ProgRAM: STD_LOGIC_VECTOR (15 downto 0);
 signal STORE_ZUM_RAM,EXFET,ADRESSE_ZUM_RAM: STD_LOGIC_VECTOR (15 downto 0);
-signal FETCH_VOM_ProgRAM,FETCH_VOM_ByteRAM,FETCH_VOM_stapR: STD_LOGIC_VECTOR (15 downto 0);
-signal WE_ZUM_RAM,WE_ZUM_ProgRAM,WE_ZUM_ByteRAM,WE_ZUM_stapR: STD_LOGIC;
+signal FETCH_VOM_ProgRAM,FETCH_VOM_ByteRAM,FETCH_VOM_stapR,FETCH_VOM_stapRNEU: STD_LOGIC_VECTOR (15 downto 0);
+signal WE_ZUM_RAM,WE_ZUM_ProgRAM,WE_ZUM_ByteRAM,WE_ZUM_stapR,WE_ZUM_stapRNEU: STD_LOGIC;
 -- fuer EMIT-Ausgabe
 signal EMIT_ABGESCHICKT_LOCAL,EMIT_ANGEKOMMEN_RUHEND,XOFF_INPUT_L: STD_LOGIC:='0';
 signal KEY_ANGEKOMMEN_LOCAL,KEY_ABGESCHICKT_RUHEND,KEY_ABGESCHICKT_MERK: STD_LOGIC:='0';
@@ -742,12 +745,14 @@ KEY_ANGEKOMMEN<=KEY_ANGEKOMMEN_LOCAL;
 -- hier werden die Lesedaten der unterschiedlichen Speicher zusammengefuehrt
 EXFET<=FETCH_VOM_ProgRAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else
        FETCH_VOM_stapR when ADRESSE_ZUM_RAM(15 downto 10)="001011" else
+       FETCH_VOM_stapRNEU when ADRESSE_ZUM_RAM(15 downto 6)="0011111111" else
        x"00"&FETCH_VOM_ByteRAM(7 downto 0) when ADRESSE_ZUM_RAM(15 downto 13)="111" else
        DAT_I;
 
 -- hier wird WE auf die unterschiedlichen Speicher aufgeteilt
 WE_ZUM_ProgRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else '0';
 WE_ZUM_stapR  <=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001011" else '0';
+WE_ZUM_stapRNEU<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 6)="0011111111" else '0';
 WE_ZUM_ByteRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="111" else '0';
 
 
@@ -772,19 +777,27 @@ begin wait until (CLK_I'event and CLK_I='1');
       end if;
   end process;
 
-process --Rueckkehrstapel, TRUE_DUAL_PORT
+process -- Daten 2C00H-2FFFH
 begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_StapR='1' then 
     stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0))):=STORE_ZUM_RAM; 
     end if;
   FETCH_VOM_stapR<=stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0)));
   end process;
+
+process --Rueckkehrstapel 3FC0-3FFFH, TRUE_DUAL_PORT
+begin wait until (CLK_I'event and CLK_I='1');
+  if WE_ZUM_StapRNEU='1' then 
+    stapRNEU(CONV_INTEGER(ADRESSE_ZUM_RAM(5 downto 0))):=STORE_ZUM_RAM; 
+    end if;
+  FETCH_VOM_stapRNEU<=stapRNEU(CONV_INTEGER(ADRESSE_ZUM_RAM(5 downto 0)));
+  end process;
 process begin wait until (CLK_I'event and CLK_I='1');
   if RW='1' then
-    stapR(CONV_INTEGER(RP(9 downto 0))):=RPC;
+    stapRNEU(CONV_INTEGER(RP(5 downto 0))):=RPC;
     RPCC<=RPC;
      else
-      RPCC<=stapR(CONV_INTEGER(RP(9 downto 0)));
+      RPCC<=stapRNEU(CONV_INTEGER(RP(5 downto 0)));
     end if;
   end process;
 
