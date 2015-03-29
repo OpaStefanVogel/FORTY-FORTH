@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<xsl:output 
-  doctype-public="-//W3C//DTD XHTML 1.1//EN"
-  doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"/>
 <xsl:template match="/">
-
 <html>
   <head>
     <!--> ursprüngliches layout geändert bei:
@@ -15,13 +11,14 @@
        user-scalable=no in yes umgeschrieben
        stylesheet R00.css ergänzt
        title auch automatisch select="los/step"
-       DOCTYPE HTML5 in XHTML 1.1, xmlns mittels xsl:attribute
+       DOCTYPE HTML5 in XHTML 1.1, xmlns mittels xsl:attribute,
+         geht aber nicht überall in gleicher Form, deshalb alles wieder html5
        meta Cache-Control und ETag ergänzt
     <!-->
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
     <meta http-equiv="Cache-Control" content="max-age=86400"/>
-    <meta http-equiv="ETag" content="201503141727"/>
+    <meta http-equiv="ETag" content="201503292131"/>
     <title><xsl:value-of select="los/step" /></title>
 
     <link rel="stylesheet" href="stylesheets/styles.css"/>
