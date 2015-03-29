@@ -6,7 +6,7 @@
   doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"/>
 <xsl:template match="/">
 
-<html><xsl:attribute name="xmlns">http://www.w3.org/1999/xhtml</xsl:attribute>
+<html>
   <head>
     <!--> ursprüngliches layout geändert bei:
        <meta..> in <meta.../> geändert und so.
