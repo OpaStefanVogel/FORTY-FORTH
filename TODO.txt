@@ -116,7 +116,7 @@ ok jetzt ist das Ausgabeformat umschaltbar zwischen ok und <ok></ok> für screen
 ok die ganzen offenen Klammern ( endlich mal schließen ... so ) 
 ok wie das XMLBIT benennen? XBIT einfach nur. ok
 ok DEZ heißt eigentlich DECIMAL in Step_11
-.. durchaus auch andere Browser mal versuchen
+o. durchaus auch andere Browser mal versuchen, html ganz ohne xmlns scheint was auszumachen.
 ok testbench.vhd jetzt mit "56 89 * ." statt x"35",x"36"...
 ok ich lasse FFINIT1NEU.txt und FFINIT2NEU.txt jetzt zusätzlich drin für neue Sachen, weniger --amend's
 ok CSI C2 9B geht ja nur in screen, also alles wieder auf ESCAPE umstellen. ok

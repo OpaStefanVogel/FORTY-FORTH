@@ -67,7 +67,7 @@ zu sehen und auch eine Nutzereingabe möglich sein. Wenn nicht, erstmal mit Eing
   <li> <i>#</i></li>
   </Terminal_1>
 
-<p>Das bei 'screenlog' anfallende Logfile kann in einem xml-Browser formatiert betrachtet werden.</p>
+<p>Das bei 'screenlog' erzeugte Logfile habe ich als screenlog.xml im master-branch gespeichert. Man kann es in einem xml-Browser formatiert anschauen.</p>
 
 <weiter />Pause
 
