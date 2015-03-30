@@ -15,16 +15,208 @@ FORGET NLIT,
 ( jetzt kann es weitergehen mit neuen Wortdefinitionen:
 
 
+REPLACE: A+0 ( a --> a+0 ) 
+  OPERAND1 !
+  OPERAND1 OPERAND->SLX
+  OVER ERGEBNIS @ 1+ SWAP MOVE
+  ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz )
+  ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
+  SLX->ERGEBNIS
+  ;
 
+0 VARIABLE GGTNRMERK
+: OBJGGT ( obj b --> ggt )
+  OVER OBJ? IF
+    SWAP ( b a  ( FORALL ) 
+    ZERLEG 3FFF AND                ( b adr n
+    NEBENRECHNUNG GGTNRMERK ! 
+      BEGIN DUP WHILE ROT ROT SWAP ( n adr b
+        OVER @ SWAP RECURSE             ( n adr b'
+        GGTNRMERK @ HAUPTRECHNUNG A+0
+        SWAP 1 + ROT 1 -         ( b' adr+1 n-1
+        REPEAT                     ( ggt adr+n 0
+    2DROP                          ( ggt
+    ELSE NGGT END_IF
+  ;
 
+: OBJ/GGT ( obj ggt --> obj/ggt )
+  OVER OBJ? IF OVER >R
+    SWAP ( b a  ( FORALL ) 
+    ZERLEG 3FFF AND                ( b adr n
+      BEGIN DUP WHILE ROT ROT SWAP ( n adr b
+        2DUP OVER @ SWAP RECURSE SWAP !       ( n adr b
+        SWAP 1 + ROT 1 -         ( b adr+1 n-1
+        REPEAT                     ( b adr+n 0
+    2DROP DROP R>                  ( b
+    ELSE N/ END_IF
+  ;
 
+: OBJ+0 ( obj --> obj+0 )
+  DUP OBJ? IF DUP >R
+    ZERLEG 3FFF AND                ( adr n
+      BEGIN DUP WHILE SWAP         ( n adr
+        DUP @ ( CR OVER M. DUP M. ERGEBNIS ? KEY DROP ) RECURSE OVER !       ( n adr
+        1 + SWAP 1 -             ( adr+1 n-1
+        REPEAT                     ( adr+n 0
+    2DROP R>                       ( obj
+    ELSE A+0 END_IF
+  ;
 
+: OBJK ( obj b --> obj/ggt b/ggt )
+  NEBENRECHNUNG >R
+  2DUP OBJGGT SWAP OVER 2SWAP OBJ/GGT ROT ROT OBJ/GGT 
+  R> HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
+  ;
 
+: OBJDUMP ( obj --> )
+  DUP OBJ? IF
+    ZERLEG 3FFF AND                ( adr n
+      BEGIN DUP WHILE SWAP         ( n adr
+        CR OVER . DUP . DUP @ 
+        DUP . DUP ABS 4000 LT IF -1 . -1 . ELSE DUP ABS ZERLEG . . END_IF
+        DUP O. RECURSE          ( n adr
+        1 + SWAP 1 -             ( adr+1 n-1
+        REPEAT                     ( adr+n 0
+    2DROP                          ( 
+    ELSE ." ZAHL " . END_IF
+  ;
 
+1400 77 77 FILL
 
+[ 12 18 1B ] 12 OBJGGT O.
+[ [ 12 18 1B ] [ 1E 21 24 ] ] 12 OBJGGT O.
+[ 12 18 1B ] ZERLEG . .
 
+[ 12 18 1B ] 3 OBJ/GGT O.
+[ [ 12 18 1B ] [ 1E 21 24 ] ] 3 OBJ/GGT O.
 
+( 2DUP OBJGGT N.
 
+[ 12 18 1B ] 12 OBJK SWAP O. N.
+[ [ 12 18 1B ] [ 1E 21 24 ] ] 12 OBJK SWAP O. N.
 
+( 2DUP OBJK OVER O. DUP N.
 
+[ 12 18 1B ] OBJ+0 O.
+
+[ 12 18 1B ] OBJDUMP
+[ [ 12 18 1B ] [ 1E 21 24 ] ] OBJDUMP
+
+0 VARIABLE NBMERK
+: INVERTIEREN ( matrix dim --> invmat nenner )
+  ( L0=mat L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
+  8 LOCAL NEBENRECHNUNG NBMERK !
+  L1 ! L0 !
+  L0 @ 1 ( mat nenner )
+  L1 @ L2 ! BEGIN -1 L2 +! ( CR L2 ? ERGEBNIS ?
+    L7 ! ( mat ) 0 L5 ! 0 L6 !
+    L0 @ L2 @ L L2 @ L ( mat neuernenner )
+    L1 @ L3 ! BEGIN -1 L3 +!
+      OVER L3 @ L L2 @ L L5 @ L3 @ ROT H L5 !
+      OVER L2 @ L L3 @ L L6 @ L3 @ ROT H L6 !
+      L3 @ 0= UNTIL
+    L5 @ L2 @ L L7 @ N+ L5 @ L2 @ ROT H L5 !
+    L6 @ L2 @ L L7 @ N- L6 @ L2 @ ROT H L6 !
+    L1 @ L3 ! BEGIN -1 L3 +!
+      OVER L3 @ L ( mat nenner mat[L3] )
+      L1 @ L4 ! BEGIN -1 L4 +! ( CR L3 ? L4 ? ERGEBNIS ?
+        NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner )
+        OVER L4 @ L OVER N*
+        L5 @ L3 @ L L6 @ L4 @ L N* N-
+        L7 @ N/ ( mat erg mat[L3] nenner bijneu )
+        2SWAP SWAP ( mat nenner bijneu mat[L3] erg )
+        HAUPTRECHNUNG SWAP A+0 ( mat nenner mat[L3] bijneu+0 )
+        SWAP L4 @ ROT H ( mat nenner mat[L3]neu )
+        L4 @ 0= UNTIL
+      ROT L3 @ ROT H SWAP ( matneu nenner )
+      L3 @ 0= UNTIL
+    ( RECHENBLOCK )
+(    CR ." vor 1. OBJ+0 " OVER OBJDUMP DUP N. DUP .
+    SWAP OBJ+0 SWAP A+0 NBMERK @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
+(    CR ." vor OBJK " OVER OBJDUMP DUP N. DUP .
+    OBJK 
+(    CR ." nach OBJK " OVER OBJDUMP DUP N. DUP .
+    NBMERK @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
+(    CR ." nach 2. OBJ+0 " OVER OBJDUMP DUP N. DUP ABS .
+(    CR OVER O. DUP N. ." durch " 
+    L2 @ 0= UNTIL
+  END_LOCAL
+  ;
+
+: VANDERMONDEMATRIX ( n --> mat )
+  3 LOCAL
+  L0 !
+  0 
+  L0 @ L1 ! BEGIN L1 @ DUP WHILE 1 - L1 !
+    L1 @ G
+    L0 @ L2 ! BEGIN L2 @ DUP WHILE 1 - L2 !
+      L2 @ L1 @ 1 + L2 @ 1 + N^ 
+      H
+      REPEAT DROP
+    H
+    REPEAT DROP
+  END_LOCAL
+  ;
+
+( 4 VANDERMONDEMATRIX DUP O.
+
+INIT
+4 VANDERMONDEMATRIX
+4 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll
+( OVER O. DUP N. [ [ 60 -48 20 -6 ] [ -68 72 -38 B ] [ 24 -30 1C -6 ] [ -4 6 -4 1 ] ] 18 ok
+
+INIT
+5 VANDERMONDEMATRIX
+5 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll
+( OVER O. DUP N. [ [ 258 -258 190 -96 18 ] [ -302 42E -30C 131 -32 ] ... [ 5 -A A -5 1 ] ] 78 ok
+
+INIT
+6 VANDERMONDEMATRIX
+6 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll
+( OVER O. DUP N. [ [ -10E0 1518 -12C0 A8C -360 78 ] ... [ 6 -F 14 -F 6 -1 ] ] -2D0 ok
+
+INIT
+7 VANDERMONDEMATRIX
+ERGEBNIS ?
+7 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll 
+( OVER O. DUP N. [ [ -89D0 CEB8 -E5B0 AC44 -52B0 16F8 -2D0 ]  ... [ -7 15 -23 23 -15 7 -1 ] ] -13B0 ok
+
+INIT
+8 VANDERMONDEMATRIX
+ERGEBNIS ?
+8 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll 
+( OVER O. DUP N. [ [ 4EC00 -89D00 B7C00 -AC440 6E400 -2DF00 B400 -13B0 ] ... [ -8 1C -38 46 -38 1C -8 1 ] ] 9D80 ok
+
+INIT
+9 VANDERMONDEMATRIX
+ERGEBNIS ?
+9 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll 
+( OVER O. DUP N. [ [ 31D580 -63AB00 9B0A00 -AE6B40 8B8900 -4D8500 1C7A00 -63AB0 9D80 ] ... [ 9 -24 54 -7E 7E -54 24 -9 1 ] ] 58980 ok
+
+INIT
+0A VANDERMONDEMATRIX
+ERGEBNIS ?
+0A INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll 
+( OVER O. DUP N. [ [ -229B600 4DDD980 -8A6D800 B5AFB80 ... -D2 78 -2D A -1 ] ] -375F00 ok
 

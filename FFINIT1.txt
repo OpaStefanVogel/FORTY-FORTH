@@ -2,8 +2,6 @@
 <?xml-stylesheet type="text/xsl" href="INIT.xsl" ?>
 <!DOCTYPE INIT SYSTEM "INIT.DTD">
 <INIT>
--1 XBIT ! ( schaltet ab der nächsten Zeile die CSI-"ok"-Ausgabe auf xml-Modus um )
-
 <AXIOME>
 <sekt inhalt="Axiome (sie enthalten Vorwärtsreferenzen und sind deshalb separat zusammengefasst)">
 <sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen">
@@ -25,7 +23,7 @@
 2 2 * DUP * BASE ! ( HEX )
 7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER )
 B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT, )
-4000 000E !        ( aktiviert ^F = START )
+0010 001E !        ( aktiviert ^F = START )
 ' DUMPZ 4 - LFA !  ( LFA zurueck auf Anfangsvokabular )
 
 DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG zurücksetzen )
@@ -423,10 +421,10 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
         INTERPRET 
         3C EMIT ." /ok>" 
         ELSE
-          C2 EMIT 9B EMIT 33 EMIT 36 EMIT 6D EMIT
+          1B EMIT 5B EMIT 33 EMIT 36 EMIT 6D EMIT
           INTERPRET 
           STAT @ 0= IF ." ok" END_IF 
-          C2 EMIT 9B EMIT 33 EMIT 39 EMIT 6D EMIT
+          1B EMIT 5B EMIT 33 EMIT 39 EMIT 6D EMIT
           END_IF 
       END_IF
     AGAIN 
