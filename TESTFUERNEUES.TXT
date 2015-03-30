@@ -24,13 +24,15 @@ REPLACE: A+0 ( a --> a+0 )
   SLX->ERGEBNIS
   ;
 
-
+0 VARIABLE GGTNRMERK
 : OBJGGT ( obj b --> ggt )
   OVER OBJ? IF
     SWAP ( b a  ( FORALL ) 
     ZERLEG 3FFF AND                ( b adr n
+    NEBENRECHNUNG GGTNRMERK ! 
       BEGIN DUP WHILE ROT ROT SWAP ( n adr b
         OVER @ SWAP RECURSE             ( n adr b'
+        GGTNRMERK @ HAUPTRECHNUNG A+0
         SWAP 1 + ROT 1 -         ( b' adr+1 n-1
         REPEAT                     ( ggt adr+n 0
     2DROP                          ( ggt
@@ -63,7 +65,6 @@ REPLACE: A+0 ( a --> a+0 )
 : OBJK ( obj b --> obj/ggt b/ggt )
   NEBENRECHNUNG >R
   2DUP OBJGGT SWAP OVER 2SWAP OBJ/GGT ROT ROT OBJ/GGT 
-  SWAP OBJ+0 SWAP A+0
   R> HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
   ;
 
@@ -107,7 +108,7 @@ REPLACE: A+0 ( a --> a+0 )
   8 LOCAL NEBENRECHNUNG NBMERK !
   L1 ! L0 !
   L0 @ 1 ( mat nenner )
-  L1 @ L2 ! BEGIN -1 L2 +!
+  L1 @ L2 ! BEGIN -1 L2 +! ( CR L2 ? ERGEBNIS ?
     L7 ! ( mat ) 0 L5 ! 0 L6 !
     L0 @ L2 @ L L2 @ L ( mat neuernenner )
     L1 @ L3 ! BEGIN -1 L3 +!
@@ -118,7 +119,7 @@ REPLACE: A+0 ( a --> a+0 )
     L6 @ L2 @ L L7 @ N- L6 @ L2 @ ROT H L6 !
     L1 @ L3 ! BEGIN -1 L3 +!
       OVER L3 @ L ( mat nenner mat[L3] )
-      L1 @ L4 ! BEGIN -1 L4 +!
+      L1 @ L4 ! BEGIN -1 L4 +! ( CR L3 ? L4 ? ERGEBNIS ?
         NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner )
         OVER L4 @ L OVER N*
         L5 @ L3 @ L L6 @ L4 @ L N* N-
@@ -130,11 +131,13 @@ REPLACE: A+0 ( a --> a+0 )
       ROT L3 @ ROT H SWAP ( matneu nenner )
       L3 @ 0= UNTIL
     ( RECHENBLOCK )
+(    CR ." vor 1. OBJ+0 " OVER OBJDUMP DUP N. DUP .
+    SWAP OBJ+0 SWAP A+0 NBMERK @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
 (    CR ." vor OBJK " OVER OBJDUMP DUP N. DUP .
     OBJK 
 (    CR ." nach OBJK " OVER OBJDUMP DUP N. DUP .
     NBMERK @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
-(    CR ." nach OBJ+0 " OVER OBJDUMP DUP N. DUP ABS .
+(    CR ." nach 2. OBJ+0 " OVER OBJDUMP DUP N. DUP ABS .
 (    CR OVER O. DUP N. ." durch " 
     L2 @ 0= UNTIL
   END_LOCAL
@@ -215,4 +218,5 @@ ERGEBNIS ?
 OVER O. DUP N.
 ERGEBNIS ?
 ( herauskommen soll 
-( 
+( OVER O. DUP N. [ [ -229B600 4DDD980 -8A6D800 B5AFB80 ... -D2 78 -2D A -1 ] ] -375F00 ok
+
