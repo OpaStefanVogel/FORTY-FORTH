@@ -23,10 +23,10 @@ FORGET NLIT,
     ZERLEG 3FFF AND                ( b adr n
       BEGIN DUP WHILE ROT ROT SWAP ( n adr b
         OVER @ SWAP RECURSE             ( n adr b'
-        SWAP 1 M+ ROT 1 M-         ( b' adr+1 n-1
+        SWAP 1 + ROT 1 -         ( b' adr+1 n-1
         REPEAT                     ( ggt adr+n 0
     2DROP                          ( ggt
-    ELSE GGT END_IF
+    ELSE NGGT END_IF
   ;
 
 : OBJ/GGT ( obj ggt --> obj/ggt )
@@ -35,7 +35,7 @@ FORGET NLIT,
     ZERLEG 3FFF AND                ( b adr n
       BEGIN DUP WHILE ROT ROT SWAP ( n adr b
         2DUP OVER @ SWAP RECURSE SWAP !       ( n adr b
-        SWAP 1 M+ ROT 1 M-         ( b adr+1 n-1
+        SWAP 1 + ROT 1 -         ( b adr+1 n-1
         REPEAT                     ( b adr+n 0
     2DROP DROP R>                  ( b
     ELSE N/ END_IF
@@ -46,7 +46,7 @@ FORGET NLIT,
     ZERLEG 3FFF AND                ( adr n
       BEGIN DUP WHILE SWAP         ( n adr
         DUP @ ( CR OVER M. DUP M. ERGEBNIS ? KEY DROP ) RECURSE OVER !       ( n adr
-        1 M+ SWAP 1 M-             ( adr+1 n-1
+        1 + SWAP 1 -             ( adr+1 n-1
         REPEAT                     ( adr+n 0
     2DROP R>                       ( obj
     ELSE A+0 END_IF
@@ -62,8 +62,8 @@ FORGET NLIT,
   DUP OBJ? IF
     ZERLEG 3FFF AND                ( adr n
       BEGIN DUP WHILE SWAP         ( n adr
-        CR OVER . DUP . DUP @ DUP M. DUP . RECURSE          ( n adr
-        1 M+ SWAP 1 M-             ( adr+1 n-1
+        CR OVER . DUP . DUP @ DUP . DUP O. RECURSE          ( n adr
+        1 + SWAP 1 -             ( adr+1 n-1
         REPEAT                     ( adr+n 0
     2DROP                          ( 
     ELSE ." ZAHL " . END_IF
@@ -71,21 +71,21 @@ FORGET NLIT,
 
    
 
-[ 12 18 1B ] 12 OBJGGT .
-[ [ 12 18 1B ] [ 1E 21 24 ] ] 12 OBJGGT .
+[ 12 18 1B ] 12 OBJGGT O.
+[ [ 12 18 1B ] [ 1E 21 24 ] ] 12 OBJGGT O.
 [ 12 18 1B ] ZERLEG . .
 
-[ 12 18 1B ] 3 OBJ/GGT .
-[ [ 12 18 1B ] [ 1E 21 24 ] ] 3 OBJ/GGT .
+[ 12 18 1B ] 3 OBJ/GGT O.
+[ [ 12 18 1B ] [ 1E 21 24 ] ] 3 OBJ/GGT O.
 
-2DUP OBJGGT .
+( 2DUP OBJGGT N.
 
-[ 12 18 1B ] 12 OBJK SWAP . .
-[ [ 12 18 1B ] [ 1E 21 24 ] ] 12 OBJK SWAP . .
+[ 12 18 1B ] 12 OBJK SWAP O. N.
+[ [ 12 18 1B ] [ 1E 21 24 ] ] 12 OBJK SWAP O. N.
 
-2DUP OBJK OVER . DUP .
+( 2DUP OBJK OVER O. DUP N.
 
-[ 12 18 1B ] OBJ+0 .
+[ 12 18 1B ] OBJ+0 O.
 
 [ 12 18 1B ] OBJDUMP
 [ [ 12 18 1B ] [ 1E 21 24 ] ] OBJDUMP
@@ -136,7 +136,7 @@ INIT
 4 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll [ [ 480 -360 180 -48 ] [ -4E0 558 -2A0 84 ] [ 1B0 -240 150 -48 ] )
+( herauskommen soll
 ( OVER O. DUP N. [ [ 60 -48 20 -6 ] [ -68 72 -38 B ] [ 24 -30 1C -6 ] [ -4 6 -4 1 ] ] 18 ok
 
 INIT
@@ -149,17 +149,8 @@ INIT
 5 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll  [ [ 2A300 -2A300 ... ] ] 8700 )
-
-[ [ C30 C1C BB8 9C4 1 ] [ 17CA 2DB4 5208 7530 20 ] [ 1FE0 5622 D2F0 18B82 F3 ] [ 1CD4 5F50 11940 27100 400 ] [ -5 -19 -7D -271 1 ] ] C35 [ [ C30 C1C BB8 9C4 1 ] [ 17CA 2DB4. 5208 7530 20 ] [ 1FE0 5622 D2F0 18B82 F3 ] [ 1CD4 5F50 11940 27100 400 ] [ -5 -19 -7D -271 1 ] ] C35
-
-[ [ 258F0 21FC0 17700 9C4 -300 ] [ 3AD40 59100 5DC00 7530 -2000 ] [ 2B9F8 529E0 69780 18B82 -5100 ] [ -1CD4 -5F50 -11940 C35 -400 ] [ 4C4 E10 1F40 -271 100 ] ] 27100 [ [ 258F0 21FC0 17700 9C4 -300 ] [ 3AD40 59100 5DC00 7530 -2000 ] [ 2B9F8 529E0 69780 18B82 -5100 ] [ -1CD4 -5F50 -11940 C35 -400 ] [ 4C4 E10 1F40 -271 100 ] ] 27100
-
-[ [ 4B3C0 2A300 17700 -D2F0 2880 ] [ 36240 2A300 5DC00 -278D0 6C00 ] [ -2B9F8 -529E0 27100 -18B82 5100 ] [ EC40 15180 -11940 D2F0 -2F40 ] [ -1608 -1C20 1F40 -1A5E 6C0 ] ] 69780 [ [ -259E0 -15180 -BB80 6978 -1440 ] [ -1B120 -15180 -2EE00 13C68 -3600 ] [ 15CFC 294F0 -13880 C5C1 -2880 ] [ -7620 -A8C0 8CA0 -6978 17A0 ] [ B04 E10 -FA0 D2F -360 ] ] -34BC0
-
-[ [ -4380 -15180 E100 -5460 D80 ] [ 1B120 -34BC0 2EE00 -13C68 3600 ] [ -C7B0 294F0 -2C880 146F4 -3A80 ] [ 2760 -A8C0 CE40 -6978 1440 ] [ -2D0 E10 -12C0 A8C -240 ] ] -15180 [ [ -5A0 -1C20 12C0 -708 120 ] [ 2418 -4650 3E80 -1A5E 480 ] [ -10A4 3714 -3B60 1B3F -4E0 ] [ 348 -E10 1130 -8CA 1B0 ] [ -3C 12C -190 E1 -30 ] ] -1C20
-
-[ [ -1C20 1C20 -12C0 708 -120 ] [ 2418 -3228 2490 -E4C 258 ] [ -10A4 1BA8 -16F8 99C -1A4 ] [ 348 -618 5A0 -294 78 ] [ -3C 78 -78 3C -C ] ] -5A0 [ [ 258 -258 190 -96 18 ] [ -302 42E -30C 131 -32 ] [ 163 -24E 1EA -CD 23 ] [ -46 82 -78 37 -A ] [ 5 -A A -5 1 ] ] 78 ok
+( herauskommen soll
+( OVER O. DUP N. [ [ 258 -258 190 -96 18 ] [ -302 42E -30C 131 -32 ] ... [ 5 -A A -5 1 ] ] 78 ok
 
 INIT
 [ [ 1 1 1 1 1 1 ]
@@ -172,7 +163,8 @@ INIT
 6 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll  [ [ 8E62000 -B1FA800 ... ] ] 17BB000 )
+( herauskommen soll
+( OVER O. DUP N. [ [ -10E0 1518 -12C0 A8C -360 78 ] ... [ 6 -F 14 -F 6 -1 ] ] -2D0 ok
 
 INIT
 [ [ 1 1 1 1 1 1 1 ]
@@ -186,7 +178,7 @@ INIT
 7 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll  [ [ CC65AF0000 -13298868000 ... ] ] 1D33190000 )
-
+( herauskommen soll 
+( OVER O. DUP N. [ [ -89D0 CEB8 -E5B0 AC44 -52B0 16F8 -2D0 ]  ... [ -7 15 -23 23 -15 7 -1 ] ] -13B0 ok
 
 
