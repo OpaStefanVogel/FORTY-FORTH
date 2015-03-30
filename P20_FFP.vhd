@@ -781,7 +781,10 @@ process -- Daten 2C00H-2FFFH
 begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_StapR='1' then 
     stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0))):=STORE_ZUM_RAM; 
-    end if;
+    FETCH_VOM_stapR<=STORE_ZUM_RAM; 
+      else
+      FETCH_VOM_stapR<=stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0)));
+      end if;
   FETCH_VOM_stapR<=stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0)));
   end process;
 
@@ -789,7 +792,10 @@ process --Rueckkehrstapel 3FC0-3FFFH, TRUE_DUAL_PORT
 begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_StapRNEU='1' then 
     stapRNEU(CONV_INTEGER(ADRESSE_ZUM_RAM(5 downto 0))):=STORE_ZUM_RAM; 
-    end if;
+    FETCH_VOM_stapRNEU<=STORE_ZUM_RAM; 
+      else
+      FETCH_VOM_stapRNEU<=stapRNEU(CONV_INTEGER(ADRESSE_ZUM_RAM(5 downto 0)));
+      end if;
   FETCH_VOM_stapRNEU<=stapRNEU(CONV_INTEGER(ADRESSE_ZUM_RAM(5 downto 0)));
   end process;
 process begin wait until (CLK_I'event and CLK_I='1');
