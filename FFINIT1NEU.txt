@@ -450,10 +450,12 @@ IMMEDIATE: ; 0 STAT ! CSP? A003 , SMUDGE { SMUDGE } ;
 ( Ende der Axiome. Hiermit enden die Axiome. )
 </sekt>
 
+<sekt inhalt="neues Vokabular abkoppeln und Programm neu starten">
 0 DPMERK @ ! ( abkoppeln )
 HERE . BZEIG ?
 
 START
+</sekt>
 </sekt>
 </AXIOME>
 
