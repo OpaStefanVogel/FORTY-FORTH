@@ -17,14 +17,176 @@ FORGET NLIT,
 
 
 
+: OBJGGT ( obj b --> ggt )
+  OVER OBJ? IF
+    SWAP ( b a  ( FORALL ) 
+    ZERLEG 3FFF AND                ( b adr n
+      BEGIN DUP WHILE ROT ROT SWAP ( n adr b
+        OVER @ SWAP RECURSE             ( n adr b'
+        SWAP 1 M+ ROT 1 M-         ( b' adr+1 n-1
+        REPEAT                     ( ggt adr+n 0
+    2DROP                          ( ggt
+    ELSE GGT END_IF
+  ;
 
+: OBJ/GGT ( obj ggt --> obj/ggt )
+  OVER OBJ? IF OVER >R
+    SWAP ( b a  ( FORALL ) 
+    ZERLEG 3FFF AND                ( b adr n
+      BEGIN DUP WHILE ROT ROT SWAP ( n adr b
+        2DUP OVER @ SWAP RECURSE SWAP !       ( n adr b
+        SWAP 1 M+ ROT 1 M-         ( b adr+1 n-1
+        REPEAT                     ( b adr+n 0
+    2DROP DROP R>                  ( b
+    ELSE N/ END_IF
+  ;
 
+: OBJ+0 ( obj --> obj+0 )
+  DUP OBJ? IF DUP >R
+    ZERLEG 3FFF AND                ( adr n
+      BEGIN DUP WHILE SWAP         ( n adr
+        DUP @ ( CR OVER M. DUP M. ERGEBNIS ? KEY DROP ) RECURSE OVER !       ( n adr
+        1 M+ SWAP 1 M-             ( adr+1 n-1
+        REPEAT                     ( adr+n 0
+    2DROP R>                       ( obj
+    ELSE A+0 END_IF
+  ;
 
+: OBJK ( obj b --> obj/ggt b/ggt )
+  NEBENRECHNUNG >R
+  2DUP OBJGGT SWAP OVER 2SWAP OBJ/GGT ROT ROT OBJ/GGT 
+  SWAP OBJ+0 SWAP A+0 R> HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
+  ;
 
+: OBJDUMP ( obj --> )
+  DUP OBJ? IF
+    ZERLEG 3FFF AND                ( adr n
+      BEGIN DUP WHILE SWAP         ( n adr
+        CR OVER . DUP . DUP @ DUP M. DUP . RECURSE          ( n adr
+        1 M+ SWAP 1 M-             ( adr+1 n-1
+        REPEAT                     ( adr+n 0
+    2DROP                          ( 
+    ELSE ." ZAHL " . END_IF
+  ;
 
+   
 
+[ 12 18 1B ] 12 OBJGGT .
+[ [ 12 18 1B ] [ 1E 21 24 ] ] 12 OBJGGT .
+[ 12 18 1B ] ZERLEG . .
 
+[ 12 18 1B ] 3 OBJ/GGT .
+[ [ 12 18 1B ] [ 1E 21 24 ] ] 3 OBJ/GGT .
 
+2DUP OBJGGT .
+
+[ 12 18 1B ] 12 OBJK SWAP . .
+[ [ 12 18 1B ] [ 1E 21 24 ] ] 12 OBJK SWAP . .
+
+2DUP OBJK OVER . DUP .
+
+[ 12 18 1B ] OBJ+0 .
+
+[ 12 18 1B ] OBJDUMP
+[ [ 12 18 1B ] [ 1E 21 24 ] ] OBJDUMP
+
+: INVERTIEREN ( matrix dim --> invmat nenner )
+  ( L0=mat L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
+  8 LOCAL
+  L1 ! L0 ! 0 L5 ! 0 L6 !
+  L0 @ 1 ( mat nenner )
+  L1 @ L2 ! BEGIN -1 L2 +!
+    L7 ! ( mat )
+    L0 @ L2 @ L L2 @ L ( mat neuernenner )
+    L1 @ L3 ! BEGIN -1 L3 +!
+      OVER L3 @ L L2 @ L L5 @ L3 @ ROT H L5 !
+      OVER L2 @ L L3 @ L L6 @ L3 @ ROT H L6 !
+      L3 @ 0= UNTIL
+    L5 @ L2 @ L L7 @ N+ L5 @ L2 @ ROT H L5 !
+    L6 @ L2 @ L L7 @ N- L6 @ L2 @ ROT H L6 !
+    L1 @ L3 ! BEGIN -1 L3 +!
+      OVER L3 @ L ( mat nenner mat[L3] )
+      L1 @ L4 ! BEGIN -1 L4 +!
+        NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner )
+        OVER L4 @ L OVER N*
+        L5 @ L3 @ L L6 @ L4 @ L N* N-
+        L7 @ N/ ( mat erg mat[L3] nenner bijneu )
+        2SWAP SWAP ( mat nenner bijneu mat[L3] erg )
+        HAUPTRECHNUNG SWAP A+0 ( mat nenner mat[L3] bijneu+0 )
+        SWAP L4 @ ROT H ( mat nenner mat[L3]neu )
+        L4 @ 0= UNTIL
+      ROT L3 @ ROT H SWAP ( matneu nenner )
+      L3 @ 0= UNTIL
+    ( RECHENBLOCK )
+(    CR OVER OBJDUMP DUP . DUP M.
+(    CR ." ERGEBNIS= " ERGEBNIS ?
+(    CR CR OVER . DUP . 
+    OBJK 
+(    CR OVER . DUP . ." durch " 
+    L2 @ 0= UNTIL
+  END_LOCAL
+  ;
+
+INIT
+[ [ 1 1 1 1 ]
+  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ ]
+  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ ]
+  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ ]
+  ]
+4 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll [ [ 480 -360 180 -48 ] [ -4E0 558 -2A0 84 ] [ 1B0 -240 150 -48 ] )
+( OVER O. DUP N. [ [ 60 -48 20 -6 ] [ -68 72 -38 B ] [ 24 -30 1C -6 ] [ -4 6 -4 1 ] ] 18 ok
+
+INIT
+[ [ 1 1 1 1 1 ]
+  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ ]
+  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ ]
+  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ ]
+  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ ]
+  ]
+5 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll  [ [ 2A300 -2A300 ... ] ] 8700 )
+
+[ [ C30 C1C BB8 9C4 1 ] [ 17CA 2DB4 5208 7530 20 ] [ 1FE0 5622 D2F0 18B82 F3 ] [ 1CD4 5F50 11940 27100 400 ] [ -5 -19 -7D -271 1 ] ] C35 [ [ C30 C1C BB8 9C4 1 ] [ 17CA 2DB4. 5208 7530 20 ] [ 1FE0 5622 D2F0 18B82 F3 ] [ 1CD4 5F50 11940 27100 400 ] [ -5 -19 -7D -271 1 ] ] C35
+
+[ [ 258F0 21FC0 17700 9C4 -300 ] [ 3AD40 59100 5DC00 7530 -2000 ] [ 2B9F8 529E0 69780 18B82 -5100 ] [ -1CD4 -5F50 -11940 C35 -400 ] [ 4C4 E10 1F40 -271 100 ] ] 27100 [ [ 258F0 21FC0 17700 9C4 -300 ] [ 3AD40 59100 5DC00 7530 -2000 ] [ 2B9F8 529E0 69780 18B82 -5100 ] [ -1CD4 -5F50 -11940 C35 -400 ] [ 4C4 E10 1F40 -271 100 ] ] 27100
+
+[ [ 4B3C0 2A300 17700 -D2F0 2880 ] [ 36240 2A300 5DC00 -278D0 6C00 ] [ -2B9F8 -529E0 27100 -18B82 5100 ] [ EC40 15180 -11940 D2F0 -2F40 ] [ -1608 -1C20 1F40 -1A5E 6C0 ] ] 69780 [ [ -259E0 -15180 -BB80 6978 -1440 ] [ -1B120 -15180 -2EE00 13C68 -3600 ] [ 15CFC 294F0 -13880 C5C1 -2880 ] [ -7620 -A8C0 8CA0 -6978 17A0 ] [ B04 E10 -FA0 D2F -360 ] ] -34BC0
+
+[ [ -4380 -15180 E100 -5460 D80 ] [ 1B120 -34BC0 2EE00 -13C68 3600 ] [ -C7B0 294F0 -2C880 146F4 -3A80 ] [ 2760 -A8C0 CE40 -6978 1440 ] [ -2D0 E10 -12C0 A8C -240 ] ] -15180 [ [ -5A0 -1C20 12C0 -708 120 ] [ 2418 -4650 3E80 -1A5E 480 ] [ -10A4 3714 -3B60 1B3F -4E0 ] [ 348 -E10 1130 -8CA 1B0 ] [ -3C 12C -190 E1 -30 ] ] -1C20
+
+[ [ -1C20 1C20 -12C0 708 -120 ] [ 2418 -3228 2490 -E4C 258 ] [ -10A4 1BA8 -16F8 99C -1A4 ] [ 348 -618 5A0 -294 78 ] [ -3C 78 -78 3C -C ] ] -5A0 [ [ 258 -258 190 -96 18 ] [ -302 42E -30C 131 -32 ] [ 163 -24E 1EA -CD 23 ] [ -46 82 -78 37 -A ] [ 5 -A A -5 1 ] ] 78 ok
+
+INIT
+[ [ 1 1 1 1 1 1 ]
+  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ 2 6 N^ ]
+  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ 3 6 N^ ]
+  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ 4 6 N^ ]
+  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ 5 6 N^ ]
+  [ 6 1 N^ 6 2 N^ 6 3 N^ 6 4 N^ 6 5 N^ 6 6 N^ ]
+  ]
+6 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll  [ [ 8E62000 -B1FA800 ... ] ] 17BB000 )
+
+INIT
+[ [ 1 1 1 1 1 1 1 ]
+  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ 2 6 N^ 2 7 N^ ]
+  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ 3 6 N^ 3 7 N^ ]
+  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ 4 6 N^ 4 7 N^ ]
+  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ 5 6 N^ 5 7 N^ ]
+  [ 6 1 N^ 6 2 N^ 6 3 N^ 6 4 N^ 6 5 N^ 6 6 N^ 6 7 N^ ]
+  [ 7 1 N^ 7 2 N^ 7 3 N^ 7 4 N^ 7 5 N^ 7 6 N^ 7 7 N^ ]
+  ]
+7 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll  [ [ CC65AF0000 -13298868000 ... ] ] 1D33190000 )
 
 
 
