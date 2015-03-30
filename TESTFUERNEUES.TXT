@@ -62,7 +62,9 @@ FORGET NLIT,
   DUP OBJ? IF
     ZERLEG 3FFF AND                ( adr n
       BEGIN DUP WHILE SWAP         ( n adr
-        CR OVER . DUP . DUP @ DUP . DUP O. RECURSE          ( n adr
+        CR OVER . DUP . DUP @ 
+        DUP . DUP ABS 4000 LT IF -1 . -1 . ELSE DUP ABS ZERLEG . . END_IF
+        DUP O. RECURSE          ( n adr
         1 + SWAP 1 -             ( adr+1 n-1
         REPEAT                     ( adr+n 0
     2DROP                          ( 
@@ -90,13 +92,14 @@ FORGET NLIT,
 [ 12 18 1B ] OBJDUMP
 [ [ 12 18 1B ] [ 1E 21 24 ] ] OBJDUMP
 
+0 VARIABLE NBMERK
 : INVERTIEREN ( matrix dim --> invmat nenner )
   ( L0=mat L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
-  8 LOCAL
-  L1 ! L0 ! 0 L5 ! 0 L6 !
+  8 LOCAL NEBENRECHNUNG NBMERK !
+  L1 ! L0 !
   L0 @ 1 ( mat nenner )
   L1 @ L2 ! BEGIN -1 L2 +!
-    L7 ! ( mat )
+    L7 ! ( mat ) 0 L5 ! 0 L6 !
     L0 @ L2 @ L L2 @ L ( mat neuernenner )
     L1 @ L3 ! BEGIN -1 L3 +!
       OVER L3 @ L L2 @ L L5 @ L3 @ ROT H L5 !
@@ -104,12 +107,12 @@ FORGET NLIT,
       L3 @ 0= UNTIL
     L5 @ L2 @ L L7 @ N+ L5 @ L2 @ ROT H L5 !
     L6 @ L2 @ L L7 @ N- L6 @ L2 @ ROT H L6 !
-    L1 @ L3 ! BEGIN -1 L3 +!
+    L1 @ L3 ! BEGIN -1 L3 +! ." xxxx "
       OVER L3 @ L ( mat nenner mat[L3] )
-      L1 @ L4 ! BEGIN -1 L4 +!
+      L1 @ L4 ! BEGIN -1 L4 +! ." yyyy "
         NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner )
-        OVER L4 @ L OVER N*
-        L5 @ L3 @ L L6 @ L4 @ L N* N-
+        OVER L4 @ L OVER N* ." WWWW "
+        L5 @ L3 @ L L6 @ L4 @ L OVER ABS . DUP ABS . N* ." VVVV " N- ." ZZZZ "
         L7 @ N/ ( mat erg mat[L3] nenner bijneu )
         2SWAP SWAP ( mat nenner bijneu mat[L3] erg )
         HAUPTRECHNUNG SWAP A+0 ( mat nenner mat[L3] bijneu+0 )
@@ -118,11 +121,14 @@ FORGET NLIT,
       ROT L3 @ ROT H SWAP ( matneu nenner )
       L3 @ 0= UNTIL
     ( RECHENBLOCK )
-(    CR OVER OBJDUMP DUP . DUP M.
+    CR ." vor OBJK " OVER OBJDUMP DUP N. DUP .
 (    CR ." ERGEBNIS= " ERGEBNIS ?
 (    CR CR OVER . DUP . 
     OBJK 
-(    CR OVER . DUP . ." durch " 
+    CR ." nach OBJK " OVER OBJDUMP DUP N. DUP .
+    NBMERK @ HAUPTRECHNUNG ERGEBNIS ? SWAP OBJ+0 SWAP A+0
+    CR ." nach OBJ+0 " OVER OBJDUMP DUP N. DUP ABS .
+    CR OVER O. DUP N. ." durch " 
     L2 @ 0= UNTIL
   END_LOCAL
   ;
@@ -175,6 +181,7 @@ INIT
   [ 6 1 N^ 6 2 N^ 6 3 N^ 6 4 N^ 6 5 N^ 6 6 N^ 6 7 N^ ]
   [ 7 1 N^ 7 2 N^ 7 3 N^ 7 4 N^ 7 5 N^ 7 6 N^ 7 7 N^ ]
   ]
+ERGEBNIS ?
 7 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
