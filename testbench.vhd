@@ -58,23 +58,6 @@ signal KEY_ABGESCHICKT: STD_LOGIC:='0';
 signal KEY_BYTE: STD_LOGIC_VECTOR (7 downto 0);
 signal KEY_ANGEKOMMEN: STD_LOGIC:='0';
 
-constant Enter:string(1 to 1) := "" & character'val(10) ;
-signal DEMO: string(1 to 139) := 
-  "56 89 * ." & Enter &
-  "111111111111111 DUP * . " & Enter & 
-  "DECIMAL" & Enter & 
-  "56 89 * ." & Enter & 
-  "[" & Enter & 
-  "[ 1 1 1 1 ]" & Enter & 
-  "[ 2 4 8 16 ]" & Enter & 
-  "[ 3 9 27 81 ]" & Enter & 
-  "[ 4 16 64 256 ]" & Enter & 
-  "]" & Enter & 
-  "4 INVERTIEREN" & Enter & 
-  "OVER ." & Enter & 
-  "DUP ." & Enter ;
-
-
 begin
 
   -- component instantiation
@@ -105,14 +88,28 @@ begin
 
   -- clock generation
   CLK <= not CLK after 10 ns;
-  EMIT_ANGEKOMMEN<=EMIT_ABGESCHICKT after 800 ns;
-
-
+  EMIT_ANGEKOMMEN<=EMIT_ABGESCHICKT after 800 ns; -- simuliert Dauer der seriellen Ausgabe
 
   -- simuliert eine Tastatureingabe
   process
   variable I: integer:=1;
   variable c: STD_LOGIC_VECTOR ( 7 downto 0 ) ;
+  constant Enter:string(1 to 1) := "" & character'val(10) ;
+  constant DEMO: string(1 to 139) := 
+    "56 89 * ." & Enter &
+    "111111111111111 DUP * . " & Enter & 
+    "DECIMAL" & Enter & 
+    "56 89 * ." & Enter & 
+    "[" & Enter & 
+    "[ 1 1 1 1 ]" & Enter & 
+    "[ 2 4 8 16 ]" & Enter & 
+    "[ 3 9 27 81 ]" & Enter & 
+    "[ 4 16 64 256 ]" & Enter & 
+    "]" & Enter & 
+    "4 INVERTIEREN" & Enter & 
+    "OVER ." & Enter & 
+    "DUP ." & Enter ;
+
   begin
     wait for 30000 ns;
     if I <= DEMO'length then
@@ -124,5 +121,3 @@ begin
   end process;
 
 end test_Step_11;
-
-
