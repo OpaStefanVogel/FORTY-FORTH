@@ -15,6 +15,14 @@ FORGET NLIT,
 ( jetzt kann es weitergehen mit neuen Wortdefinitionen:
 
 
+REPLACE: A+0 ( a --> a+0 ) 
+  OPERAND1 !
+  OPERAND1 OPERAND->SLX
+  OVER ERGEBNIS @ 1+ SWAP MOVE
+  ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz )
+  ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
+  SLX->ERGEBNIS
+  ;
 
 
 : OBJGGT ( obj b --> ggt )
@@ -55,7 +63,8 @@ FORGET NLIT,
 : OBJK ( obj b --> obj/ggt b/ggt )
   NEBENRECHNUNG >R
   2DUP OBJGGT SWAP OVER 2SWAP OBJ/GGT ROT ROT OBJ/GGT 
-  SWAP OBJ+0 SWAP A+0 R> HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
+  SWAP OBJ+0 SWAP A+0
+  R> HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
   ;
 
 : OBJDUMP ( obj --> )
@@ -71,7 +80,7 @@ FORGET NLIT,
     ELSE ." ZAHL " . END_IF
   ;
 
-   
+1400 77 77 FILL
 
 [ 12 18 1B ] 12 OBJGGT O.
 [ [ 12 18 1B ] [ 1E 21 24 ] ] 12 OBJGGT O.
@@ -107,12 +116,12 @@ FORGET NLIT,
       L3 @ 0= UNTIL
     L5 @ L2 @ L L7 @ N+ L5 @ L2 @ ROT H L5 !
     L6 @ L2 @ L L7 @ N- L6 @ L2 @ ROT H L6 !
-    L1 @ L3 ! BEGIN -1 L3 +! ." xxxx "
+    L1 @ L3 ! BEGIN -1 L3 +!
       OVER L3 @ L ( mat nenner mat[L3] )
-      L1 @ L4 ! BEGIN -1 L4 +! ." yyyy "
+      L1 @ L4 ! BEGIN -1 L4 +!
         NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner )
-        OVER L4 @ L OVER N* ." WWWW "
-        L5 @ L3 @ L L6 @ L4 @ L OVER ABS . DUP ABS . N* ." VVVV " N- ." ZZZZ "
+        OVER L4 @ L OVER N*
+        L5 @ L3 @ L L6 @ L4 @ L N* N-
         L7 @ N/ ( mat erg mat[L3] nenner bijneu )
         2SWAP SWAP ( mat nenner bijneu mat[L3] erg )
         HAUPTRECHNUNG SWAP A+0 ( mat nenner mat[L3] bijneu+0 )
@@ -121,24 +130,35 @@ FORGET NLIT,
       ROT L3 @ ROT H SWAP ( matneu nenner )
       L3 @ 0= UNTIL
     ( RECHENBLOCK )
-    CR ." vor OBJK " OVER OBJDUMP DUP N. DUP .
-(    CR ." ERGEBNIS= " ERGEBNIS ?
-(    CR CR OVER . DUP . 
+(    CR ." vor OBJK " OVER OBJDUMP DUP N. DUP .
     OBJK 
-    CR ." nach OBJK " OVER OBJDUMP DUP N. DUP .
-    NBMERK @ HAUPTRECHNUNG ERGEBNIS ? SWAP OBJ+0 SWAP A+0
-    CR ." nach OBJ+0 " OVER OBJDUMP DUP N. DUP ABS .
-    CR OVER O. DUP N. ." durch " 
+(    CR ." nach OBJK " OVER OBJDUMP DUP N. DUP .
+    NBMERK @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
+(    CR ." nach OBJ+0 " OVER OBJDUMP DUP N. DUP ABS .
+(    CR OVER O. DUP N. ." durch " 
     L2 @ 0= UNTIL
   END_LOCAL
   ;
 
+: VANDERMONDEMATRIX ( n --> mat )
+  3 LOCAL
+  L0 !
+  0 
+  L0 @ L1 ! BEGIN L1 @ DUP WHILE 1 - L1 !
+    L1 @ G
+    L0 @ L2 ! BEGIN L2 @ DUP WHILE 1 - L2 !
+      L2 @ L1 @ 1 + L2 @ 1 + N^ 
+      H
+      REPEAT DROP
+    H
+    REPEAT DROP
+  END_LOCAL
+  ;
+
+( 4 VANDERMONDEMATRIX DUP O.
+
 INIT
-[ [ 1 1 1 1 ]
-  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ ]
-  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ ]
-  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ ]
-  ]
+4 VANDERMONDEMATRIX
 4 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
@@ -146,12 +166,7 @@ ERGEBNIS ?
 ( OVER O. DUP N. [ [ 60 -48 20 -6 ] [ -68 72 -38 B ] [ 24 -30 1C -6 ] [ -4 6 -4 1 ] ] 18 ok
 
 INIT
-[ [ 1 1 1 1 1 ]
-  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ ]
-  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ ]
-  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ ]
-  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ ]
-  ]
+5 VANDERMONDEMATRIX
 5 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
@@ -159,13 +174,7 @@ ERGEBNIS ?
 ( OVER O. DUP N. [ [ 258 -258 190 -96 18 ] [ -302 42E -30C 131 -32 ] ... [ 5 -A A -5 1 ] ] 78 ok
 
 INIT
-[ [ 1 1 1 1 1 1 ]
-  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ 2 6 N^ ]
-  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ 3 6 N^ ]
-  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ 4 6 N^ ]
-  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ 5 6 N^ ]
-  [ 6 1 N^ 6 2 N^ 6 3 N^ 6 4 N^ 6 5 N^ 6 6 N^ ]
-  ]
+6 VANDERMONDEMATRIX
 6 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
@@ -173,14 +182,7 @@ ERGEBNIS ?
 ( OVER O. DUP N. [ [ -10E0 1518 -12C0 A8C -360 78 ] ... [ 6 -F 14 -F 6 -1 ] ] -2D0 ok
 
 INIT
-[ [ 1 1 1 1 1 1 1 ]
-  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ 2 6 N^ 2 7 N^ ]
-  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ 3 6 N^ 3 7 N^ ]
-  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ 4 6 N^ 4 7 N^ ]
-  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ 5 6 N^ 5 7 N^ ]
-  [ 6 1 N^ 6 2 N^ 6 3 N^ 6 4 N^ 6 5 N^ 6 6 N^ 6 7 N^ ]
-  [ 7 1 N^ 7 2 N^ 7 3 N^ 7 4 N^ 7 5 N^ 7 6 N^ 7 7 N^ ]
-  ]
+7 VANDERMONDEMATRIX
 ERGEBNIS ?
 7 INVERTIEREN
 OVER O. DUP N.
@@ -188,4 +190,29 @@ ERGEBNIS ?
 ( herauskommen soll 
 ( OVER O. DUP N. [ [ -89D0 CEB8 -E5B0 AC44 -52B0 16F8 -2D0 ]  ... [ -7 15 -23 23 -15 7 -1 ] ] -13B0 ok
 
+INIT
+8 VANDERMONDEMATRIX
+ERGEBNIS ?
+8 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll 
+( OVER O. DUP N. [ [ 4EC00 -89D00 B7C00 -AC440 6E400 -2DF00 B400 -13B0 ] ... [ -8 1C -38 46 -38 1C -8 1 ] ] 9D80 ok
 
+INIT
+9 VANDERMONDEMATRIX
+ERGEBNIS ?
+9 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll 
+( OVER O. DUP N. [ [ 31D580 -63AB00 9B0A00 -AE6B40 8B8900 -4D8500 1C7A00 -63AB0 9D80 ] ... [ 9 -24 54 -7E 7E -54 24 -9 1 ] ] 58980 ok
+
+INIT
+0A VANDERMONDEMATRIX
+ERGEBNIS ?
+0A INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll 
+( 
