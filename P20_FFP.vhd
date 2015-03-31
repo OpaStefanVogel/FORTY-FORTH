@@ -448,8 +448,8 @@ signal ByteRAM: ByteRAMTYPE:=(
   others=>x"00");
 
 -- Daten 2C00H-2FFFH
-type stapRAMTYPE is array(0 to 1024-1) of STD_LOGIC_VECTOR (15 downto 0);
-shared variable stapR: stapRAMTYPE:=(
+type VarRAMTYPE is array(0 to 1024-1) of STD_LOGIC_VECTOR (15 downto 0);
+shared variable VarRAM: VarRAMTYPE:=(
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C00-2C0F 
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C10-2C1F 
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C20-2C2F 
@@ -517,8 +517,8 @@ shared variable stapR: stapRAMTYPE:=(
   others=>x"0000");
 
 -- Rueckkehrstapel 3FC0-3FFFH, TRUE_DUAL_PORT
-type stapRAMNEUTYPE is array(0 to 63) of STD_LOGIC_VECTOR (15 downto 0);
-shared variable stapRNEU: stapRAMNEUTYPE:=(
+type RetRAMTYPE is array(0 to 63) of STD_LOGIC_VECTOR (15 downto 0);
+shared variable RetRAM: RetRAMTYPE:=(
   others=>x"0000");
 
 -- diese Funktion übernimmt von SP nur die beiden niedrigsten Bits
@@ -539,8 +539,8 @@ signal RW: STD_LOGIC;
 -- kompletten Speicher anschliessen
 signal PC_ZUM_ProgRAM,PD_VOM_ProgRAM: STD_LOGIC_VECTOR (15 downto 0);
 signal STORE_ZUM_RAM,EXFET,ADRESSE_ZUM_RAM: STD_LOGIC_VECTOR (15 downto 0);
-signal FETCH_VOM_ProgRAM,FETCH_VOM_ByteRAM,FETCH_VOM_stapR,FETCH_VOM_stapRNEU: STD_LOGIC_VECTOR (15 downto 0);
-signal WE_ZUM_RAM,WE_ZUM_ProgRAM,WE_ZUM_ByteRAM,WE_ZUM_stapR,WE_ZUM_stapRNEU: STD_LOGIC;
+signal FETCH_VOM_ProgRAM,FETCH_VOM_ByteRAM,FETCH_VOM_VarRAM,FETCH_VOM_RetRAM: STD_LOGIC_VECTOR (15 downto 0);
+signal WE_ZUM_RAM,WE_ZUM_ProgRAM,WE_ZUM_ByteRAM,WE_ZUM_VarRAM,WE_ZUM_RetRAM: STD_LOGIC;
 -- fuer EMIT-Ausgabe
 signal EMIT_ABGESCHICKT_LOCAL,EMIT_ANGEKOMMEN_RUHEND,XOFF_INPUT_L: STD_LOGIC:='0';
 signal KEY_ANGEKOMMEN_LOCAL,KEY_ABGESCHICKT_RUHEND,KEY_ABGESCHICKT_MERK: STD_LOGIC:='0';
@@ -676,7 +676,7 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
         end if;
       T:=3;
     elsif PD=x"A017" then -- MULT_I
-      --     D    C    B    A        stapR
+      --     D    C    B    A        RetRAM
       --     c    ü   adr1 adr2      i
       -- c   ü   erg1 adr2 adr1      i-1
       SUMME:=(D*EXFET)+(x"0000"&C);
@@ -686,7 +686,7 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
       RPC<=RPCC-1; RW<='1';
       T:=4; SP:=SP+1;
     elsif PD=x"A018" then -- MULT_II
-      --     D    C     B      A         stapR
+      --     D    C     B      A         RetRAM
       -- c   ü1  erg1   adr2   adr1      i-1
       -- c   ü2  adr1+1 adr2+1 i-1       i-1
       SUMME:=(D&C)+(x"0000"&EXFET);
@@ -722,7 +722,7 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
       if T/=2 then R(P(SP-3)):=C; W(P(SP-3)):='1';
         if T/=3 then R(P(SP-4)):=D; W(P(SP-4)):='1';
           end if; end if; end if; end if;
-  -- Ausgabeadresse zum StapRAM zusammenbasteln
+  -- Ausgabeadresse zum VarRAMAM zusammenbasteln
   ADRESSE_ZUM_STAPEL(0)<=CONV_STD_LOGIC_VECTOR(SP-1,16);
   ADRESSE_ZUM_STAPEL(1)<=CONV_STD_LOGIC_VECTOR(SP-2,16);
   ADRESSE_ZUM_STAPEL(2)<=CONV_STD_LOGIC_VECTOR(SP-3,16);
@@ -744,15 +744,15 @@ KEY_ANGEKOMMEN<=KEY_ANGEKOMMEN_LOCAL;
 
 -- hier werden die Lesedaten der unterschiedlichen Speicher zusammengefuehrt
 EXFET<=FETCH_VOM_ProgRAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else
-       FETCH_VOM_stapR when ADRESSE_ZUM_RAM(15 downto 10)="001011" else
-       FETCH_VOM_stapRNEU when ADRESSE_ZUM_RAM(15 downto 6)="0011111111" else
+       FETCH_VOM_VarRAM when ADRESSE_ZUM_RAM(15 downto 10)="001011" else
+       FETCH_VOM_RetRAM when ADRESSE_ZUM_RAM(15 downto 6)="0011111111" else
        x"00"&FETCH_VOM_ByteRAM(7 downto 0) when ADRESSE_ZUM_RAM(15 downto 13)="111" else
        DAT_I;
 
 -- hier wird WE auf die unterschiedlichen Speicher aufgeteilt
 WE_ZUM_ProgRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else '0';
-WE_ZUM_stapR  <=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001011" else '0';
-WE_ZUM_stapRNEU<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 6)="0011111111" else '0';
+WE_ZUM_VarRAM  <=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001011" else '0';
+WE_ZUM_RetRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 6)="0011111111" else '0';
 WE_ZUM_ByteRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="111" else '0';
 
 
@@ -779,31 +779,31 @@ begin wait until (CLK_I'event and CLK_I='1');
 
 process -- Daten 2C00H-2FFFH
 begin wait until (CLK_I'event and CLK_I='1');
-  if WE_ZUM_StapR='1' then 
-    stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0))):=STORE_ZUM_RAM; 
-    FETCH_VOM_stapR<=STORE_ZUM_RAM; 
+  if WE_ZUM_VarRAM='1' then 
+    VarRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0))):=STORE_ZUM_RAM; 
+    FETCH_VOM_VarRAM<=STORE_ZUM_RAM; 
       else
-      FETCH_VOM_stapR<=stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0)));
+      FETCH_VOM_VarRAM<=VarRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0)));
       end if;
-  FETCH_VOM_stapR<=stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0)));
+  FETCH_VOM_VarRAM<=VarRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0)));
   end process;
 
 process --Rueckkehrstapel 3FC0-3FFFH, TRUE_DUAL_PORT
 begin wait until (CLK_I'event and CLK_I='1');
-  if WE_ZUM_StapRNEU='1' then 
-    stapRNEU(CONV_INTEGER(ADRESSE_ZUM_RAM(5 downto 0))):=STORE_ZUM_RAM; 
-    FETCH_VOM_stapRNEU<=STORE_ZUM_RAM; 
+  if WE_ZUM_RetRAM='1' then 
+    RetRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(5 downto 0))):=STORE_ZUM_RAM; 
+    FETCH_VOM_RetRAM<=STORE_ZUM_RAM; 
       else
-      FETCH_VOM_stapRNEU<=stapRNEU(CONV_INTEGER(ADRESSE_ZUM_RAM(5 downto 0)));
+      FETCH_VOM_RetRAM<=RetRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(5 downto 0)));
       end if;
-  FETCH_VOM_stapRNEU<=stapRNEU(CONV_INTEGER(ADRESSE_ZUM_RAM(5 downto 0)));
+  FETCH_VOM_RetRAM<=RetRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(5 downto 0)));
   end process;
 process begin wait until (CLK_I'event and CLK_I='1');
   if RW='1' then
-    stapRNEU(CONV_INTEGER(RP(5 downto 0))):=RPC;
+    RetRAM(CONV_INTEGER(RP(5 downto 0))):=RPC;
     RPCC<=RPC;
      else
-      RPCC<=stapRNEU(CONV_INTEGER(RP(5 downto 0)));
+      RPCC<=RetRAM(CONV_INTEGER(RP(5 downto 0)));
     end if;
   end process;
 
