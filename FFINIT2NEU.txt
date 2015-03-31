@@ -666,20 +666,21 @@ DUP ZERLEG SWAP . .
 </sekt>
 
 <sekt inhalt="größter gemeinsamer Teiler von Matrix und Nenner">
-0 VARIABLE GGTNRMERK
 : OBJGGT ( obj b --> ggt )
+  1 LOCAL
   OVER OBJ? IF
     SWAP ( b a  ( FORALL ) 
     ZERLEG 3FFF AND                ( b adr n )
     SWAP OVER + -1 + SWAP          ( b eadr-1 n )
-    NEBENRECHNUNG GGTNRMERK ! 
+    NEBENRECHNUNG L0 ! 
       BEGIN DUP WHILE ROT ROT SWAP ( n eadr-1 b )
         OVER @ SWAP RECURSE        ( n eadr-1 b' )
-        GGTNRMERK @ HAUPTRECHNUNG A+0
+        L0 @ HAUPTRECHNUNG A+0
         SWAP -1 + ROT -1 +         ( b' eadr-2 n-1 )
         REPEAT                     ( ggt adr-1 0 )
     2DROP                          ( ggt )
     ELSE NGGT END_IF
+  END_LOCAL
   ;
 
 [ 12 18 1B ] 12 OBJGGT O.
