@@ -47,7 +47,7 @@ ok in RXD noch STRG umsetzen auf nach dbInput, aber wie? aha mit STRG_2
 ok FFPINIT1.TXT und 2 gehören in master mit rein ok
 ok alle .xml auch so anordnen, dass sie ohne xslt lesbar sind. ok
 ok auch noch einen Weiterhupf ok svg-Kreis
-.. README.md dann auch mit vorrichten
+o. README.md dann auch mit vorrichten
 ok das .ucf File auch noch weng zurechtmachen. ok
 ok colorisierte Ausgabe --- in FFINIT2.TXT mit reinmach erstmal ok
 .. na inzwischen kann auch das pre-wrap allmählich ganz raus, naja es wird immer mal gebraucht
@@ -77,7 +77,7 @@ ok N" 4000" geht nicht richtig??? ok inzwischen doch
 ok copy-of in ptable ist wohl nicht ganz korrekt... ok ist behoben
 .. ganz ohne Variablen?
 .. wenigstens die ab 0040 noch extra, damit readonly wieder mal geht, VARIABLE gleich bei CONSTANT mit
-.. als nächstes mal SLX-ERGEBNIS, da war wo noch was,
+o. als nächstes mal SLX-ERGEBNIS, da war wo noch was,
    ok im Moment sowieso ERROR - Fehler Nummer 0369, da kann nix schiefgehen.
    .. SPEICHERFREI über SPEICHERENDE hinaus noch, das hatte ich doch schon
 .. Step_0 nur für Spartan3 und nicht vivado!!! Das ist es.
@@ -105,7 +105,7 @@ ok vom Prinzip her gehören INIT.xml und screenlog.xml mit in Step_xx rein,
        deshalb nicht mit in gh.pages.
        ok ich mach jetzt so eine Konstellation in master.
 ok da stimmt doch JR 8000 bei DIST > 800 nicht???? ok ja mehr ist gar nicht vorgesehen, jetzt REPLACE:
-.. mal alle !!!aufsammel weng: SP, JR, ! @, DP max 1400, xml am Zeilenanfang,INTERRU.
+.. mal alle !!!aufsammel weng: SP, JR, ! @, DP max 1400, xml am Zeilenanfang,INTERRU, : H 4000 ;, 
 ok uff CRBIT ist raus!!! ok
 ok wieso ist IRAMADR ungleich JRAMADR ? aha wegen cp, da ist ganze Menge Vorlauf ok DUMPZ
 ok mal schauen, ob ich absolut leere /ok/ok/ wegbekomme, vorallem bei /xml/ ok ja klar
@@ -116,15 +116,17 @@ ok jetzt ist das Ausgabeformat umschaltbar zwischen ok und <ok></ok> für screen
 ok die ganzen offenen Klammern ( endlich mal schließen ... so ) 
 ok wie das XMLBIT benennen? XBIT einfach nur. ok
 ok DEZ heißt eigentlich DECIMAL in Step_11
-o. durchaus auch andere Browser mal versuchen, html ganz ohne xmlns scheint was auszumachen, also html5.
+ok durchaus auch andere Browser mal versuchen, html ganz ohne xmlns scheint was auszumachen, also html5.
 ok testbench.vhd jetzt mit "56 89 * ." statt x"35",x"36"...
 ok ich lasse FFINIT1NEU.txt und FFINIT2NEU.txt jetzt zusätzlich drin für neue Sachen, weniger --amend's
 ok CSI C2 9B geht ja nur in screen, also alles wieder auf ESCAPE umstellen. ok
-.. FFINIT1.txt muss die aktuelle auf dem Spartan3 gespeicherte Version halten!!!
+ok FFINIT1.txt muss die aktuelle auf dem Spartan3 gespeicherte Version halten!!! ok ist jetzt aktuell ok
 .. NLT.
+ok signal DEMO mit in process rein, erscheint dann nicht automatisch in waveform
+ok Matrix kürzen ist jetzt auch drin ok
 
-
-solange S3 nicht neu programmiert ist, ein Skript zur Erstellung von ... aus ..:
+Spartan3 ist momentan programmiert auf a193d84
+solange S3 nicht weiter programmiert ist, ein Skript zur Erstellung von ... aus ..:
 ###!!! wenn es ab hier losgehen soll wegen neuer AXIOME, dann zuerst RESET drücken auf dem Spartan3
 ###!!! ebenso wenn Reset gedrückt auf dem Spartan3, dann muss es hier losgehen:
 cp FFINIT1.txt /dev/ttyAMA0
