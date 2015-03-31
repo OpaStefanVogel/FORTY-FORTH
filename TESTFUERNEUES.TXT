@@ -18,49 +18,61 @@ FORGET NLIT,
 REPLACE: A+0 ( a --> a+0 ) 
   OPERAND1 !
   OPERAND1 OPERAND->SLX
-  OVER ERGEBNIS @ 1+ SWAP MOVE
+  OVER ERGEBNIS @ 1+ SWAP MOVE ( SPEICHERHOL will hier nicht gehen )
   ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz )
-  ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
+  ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF ( da ist es passiert )
   SLX->ERGEBNIS
   ;
 
-0 VARIABLE GGTNRMERK
 : OBJGGT ( obj b --> ggt )
+  1 LOCAL
   OVER OBJ? IF
     SWAP ( b a  ( FORALL ) 
-    ZERLEG 3FFF AND                ( b adr n
-    NEBENRECHNUNG GGTNRMERK ! 
-      BEGIN DUP WHILE ROT ROT SWAP ( n adr b
-        OVER @ SWAP RECURSE             ( n adr b'
-        GGTNRMERK @ HAUPTRECHNUNG A+0
-        SWAP 1 + ROT 1 -         ( b' adr+1 n-1
-        REPEAT                     ( ggt adr+n 0
-    2DROP                          ( ggt
+    ZERLEG 3FFF AND                ( b adr n )
+    SWAP OVER + -1 + SWAP          ( b eadr-1 n )
+    NEBENRECHNUNG L0 ! 
+      BEGIN DUP WHILE ROT ROT SWAP ( n eadr-1 b )
+        OVER @ SWAP RECURSE        ( n eadr-1 b' )
+        L0 @ HAUPTRECHNUNG A+0
+        SWAP -1 + ROT -1 +         ( b' eadr-2 n-1 )
+        REPEAT                     ( ggt adr-1 0 )
+    2DROP                          ( ggt )
     ELSE NGGT END_IF
+  END_LOCAL
   ;
+
+[ 12 18 1B ] 12 OBJGGT O.
+[ [ 12 18 1B ] [ 1E 21 24 ] ] 12 OBJGGT O.
 
 : OBJ/GGT ( obj ggt --> obj/ggt )
   OVER OBJ? IF OVER >R
     SWAP ( b a  ( FORALL ) 
-    ZERLEG 3FFF AND                ( b adr n
-      BEGIN DUP WHILE ROT ROT SWAP ( n adr b
-        2DUP OVER @ SWAP RECURSE SWAP !       ( n adr b
-        SWAP 1 + ROT 1 -         ( b adr+1 n-1
-        REPEAT                     ( b adr+n 0
-    2DROP DROP R>                  ( b
+    ZERLEG 3FFF AND                     ( b adr n )
+    SWAP OVER + -1 + SWAP               ( b eadr-1 n )
+      BEGIN DUP WHILE ROT ROT SWAP      ( n eadr-1 b )
+        2DUP OVER @ SWAP RECURSE SWAP ! ( n eadr-1 b )
+        SWAP -1 + ROT -1 +              ( b eadr-2 n-1 )
+        REPEAT                          ( b adr-1 0 )
+    2DROP DROP R>                       ( obj )
     ELSE N/ END_IF
   ;
 
+[ 12 18 1B ] 3 OBJ/GGT O.
+[ [ 12 18 1B ] [ 1E 21 24 ] ] 3 OBJ/GGT O.
+
 : OBJ+0 ( obj --> obj+0 )
   DUP OBJ? IF DUP >R
-    ZERLEG 3FFF AND                ( adr n
-      BEGIN DUP WHILE SWAP         ( n adr
-        DUP @ ( CR OVER M. DUP M. ERGEBNIS ? KEY DROP ) RECURSE OVER !       ( n adr
-        1 + SWAP 1 -             ( adr+1 n-1
-        REPEAT                     ( adr+n 0
-    2DROP R>                       ( obj
+    ZERLEG 3FFF AND          ( adr n )
+    SWAP OVER + -1 + SWAP    ( eadr-1 n )
+      BEGIN DUP WHILE SWAP   ( n eadr-1 )
+        DUP @ RECURSE OVER ! ( n eadr-1 )
+        -1 + SWAP -1 +       ( eadr-1 n-1 )
+        REPEAT               ( adr-1 0 )
+    2DROP R>                 ( obj )
     ELSE A+0 END_IF
   ;
+
+[ 12 18 1B ] OBJ+0 O.
 
 : OBJK ( obj b --> obj/ggt b/ggt )
   NEBENRECHNUNG >R
@@ -68,49 +80,32 @@ REPLACE: A+0 ( a --> a+0 )
   R> HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
   ;
 
-: OBJDUMP ( obj --> )
-  DUP OBJ? IF
-    ZERLEG 3FFF AND                ( adr n
-      BEGIN DUP WHILE SWAP         ( n adr
-        CR OVER . DUP . DUP @ 
-        DUP . DUP ABS 4000 LT IF -1 . -1 . ELSE DUP ABS ZERLEG . . END_IF
-        DUP O. RECURSE          ( n adr
-        1 + SWAP 1 -             ( adr+1 n-1
-        REPEAT                     ( adr+n 0
-    2DROP                          ( 
-    ELSE ." ZAHL " . END_IF
-  ;
-
-1400 77 77 FILL
-
-[ 12 18 1B ] 12 OBJGGT O.
-[ [ 12 18 1B ] [ 1E 21 24 ] ] 12 OBJGGT O.
-[ 12 18 1B ] ZERLEG . .
-
-[ 12 18 1B ] 3 OBJ/GGT O.
-[ [ 12 18 1B ] [ 1E 21 24 ] ] 3 OBJ/GGT O.
-
-( 2DUP OBJGGT N.
-
 [ 12 18 1B ] 12 OBJK SWAP O. N.
 [ [ 12 18 1B ] [ 1E 21 24 ] ] 12 OBJK SWAP O. N.
 
-( 2DUP OBJK OVER O. DUP N.
-
-[ 12 18 1B ] OBJ+0 O.
+: OBJDUMP ( obj --> )
+  DUP OBJ? IF
+    ZERLEG 3FFF AND                ( adr n )
+      BEGIN DUP WHILE SWAP         ( n adr )
+        CR OVER . DUP . DUP @ 
+        DUP . DUP ABS 4000 LT IF -1 . -1 . ELSE DUP ABS ZERLEG . . END_IF
+        DUP O. RECURSE             ( n adr )
+        1 + SWAP -1 +              ( adr+1 n-1 )
+        REPEAT                     ( adr+n 0 )
+    2DROP                          ( )
+    ELSE DROP END_IF
+  ;
 
 [ 12 18 1B ] OBJDUMP
 [ [ 12 18 1B ] [ 1E 21 24 ] ] OBJDUMP
 
-0 VARIABLE NBMERK
 : INVERTIEREN ( matrix dim --> invmat nenner )
-  ( L0=mat L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
-  8 LOCAL NEBENRECHNUNG NBMERK !
-  L1 ! L0 !
-  L0 @ 1 ( mat nenner )
+  ( L0=nr L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
+  8 LOCAL NEBENRECHNUNG L0 !
+  L1 ! 1 ( mat nenner )
   L1 @ L2 ! BEGIN -1 L2 +! ( CR L2 ? ERGEBNIS ?
     L7 ! ( mat ) 0 L5 ! 0 L6 !
-    L0 @ L2 @ L L2 @ L ( mat neuernenner )
+    DUP L2 @ L L2 @ L ( mat neuernenner )
     L1 @ L3 ! BEGIN -1 L3 +!
       OVER L3 @ L L2 @ L L5 @ L3 @ ROT H L5 !
       OVER L2 @ L L3 @ L L6 @ L3 @ ROT H L6 !
@@ -130,15 +125,15 @@ REPLACE: A+0 ( a --> a+0 )
         L4 @ 0= UNTIL
       ROT L3 @ ROT H SWAP ( matneu nenner )
       L3 @ 0= UNTIL
+    A+0 ( verschiebt nenner hinter matneu )
     ( RECHENBLOCK )
-(    CR ." vor 1. OBJ+0 " OVER OBJDUMP DUP N. DUP .
-    SWAP OBJ+0 SWAP A+0 NBMERK @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
-(    CR ." vor OBJK " OVER OBJDUMP DUP N. DUP .
+    CR ." vor 1. OBJ+0 " ERGEBNIS ? ( OVER OBJDUMP DUP N. DUP ABS .
+    L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
+    ." vor OBJK " ERGEBNIS ? ( OVER OBJDUMP DUP N. DUP ABS .
     OBJK 
-(    CR ." nach OBJK " OVER OBJDUMP DUP N. DUP .
-    NBMERK @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
-(    CR ." nach 2. OBJ+0 " OVER OBJDUMP DUP N. DUP ABS .
-(    CR OVER O. DUP N. ." durch " 
+    ." nach OBJK " ERGEBNIS ? ( OVER OBJDUMP DUP N. DUP ABS .
+    L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
+    ." nach 2. OBJ+0 " ERGEBNIS ? ( OVER OBJDUMP DUP N. DUP ABS .
     L2 @ 0= UNTIL
   END_LOCAL
   ;
@@ -220,3 +215,20 @@ ERGEBNIS ?
 ( herauskommen soll 
 ( OVER O. DUP N. [ [ -229B600 4DDD980 -8A6D800 B5AFB80 ... -D2 78 -2D A -1 ] ] -375F00 ok
 
+INIT
+0B VANDERMONDEMATRIX
+ERGEBNIS ?
+0B INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll 
+( OVER O. DUP N. [ [ -1A2BE700 416DC180 -82DB8300 ... -14A A5 -37 B -1 ] ] -2611500 ok
+
+INIT
+0C VANDERMONDEMATRIX
+ERGEBNIS ?
+0C INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll 
+( OVER O. DUP N. [ [ 1569BD000 -3AE2C7C00 82DB83000 ... -318 1EF -DC 42 -C 1 ] ] 1C8CFC00 ok
