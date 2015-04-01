@@ -13,7 +13,7 @@
   </xsl:template>
 
 <xsl:template match="INIT"><INIT>
-Wozu die beiden Files INIT.xml und screenlog.0 verwendet werden:
+Wozu die beiden Files INIT.xml und screenlog.xml verwendet werden:
   <a href="INIT.xml">INIT.xml</a>: FORTH-Interpreter recompilieren mit cp INIT.xml /dev/tty..
   <a href="screenlog.xml">screenlog.xml</a>: Logfile, welches dabei angefertigt wurde, 
     vor allem auch, um bequem die generierten Speicherarrays für P20_FFP.vhd entnehmen zu können.
@@ -21,12 +21,12 @@ Wozu die beiden Files INIT.xml und screenlog.0 verwendet werden:
 Bedeutung der verwendeten Hintergrundfarben:
   <span style="background-color: Magenta;">Magenta</span> damit sind die Axiome eingerahmt
   <span style="background-color: Aqua;">Aqua</span> Überschriften aus der Inhaltsübersicht
-  nur bei <a href="screenlog.0">screenlog.0</a>:
+  nur bei <a href="screenlog.xml">screenlog.xml</a>:
     <span style="background-color: LightGrey;">LightGrey</span> erreichte Speicheradressen vorm Weitercompilieren, Programm 0000H-1400H, Text E000H-FB00H
     <span style="background-color: Khaki;">Khaki</span> Programmausgaben des FORTH-Interpreters im xml-Ausgabemodus
     <span style="background-color: Pink;">Pink</span> generierte Speicherarrays zum Kopieren in P20_FFP.vhd hinein
 
-  <h1 id="Übersicht">Inhalt:</h1>
+  <h1 id="Inhalt">Inhalt:</h1>
 
   <ul>
     <xsl:for-each select="*/sekt">
@@ -72,7 +72,7 @@ Bedeutung der verwendeten Hintergrundfarben:
   <div class="VorSekt">
     <xsl:attribute name="id"><xsl:value-of select="@inhalt" /></xsl:attribute>
     <xsl:value-of select="@inhalt" />
-    <a href="#Übersicht" class="zurück"> -----> zurück zur Übersicht</a>
+    <a href="#Inhalt" class="zurück"> -----> zurück zur Übersicht</a>
     </div>
   <sekt><xsl:apply-templates /></sekt>
   </xsl:template>
