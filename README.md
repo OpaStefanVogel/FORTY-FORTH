@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # FORTY-FORTH
 Ohne Rundungsfehler Gleichungssysteme lösen
 
@@ -28,3 +29,4 @@ TESTFUERNEUES.txt
 
 README.md
 ```
+

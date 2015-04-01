@@ -1,0 +1,13 @@
+NET "CLK"            LOC =  "T9";
+
+NET "RXD"            LOC =  "T13" | PULLUP;
+NET "TXD"            LOC =  "R13";
+
+NET "led<0>"         LOC =  "K12";
+NET "led<1>"         LOC =  "P14";
+NET "led<2>"         LOC =  "L12";
+NET "led<3>"         LOC =  "N14";
+NET "led<4>"         LOC =  "P13";
+NET "led<5>"         LOC =  "N12";
+NET "led<6>"         LOC =  "P12";
+NET "led<7>"         LOC =  "P11";
