@@ -13,7 +13,7 @@ DI32 ( a b c --> r q ) teilt die aus a und b zusammengesetzte 32-Bit Zahl a*2^16
 MULT_I ( ... ) und
 MULT_II ( ... ) sind zwei Hilfsfunktionen für die Multiplikation einer 16-Bit-Zahl mit einer ab Adresse adr gespeicherten großen ganzen Zahl der Länge l Bytes.
 
-Hier ist nur aufgeführt, was im VHDL-Programm dazugekommen ist. Wie das alles mit dem FORTH-Interpreter zusammenwirkt und daraus schließlich das Matrix-Invertierungsprogramm gemacht wird, öffne dazu die Datei <code><i>your-master-repo</i>/screenlog.xml</code> mit einem xml-Browser. Das ist ein Logfile, welches beim Compilieren des Forth-Interpreters angefertigt wurde. Es enthält den vollständigen FORTH-Quelltext, versehen mit wenigstens ein paar Erläuterungen.
+Hier ist nur aufgeführt, was im VHDL-Programm dazugekommen ist. Wie das alles mit dem FORTH-Interpreter zusammenwirkt und daraus schließlich das Matrix-Invertierungsprogramm gemacht wird, öffne dazu die Datei <a href="screenlog.xml">screenlog.xml</a>. Das ist ein Logfile, welches beim Compilieren des Forth-Interpreters angefertigt wurde. Es enthält den vollständigen FORTH-Quelltext, versehen mit wenigstens ein paar Erläuterungen.
 
 Beispielaufgabe: <i>Invertiere die Matrix
 
