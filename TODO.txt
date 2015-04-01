@@ -125,6 +125,8 @@ ok FFINIT1.txt muss die aktuelle auf dem Spartan3 gespeicherte Version halten!!!
 ok signal DEMO mit in process rein, erscheint dann nicht automatisch in waveform
 ok Matrix kürzen ist jetzt auch drin ok
 .. jetzt probier ich mal alle branches zusammen in master rein, wie weit das gutgeht..
+.. an den Anfang von schreenlog noch einen Rückverweis
+.. und die Umlaute in xml-Attributen da ging mal der Link nicht...
 
 Spartan3 ist momentan programmiert auf a193d84
 solange S3 nicht weiter programmiert ist, ein Skript zur Erstellung von ... aus ..:
