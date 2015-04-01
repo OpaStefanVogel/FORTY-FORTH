@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xml-stylesheet type="text/xsl" href="R00.xsl" ?>
+<!DOCTYPE los SYSTEM "R00.dtd">
+<los>
+
+<step> Spartan3 Board </step>
+
+<p> Spartan3 Board </p>
+
+<p> Zuletzt war in Terminal_1 branch <code>Step_11</code> eingestellt. Alle speziell auf das Spartan3 Board bezogene Dateien befinden sich in einem extra Branch, welcher nicht gleichzeitig in Terminal_1 mit eingestellt werden kann. Deshalb in einem neuen Terminal_2 ein neues leeres Verzeichnis mit einem selbstgewählten Namen <i>your-Spartan3-repo</i> anlegen, in dieses Verzeichnis wechseln und nochmal klonen. </p>
+
+<Terminal_2>
+  <li> git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git . </li>
+  <li> git checkout Spartan3_Step_9_und_10 </li>
+  </Terminal_2>
+
+<p> Die Ein- und Ausgabe soll über die serielle Verbindung zum Spartan3 Board erfolgen. Dafür wird ein weiteres Terminal_3 benötigt. Welches Verzeichnis darin eigestellt ist, ist egal. Jedoch kann anstelle <code>/ttyS0</code> auch <code>/ttyS1</code> oder eine andere Eingabe erforderlich sein. </p>
+
+<Terminal_3>
+  <li> stty -F /dev/ttyS0 115200 raw -cstopb -parenb -crtscts -echo ixon -ixoff </li>
+  <li> stty raw -echo opost quit ^C isig ixon -ixoff #hiernach ist es finster!!! </li>
+  <li> cp /dev/ttyS0 /dev/tty &amp; cp /dev/tty /dev/ttyS0 </li>
+  </Terminal_3>
+
+<p> (Alles mit Enter abschließen. Man sieht nach dem zweiten stty keine Bildschirmausgabe mehr. In dem Moment ist nicht erkennbar, ob alles funktioniert)  </p>
+
+<p> So, jetzt muss mit <a href="https://en.wikipedia.org/wiki/Xilinx_ISE">Xilinx_ISE</a> ein Projekt mit den Dateien </p>
+
+<p><div> <i>your-master-repo</i>/P01_top.vhd </div>
+<div> <i>your-master-repo</i>/P20_FFP.vhd </div>
+<div> <i>your-Spartan3-repo</i>/TopSpartan3.vhd </div>
+<div> <i>your-Spartan3-repo</i>/Platine95S3.ucf </div>
+</p>
+<p> angelegt, das .bit File generiert und auf den Spartan3 ausgegeben werden. Dann sollte in Terminal_3 wieder
+
+<DEMO>FORTY-FORTH
+
+ok</DEMO>
+
+zu sehen und auch eine Nutzereingabe möglich sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, ob sich da etwas verheddert hat. Sonst bleibt nur, in Terminal_1 und Terminal_2 mit <code>git checkout</code> auf vorherige Versionen umzuschalten, .bit erneut zu generieren und auf den Spartan3 auszugeben. Dabei gilt momentan folgende Zuordnung </p>
+
+<table border="1"><tr>
+  <th> <i>your-master-repo&amp;</i>   </th>
+  <th> <i>your-Spartan3-repo&amp;</i> </th>
+  <th> Ausgabe </th></tr>
+  <tr><td> Step_1  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_2  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_3  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_4  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_5  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_6  </td><td> Spartan_Step_6_und_7       </td><td> LED's             </td></tr>
+  <tr><td> Step_7  </td><td> Spartan_Step_6_und_7       </td><td> LED's             </td></tr>
+  <tr><td> Step_8  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_9  </td><td> Spartan_Step_9             </td><td> serieller Ausgang </td></tr>
+  <tr><td> Step_10 </td><td> Spartan_ab_Step_10         </td><td> serieller Ausgang </td></tr>
+  <tr><td> Step_11 </td><td> Spartan_ab_Step_10         </td><td> serieller Ausgang </td></tr>
+  </table>
+
+<p> Anstelle oder nach einigen Tastatureingaben in Terminal_3 hinein geht auch in Terminal_1</p>
+
+<Terminal_1>
+  <li> echo '-1 XBIT !' >/dev/ttyS0 <i># schaltet xml-Ausgabemodus ein</i> </li>
+  <li> <i># jetzt screenlog starten, (C-a H) bei <a href="http://www.gnu.org/software/screen/manual/html_node/Log.html#Log">screen</a></i> </li>
+  <li> cp INIT.xml /dev/ttyS0    <i># recompiliert den vorhandenen FORTH-Interpreter</i> </li>
+  <li> <i># jetzt screenlog stoppen, nochmal (C-a H)</i> </li>
+  <li> echo '0 XBIT !' >/dev/ttyS0 <i># schaltet xml-Ausgabemodus aus</i> </li>
+  <li> <i>#</i></li>
+  </Terminal_1>
+
+<p>Das bei 'screenlog' erzeugte Logfile habe ich als screenlog.xml im master-branch gespeichert. Man kann es in einem xml-Browser formatiert anschauen.</p>
+
+<weiter />Pause
+
+</los>
