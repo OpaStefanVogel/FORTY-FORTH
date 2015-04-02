@@ -12,7 +12,8 @@
     </html>
   </xsl:template>
 
-<xsl:template match="INIT"><INIT>
+<xsl:template match="INIT"><INIT>zurück zu <a href="R11.xml">R11.xml</a>
+
 Wozu die beiden Files INIT.xml und screenlog.xml verwendet werden:
   <a href="INIT.xml">INIT.xml</a>: FORTH-Interpreter recompilieren mit cp INIT.xml /dev/tty..
   <a href="screenlog.xml">screenlog.xml</a>: Logfile, welches dabei angefertigt wurde, 
