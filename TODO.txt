@@ -125,6 +125,9 @@ ok FFINIT1.txt muss die aktuelle auf dem Spartan3 gespeicherte Version halten!!!
 ok signal DEMO mit in process rein, erscheint dann nicht automatisch in waveform
 ok Matrix kürzen ist jetzt auch drin ok
 .. jetzt probier ich mal alle branches zusammen in master rein, wie weit das gutgeht..
+   .. so richtig ist das noch nicht im Lot, gh-pages muss bezogen auf Step_11 gültig sein,
+      also INIT.xml, screenlog.xml dürfen sich zwischen Step_11 und gh-pages nicht ändern
+      eigentlich auch P20_FFR.vhd auch nicht, macht es im Moment aber ... 
 .. an den Anfang von schreenlog noch einen Rückverweis
 .. und die Umlaute in xml-Attributen da ging mal der Link nicht...
 
