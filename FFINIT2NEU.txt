@@ -397,12 +397,14 @@ ZAHLENSPEICHER @ VARIABLE BLOCKENDE
 INIT
 
 : A+0 ( a --> a+0 ) 
-  OPERAND1 !
+  DUP OPERAND1 !
   OPERAND1 OPERAND->SLX
-  OVER ERGEBNIS @ 1+ SWAP MOVE
-  ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz )
-  ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF ( da ist es passiert )
-  SLX->ERGEBNIS
+  DUP OPERAND1 - DROP 1 IF
+    OVER ERGEBNIS @ 1+ SWAP MOVE ( SPEICHERHOL will hier nicht gehen )
+    ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz )
+    ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF ( da ist es passiert )
+    SLX->ERGEBNIS SWAP DROP
+    ELSE 2DROP DROP END_IF
   ;
 : B+0 ( a b --> a+0 b+0 )
   SWAP A+0 SWAP A+0 ;
@@ -665,43 +667,7 @@ DUP ZERLEG SWAP . .
   ;
 </sekt>
 
-<sekt inhalt="größter gemeinsamer Teiler von Matrix und Nenner">
-: OBJGGT ( obj b --> ggt )
-  1 LOCAL
-  OVER OBJ? IF
-    SWAP ( b a  ( FORALL ) 
-    ZERLEG 3FFF AND                ( b adr n )
-    SWAP OVER + -1 + SWAP          ( b eadr-1 n )
-    NEBENRECHNUNG L0 ! 
-      BEGIN DUP WHILE ROT ROT SWAP ( n eadr-1 b )
-        OVER @ SWAP RECURSE        ( n eadr-1 b' )
-        L0 @ HAUPTRECHNUNG A+0
-        SWAP -1 + ROT -1 +         ( b' eadr-2 n-1 )
-        REPEAT                     ( ggt adr-1 0 )
-    2DROP                          ( ggt )
-    ELSE NGGT END_IF
-  END_LOCAL
-  ;
-
-[ 12 18 1B ] 12 OBJGGT O.
-[ [ 12 18 1B ] [ 1E 21 24 ] ] 12 OBJGGT O.
-
-: OBJ/GGT ( obj ggt --> obj/ggt )
-  OVER OBJ? IF OVER >R
-    SWAP ( b a  ( FORALL ) 
-    ZERLEG 3FFF AND                     ( b adr n )
-    SWAP OVER + -1 + SWAP               ( b eadr-1 n )
-      BEGIN DUP WHILE ROT ROT SWAP      ( n eadr-1 b )
-        2DUP OVER @ SWAP RECURSE SWAP ! ( n eadr-1 b )
-        SWAP -1 + ROT -1 +              ( b eadr-2 n-1 )
-        REPEAT                          ( b adr-1 0 )
-    2DROP DROP R>                       ( obj )
-    ELSE N/ END_IF
-  ;
-
-[ 12 18 1B ] 3 OBJ/GGT O.
-[ [ 12 18 1B ] [ 1E 21 24 ] ] 3 OBJ/GGT O.
-
+<sekt inhalt="Matrix invertieren">
 : OBJ+0 ( obj --> obj+0 )
   DUP OBJ? IF DUP >R
     ZERLEG 3FFF AND          ( adr n )
@@ -715,15 +681,6 @@ DUP ZERLEG SWAP . .
   ;
 
 [ 12 18 1B ] OBJ+0 O.
-
-: OBJK ( obj b --> obj/ggt b/ggt )
-  NEBENRECHNUNG >R
-  2DUP OBJGGT SWAP OVER 2SWAP OBJ/GGT ROT ROT OBJ/GGT 
-  R> HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
-  ;
-
-[ 12 18 1B ] 12 OBJK SWAP O. N.
-[ [ 12 18 1B ] [ 1E 21 24 ] ] 12 OBJK SWAP O. N.
 
 : OBJDUMP ( obj --> )
   DUP OBJ? IF
@@ -740,9 +697,7 @@ DUP ZERLEG SWAP . .
 
 [ 12 18 1B ] OBJDUMP
 [ [ 12 18 1B ] [ 1E 21 24 ] ] OBJDUMP
-</sekt>
 
-<sekt inhalt="Matrix invertieren">
 : INVERTIEREN ( matrix dim --> invmat nenner )
   ( L0=nr L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
   8 LOCAL NEBENRECHNUNG L0 !
@@ -773,11 +728,7 @@ DUP ZERLEG SWAP . .
     ( RECHENBLOCK )
     ( CR ." vor 1. OBJ+0 " ERGEBNIS ? ( OVER OBJDUMP DUP N. DUP ABS .
     L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
-    ( ." vor OBJK " ERGEBNIS ? ( OVER OBJDUMP DUP N. DUP ABS .
-    OBJK 
-    ( ." nach OBJK " ERGEBNIS ? ( OVER OBJDUMP DUP N. DUP ABS .
-    L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
-    ( ." nach 2. OBJ+0 " ERGEBNIS ? ( OVER OBJDUMP DUP N. DUP ABS .
+    ( ." nach 1. OBJ+0 " ERGEBNIS ? ( OVER OBJDUMP DUP N. DUP ABS .
     L2 @ 0= UNTIL
   END_LOCAL
   ;
@@ -842,24 +793,24 @@ INIT
 4 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll
-( OVER O. DUP N. [ [ 60 -48 20 -6 ] [ -68 72 -38 B ] [ 24 -30 1C -6 ] [ -4 6 -4 1 ] ] 18 ok
+( herauskommen soll [ [ 480 -360 180 -48 ] [ -4E0 558 -2A0 84 ] [ 1B0 -240 150 -48 ] [ -30 48 -30 C ] ] 120
+( gekürzt [ [ 60 -48 20 -6 ] [ -68 72 -38 B ] [ 24 -30 1C -6 ] [ -4 6 -4 1 ] ] 18 ok
 
 INIT
 5 VANDERMONDEMATRIX
 5 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll
-( OVER O. DUP N. [ [ 258 -258 190 -96 18 ] [ -302 42E -30C 131 -32 ] ... [ 5 -A A -5 1 ] ] 78 ok
+( herauskommen soll [ [ 2A300 -2A300 1C200 -A8C0 1B00 ] [ -36240 4B3C0 -36D80 15720 -3840 ] [ 18F60 -297C0 22740 -E6A0 2760 ] [ -4EC0 9240 -8700 3DE0 -B40 ] [ 5A0 -B40 B40 -5A0 120 ] ] 8700
+( gekürzt [ [ 258 -258 190 -96 18 ] [ -302 42E -30C 131 -32 ] ... [ 5 -A A -5 1 ] ] 78 ok
 
 INIT
 6 VANDERMONDEMATRIX
 6 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll
-( OVER O. DUP N. [ [ -10E0 1518 -12C0 A8C -360 78 ] ... [ 6 -F 14 -F 6 -1 ] ] -2D0 ok
+( herauskommen soll [ [ 8E62000 -B1FA800 9E34000 ... -32A00 8700 ] ] 17BB000
+( gekürzt [ [ -10E0 1518 -12C0 A8C -360 78 ] ... [ 6 -F 14 -F 6 -1 ] ] -2D0 ok
 
 INIT
 7 VANDERMONDEMATRIX
@@ -867,8 +818,8 @@ ERGEBNIS ?
 7 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll 
-( OVER O. DUP N. [ [ -89D0 CEB8 -E5B0 AC44 -52B0 16F8 -2D0 ]  ... [ -7 15 -23 23 -15 7 -1 ] ] -13B0 ok
+( herauskommen soll [ [ CC65AF0000 -13298868000 ... 17BB000 ] ] 1D33190000 
+( gekürzt [ [ -89D0 CEB8 -E5B0 AC44 -52B0 16F8 -2D0 ]  ... [ -7 15 -23 23 -15 7 -1 ] ] -13B0 ok
 
 INIT
 8 VANDERMONDEMATRIX
@@ -876,8 +827,8 @@ ERGEBNIS ?
 8 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll 
-( OVER O. DUP N. [ [ 4EC00 -89D00 B7C00 -AC440 6E400 -2DF00 B400 -13B0 ] ... [ -8 1C -38 46 -38 1C -8 1 ] ] 9D80 ok
+( herauskommen soll [ [ 8FB77F0C000000 -FB811E55000000 ... 1D33190000 ] ] 11F6EFE1800000
+( gekürzt [ [ 4EC00 -89D00 B7C00 -AC440 6E400 -2DF00 B400 -13B0 ] ... [ -( 1C -38 46 -38 1C -8 1 ] ] 9D80 ok
 
 INIT
 9 VANDERMONDEMATRIX
@@ -885,8 +836,8 @@ ERGEBNIS ?
 9 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll 
-( OVER O. DUP N. [ [ 31D580 -63AB00 9B0A00 -AE6B40 8B8900 -4D8500 1C7A00 -63AB0 9D80 ] ... [ 9 -24 54 -7E 7E -54 24 -9 1 ] ] 58980 ok
+( herauskommen soll [ [ 37F3F5B381040000000 ... 11F6EFE1800000 ] ] 6378D13F1E40000000
+( gekürzt [ [ 31D580 -63AB00 9B0A00 -AE6B40 8B8900 -4D8500 1C7A00 -63AB0 9D80 ] ... [ 9 -24 54 -7E 7E -54 24 -9 1 ] ] 58980 ok
 
 INIT
 0A VANDERMONDEMATRIX
@@ -894,8 +845,8 @@ ERGEBNIS ?
 0A INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll 
-( OVER O. DUP N. [ [ -229B600 4DDD980 -8A6D800 B5AFB80 ... -D2 78 -2D A -1 ] ] -375F00 ok
+( herauskommen soll [ [ D726B3E61B37C18000000000 ... 6378D13F1E40000000 ] ] 1583DECA35EBF9C000000000
+( gekürzt [ [ -229B600 4DDD980 -8A6D800 B5AFB80 ... -D2 78 -2D A -1 ] ] -375F00 ok
 
 INIT
 0B VANDERMONDEMATRIX
@@ -903,20 +854,32 @@ ERGEBNIS ?
 0B INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll 
-( OVER O. DUP N. [ [ -1A2BE700 416DC180 -82DB8300 ... -14A A5 -37 B -1 ] ] -2611500 ok
+( herauskommen soll [ [ 2331530F3797CA8619C400000000000 -57FB4FA60AFB7A4F406A00000000000 ... 1583DECA35EBF9C000000000 ] ] 333078D050DCC97D3CC00000000000
+( gekürzt [ [ -1A2BE700 416DC180 -82DB8300 ... -14A A5 -37 B -1 ] ] -2611500 ok
 
 INIT
 0C VANDERMONDEMATRIX
 ERGEBNIS ?
-0C INVERTIEREN
-OVER O. DUP N.
+( 0C INVERTIEREN OVER O. DUP N.
 ERGEBNIS ?
 ( herauskommen soll 
 ( OVER O. DUP N. [ [ 1569BD000 -3AE2C7C00 82DB83000 ... -318 1EF -DC 42 -C 1 ] ] 1C8CFC00 ok
 
-
 ( mehr geht erstmal nicht weil nicht mehr Platz )
+
+
+INIT
+[ [ 112  431  199 764 987 434 ]
+  [ 543 45 33 41 789 566 ]
+  [ 543 145 33 42 789 566 ]
+  [ 875 687 098 675 677 574 ]
+  [ 875 66B 0987 675 678 634 ]
+  [ 454 33 555 934 655 633 ]
+  ] 
+DUP O.
+6 INVERTIEREN ( mat dim --> invmat nenner )
+OVER O.
+DUP O.
 </sekt>
 
 <sekt inhalt="Reste die auch weggelassen werden können, wenn alles geht">
