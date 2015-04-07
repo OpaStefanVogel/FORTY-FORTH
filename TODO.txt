@@ -105,7 +105,8 @@ ok vom Prinzip her gehören INIT.xml und screenlog.xml mit in Step_xx rein,
        deshalb nicht mit in gh.pages.
        ok ich mach jetzt so eine Konstellation in master.
 ok da stimmt doch JR 8000 bei DIST > 800 nicht???? ok ja mehr ist gar nicht vorgesehen, jetzt REPLACE:
-.. mal alle !!!aufsammel weng: SP, JR, ! @, DP max 1400, xml am Zeilenanfang,INTERRU, : H 4000 ;, 
+.. mal alle !!!aufsammel weng: SP, JR, ! @, DP max 1400, xml am Zeilenanfang,INTERRU, : H 4000 ;
+   [ ] abwärts füllen,
 ok uff CRBIT ist raus!!! ok
 ok wieso ist IRAMADR ungleich JRAMADR ? aha wegen cp, da ist ganze Menge Vorlauf ok DUMPZ
 ok mal schauen, ob ich absolut leere /ok/ok/ wegbekomme, vorallem bei /xml/ ok ja klar
@@ -130,6 +131,8 @@ ok Matrix kürzen ist jetzt auch drin ok
       eigentlich auch P20_FFR.vhd auch nicht, macht es im Moment aber ... 
 .. an den Anfang von schreenlog noch einen Rückverweis
 .. und die Umlaute in xml-Attributen da ging mal der Link nicht...
+ok hab es ausprobiert mit GAP/FFP_GITHUB.txt, OBJK ist allgemein nicht nötig. 
+ok A+0 kann bei abs(x)<4000 überspringen. 
 
 Spartan3 ist momentan programmiert auf a193d84
 solange S3 nicht weiter programmiert ist, ein Skript zur Erstellung von ... aus ..:
@@ -152,4 +155,5 @@ cp INIT.xml /dev/ttyAMA0
 #screenlog anhalten ^AH
 echo '0 XBIT !' >/dev/ttyAMA0
 
+cp TESTFUERNEUES.TXT /dev/ttyAMA0
 
