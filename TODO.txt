@@ -133,7 +133,8 @@ ok an den Anfang von schreenlog noch einen Rückverweis ok
 .. und die Umlaute in xml-Attributen da ging mal der Link nicht...
 ok hab es ausprobiert mit GAP/FFP_GITHUB.txt, OBJK ist allgemein nicht nötig. 
 ok A+0 kann bei abs(x)<4000 überspringen.
-o. neue lokale Variablen ab 2F00 funktionieren 
+o. neue lokale Variablen ab 2F00 funktionieren
+.. Variablennamen so dass eindeutige Suche
 
 Spartan3 ist momentan programmiert auf a193d84
 solange S3 nicht weiter programmiert ist, ein Skript zur Erstellung von ... aus ..:
