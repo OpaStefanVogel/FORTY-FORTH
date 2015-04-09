@@ -134,29 +134,51 @@ ok an den Anfang von schreenlog noch einen Rückverweis ok
 ok hab es ausprobiert mit GAP/FFP_GITHUB.txt, OBJK ist allgemein nicht nötig. 
 ok A+0 kann bei abs(x)<4000 überspringen.
 o. neue lokale Variablen ab 2F00 funktionieren
+   ok dabei kommt es aber zu NB. FFFFFFF0 F F0  und sowas... ok ja da war LOCALADRESSE=2FEF eingestellt
+      gut dass ich danach gesucht habe!!!
 .. Variablennamen so dass eindeutige Suche
+.. wenn ich einmal dabei bin,
+   ok beim 40-57 nach 2F00 schaffen
+   ok kann ich auch noch mit D000 bis D003 nach 2D00 bis 2D03 schaffen, neee 2D00 geht nicht...2800
+      ok das auch in KEY_INT und so...
+   ok beide serielle IO ttyS0 und ttyAMA0 parallelschalten.
+   .. die git-Versionsnummer mit reinpacken, beim Copy&Paste mit zu machen
+   ok E000-EFFF wieder nach 3000-3FFF schaffen
+   ok TIB und IRAMADR auch
+   ok dann ist C000-FFFF wieder komplett frei...
+   .. und ich muss dann nur noch 0000-1FFF auf 0000-FFFF zusammenstauchen
+   ok 2800 mit als CONSTANT KEYADR
+   ok Prog auch von 58 auf 40 oder weniger verschieben, auf 28 momentan wegen 26=KEY_INT
+   .. mal Readonly probieren...
+   .. Takt aucH mal rauftun
+   .. so, dann mal wieder ein screenlog.xml
+.. vielleicht auch mal 10-2F mit in Prog aufnehmen, das geistert so versteckt mit herum...
 
 Spartan3 ist momentan programmiert auf a193d84
 solange S3 nicht weiter programmiert ist, ein Skript zur Erstellung von ... aus ..:
 ###!!! wenn es ab hier losgehen soll wegen neuer AXIOME, dann zuerst RESET drücken auf dem Spartan3
 ###!!! ebenso wenn Reset gedrückt auf dem Spartan3, dann muss es hier losgehen:
 cp FFINIT1.txt /dev/ttyAMA0
-echo 'HERE 100 + DPMERK ! E800 BANF !' >/dev/ttyAMA0
-echo '2F00 57 !' >/dev/ttyAMA0 #neu LOCAL unter 2F00
+echo 'HERE 100 + DPMERK ! 3400 BANF !' >/dev/ttyAMA0
+echo '2F00 2F17 !' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
-echo '058 DPMERK ! E000 BANF !' >/dev/ttyAMA0
+echo '028 DPMERK ! 3000 BANF !' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 ### wenn einmal bis hierher durchgeĺaufen, dann reicht auch ab jetzt
 cp FFINIT1NEU.txt /dev/ttyAMA0
 cp FFINIT2NEU.txt /dev/ttyAMA0 # für Step_11
+echo 'HEX 2C00 2F0 0 FILL' >/dev/ttyAMA0
 
-#dann neues screenlog.xml:
+#wenn alles ok, dann neues screenlog.xml: FFINIT1NEU und FFINIT2NEU in INIT.xml packen,
 echo '-1 XBIT !' >/dev/ttyAMA0
 #screenlog starten ^AH
 cp INIT.xml /dev/ttyAMA0
 #screenlog anhalten ^AH
 echo '0 XBIT !' >/dev/ttyAMA0
+#dann screenlog.0 nach screenlog.xml kopieren
+#dann commit
+#dann erst neues P20_FFP.vhd
 
 cp TESTFUERNEUES.TXT /dev/ttyAMA0
 

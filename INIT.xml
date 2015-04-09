@@ -11,7 +11,7 @@
   ( anschließend die neuen Axiome compilieren, so: )
     ( HERE 100 + DPMERK ! E800 BANF ! )
     ( 2x neue Axiome compilieren <REF1/> )
-    ( 058 DPMERK ! E000 BANF ! )
+    ( 028 DPMERK ! E000 BANF ! )
     ( 2x neue Axiome compilieren <REF1/> nochmal ) 
     ( danach alles, was nach den AXIOMEN folgt, 1x compilieren )
   ( bei verzwickten Veränderungen kann es vorkommen, 
@@ -42,35 +42,37 @@ COMPILE: (CONSTANT:) R> @ STAT @ IF LIT, END_IF ;
 <sekt inhalt="Konstanten">
 : CONSTANT ( /name/  c --> ) CREATE COMPILE (CONSTANT:) , SMUDGE ;
 
-D001 CONSTANT SP
-D002 CONSTANT RP
-D003 CONSTANT PC
+2800 CONSTANT KEYADR
+2801 CONSTANT SP
+2802 CONSTANT RP
+2803 CONSTANT PC
 
 ( für das Folgende freigehaltene Adressen: 0040-0057 )
-40 CONSTANT XBIT
-41 CONSTANT SMUDGEBIT
-42 CONSTANT RP0 3000 RP0 !
-43 CONSTANT IRAMADR
-44 CONSTANT JRAMADR
-45 CONSTANT XOFF
-46 CONSTANT CRBZEIG BZEIG @ CRBZEIG !
-47 CONSTANT CRDP DP @ 8 - CRDP !
+2F00 CONSTANT XBIT
+2F01 CONSTANT SMUDGEBIT
+2F02 CONSTANT RP0 3000 RP0 !
+2F03 CONSTANT IRAMADR
+2F04 CONSTANT JRAMADR
+2F05 CONSTANT XOFF
+2F06 CONSTANT CRBZEIG BZEIG @ CRBZEIG !
+2F07 CONSTANT CRDP DP @ 8 - CRDP !
 
-48 CONSTANT BASE
-49 CONSTANT TIB
-4A CONSTANT IN1
-4B CONSTANT IN2
-4C CONSTANT IN3
-4D CONSTANT IN4
-4E CONSTANT ERRORNR 0 ERRORNR !
-4F CONSTANT DP
-50 CONSTANT STAT 0 STAT !
-51 CONSTANT LFA
-52 CONSTANT BANF
-53 CONSTANT BZEIG
-54 CONSTANT DPMERK
-55 CONSTANT CSP
-56 CONSTANT LOCALADDR
+2F08 CONSTANT BASE
+2F09 CONSTANT TIB
+2F0A CONSTANT IN1
+2F0B CONSTANT IN2
+2F0C CONSTANT IN3
+2F0D CONSTANT IN4
+2F0E CONSTANT ERRORNR 0 ERRORNR !
+2F0F CONSTANT DP
+2F10 CONSTANT STAT 0 STAT !
+2F11 CONSTANT LFA
+2F12 CONSTANT BANF
+2F13 CONSTANT BZEIG
+2F14 CONSTANT DPMERK
+2F15 CONSTANT CSP
+2F16 CONSTANT LOCALADDR
+2F17 CONSTANT LOCALADRESSE
 
 VERSION 1+ CONSTANT VERSION VERSION .
 </sekt>
@@ -189,27 +191,16 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 </sekt>
 
 <sekt inhalt="lokale Variablen">
-: LOCAL ( n --> )
-  R> SWAP 
-  DUP MINUS RP @ + RP !
-  RP @ LOCALADDR @
-  >R LOCALADDR !
-  >R ( LOCALDIST )
-  >R ;
-: END_LOCAL
-  R>
-  R> ( LOCALDIST )
-  R> LOCALADDR ! 
-  RP @ + RP !
-  >R ;  
-: L0 LOCALADDR @ ;
-: L1 LOCALADDR @ 1+ ;
-: L2 LOCALADDR @ 2 + ;
-: L3 LOCALADDR @ 3 + ;
-: L4 LOCALADDR @ 4 + ;
-: L5 LOCALADDR @ 5 + ;
-: L6 LOCALADDR @ 6 + ;
-: L7 LOCALADDR @ 7 + ;
+: LOCAL ( n --> ) 1 + LOCALADRESSE @ OVER - DUP LOCALADRESSE ! ! ;
+: END_LOCAL ( --> ) LOCALADRESSE @ DUP @ + LOCALADRESSE ! ;
+: L0 LOCALADRESSE @ 1 + ;
+: L1 LOCALADRESSE @ 2 + ;
+: L2 LOCALADRESSE @ 3 + ;
+: L3 LOCALADRESSE @ 4 + ;
+: L4 LOCALADRESSE @ 5 + ;
+: L5 LOCALADRESSE @ 6 + ;
+: L6 LOCALADRESSE @ 7 + ;
+: L7 LOCALADRESSE @ 8 + ; ( soviele reichen schon )
 </sekt>
 
 <sekt inhalt="alles zu KEY">
@@ -223,7 +214,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
   ;
 
 : KEY_INT ( --> )
-  D000 @ 
+  KEYADR @ 
   DUP 08 LT IF 
     18 + @ DUP IF DUP EXECUTE END_IF
     DROP
@@ -231,9 +222,9 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
       IRAMADR @ ! 
       IRAMADR INCR4
       IRAMADR @ JRAMADR @ - 3FF AND 
-      100 > IF XOFF @ 0= IF -1 XOFF ! 13 EMIT END_IF END_IF 
+      80 > IF XOFF @ 0= IF -1 XOFF ! 13 EMIT END_IF END_IF 
       END_IF
-  0 D000 !
+  0 KEYADR !
   ;
 
 : KEYCODE2 ( --> c f )
@@ -241,7 +232,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
     ELSE JRAMADR @ @ -1
     JRAMADR INCR4
     IRAMADR @ JRAMADR @ - 3FF AND
-    80 LT IF XOFF @ IF 0 XOFF ! 11 EMIT END_IF END_IF
+    20 LT IF XOFF @ IF 0 XOFF ! 11 EMIT END_IF END_IF
     END_IF
   ;
 
@@ -450,10 +441,12 @@ IMMEDIATE: ; 0 STAT ! CSP? A003 , SMUDGE { SMUDGE } ;
 ( Ende der Axiome. Hiermit enden die Axiome. )
 </sekt>
 
+<sekt inhalt="neues Vokabular abkoppeln und Programm neu starten">
 0 DPMERK @ ! ( abkoppeln )
 HERE . BZEIG ?
 
 START
+</sekt>
 </sekt>
 </AXIOME>
 
@@ -478,6 +471,7 @@ START
     0000 BEGIN 
       2DUP + 
       DUP IRAMADR = IF DROP JRAMADR END_IF
+      DUP LOCALADRESSE = IF DROP 2F00 HERE 1 + ! HERE 1 + END_IF
       @ NG. 1+ DUP 10 = 
       UNTIL DROP
     ."  -- " DUP HG. ." -" DUP 0F + . 
@@ -492,11 +486,11 @@ HERE . BZEIG ?
 
 <sekt inhalt="ProgRAM und ByteRAM für Step_9 und Step_10 erstellen">
 HERE 0 0 DUMPZ          ( generiert ProgRAM für P20_FFP.vhd Step_10 )
-BZEIG @ E000 -1 DUMPZ   ( generiert ByteRAM für P20_FFP.vhd Step_10 )
+BZEIG @ 3000 -1 DUMPZ   ( generiert ByteRAM für P20_FFP.vhd Step_10 )
 </sekt>
 
 <sekt inhalt="Variablen">
-2F00 CONSTANT RAMP1 RAMP1 1+ RAMP1 !
+2F18 CONSTANT RAMP1 RAMP1 1+ RAMP1 ! ( bis 2F17 sind neu BASE TIB ... )
 : VARIABLE RAMP1 @ DUP CONSTANT DUP 1+ RAMP1 ! ! ;
 </sekt>
 
@@ -894,11 +888,14 @@ ZAHLENSPEICHER @ VARIABLE BLOCKENDE
 INIT
 
 : A+0 ( a --> a+0 ) 
-  OPERAND1 !
+  DUP OPERAND1 !
   OPERAND1 OPERAND->SLX
-  OVER ERGEBNIS @ 1+ SWAP MOVE
-  ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz )
-  SLX->ERGEBNIS
+  DUP OPERAND1 - DROP 1 IF
+    OVER ERGEBNIS @ 1+ SWAP MOVE ( SPEICHERHOL will hier nicht gehen )
+    ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz )
+    ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF ( da ist es passiert )
+    SLX->ERGEBNIS SWAP DROP
+    ELSE 2DROP DROP END_IF
   ;
 : B+0 ( a b --> a+0 b+0 )
   SWAP A+0 SWAP A+0 ;
@@ -977,9 +974,9 @@ INIT
 
 ( REPLACE: NUMBER NNUMBER ;
 
-N" 111111111111111" DUP N* DUP N.
-N" 111111111111111" DUP N.
-N/MOD NB.
+N" 111111111111111" DUP N* DUP N. DUP .
+N" 111111111111111" DUP N. DUP .
+N/MOD OVER . DUP . NB.
 
 N" 0026D4346A00" DUP N.
 N" 00000FC82800" DUP N.
@@ -1148,9 +1145,7 @@ DUP ZERLEG SWAP . .
 0 0 0 60 H 1 30 H 2 20 H H DUP O.
 1 0 0 30 H 1 20 H 2 15 H H DUP O.
 2 0 0 20 H 1 15 H 2 12 H H CR DUP O.
-</sekt>
 
-<sekt inhalt="Invertieren">
 0 VARIABLE SPMERK
 : [ ( ---> spmerk )
   SPMERK @ SP @ SPMERK !
@@ -1161,18 +1156,46 @@ DUP ZERLEG SWAP . .
     SP @ 2 - SPMERK @ - ROT H REPEAT
   SWAP SPMERK !
   ;
+</sekt>
 
-(   zuallerletzt nochmal NEBENRECHNUNG checken zuguterletzt dann auch noch B Y Z )
-( NENNER als LOCAL und O. rein, uff, das ist ein Brocken. .. L0 war doch zuviel... )
+<sekt inhalt="Matrix invertieren">
+: OBJ+0 ( obj --> obj+0 )
+  DUP OBJ? IF DUP >R
+    ZERLEG 3FFF AND          ( adr n )
+    SWAP OVER + -1 + SWAP    ( eadr-1 n )
+      BEGIN DUP WHILE SWAP   ( n eadr-1 )
+        DUP @ RECURSE OVER ! ( n eadr-1 )
+        -1 + SWAP -1 +       ( eadr-1 n-1 )
+        REPEAT               ( adr-1 0 )
+    2DROP R>                 ( obj )
+    ELSE A+0 END_IF
+  ;
+
+[ 12 18 1B ] OBJ+0 O.
+
+: OBJDUMP ( obj --> )
+  DUP OBJ? IF
+    ZERLEG 3FFF AND                ( adr n )
+      BEGIN DUP WHILE SWAP         ( n adr )
+        CR OVER . DUP . DUP @ 
+        DUP . DUP ABS 4000 LT IF -1 . -1 . ELSE DUP ABS ZERLEG . . END_IF
+        DUP O. RECURSE             ( n adr )
+        1 + SWAP -1 +              ( adr+1 n-1 )
+        REPEAT                     ( adr+n 0 )
+    2DROP                          ( )
+    ELSE DROP END_IF
+  ;
+
+[ 12 18 1B ] OBJDUMP
+[ [ 12 18 1B ] [ 1E 21 24 ] ] OBJDUMP
 
 : INVERTIEREN ( matrix dim --> invmat nenner )
-  ( L0=mat L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
-  8 LOCAL
-  L1 ! L0 ! 0 L5 ! 0 L6 !
-  L0 @ 1 ( mat nenner )
-  L1 @ L2 ! BEGIN -1 L2 +!
-    L7 ! ( mat )
-    L0 @ L2 @ L L2 @ L ( mat neuernenner )
+  ( L0=nr L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
+  8 LOCAL NEBENRECHNUNG L0 !
+  L1 ! 1 ( mat nenner )
+  L1 @ L2 ! BEGIN -1 L2 +! ( CR L2 ? ERGEBNIS ?
+    L7 ! ( mat ) 0 L5 ! 0 L6 !
+    DUP L2 @ L L2 @ L ( mat neuernenner )
     L1 @ L3 ! BEGIN -1 L3 +!
       OVER L3 @ L L2 @ L L5 @ L3 @ ROT H L5 !
       OVER L2 @ L L3 @ L L6 @ L3 @ ROT H L6 !
@@ -1181,7 +1204,7 @@ DUP ZERLEG SWAP . .
     L6 @ L2 @ L L7 @ N- L6 @ L2 @ ROT H L6 !
     L1 @ L3 ! BEGIN -1 L3 +!
       OVER L3 @ L ( mat nenner mat[L3] )
-      L1 @ L4 ! BEGIN -1 L4 +!
+      L1 @ L4 ! BEGIN -1 L4 +! ( CR L3 ? L4 ? ERGEBNIS ?
         NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner )
         OVER L4 @ L OVER N*
         L5 @ L3 @ L L6 @ L4 @ L N* N-
@@ -1192,11 +1215,14 @@ DUP ZERLEG SWAP . .
         L4 @ 0= UNTIL
       ROT L3 @ ROT H SWAP ( matneu nenner )
       L3 @ 0= UNTIL
+    A+0 ( verschiebt nenner hinter matneu )
     ( RECHENBLOCK )
+    ( CR ." vor 1. OBJ+0 " ERGEBNIS ? ( OVER OBJDUMP DUP N. DUP ABS .
+    L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
+    ( ." nach 1. OBJ+0 " ERGEBNIS ? ( OVER OBJDUMP DUP N. DUP ABS .
     L2 @ 0= UNTIL
   END_LOCAL
   ;
-
 
 ( so und jetzt anwenden )
 
@@ -1236,49 +1262,115 @@ OVER O. DUP N.
 ERGEBNIS ?
 ( herauskommen soll  [ [ 2A300 -2A300 ... ] ] 8700 )
 
+: VANDERMONDEMATRIX ( n --> mat )
+  3 LOCAL
+  L0 !
+  0 
+  L0 @ L1 ! BEGIN L1 @ DUP WHILE 1 - L1 !
+    L1 @ G
+    L0 @ L2 ! BEGIN L2 @ DUP WHILE 1 - L2 !
+      L2 @ L1 @ 1 + L2 @ 1 + N^ 
+      H
+      REPEAT DROP
+    H
+    REPEAT DROP
+  END_LOCAL
+  ;
+
+( 4 VANDERMONDEMATRIX DUP O.
+
 INIT
-[ [ 1 1 1 1 1 1 ]
-  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ 2 6 N^ ]
-  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ 3 6 N^ ]
-  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ 4 6 N^ ]
-  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ 5 6 N^ ]
-  [ 6 1 N^ 6 2 N^ 6 3 N^ 6 4 N^ 6 5 N^ 6 6 N^ ]
-  ]
+4 VANDERMONDEMATRIX
+4 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll [ [ 480 -360 180 -48 ] [ -4E0 558 -2A0 84 ] [ 1B0 -240 150 -48 ] [ -30 48 -30 C ] ] 120
+( gekürzt [ [ 60 -48 20 -6 ] [ -68 72 -38 B ] [ 24 -30 1C -6 ] [ -4 6 -4 1 ] ] 18 ok
+
+INIT
+5 VANDERMONDEMATRIX
+5 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll [ [ 2A300 -2A300 1C200 -A8C0 1B00 ] [ -36240 4B3C0 -36D80 15720 -3840 ] [ 18F60 -297C0 22740 -E6A0 2760 ] [ -4EC0 9240 -8700 3DE0 -B40 ] [ 5A0 -B40 B40 -5A0 120 ] ] 8700
+( gekürzt [ [ 258 -258 190 -96 18 ] [ -302 42E -30C 131 -32 ] ... [ 5 -A A -5 1 ] ] 78 ok
+
+INIT
+6 VANDERMONDEMATRIX
 6 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll  [ [ 8E62000 -B1FA800 ... ] ] 17BB000 )
+( herauskommen soll [ [ 8E62000 -B1FA800 9E34000 ... -32A00 8700 ] ] 17BB000
+( gekürzt [ [ -10E0 1518 -12C0 A8C -360 78 ] ... [ 6 -F 14 -F 6 -1 ] ] -2D0 ok
 
 INIT
-[ [ 1 1 1 1 1 1 1 ]
-  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ 2 6 N^ 2 7 N^ ]
-  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ 3 6 N^ 3 7 N^ ]
-  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ 4 6 N^ 4 7 N^ ]
-  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ 5 6 N^ 5 7 N^ ]
-  [ 6 1 N^ 6 2 N^ 6 3 N^ 6 4 N^ 6 5 N^ 6 6 N^ 6 7 N^ ]
-  [ 7 1 N^ 7 2 N^ 7 3 N^ 7 4 N^ 7 5 N^ 7 6 N^ 7 7 N^ ]
-  ]
+7 VANDERMONDEMATRIX
+ERGEBNIS ?
 7 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll  [ [ CC65AF0000 -13298868000 ... ] ] 1D33190000 )
+( herauskommen soll [ [ CC65AF0000 -13298868000 ... 17BB000 ] ] 1D33190000 
+( gekürzt [ [ -89D0 CEB8 -E5B0 AC44 -52B0 16F8 -2D0 ]  ... [ -7 15 -23 23 -15 7 -1 ] ] -13B0 ok
 
 INIT
-[ [ 1 1 1 1 1 1 1 1 ]
-  [ 2 1 N^ 2 2 N^ 2 3 N^ 2 4 N^ 2 5 N^ 2 6 N^ 2 7 N^ 2 8 N^ ]
-  [ 3 1 N^ 3 2 N^ 3 3 N^ 3 4 N^ 3 5 N^ 3 6 N^ 3 7 N^ 3 8 N^ ]
-  [ 4 1 N^ 4 2 N^ 4 3 N^ 4 4 N^ 4 5 N^ 4 6 N^ 4 7 N^ 4 8 N^ ]
-  [ 5 1 N^ 5 2 N^ 5 3 N^ 5 4 N^ 5 5 N^ 5 6 N^ 5 7 N^ 5 8 N^ ]
-  [ 6 1 N^ 6 2 N^ 6 3 N^ 6 4 N^ 6 5 N^ 6 6 N^ 6 7 N^ 6 8 N^ ]
-  [ 7 1 N^ 7 2 N^ 7 3 N^ 7 4 N^ 7 5 N^ 7 6 N^ 7 7 N^ 7 8 N^ ]
-  [ 8 1 N^ 8 2 N^ 8 3 N^ 8 4 N^ 8 5 N^ 8 6 N^ 8 7 N^ 8 8 N^ ]
-  ]
+8 VANDERMONDEMATRIX
+ERGEBNIS ?
 8 INVERTIEREN
 OVER O. DUP N.
 ERGEBNIS ?
-( herauskommen soll  [ [ 8FB77F0C000000 -FB811E55000000 ... ] ] 11F6EFE1800000 )
+( herauskommen soll [ [ 8FB77F0C000000 -FB811E55000000 ... 1D33190000 ] ] 11F6EFE1800000
+( gekürzt [ [ 4EC00 -89D00 B7C00 -AC440 6E400 -2DF00 B400 -13B0 ] ... [ -( 1C -38 46 -38 1C -8 1 ] ] 9D80 ok
+
+INIT
+9 VANDERMONDEMATRIX
+ERGEBNIS ?
+9 INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll [ [ 37F3F5B381040000000 ... 11F6EFE1800000 ] ] 6378D13F1E40000000
+( gekürzt [ [ 31D580 -63AB00 9B0A00 -AE6B40 8B8900 -4D8500 1C7A00 -63AB0 9D80 ] ... [ 9 -24 54 -7E 7E -54 24 -9 1 ] ] 58980 ok
+
+INIT
+0A VANDERMONDEMATRIX
+ERGEBNIS ?
+0A INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll [ [ D726B3E61B37C18000000000 ... 6378D13F1E40000000 ] ] 1583DECA35EBF9C000000000
+( gekürzt [ [ -229B600 4DDD980 -8A6D800 B5AFB80 ... -D2 78 -2D A -1 ] ] -375F00 ok
+
+INIT
+0B VANDERMONDEMATRIX
+ERGEBNIS ?
+0B INVERTIEREN
+OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll [ [ 2331530F3797CA8619C400000000000 -57FB4FA60AFB7A4F406A00000000000 ... 1583DECA35EBF9C000000000 ] ] 333078D050DCC97D3CC00000000000
+( gekürzt [ [ -1A2BE700 416DC180 -82DB8300 ... -14A A5 -37 B -1 ] ] -2611500 ok
+
+INIT
+0C VANDERMONDEMATRIX
+ERGEBNIS ?
+( 0C INVERTIEREN OVER O. DUP N.
+ERGEBNIS ?
+( herauskommen soll 
+( OVER O. DUP N. [ [ 1569BD000 -3AE2C7C00 82DB83000 ... -318 1EF -DC 42 -C 1 ] ] 1C8CFC00 ok
 
 ( mehr geht erstmal nicht weil nicht mehr Platz )
+
+
+INIT
+[ [ 112  431  199 764 987 434 ]
+  [ 543 45 33 41 789 566 ]
+  [ 543 145 33 42 789 566 ]
+  [ 875 687 098 675 677 574 ]
+  [ 875 66B 0987 675 678 634 ]
+  [ 454 33 555 934 655 633 ]
+  ] 
+DUP O.
+6 INVERTIEREN ( mat dim --> invmat nenner )
+OVER O.
+DUP O.
 </sekt>
 
 <sekt inhalt="Reste die auch weggelassen werden können, wenn alles geht">
@@ -1710,10 +1802,16 @@ OVER .
 DUP .
 ( Ergebnis sollte sein: OVER .      )
 (      [ [ 1152 -864 384 -72 ]      )
-(        [ -1248 1368 -672 132 ]    ) 
+(        [ -1248 1368 -672 132 ]    )
 (        [ 432 -576 336 -72 ]       )
 (        [ -48 72 -48 12 ] ] ok     )
 ( und gemeinsamer Nenner: DUP . 288 )
+( neu nach dem Kürzen:        )
+(      [ [ 96 -72 32 -6 ]     )
+(        [ -104 114 -56 11 ]  )
+(        [ 36 -48 28 -6 ]     )
+(        [ -4 6 -4 1 ] ]      )
+( und gemeinsamer Nenner: 24  )
 </sekt>
 </FFINIT2>
 </INIT>
