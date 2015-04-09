@@ -11,7 +11,7 @@
   ( anschließend die neuen Axiome compilieren, so: )
     ( HERE 100 + DPMERK ! E800 BANF ! )
     ( 2x neue Axiome compilieren <REF1/> )
-    ( 058 DPMERK ! E000 BANF ! )
+    ( 028 DPMERK ! E000 BANF ! )
     ( 2x neue Axiome compilieren <REF1/> nochmal ) 
     ( danach alles, was nach den AXIOMEN folgt, 1x compilieren )
   ( bei verzwickten Veränderungen kann es vorkommen, 
@@ -42,6 +42,7 @@ COMPILE: (CONSTANT:) R> @ STAT @ IF LIT, END_IF ;
 <sekt inhalt="Konstanten">
 : CONSTANT ( /name/  c --> ) CREATE COMPILE (CONSTANT:) , SMUDGE ;
 
+2800 CONSTANT KEYADR
 2801 CONSTANT SP
 2802 CONSTANT RP
 2803 CONSTANT PC
@@ -71,6 +72,7 @@ COMPILE: (CONSTANT:) R> @ STAT @ IF LIT, END_IF ;
 2F14 CONSTANT DPMERK
 2F15 CONSTANT CSP
 2F16 CONSTANT LOCALADDR
+2F17 CONSTANT LOCALADRESSE
 
 VERSION 1+ CONSTANT VERSION VERSION .
 </sekt>
@@ -189,27 +191,16 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 </sekt>
 
 <sekt inhalt="lokale Variablen">
-: LOCAL ( n --> )
-  R> SWAP 
-  DUP MINUS RP @ + RP !
-  RP @ LOCALADDR @
-  >R LOCALADDR !
-  >R ( LOCALDIST )
-  >R ;
-: END_LOCAL
-  R>
-  R> ( LOCALDIST )
-  R> LOCALADDR ! 
-  RP @ + RP !
-  >R ;  
-: L0 LOCALADDR @ ;
-: L1 LOCALADDR @ 1+ ;
-: L2 LOCALADDR @ 2 + ;
-: L3 LOCALADDR @ 3 + ;
-: L4 LOCALADDR @ 4 + ;
-: L5 LOCALADDR @ 5 + ;
-: L6 LOCALADDR @ 6 + ;
-: L7 LOCALADDR @ 7 + ;
+: LOCAL ( n --> ) 1 + LOCALADRESSE @ OVER - DUP LOCALADRESSE ! ! ;
+: END_LOCAL ( --> ) LOCALADRESSE @ DUP @ + LOCALADRESSE ! ;
+: L0 LOCALADRESSE @ 1 + ;
+: L1 LOCALADRESSE @ 2 + ;
+: L2 LOCALADRESSE @ 3 + ;
+: L3 LOCALADRESSE @ 4 + ;
+: L4 LOCALADRESSE @ 5 + ;
+: L5 LOCALADRESSE @ 6 + ;
+: L6 LOCALADRESSE @ 7 + ;
+: L7 LOCALADRESSE @ 8 + ; ( soviele reichen schon )
 </sekt>
 
 <sekt inhalt="alles zu KEY">
@@ -223,7 +214,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
   ;
 
 : KEY_INT ( --> )
-  2800 @ 
+  KEYADR @ 
   DUP 08 LT IF 
     18 + @ DUP IF DUP EXECUTE END_IF
     DROP
@@ -231,9 +222,9 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
       IRAMADR @ ! 
       IRAMADR INCR4
       IRAMADR @ JRAMADR @ - 3FF AND 
-      100 > IF XOFF @ 0= IF -1 XOFF ! 13 EMIT END_IF END_IF 
+      80 > IF XOFF @ 0= IF -1 XOFF ! 13 EMIT END_IF END_IF 
       END_IF
-  0 2800 !
+  0 KEYADR !
   ;
 
 : KEYCODE2 ( --> c f )
@@ -241,7 +232,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
     ELSE JRAMADR @ @ -1
     JRAMADR INCR4
     IRAMADR @ JRAMADR @ - 3FF AND
-    80 LT IF XOFF @ IF 0 XOFF ! 11 EMIT END_IF END_IF
+    20 LT IF XOFF @ IF 0 XOFF ! 11 EMIT END_IF END_IF
     END_IF
   ;
 
@@ -450,10 +441,12 @@ IMMEDIATE: ; 0 STAT ! CSP? A003 , SMUDGE { SMUDGE } ;
 ( Ende der Axiome. Hiermit enden die Axiome. )
 </sekt>
 
+<sekt inhalt="neues Vokabular abkoppeln und Programm neu starten">
 0 DPMERK @ ! ( abkoppeln )
 HERE . BZEIG ?
 
 START
+</sekt>
 </sekt>
 </AXIOME>
 
@@ -478,6 +471,7 @@ START
     0000 BEGIN 
       2DUP + 
       DUP IRAMADR = IF DROP JRAMADR END_IF
+      DUP LOCALADRESSE = IF DROP 2F00 HERE 1 + ! HERE 1 + END_IF
       @ NG. 1+ DUP 10 = 
       UNTIL DROP
     ."  -- " DUP HG. ." -" DUP 0F + . 
