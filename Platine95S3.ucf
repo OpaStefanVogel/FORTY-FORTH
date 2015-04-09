@@ -1,7 +1,10 @@
 NET "CLK"            LOC =  "T9";
 
-NET "RXD"            LOC =  "T13" | PULLUP;
-NET "TXD"            LOC =  "R13";
+NET "RXD_ttyS0"      LOC =  "T13" | PULLUP;
+NET "TXD_ttyS0"      LOC =  "R13" | PULLUP;
+
+NET "RXD_ttyAMA0"    LOC =  "D5" | PULLUP;
+NET "TXD_ttyAMA0"    LOC =  "D6" | PULLUP;
 
 NET "led<0>"         LOC =  "K12";
 NET "led<1>"         LOC =  "P14";

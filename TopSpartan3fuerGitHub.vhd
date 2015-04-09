@@ -32,8 +32,10 @@ entity TopSpartan3fuerGitHub is
     -- ==== Clock inputs (CLK) ====
     CLK: in  STD_LOGIC; -- 50 MHz 
     -- ==== RS-232 Serial Ports  (RS232) ====
-    RXD: in  STD_LOGIC;
-    TXD: out STD_LOGIC:='1';
+    RXD_ttyS0: in  STD_LOGIC:='1';
+    TXD_ttyS0: out STD_LOGIC:='1';
+    RXD_ttyAMA0: in  STD_LOGIC:='1';
+    TXD_ttyAMA0: out STD_LOGIC:='1';
     -- ==== LED's ====
     led: out STD_LOGIC_VECTOR (7 downto 0)
     );	 
@@ -66,6 +68,7 @@ signal CLK_I: STD_LOGIC;
 signal TAKTZAEHLER: STD_LOGIC_VECTOR (55 downto 0):="00000000000000000000000000000000000000000000000000000000";
 
 --RXD --
+signal RXD: STD_LOGIC:='1';
 signal CLK_6_MHz,KEY_ABGESCHICKT,RxD_RUHEND: STD_LOGIC;
 signal KEY_ABGESCHICKT_LOCAL: STD_LOGIC;
 signal KEY_BYTE: STD_LOGIC_VECTOR (7 downto 0);
@@ -73,6 +76,7 @@ signal scount: STD_LOGIC_VECTOR (31 downto 0):=x"FFFF0000"; --wartet paar ms
 signal KEY_BYTE_LOCAL: STD_LOGIC_VECTOR (7 downto 0);
 
 --TXD --
+signal TXD: STD_LOGIC:='1';
 signal EMIT_ABGESCHICKT_RUHEND,EMIT_ANGEKOMMEN,EMIT_ABGESCHICKT: STD_LOGIC;
 signal EMIT_ANGEKOMMEN_LOCAL: STD_LOGIC;
 signal EMIT_BYTE_RUHEND,EMIT_BYTE: STD_LOGIC_VECTOR (7 downto 0);
@@ -81,6 +85,9 @@ signal xcount2: STD_LOGIC_VECTOR (3 downto 0):="0000";
 signal OutBit: STD_LOGIC_VECTOR (18 downto 9):="1111111111";
 
 begin
+RXD <= RXD_ttyS0 and RXD_ttyAMA0 ;
+TXD_ttyS0 <= TXD ;
+TXD_ttyAMA0 <= TXD ;
 
 DUT: top
   port map (

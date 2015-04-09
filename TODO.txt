@@ -149,9 +149,9 @@ o. neue lokale Variablen ab 2F00 funktionieren
    .. und ich muss dann nur noch 0000-1FFF auf 0000-FFFF zusammenstauchen
    ok 2800 mit als CONSTANT KEYADR
    ok Prog auch von 58 auf 40 oder weniger verschieben, auf 28 momentan wegen 26=KEY_INT
-   .. mal Readonly probieren...
-   .. Takt aucH mal rauftun
-   .. so, dann mal wieder ein screenlog.xml
+   .. mal Readonly probieren...erster Versuch HERE . geht, 77 . gibt 0, weil NNUMBER 1400 nutzt
+   .. Takt auch mal rauftun, da schau, geht mal schon [ 1 2 3 ] nicht
+   ok so, dann mal wieder ein screenlog.xml
 .. vielleicht auch mal 10-2F mit in Prog aufnehmen, das geistert so versteckt mit herum...
 
 Spartan3 ist momentan programmiert auf a193d84
