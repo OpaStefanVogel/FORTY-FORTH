@@ -47,7 +47,6 @@ COMPILE: (CONSTANT:) R> @ STAT @ IF LIT, END_IF ; <ok></ok><fl>0064 301A </fl><f
 2802 CONSTANT RP <ok></ok><fl>0082 3039 </fl><fr>0087 303C </fr>
 2803 CONSTANT PC <ok></ok><fl>0087 303C </fl><fr>008C 303F </fr>
  <ok></ok>
-( für das Folgende freigehaltene Adressen: 0040-0057 ) <ok></ok>
 2F00 CONSTANT XBIT <ok></ok><fl>008C 303F </fl><fr>0091 3044 </fr>
 2F01 CONSTANT SMUDGEBIT <ok></ok><fl>0091 3044 </fl><fr>0096 304E </fr>
 2F02 CONSTANT RP0 3000 RP0 ! <ok></ok><fl>0096 304E </fl><fr>009B 3052 </fr>
