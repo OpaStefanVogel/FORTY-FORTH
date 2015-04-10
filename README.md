@@ -1,13 +1,9 @@
-<<<<<<< HEAD
 # FORTY-FORTH
 Ohne Rundungsfehler Gleichungssysteme lösen
 
 Siehe http://OpaStefanVogel.github.io/FORTY-FORTH/ 
 
 ```
-Siehe file:///your-master-repo/screenlog.xml in einem xml-Browser.
-
-
 --- Files in branch master:
 
 P01.vhd            entity top
@@ -39,10 +35,9 @@ R00.css           css-Formatierung und
 R00.DTD           DOCTYPE zu nachfolgR...xml
 favicon.ico       ein Icon
 
-R01
-R01_Anfang.xml"            ein erstes einfaches Programm
+R01_Anfang.xml             ein erstes einfaches Programm
 R02_Stapelvariablen.xml    Stapeleinträge benennen
-R03_StapelRAM.xml"         Stapel in RAM speichern
+R03_StapelRAM.xml          Stapel in RAM speichern
 R04_bedingter_Sprung.xml   bedingter Sprung
 R05_Unterprogramm.xml      Unterprogramm
 R06_Umstapeln.xml          Umstapeln

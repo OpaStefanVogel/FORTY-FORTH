@@ -153,8 +153,11 @@ o. neue lokale Variablen ab 2F00 funktionieren
    .. Takt auch mal rauftun, da schau, geht mal schon [ 1 2 3 ] nicht
    ok so, dann mal wieder ein screenlog.xml
 .. vielleicht auch mal 10-2F mit in Prog aufnehmen, das geistert so versteckt mit herum...
+.. beim neuen Zusammenfassen geht folgendes nicht:
+     - Rxx.xml in ein Verzeichnis gh-branches weil dann theme-Aktualisierung nicht wirkt
+.. aktuelle Speicherübersicht mit hinein in screenlog.xml zaubern
 
-Spartan3 ist momentan programmiert auf a193d84
+Spartan3 ist momentan programmiert auf 1260: B2CC 2607 4B71 3BE1 A669 EF7C B895 D725 33C8 DAD9
 solange S3 nicht weiter programmiert ist, ein Skript zur Erstellung von ... aus ..:
 ###!!! wenn es ab hier losgehen soll wegen neuer AXIOME, dann zuerst RESET drücken auf dem Spartan3
 ###!!! ebenso wenn Reset gedrückt auf dem Spartan3, dann muss es hier losgehen:
