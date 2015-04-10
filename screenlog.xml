@@ -9,9 +9,9 @@
 ( wenn die Axiome verändert werden sollen, dann ) <ok></ok>
   ( zuerst RESET und 1x die ursprünglichen Axiome laden )  <ok></ok>
   ( anschließend die neuen Axiome compilieren, so: ) <ok></ok>
-    ( HERE 100 + DPMERK ! E800 BANF ! ) <ok></ok>
+    ( HERE 100 + DPMERK ! 3400 BANF ! ) <ok></ok>
     ( 2x neue Axiome compilieren <REF1/> ) <ok></ok>
-    ( 028 DPMERK ! E000 BANF ! ) <ok></ok>
+    ( 0028 DPMERK ! 3000 BANF ! ) <ok></ok>
     ( 2x neue Axiome compilieren <REF1/> nochmal )  <ok></ok>
     ( danach alles, was nach den AXIOMEN folgt, 1x compilieren ) <ok></ok>
   ( bei verzwickten Veränderungen kann es vorkommen,  <ok></ok>
