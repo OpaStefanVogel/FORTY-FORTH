@@ -787,10 +787,10 @@ begin wait until (CLK_I'event and CLK_I='1');
 process -- Textspeicher 3000H-3FFFH
 begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_ByteRAM='1' then 
-    ByteRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(12 downto 0)))<=STORE_ZUM_RAM(7 downto 0); 
+    ByteRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(11 downto 0)))<=STORE_ZUM_RAM(7 downto 0); 
     FETCH_VOM_ByteRAM<=STORE_ZUM_RAM; 
 	 else
-      FETCH_VOM_ByteRAM<=x"00"&ByteRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(12 downto 0)));
+      FETCH_VOM_ByteRAM<=x"00"&ByteRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(11 downto 0)));
       end if;
   end process;
 
