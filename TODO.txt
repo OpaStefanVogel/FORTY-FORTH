@@ -152,56 +152,23 @@ o. neue lokale Variablen ab 2F00 funktionieren
    .. mal Readonly probieren...erster Versuch HERE . geht, 77 . gibt 0, weil NNUMBER 1400 nutzt
    .. Takt auch mal rauftun, da schau, geht mal schon [ 1 2 3 ] nicht
    ok so, dann mal wieder ein screenlog.xml
-.. vielleicht auch mal 10-2F mit in Prog aufnehmen, das geistert so versteckt mit herum...
+ok vielleicht auch mal 10-2F mit in Prog aufnehmen, das geistert so versteckt mit herum...ok siehe unten
 .. beim neuen Zusammenfassen geht folgendes nicht:
      - Rxx.xml in ein Verzeichnis gh-branches weil dann theme-Aktualisierung nicht wirkt
    .. ein Verzeichnis master sollte jedoch machbar sein...
 .. aktuelle Speicherübersicht mit hinein in screenlog.xml zaubern
-.. den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
+ok den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
+   ok 12-17B mit in : KEY
+   ok 18-1F auf 2F18-2F1F
+   ok und 26 jetzt auf 12
    .. dazu eventuell KEYCODE2 von b 0 auf b -1 umstellen
 .. das JR und JR0 heißt eigentlich BRANCH und ?BRANCH
 
 
-also ich hab momentan
-10 START
-11 RETURN
-12 BEGIN KEYCODE
-13 JR0
-14 RETURN
-15 DROP
-16 NOOP
-17 REPEAT
 
-26 KEY_INT
-27 RETURN
-28 Vok...
-
-und mach daraus
-
-10 START
-11 RETURN
-12 KEY_INT
-13 RETURN
-14 Vok...
-
-dazu muss KEY jetzt so sein:
-: KEY2 BEGIN NOOP KEYCODE2 NOT WHILE DROP REPEAT ;
-dann mal noch das NOT raus
-
-muss ich alles in mehreren Schritten machen
-
-erst FFINITNEU 
-  um 12-17 raus in KEY hineinzubringen
-  und 12 zusätzlich neu füllen 
-  und für ^A neuen Adressbereich, ich nehm halt für RAMP1 nochmal 8 mehr
-  und screenlog.0 und Copy&Paste
-  dabei in vhdl Adresse 26 auf 12 umstellen
-dann nochmal FFINIT auf Prog ab 14 oder ab 20, 10-1F dann alles CR A003
-
-
-
-
-Spartan3 ist momentan programmiert auf 1260: B2CC 2607 4B71 3BE1 A669 EF7C B895 D725 33C8 DAD9
+Spartan3 ist momentan programmiert auf 
+  1250: 39DE 3715 9CB5 3472 EF59 B9BD F699 180C 9C43 D52A
+  .mcs: d0d2f69b64ea2fc2d42b04a6dc1c421b4c6ebd95
 solange S3 nicht weiter programmiert ist, ein Skript zur Erstellung von ... aus ..:
 ###!!! wenn es ab hier losgehen soll wegen neuer AXIOME, dann zuerst RESET drücken auf dem Spartan3
 ###!!! ebenso wenn Reset gedrückt auf dem Spartan3, dann muss es hier losgehen:

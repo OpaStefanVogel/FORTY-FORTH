@@ -11,7 +11,7 @@
   ( anschließend die neuen Axiome compilieren, so: )
     ( HERE 100 + DPMERK ! 3400 BANF ! )
     ( 2x neue Axiome compilieren <REF1/> )
-    ( 0028 DPMERK ! 3000 BANF ! )
+    ( 0020 DPMERK ! 3000 BANF ! )
     ( 2x neue Axiome compilieren <REF1/> nochmal ) 
     ( danach alles, was nach den AXIOMEN folgt, 1x compilieren )
   ( bei verzwickten Veränderungen kann es vorkommen, 
@@ -23,7 +23,6 @@
 2 2 * DUP * BASE ! ( HEX )
 7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER )
 B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT, )
-0010 001E !        ( aktiviert ^F = START )
 ' DUMPZ 4 - LFA !  ( LFA zurueck auf Anfangsvokabular )
 
 DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG zurücksetzen )
@@ -234,7 +233,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
     END_IF
   ;
 
-' KEY_INT 4000 + 26 !
+' KEY_INT 4000 + 12 !
 </sekt>
 
 <sekt inhalt="es folgt der Interpreter">
