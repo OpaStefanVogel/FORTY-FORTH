@@ -70,7 +70,7 @@ COMPILE: (CONSTANT:) R> @ STAT @ IF LIT, END_IF ;
 2F13 CONSTANT BZEIG
 2F14 CONSTANT DPMERK
 2F15 CONSTANT CSP
-2F16 CONSTANT LOCALADDR
+2F16 CONSTANT DUBIT
 2F17 CONSTANT LOCALADRESSE
 
 VERSION 1+ CONSTANT VERSION VERSION .
@@ -90,7 +90,6 @@ A005 MCODE EMITCODE
 A00B MCODE NOT
 A008 MCODE AND
 A00E MCODE OR
-A00C MCODE KEYCODE
 A007 MCODE +
 A009 MCODE !
 A00A MCODE @
@@ -151,7 +150,7 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 : R RP @ 1+ @ ; ( bei R> >R nicht unterhalb RP speichern wegen INTXY )
 : , DP @ ! 1 DP +! ;
 : EXECUTE PC ! ;
-: KEY 12 EXECUTE ;
+: KEY BEGIN NOOP KEYCODE2 NOT WHILE DROP REPEAT ;
 : EMIT ' EMITCODE EXECUTE ;
 : SHL16 ( a --> t a' )
   0 SWAP 10 U* SWAP ; ( t a' = SHL a )
@@ -236,7 +235,6 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
   ;
 
 ' KEY_INT 4000 + 26 !
-' KEYCODE2 4000 + 12 !
 </sekt>
 
 <sekt inhalt="es folgt der Interpreter">
@@ -454,7 +452,6 @@ START
 ( erste Forth Erweiterungen )
 ( - DUMPZ )
 ( RAMB-Inhaltsausgabe erzeugen: )
-: DUBIT HERE ;
 : LG. ( n --> )
   DUBIT @ IF SHL16 DROP SHL16 DROP 
     ELSE SHL16 DIG EMIT SHL16 DIG EMIT END_IF 
@@ -467,18 +464,18 @@ START
   CR 3C EMIT ." DUMPZ>"
   BEGIN
     CR ."   "
-    0000 BEGIN 
-      2DUP + 
+    0000 BEGIN
+      2DUP +
       DUP IRAMADR = IF DROP JRAMADR END_IF
-      DUP LOCALADRESSE = IF DROP 2F00 HERE 1 + ! HERE 1 + END_IF
-      @ NG. 1+ DUP 10 = 
+      DUP LOCALADRESSE = IF DROP 2F00 2F80 ! 2F80 END_IF
+      @ NG. 1+ DUP 10 =
       UNTIL DROP
-    ."  -- " DUP HG. ." -" DUP 0F + . 
+    ."  -- " DUP HG. ." -" DUP 0F + .
     10 +
     2DUP > NOT UNTIL 2DROP
   CR 3C EMIT ." /DUMPZ>"
   R> XBIT !
-  ; 
+  ;
 
 HERE . BZEIG ?
 </sekt>

@@ -11,7 +11,7 @@
   ( anschließend die neuen Axiome compilieren, so: )
     ( HERE 100 + DPMERK ! 3400 BANF ! )
     ( 2x neue Axiome compilieren <REF1/> )
-    ( 0028 DPMERK ! 3000 BANF ! )
+    ( 0020 DPMERK ! 3000 BANF ! )
     ( 2x neue Axiome compilieren <REF1/> nochmal ) 
     ( danach alles, was nach den AXIOMEN folgt, 1x compilieren )
   ( bei verzwickten Veränderungen kann es vorkommen, 
@@ -23,7 +23,6 @@
 2 2 * DUP * BASE ! ( HEX )
 7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER )
 B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT, )
-0010 001E !        ( aktiviert ^F = START )
 ' DUMPZ 4 - LFA !  ( LFA zurueck auf Anfangsvokabular )
 
 DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG zurücksetzen )
@@ -70,7 +69,7 @@ COMPILE: (CONSTANT:) R> @ STAT @ IF LIT, END_IF ;
 2F13 CONSTANT BZEIG
 2F14 CONSTANT DPMERK
 2F15 CONSTANT CSP
-2F16 CONSTANT LOCALADDR
+2F16 CONSTANT DUBIT
 2F17 CONSTANT LOCALADRESSE
 
 VERSION 1+ CONSTANT VERSION VERSION .
@@ -90,7 +89,6 @@ A005 MCODE EMITCODE
 A00B MCODE NOT
 A008 MCODE AND
 A00E MCODE OR
-A00C MCODE KEYCODE
 A007 MCODE +
 A009 MCODE !
 A00A MCODE @
@@ -151,7 +149,7 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 : R RP @ 1+ @ ; ( bei R> >R nicht unterhalb RP speichern wegen INTXY )
 : , DP @ ! 1 DP +! ;
 : EXECUTE PC ! ;
-: KEY 12 EXECUTE ;
+: KEY BEGIN NOOP KEYCODE2 NOT WHILE DROP REPEAT ;
 : EMIT ' EMITCODE EXECUTE ;
 : SHL16 ( a --> t a' )
   0 SWAP 10 U* SWAP ; ( t a' = SHL a )
@@ -235,8 +233,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
     END_IF
   ;
 
-' KEY_INT 4000 + 26 !
-' KEYCODE2 4000 + 12 !
+' KEY_INT 4000 + 12 !
 </sekt>
 
 <sekt inhalt="es folgt der Interpreter">
@@ -454,7 +451,6 @@ START
 ( erste Forth Erweiterungen )
 ( - DUMPZ )
 ( RAMB-Inhaltsausgabe erzeugen: )
-: DUBIT HERE ;
 : LG. ( n --> )
   DUBIT @ IF SHL16 DROP SHL16 DROP 
     ELSE SHL16 DIG EMIT SHL16 DIG EMIT END_IF 
@@ -467,18 +463,18 @@ START
   CR 3C EMIT ." DUMPZ>"
   BEGIN
     CR ."   "
-    0000 BEGIN 
-      2DUP + 
+    0000 BEGIN
+      2DUP +
       DUP IRAMADR = IF DROP JRAMADR END_IF
-      DUP LOCALADRESSE = IF DROP 2F00 HERE 1 + ! HERE 1 + END_IF
-      @ NG. 1+ DUP 10 = 
+      DUP LOCALADRESSE = IF DROP 2F00 2F80 ! 2F80 END_IF
+      @ NG. 1+ DUP 10 =
       UNTIL DROP
-    ."  -- " DUP HG. ." -" DUP 0F + . 
+    ."  -- " DUP HG. ." -" DUP 0F + .
     10 +
     2DUP > NOT UNTIL 2DROP
   CR 3C EMIT ." /DUMPZ>"
   R> XBIT !
-  ; 
+  ;
 
 HERE . BZEIG ?
 </sekt>
@@ -489,7 +485,7 @@ BZEIG @ 3000 -1 DUMPZ   ( generiert ByteRAM für P20_FFP.vhd Step_10 )
 </sekt>
 
 <sekt inhalt="Variablen">
-2F18 CONSTANT RAMP1 RAMP1 1+ RAMP1 ! ( bis 2F17 sind neu BASE TIB ... )
+2F20 CONSTANT RAMP1 RAMP1 1+ RAMP1 ! ( bis 2F17 sind neu BASE TIB ... )
 : VARIABLE RAMP1 @ DUP CONSTANT DUP 1+ RAMP1 ! ! ;
 </sekt>
 
@@ -1416,11 +1412,11 @@ A003 CONSTANT RETURN
   ;
 
 ( ganz neu: Steuerungstasten: ^A bis ^G, weiter ^H=^A ^L=^B ... )
-18 8 0 FILL
-: STRG: : HERE 3 - DUP . @ 1+ DUP . @ DUP . 40 - HERE SWAP 7 AND 18 + ! ;
+2F18 8 0 FILL
+: STRG: : HERE 3 - DUP . @ 1+ DUP . @ DUP . 40 - HERE SWAP 7 AND 2F18 + ! ;
 STRG: ^G 7 EMIT ." /1xPIEP/" ;
 STRG: ^F 7 EMIT ." QUIT" QUIT ;
-STRG: ^A ." Angehalten für genau eine Eingabezeile: " 
+STRG: ^A ." Angehalten für genau eine Eingabezeile: "
   CR FA00 100 EXPECT INTERPRET ." ok";
 
 : QUERY ( adr --> n ) TIB @ 100 EXPECT ;
@@ -1644,7 +1640,7 @@ IOSTART
 
 VLIST
 
-( nochmal mit Speicheradressen, vor jedem Wort steht dessen Aufruf-Adresse )
+( nochmal mit Speicheradressen, vor jedem Wort steht dessen "Linkfeld"_Adresse=Aufruf_Adresse-4 )
 
 WLIST
 

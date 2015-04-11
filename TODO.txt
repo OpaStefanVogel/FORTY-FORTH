@@ -155,7 +155,51 @@ o. neue lokale Variablen ab 2F00 funktionieren
 .. vielleicht auch mal 10-2F mit in Prog aufnehmen, das geistert so versteckt mit herum...
 .. beim neuen Zusammenfassen geht folgendes nicht:
      - Rxx.xml in ein Verzeichnis gh-branches weil dann theme-Aktualisierung nicht wirkt
+   .. ein Verzeichnis master sollte jedoch machbar sein...
 .. aktuelle Speicherübersicht mit hinein in screenlog.xml zaubern
+.. den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
+   .. dazu eventuell KEYCODE2 von b 0 auf b -1 umstellen
+.. das JR und JR0 heißt eigentlich BRANCH und ?BRANCH
+
+
+also ich hab momentan
+10 START
+11 RETURN
+12 BEGIN KEYCODE
+13 JR0
+14 RETURN
+15 DROP
+16 NOOP
+17 REPEAT
+
+26 KEY_INT
+27 RETURN
+28 Vok...
+
+und mach daraus
+
+10 START
+11 RETURN
+12 KEY_INT
+13 RETURN
+14 Vok...
+
+dazu muss KEY jetzt so sein:
+: KEY2 BEGIN NOOP KEYCODE2 NOT WHILE DROP REPEAT ;
+dann mal noch das NOT raus
+
+muss ich alles in mehreren Schritten machen
+
+erst FFINITNEU 
+  um 12-17 raus in KEY hineinzubringen
+  und 12 zusätzlich neu füllen 
+  und für ^A neuen Adressbereich, ich nehm halt für RAMP1 nochmal 8 mehr
+  und screenlog.0 und Copy&Paste
+  dabei in vhdl Adresse 26 auf 12 umstellen
+dann nochmal FFINIT auf Prog ab 14 oder ab 20, 10-1F dann alles CR A003
+
+
+
 
 Spartan3 ist momentan programmiert auf 1260: B2CC 2607 4B71 3BE1 A669 EF7C B895 D725 33C8 DAD9
 solange S3 nicht weiter programmiert ist, ein Skript zur Erstellung von ... aus ..:
@@ -163,15 +207,13 @@ solange S3 nicht weiter programmiert ist, ein Skript zur Erstellung von ... aus 
 ###!!! ebenso wenn Reset gedrückt auf dem Spartan3, dann muss es hier losgehen:
 cp FFINIT1.txt /dev/ttyAMA0
 echo 'HERE 100 + DPMERK ! 3400 BANF !' >/dev/ttyAMA0
-echo '2F00 2F17 !' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
-echo '028 DPMERK ! 3000 BANF !' >/dev/ttyAMA0
+echo '020 DPMERK ! 3000 BANF !' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 ### wenn einmal bis hierher durchgeĺaufen, dann reicht auch ab jetzt
 cp FFINIT1NEU.txt /dev/ttyAMA0
 cp FFINIT2NEU.txt /dev/ttyAMA0 # für Step_11
-echo 'HEX 2C00 2F0 0 FILL' >/dev/ttyAMA0
 
 #wenn alles ok, dann neues screenlog.xml: FFINIT1NEU und FFINIT2NEU in INIT.xml packen,
 echo '-1 XBIT !' >/dev/ttyAMA0
@@ -182,6 +224,7 @@ echo '0 XBIT !' >/dev/ttyAMA0
 #dann screenlog.0 nach screenlog.xml kopieren
 #dann commit
 #dann erst neues P20_FFP.vhd
+#und FFINIT1NEU in FFINIT.txt packen
 
 cp TESTFUERNEUES.TXT /dev/ttyAMA0
 
