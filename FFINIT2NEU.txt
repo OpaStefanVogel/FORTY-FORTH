@@ -1,5 +1,5 @@
 <sekt inhalt="Variablen">
-2F18 CONSTANT RAMP1 RAMP1 1+ RAMP1 ! ( bis 2F17 sind neu BASE TIB ... )
+2F20 CONSTANT RAMP1 RAMP1 1+ RAMP1 ! ( bis 2F17 sind neu BASE TIB ... )
 : VARIABLE RAMP1 @ DUP CONSTANT DUP 1+ RAMP1 ! ! ;
 </sekt>
 
@@ -926,11 +926,11 @@ A003 CONSTANT RETURN
   ;
 
 ( ganz neu: Steuerungstasten: ^A bis ^G, weiter ^H=^A ^L=^B ... )
-18 8 0 FILL
-: STRG: : HERE 3 - DUP . @ 1+ DUP . @ DUP . 40 - HERE SWAP 7 AND 18 + ! ;
+2F18 8 0 FILL
+: STRG: : HERE 3 - DUP . @ 1+ DUP . @ DUP . 40 - HERE SWAP 7 AND 2F18 + ! ;
 STRG: ^G 7 EMIT ." /1xPIEP/" ;
 STRG: ^F 7 EMIT ." QUIT" QUIT ;
-STRG: ^A ." Angehalten für genau eine Eingabezeile: " 
+STRG: ^A ." Angehalten für genau eine Eingabezeile: "
   CR FA00 100 EXPECT INTERPRET ." ok";
 
 : QUERY ( adr --> n ) TIB @ 100 EXPECT ;
@@ -1154,7 +1154,7 @@ IOSTART
 
 VLIST
 
-( nochmal mit Speicheradressen, vor jedem Wort steht dessen Aufruf-Adresse )
+( nochmal mit Speicheradressen, vor jedem Wort steht dessen "Linkfeld"_Adresse=Aufruf_Adresse-4 )
 
 WLIST
 

@@ -152,23 +152,35 @@ o. neue lokale Variablen ab 2F00 funktionieren
    .. mal Readonly probieren...erster Versuch HERE . geht, 77 . gibt 0, weil NNUMBER 1400 nutzt
    .. Takt auch mal rauftun, da schau, geht mal schon [ 1 2 3 ] nicht
    ok so, dann mal wieder ein screenlog.xml
-.. vielleicht auch mal 10-2F mit in Prog aufnehmen, das geistert so versteckt mit herum...
+ok vielleicht auch mal 10-2F mit in Prog aufnehmen, das geistert so versteckt mit herum...ok siehe unten
+.. beim neuen Zusammenfassen geht folgendes nicht:
+     - Rxx.xml in ein Verzeichnis gh-branches weil dann theme-Aktualisierung nicht wirkt
+   .. ein Verzeichnis master sollte jedoch machbar sein...
+.. aktuelle Speicherübersicht mit hinein in screenlog.xml zaubern
+ok den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
+   ok 12-17B mit in : KEY
+   ok 18-1F auf 2F18-2F1F
+   ok und 26 jetzt auf 12
+   .. dazu eventuell KEYCODE2 von b 0 auf b -1 umstellen
+.. das JR und JR0 heißt eigentlich BRANCH und ?BRANCH
 
-Spartan3 ist momentan programmiert auf a193d84
+
+
+Spartan3 ist momentan programmiert auf 
+  1250: 39DE 3715 9CB5 3472 EF59 B9BD F699 180C 9C43 D52A
+  .mcs: d0d2f69b64ea2fc2d42b04a6dc1c421b4c6ebd95
 solange S3 nicht weiter programmiert ist, ein Skript zur Erstellung von ... aus ..:
 ###!!! wenn es ab hier losgehen soll wegen neuer AXIOME, dann zuerst RESET drücken auf dem Spartan3
 ###!!! ebenso wenn Reset gedrückt auf dem Spartan3, dann muss es hier losgehen:
 cp FFINIT1.txt /dev/ttyAMA0
 echo 'HERE 100 + DPMERK ! 3400 BANF !' >/dev/ttyAMA0
-echo '2F00 2F17 !' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
-echo '028 DPMERK ! 3000 BANF !' >/dev/ttyAMA0
+echo '020 DPMERK ! 3000 BANF !' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 ### wenn einmal bis hierher durchgeĺaufen, dann reicht auch ab jetzt
 cp FFINIT1NEU.txt /dev/ttyAMA0
 cp FFINIT2NEU.txt /dev/ttyAMA0 # für Step_11
-echo 'HEX 2C00 2F0 0 FILL' >/dev/ttyAMA0
 
 #wenn alles ok, dann neues screenlog.xml: FFINIT1NEU und FFINIT2NEU in INIT.xml packen,
 echo '-1 XBIT !' >/dev/ttyAMA0
@@ -179,6 +191,7 @@ echo '0 XBIT !' >/dev/ttyAMA0
 #dann screenlog.0 nach screenlog.xml kopieren
 #dann commit
 #dann erst neues P20_FFP.vhd
+#und FFINIT1NEU in FFINIT.txt packen
 
 cp TESTFUERNEUES.TXT /dev/ttyAMA0
 
