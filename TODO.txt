@@ -155,7 +155,8 @@ o. neue lokale Variablen ab 2F00 funktionieren
 ok vielleicht auch mal 10-2F mit in Prog aufnehmen, das geistert so versteckt mit herum...ok siehe unten
 .. beim neuen Zusammenfassen geht folgendes nicht:
      - Rxx.xml in ein Verzeichnis gh-branches weil dann theme-Aktualisierung nicht wirkt
-   .. ein Verzeichnis master sollte jedoch machbar sein...
+   .. ein Verzeichnis branch_master sollte jedoch machbar sein...
+      ja, und auch branch_Spartan3, und beide nur in gh hinein mergen. 
 .. aktuelle Speicherübersicht mit hinein in screenlog.xml zaubern
 ok den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
    ok 12-17B mit in : KEY
@@ -163,8 +164,8 @@ ok den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
    ok und 26 jetzt auf 12
    .. dazu eventuell KEYCODE2 von b 0 auf b -1 umstellen
 .. das JR und JR0 heißt eigentlich BRANCH und ?BRANCH
-
-
+.. in Step_8 ist noch E000-FFFF und D001-D003
+.. und in Step_10 ist noch 0016 drin.
 
 Spartan3 ist momentan programmiert auf 
   1250: 39DE 3715 9CB5 3472 EF59 B9BD F699 180C 9C43 D52A

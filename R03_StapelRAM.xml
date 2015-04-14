@@ -16,7 +16,7 @@ stap3_RAM:=(R(3),R(7),R(11),R(15)...)
 
 Bei jedem beliebigen Wert von SP können weiterhin A, B, C und D in einem Takt gelesen werden, für jedes einzelne Array stap0 bis stap3 wird aber nur ein einzelner Port benötigt. Die einzelnen erforderlichen Anpassungen sind wieder bei <code>git diff</code> zu sehen.
 
-Als Beispielprogramm für den jetzt verfügbaren Stapelspeicher <i>wird die Zahlenfolge 1, 2, 3, 4, 5 auf dem Stapel zwischengespeichert und anschließend in umgekehrter Reihenfolge auf Adresse 2D04 ausgegeben</i>. Obwohl das Array für R nur 4 Elemente hat, werden jetzt auch mehr als 4 Stapeleinträge gespeichert.</pr>
+Als Beispielprogramm für den jetzt verfügbaren Stapelspeicher <i>wird die Zahlenfolge 1, 2, 3, 4, 5 auf dem Stapel zwischengespeichert und anschließend in umgekehrter Reihenfolge nach Adresse 2D04 ausgegeben</i>. Obwohl das Array für R nur 4 Elemente hat, werden jetzt auch mehr als 4 Stapeleinträge gespeichert.</pr>
 
 <ptable>
   <tr><td> 0000 </td><td> 0001 </td><td> BEGIN 1 </td><td>1         </td><td>1</td></tr>
@@ -37,7 +37,7 @@ Als Beispielprogramm für den jetzt verfügbaren Stapelspeicher <i>wird die Zahl
   <tr><td> 000F </td><td> 8FF0 </td><td> AGAIN   </td><td>          </td><td>0</td></tr>
   </ptable>
 
-<p>Nachdem die Zahlen 1, 2, 3, 4, 5 auf den Stapel gebracht sind, wird fünfmal die oberste Zahl auf Adresse 2D04 ausgegeben. AGAIN geht wieder zurück zu BEGIN 0 und alles geht von vorn los.</p>
+<p>Nachdem die Zahlen 1, 2, 3, 4, 5 auf den Stapel gebracht sind, wird fünfmal die oberste Zahl nach Adresse 2D04 ausgegeben. AGAIN geht wieder zurück zu BEGIN und alles geht von vorn los.</p>
 
 
 <Terminal_1>

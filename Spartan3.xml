@@ -11,7 +11,7 @@
 
 <Terminal_2>
   <li> git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git . </li>
-  <li> git checkout Spartan3_Step_9_und_10 </li>
+  <li> git checkout Spartan3_ab_Step_10 </li>
   </Terminal_2>
 
 <p> Die Ein- und Ausgabe soll über die serielle Verbindung zum Spartan3 Board erfolgen. Dafür wird ein weiteres Terminal_3 benötigt. Welches Verzeichnis darin eigestellt ist, ist egal. Jedoch kann anstelle <code>/ttyS0</code> auch <code>/ttyS1</code> oder eine andere Eingabe erforderlich sein. </p>
@@ -22,7 +22,7 @@
   <li> cp /dev/ttyS0 /dev/tty &amp; cp /dev/tty /dev/ttyS0 </li>
   </Terminal_3>
 
-<p> (Alles mit Enter abschließen. Man sieht nach dem zweiten stty keine Bildschirmausgabe mehr. In dem Moment ist nicht erkennbar, ob alles funktioniert)  </p>
+<p> (Alles mit Enter abschließen. Man sieht nach dem zweiten stty keine Bildschirmausgabe mehr. In dem Moment ist nicht erkennbar, ob irgendwas funktioniert)  </p>
 
 <p> So, jetzt muss mit <a href="https://en.wikipedia.org/wiki/Xilinx_ISE">Xilinx_ISE</a> ein Projekt mit den Dateien </p>
 

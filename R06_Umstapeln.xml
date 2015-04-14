@@ -9,7 +9,7 @@
 
 Übliche FORTH-Worte zum Umstapeln sind 
 
-PD=    FORTH-Wort   Stapeldiagramm
+PD     FORTH-Wort   Stapeldiagramm
 B412   SWAP         ( a b --> b a )
 B502   OVER         ( a b --> a b a )
 B501   DUP          ( a --> a a )
@@ -20,7 +20,7 @@ B60C   2OVER        ( a b c d --> a b c d a b )
 B603   2DUP         ( a b --> a b a b )
 B200   2DROP        ( a b --> )
 
-2ROT habe ich weggelassen, weil dafür mehr als vier obere Stapeleinträge verarbeitet werden. Anstelle nun jedes einzelne FORTH-Wort extra zu programmieren, habe ich versucht, das Umstapeln mit in PD zu codieren, siehe den oben angegebenen Code sowie <code>git diff</code>. So hat man mit nur einer Programmfunktion auch noch weitere Umstapelmöglichkeiten, zum Beispiel 
+2ROT habe ich weggelassen, weil dafür mehr als vier obere Stapeleinträge verarbeitet werden. Anstelle nun jedes einzelne FORTH-Wort extra zu programmieren, habe ich versucht, das Umstapeln mit in PD zu codieren, siehe oben Tabellenspalte PD sowie <code>git diff</code>. So hat man mit nur einer Programmfunktion auch noch weitere Umstapelmöglichkeiten, zum Beispiel 
 
 B6A9   für          ( a b c d --> a b a c a d ). 
 

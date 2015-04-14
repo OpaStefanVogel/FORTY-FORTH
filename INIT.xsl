@@ -23,7 +23,7 @@ Bedeutung der verwendeten Hintergrundfarben:
   <span style="background-color: Magenta;">Magenta</span> damit sind die Axiome eingerahmt
   <span style="background-color: Aqua;">Aqua</span> Überschriften aus der Inhaltsübersicht
   nur bei <a href="screenlog.xml">screenlog.xml</a>:
-    <span style="background-color: LightGrey;">LightGrey</span> erreichte Speicheradressen vorm Weitercompilieren, Programm 0000H-1400H, Text E000H-FB00H
+    <span style="background-color: LightGrey;">LightGrey</span> erreichte Speicheradressen vorm Weitercompilieren, Programm 0000H-1400H, Text 3000H-3B00H
     <span style="background-color: Khaki;">Khaki</span> Programmausgaben des FORTH-Interpreters im xml-Ausgabemodus
     <span style="background-color: Pink;">Pink</span> generierte Speicherarrays zum Kopieren in P20_FFP.vhd hinein
 
