@@ -43,24 +43,24 @@ zu sehen und auch eine Nutzereingabe möglich sein. Wenn nicht, erstmal mit Eing
   <th> <i>your-master-repo&amp;</i>   </th>
   <th> <i>your-Spartan3-repo&amp;</i> </th>
   <th> Ausgabe </th></tr>
-  <tr><td> Step_1  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
-  <tr><td> Step_2  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
-  <tr><td> Step_3  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
-  <tr><td> Step_4  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
-  <tr><td> Step_5  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
-  <tr><td> Step_6  </td><td> Spartan_Step_6_und_7       </td><td> LED's             </td></tr>
-  <tr><td> Step_7  </td><td> Spartan_Step_6_und_7       </td><td> LED's             </td></tr>
-  <tr><td> Step_8  </td><td> Spartan_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
-  <tr><td> Step_9  </td><td> Spartan_Step_9             </td><td> serieller Ausgang </td></tr>
-  <tr><td> Step_10 </td><td> Spartan_ab_Step_10         </td><td> serieller Ausgang </td></tr>
-  <tr><td> Step_11 </td><td> Spartan_ab_Step_10         </td><td> serieller Ausgang </td></tr>
+  <tr><td> Step_1  </td><td> Spartan3_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_2  </td><td> Spartan3_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_3  </td><td> Spartan3_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_4  </td><td> Spartan3_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_5  </td><td> Spartan3_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_6  </td><td> Spartan3_Step_6_und_7       </td><td> LED's             </td></tr>
+  <tr><td> Step_7  </td><td> Spartan3_Step_6_und_7       </td><td> LED's             </td></tr>
+  <tr><td> Step_8  </td><td> Spartan3_Step_1_bis_5_und_8 </td><td> LED's             </td></tr>
+  <tr><td> Step_9  </td><td> Spartan3_Step_9             </td><td> serieller Ausgang </td></tr>
+  <tr><td> Step_10 </td><td> Spartan3_ab_Step_10         </td><td> serieller Ausgang </td></tr>
+  <tr><td> Step_11 </td><td> Spartan3_ab_Step_10         </td><td> serieller Ausgang </td></tr>
   </table>
 
 <p> Anstelle oder nach einigen Tastatureingaben in Terminal_3 hinein geht auch in Terminal_1</p>
 
 <Terminal_1>
   <li> echo '-1 XBIT !' >/dev/ttyS0 <i># schaltet xml-Ausgabemodus ein</i> </li>
-  <li> <i># jetzt screenlog starten, (C-a H) bei <a href="http://www.gnu.org/software/screen/manual/html_node/Log.html#Log">screen</a></i> </li>
+  <li> <i># jetzt screenlog starten, (C-a H) bei Verwendung von <a href="http://www.gnu.org/software/screen/manual/html_node/Log.html#Log">screen</a></i> </li>
   <li> cp INIT.xml /dev/ttyS0    <i># recompiliert den vorhandenen FORTH-Interpreter</i> </li>
   <li> <i># jetzt screenlog stoppen, nochmal (C-a H)</i> </li>
   <li> echo '0 XBIT !' >/dev/ttyS0 <i># schaltet xml-Ausgabemodus aus</i> </li>
