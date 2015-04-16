@@ -7,12 +7,13 @@
 
 <pr>weitere Rechenoperationen
 
-MINUS  ( a --> -a )
-NOT    ( a --> a' )
-AND    ( a b --> c )
-OR     ( a b --> c )
-U+     ( a b c --> d e )
-U*     ( a b c --> d e )
+<Maschinencode>PD     FORTH-Wort  Stapeldiagramm
+A000    MINUS         ( a --> -a )
+A00B    NOT           ( a --> a' )
+A008    AND           ( a b --> c )
+A00E    OR            ( a b --> c )
+A001    U+            ( a b c --> d e )
+A002    U*            ( a b c --> d e )</Maschinencode>
 
 MINUS wechselt das Vorzeichen des obersten Stapeleintrages und NOT bildet das bitweise Komplement. AND und OR verknüpfen die beiden oberen Stapeleinträge bitweise. U+ und U* sind Rechenoperationen mit Übertrag. U+ addiert die drei obersten Stapeleinträge und gibt das 16-Bit Ergebnis in e und einen eventuell entstehenden Übertrag in d zurück. U* rechnet a+b*c und gibt ebenfalls die untersten 16 Bit vom Ergebnis in e und den verbleibenden Übertrag in d zurück. 
 

@@ -49,3 +49,17 @@ code { font-family:monospace;
   list-style-type: none;
   }
 
+.ptable {
+  }
+  
+.Maschinencode {
+  display: inline-block;
+  #background: #C6EAFA;
+  border: solid LightGrey;
+  border-radius: 4px;
+  #white-space: pre-wrap; 
+  }
+
+.Maschinencode:first-line {
+  font-weight: bold ;
+  }

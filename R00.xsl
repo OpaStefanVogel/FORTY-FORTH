@@ -113,6 +113,8 @@ weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inh
     </table>
   </xsl:template>
 
+<xsl:template match="Maschinencode"><span class="Maschinencode"><xsl:apply-templates /></span></xsl:template>
+
 <xsl:template match="Terminal_1">
   <p id="Terminal"><div>Terminal_1: <i>your-master-repo&amp; </i></div>
   <pre><code><span class="Terminal"><xsl:apply-templates /></span></code></pre></p>

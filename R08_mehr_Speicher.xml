@@ -19,12 +19,13 @@ D003              16             Lesen und Setzen von PC
 
 Dafür sind umfangreiche Ergänzungen des Programms notwendig, es ist aber immer wieder das gleiche Prinzip: Adress- ADR und Datenausgang DAT werden unverändert auf Adress- und Schreibeingang der Speicher-Arrays gelegt, die Schreibaufforderung WE verzweigt abhängig von ADR zum zugehörigen Array und die Lesedaten aus den Arrays werden abhängig von ADR mit DAT_I zusammengeführt.
 
-!  ( n adr--> ) schreibt n auf Adresse adr
-@  ( adr --> n ) liest n von Adresse adr
+<Maschinencode>PD     FORTH-Wort  Stapeldiagramm
+A009    !             ( n adr--> ) 
+A00A    @             ( adr --> n )</Maschinencode>
 
-Die momentane Variante von "@" hat eine Einschränkung: Nach "!" darf nicht unmittelbar gleich "@" folgen. Da diese Konstellation aber bis jetzt kaum aufgetreten ist, habe ich es bisher bei dieser Variante belassen.
+Das FORTH-Wort "!" speichert n auf Adresse adr und "@" liest n von Adresse adr zurück. Die momentane Variante von "@" hat eine Einschränkung: Nach "!" darf nicht unmittelbar gleich "@" folgen. Da diese Konstellation aber bis jetzt kaum aufgetreten ist, habe ich es bisher bei dieser Variante belassen.
 
-Beispielprogramm <i></i></pr>
+Beispielprogramm <i>ob der neue Speicher funktioniert</i></pr>
 <ptable>
   <tr><td> 0000 </td><td> 0100 </td><td> BEGIN 0100 </td><td> 0100           </td><td>1</td></tr>
   <tr><td> 0001 </td><td> 4007 </td><td> 7 EXECUTE  </td><td>                </td><td>0</td></tr>

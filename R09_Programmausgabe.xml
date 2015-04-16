@@ -12,7 +12,7 @@ EMIT_BYTE        = enthält das auszugebende Byte
 EMIT_ABGESCHICKT = wird invertiert, wenn ein Byte gesendet wurde,
 EMIT_ANGEKOMMEN  = muss vom Empfänger invertiert werden. Das Programm wartet solange mit dem Absenden des nächsten Bytes.
 
-EMIT  ( n --> ) gibt n auf Port EMIT_BYTE aus.
+EMIT  ( n --> ) gibt n auf Port EMIT_BYTE aus, wartet dabei solange, bis ein davor abgeschicktes Byte beim Empfänger angekommen ist, erkennbar am Pegelwechsel von EMIT_ANGEKOMMEN.
 
 Ein Beispielprogramm wie</pr>
 <ptable>

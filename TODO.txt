@@ -156,7 +156,8 @@ ok vielleicht auch mal 10-2F mit in Prog aufnehmen, das geistert so versteckt mi
 .. beim neuen Zusammenfassen geht folgendes nicht:
      - Rxx.xml in ein Verzeichnis gh-branches weil dann theme-Aktualisierung nicht wirkt
    .. ein Verzeichnis branch_master sollte jedoch machbar sein...
-      ja, und auch branch_Spartan3, und beide nur in gh hinein mergen. 
+      ja, und auch branch_Spartan3, und beide nur in gh hinein mergen.
+      allerdings, wenn dann beispielsweise INIT.xsl versehentlich im gh-Branch INIT.xsl geändert wird, wird es im master-branch nicht bemerkt, und einfach master vorsetzen geht dann nicht, muss ein extra merge gemacht werden. also es ist noch nicht im Lot alles. 
 .. aktuelle Speicherübersicht mit hinein in screenlog.xml zaubern
 ok den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
    ok 12-17B mit in : KEY
@@ -165,7 +166,18 @@ ok den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
    .. dazu eventuell KEYCODE2 von b 0 auf b -1 umstellen
 .. das JR und JR0 heißt eigentlich BRANCH und ?BRANCH
 .. in Step_8 ist noch E000-FFFF und D001-D003
-.. und in Step_10 ist noch 0016 drin.
+.. und in Step_10 ist noch 0016 drin, 
+   muss beides zusammen mit master geändert werden
+.. bei der Gelegenheit auch stapR umbenennen in VarRAM oder so.
+.. es sind eigentlich 4: InOutRAM, LocalRAM, VariablenRAM, ReturnRAM.
+.. nanu, bei Step 5 beginnt da LED nicht eigentlich bei 3?
+.. neben 5 auch in Step 6 PD FORTH-Notation und Stapeldiagramm, 
+     noch woanders auch?
+     ja, in 8 und 9, also neues Tabellenformat
+.. ebenso für vhdl-Variablen
+.. dazu kommen dann noch verwendete Doppelpunktdefinitionen.
+
+
 
 Spartan3 ist momentan programmiert auf 
   1250: 39DE 3715 9CB5 3472 EF59 B9BD F699 180C 9C43 D52A
@@ -191,8 +203,10 @@ cp INIT.xml /dev/ttyAMA0
 echo '0 XBIT !' >/dev/ttyAMA0
 #dann screenlog.0 nach screenlog.xml kopieren
 #dann commit
-#dann erst neues P20_FFP.vhd
-#und FFINIT1NEU in FFINIT.txt packen
+#dann erst neues P20_FFP.vhd, dort auch SHA von screenlog.xml einsetzen
+#und mit Vivado und Spartan3 testen
+#dann auch P20_FFP.vhd commit
+#dann Spartan3 .mcs neu programmieren, mit SHA von P20
+#und dann FFINIT1NEU in FFINIT.txt packen.
 
 cp TESTFUERNEUES.TXT /dev/ttyAMA0
-

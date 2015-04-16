@@ -1315,7 +1315,7 @@ DUP .
 (        [ 432 -576 336 -72 ]       )
 (        [ -48 72 -48 12 ] ] ok     )
 ( und gemeinsamer Nenner: DUP . 288 )
-( neu nach dem Kürzen:        )
+( nach dem Kürzen:        )
 (      [ [ 96 -72 32 -6 ]     )
 (        [ -104 114 -56 11 ]  )
 (        [ 36 -48 28 -6 ]     )
