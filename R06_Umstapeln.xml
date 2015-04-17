@@ -22,7 +22,7 @@ B200    2DROP         ( a b --> )</Maschinencode>
 
 2ROT habe ich weggelassen, weil dafür mehr als vier obere Stapeleinträge verarbeitet werden. Anstelle nun jedes einzelne FORTH-Wort extra zu programmieren, habe ich versucht, das Umstapeln mit in PD zu codieren, siehe oben Tabellenspalte PD sowie <code>git diff</code>. So hat man mit nur einer Programmfunktion auch noch weitere Umstapelmöglichkeiten, zum Beispiel 
 
-B6A9   für          ( a b c d --> a b a c a d ). 
+B6A9    ????          ( a b c d --> a b a c a d ). 
 
 Hier ein Beispielprogramm, <i>auf den Stapel 4, 3, 2, 1 der Reihe nach alle Worte zum Umstapeln anwenden.</i></pr>
 <ptable>
