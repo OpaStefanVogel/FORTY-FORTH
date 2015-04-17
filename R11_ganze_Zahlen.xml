@@ -9,7 +9,7 @@
 
 Zum Rechnen mit großen ganzen Zahlen sind weitere Rechenoperationen eingefügt, welche den Rechenablauf beschleunigen sollen.
 
-<Maschinencode>PD     FORTH-Wort  Stapeldiagramm
+<Maschinencode>PD      FORTH-Wort    Stapeldiagramm
 A014    DI32          ( a b c --> r q ) 
 A017    MULT_I        ( ... )
 A018    MULT_II       ( ... )</Maschinencode>

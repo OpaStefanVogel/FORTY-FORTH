@@ -55,11 +55,12 @@ code { font-family:monospace;
 .Maschinencode {
   display: inline-block;
   #background: #C6EAFA;
-  border: solid LightGrey;
+  border-left: solid Grey;
   border-radius: 4px;
   #white-space: pre-wrap; 
   }
 
 .Maschinencode:first-line {
-  font-weight: bold ;
+  background: LightGrey;
+  #font-weight: bold ;
   }

@@ -19,7 +19,7 @@ D003              16             Lesen und Setzen von PC
 
 Dafür sind umfangreiche Ergänzungen des Programms notwendig, es ist aber immer wieder das gleiche Prinzip: Adress- ADR und Datenausgang DAT werden unverändert auf Adress- und Schreibeingang der Speicher-Arrays gelegt, die Schreibaufforderung WE verzweigt abhängig von ADR zum zugehörigen Array und die Lesedaten aus den Arrays werden abhängig von ADR mit DAT_I zusammengeführt.
 
-<Maschinencode>PD     FORTH-Wort  Stapeldiagramm
+<Maschinencode>PD      FORTH-Wort    Stapeldiagramm
 A009    !             ( n adr--> ) 
 A00A    @             ( adr --> n )</Maschinencode>
 

@@ -7,7 +7,7 @@
 
 <pr>weitere Rechenoperationen
 
-<Maschinencode>PD     FORTH-Wort  Stapeldiagramm
+<Maschinencode>PD      FORTH-Wort    Stapeldiagramm
 A000    MINUS         ( a --> -a )
 A00B    NOT           ( a --> a' )
 A008    AND           ( a b --> c )
