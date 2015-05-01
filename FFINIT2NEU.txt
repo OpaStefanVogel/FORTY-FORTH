@@ -357,23 +357,23 @@ IMMEDIATE: RECURSE LFA @ 4 M+ COMPILE, ;
 
 1111 1111 * .
 
-: NB. SWAP . . ;
+: B. SWAP . . ;
 
 
 
 7 3 /MOD . . 
 3333 DUP * DUP * 10 * DUP .
 3333 DUP * 10 * DUP .
-/MOD NB.
+/MOD B.
 3333 DUP * .
 
 1111 DUP * 8 * DUP .
 1111 8 * DUP .
-/MOD NB.
+/MOD B.
 
 1111 DUP * DUP .
 1111 DUP .
-/MOD NB.
+/MOD B.
 </sekt>
 
 <sekt inhalt="Zwischenergebnisse nicht unnötig speichern">
@@ -426,7 +426,7 @@ ERGEBNIS M?
 
 
 
-777 99 BK NB.
+777 99 BK B.
 
 
 
@@ -475,18 +475,18 @@ ERGEBNIS M?
 
 N" 111111111111111" DUP * DUP . DUP M.
 N" 111111111111111" DUP . DUP M.
-/MOD OVER M. DUP M. NB.
+/MOD OVER M. DUP M. B.
 
 N" 0026D4346A00" DUP .
 N" 00000FC82800" DUP .
-2DUP /MOD NB.
-2DUP BK NB. 
+2DUP /MOD B.
+2DUP BK B. 
 ( richtig wäre D6A2200 275 bei /MOD )
 ( richtig wäre 3135 14 bei BK )
 
 N" 00A7426290A8C945E959A780" DUP .
 N" 000002330657FDD698" DUP .
-/MOD NB. 
+/MOD B. 
 ( richtig wäre 158B5843D5ED0 4C0CF598D2 )
 ( und nicht   0325AF2C3F8838 4C0CF598D3 )
 
@@ -546,10 +546,9 @@ N" 000002330657FDD698" N" 4C0CF598D2" * .
     HAUPTRECHNUNG
     END_IF
   ;
+: B. SWAP . . ;
 
-: NB. SWAP . . ;
-
-777 99 BK NB.
+777 99 BK B.
 INIT
 </sekt>
 
@@ -616,6 +615,7 @@ DUP ZERLEG SWAP M. M.
      ." ] "
     ELSE . END_IF
   ;
+: B. SWAP . . ;
 
 7 DUP .
 2 9 H DUP .
