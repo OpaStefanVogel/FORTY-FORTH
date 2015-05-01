@@ -20,9 +20,8 @@
 
 <sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
 ( zuerst alles Notwendige wieder auf Ausgangszustand schalten )
-2 2 * DUP * BASE ! ( HEX )
-
-DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG zurücksetzen )
+2 2 * DUP * BASE !           ( HEX )
+DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG auf Anfangswerte zurücksetzen )
 </sekt>
 
 <sekt inhalt="so, mit irgendwas muss das Compilieren losgehen">
@@ -31,7 +30,8 @@ IMMEDIATE: { 0 STAT ! ; ( war ursprünglich mal [ )
 : } 1 STAT ! ;
 IMMEDIATE: COMPILE 20 WORD FIND LCFA DROP COMPILE, ;
 : MLIT ( a b --> 1000*a+b ) SWAP 1000 U* SWAP DROP ;
-: LIT, ( a --> ) DUP DUP 0LT IF MINUS END_IF 04 000 MLIT AND IF 111 ERROR END_IF , ;
+: ABS DUP 0LT IF MINUS END_IF ;
+: LIT, ( a --> ) DUP ABS 04 000 MLIT AND IF 111 ERROR END_IF , ;
 COMPILE: (CONSTANT:) R> @ STAT @ IF LIT, END_IF ;
 </sekt>
 

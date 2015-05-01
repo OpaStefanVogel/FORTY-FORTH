@@ -16,7 +16,6 @@
   2DUP LT IF SWAP END_IF DROP ;
 : MIN ( a b --> c )
   2DUP > IF SWAP END_IF DROP ;
-: ABS DUP 0LT IF MINUS END_IF ;
 </sekt>
 
 <sekt inhalt="Multiplikation">
