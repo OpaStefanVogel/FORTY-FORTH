@@ -14,25 +14,4 @@ FORGET NLIT,
 
 ( jetzt kann es weitergehen mit neuen Wortdefinitionen:
 
-( da versuch ich jetzt mal LOCAL auf neue Adressen umzubiegen
 
-2 2 * DUP * BASE ! ( HEX )
-7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER )
-B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT, )
-: LTNEU ( a b --> r ) 8000 M+ SWAP NOT 8000 M+ 0 U+ DROP 0= NOT ;
-' LTNEU 10 DUMP
-: LTNEU MINUS M+ 0LT ;
-' LTNEU 4 DUMP
-: REPLACE_LT ' LTNEU 4000 OR ' LT RETURN ' LT 1 M+ 2DUP M. M. 2OVER M. M. ! ! ;
-REPLACE_LT
-
-
-oder kürzer in einem Ruck ohne original NUMBER und LIT,
-
-: REPLACE_LT 
-  ' MINUS @ ' LT 2DUP M. M.           ( MINUS
-  ' OR 6 M+ @ ' LT 1 M+  2DUP M. M.   ( M+
-  ' 0LT @ ' LT 2 M+  2DUP M. M.       ( 0LT
-  ' OR 1 M+ @ ' LT 3 M+  2DUP M. M.   ( ;
-  ! ! ! ! ;
-REPLACE_LT
