@@ -21,9 +21,6 @@
 <sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
 ( zuerst alles Notwendige wieder auf Ausgangszustand schalten )
 2 2 * DUP * BASE ! ( HEX )
-7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER )
-B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT, )
-' DUMPZ 4 - LFA !  ( LFA zurueck auf Anfangsvokabular )
 
 DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG zurücksetzen )
 </sekt>
@@ -136,9 +133,6 @@ IMMEDIATE: ELSE 1 ALLOT COMPILE END_IF JRBIT HERE ;
 IMMEDIATE: WHILE COMPILE IF ;
 IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 </sekt>
-: H BEGIN 1 . -1 UNTIL ; 
-' H 8 DUMP
-H
 
 <sekt inhalt="etliche kleinere Funktionen">
 : C@ @ ;
@@ -466,7 +460,7 @@ START
   ." x" 22 EMIT LG. 22 EMIT ." ," ; 
 : DUMPZ ( bis+1 von dubit --> )
   DUBIT ! XBIT @ >R 0 XBIT !
-  " ' START " INTERPRET 4000 + 10 !
+  " ' START " INTERPRET 04 000 MLIT OR 10 !
   CR 3C EMIT ." DUMPZ>"
   BEGIN
     CR ."   "
@@ -476,7 +470,7 @@ START
       DUP LOCALADRESSE = IF DROP 2F00 2F80 ! 2F80 END_IF
       @ NG. 1+ DUP 10 =
       UNTIL DROP
-    ."  -- " DUP HG. ." -" DUP 0F + .
+    ."  -- " DUP HG. ." -" DUP 0F + HG.
     10 +
     2DUP > NOT UNTIL 2DROP
   CR 3C EMIT ." /DUMPZ>"

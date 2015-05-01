@@ -163,6 +163,9 @@ ok den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
    ok und 26 jetzt auf 12
    .. dazu eventuell KEYCODE2 von b 0 auf b -1 umstellen
 .. das JR und JR0 heißt eigentlich BRANCH und ?BRANCH
+.. ein kritischer Bereich ist von : ( bis MCODE + weil dadrin das langsame + drin ist.
+     das ist gewissermaßen das, was als "weiterprogrammieren" zählt.
+
 
 
 
@@ -172,9 +175,12 @@ Spartan3 ist momentan programmiert auf
 solange S3 nicht weiter programmiert ist, ein Skript zur Erstellung von ... aus ..:
 ###!!! wenn es ab hier losgehen soll wegen neuer AXIOME, dann zuerst RESET drücken auf dem Spartan3
 ###!!! ebenso wenn Reset gedrückt auf dem Spartan3, dann muss es hier losgehen:
-cp FFINIT1.txt /dev/ttyAMA0
-echo 'HERE 100 + DPMERK ! 3400 BANF !' >/dev/ttyAMA0
+#cp FFINIT1.txt /dev/ttyAMA0
+#echo 'HERE 100 + DPMERK ! 3400 BANF !' >/dev/ttyAMA0
+echo 'DP @ DPMERK ! BZEIG @ BANF !' >/dev/ttyAMA0
+echo '1800 ERGEBNIS ! ' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
+echo 'HERE 2F23 ( ERGEBNIS ) ! ' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 echo '020 DPMERK ! 3000 BANF !' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0

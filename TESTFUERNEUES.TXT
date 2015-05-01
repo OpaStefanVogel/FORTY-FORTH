@@ -16,42 +16,23 @@ FORGET NLIT,
 
 ( da versuch ich jetzt mal LOCAL auf neue Adressen umzubiegen
 
-HEX
-2000 VARIABLE LOCALADRESSE
-: LOCAL ( n --> ) 1 + LOCALADRESSE @ OVER - DUP LOCALADRESSE ! ! ;
-: END_LOCAL ( --> ) LOCALADRESSE @ DUP @ + LOCALADRESSE ! ;
-: L0 LOCALADRESSE @ 1 + ;
-: L1 LOCALADRESSE @ 2 + ;
-: L2 LOCALADRESSE @ 3 + ;
-: L3 LOCALADRESSE @ 4 + ;
-: L4 LOCALADRESSE @ 5 + ;
-: L5 LOCALADRESSE @ 6 + ;
-: L6 LOCALADRESSE @ 7 + ;
-: L7 LOCALADRESSE @ 8 + ;
-
-LOCALADRESSE ? SP ?
-8 LOCAL LOCALADRESSE ?
-0 L0 ! 1 L1 ! 2 L2 ! 3 L3 ! 4 L4 ! 5 L5 ! 6 L6 ! 7 L7 !
-LOCALADRESSE @ DUP @ DUMP
-END_LOCAL
-LOCALADRESSE ? SP ?
+2 2 * DUP * BASE ! ( HEX )
+7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER )
+B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT, )
+: LTNEU ( a b --> r ) 8000 M+ SWAP NOT 8000 M+ 0 U+ DROP 0= NOT ;
+' LTNEU 10 DUMP
+: LTNEU MINUS M+ 0LT ;
+' LTNEU 4 DUMP
+: REPLACE_LT ' LTNEU 4000 OR ' LT RETURN ' LT 1 M+ 2DUP M. M. 2OVER M. M. ! ! ;
+REPLACE_LT
 
 
-: LTEST
-  8 LOCAL
-  0 L0 ! 1 L1 ! 2 L2 ! 3 L3 ! 4 L4 ! 5 L5 ! 6 L6 ! 7 L7 !
-  L0 ? L1 ? L2 ? L3 ? L4 ? L5 ? L6 ? L7 ?
-  END_LOCAL
-  ;
+oder kürzer in einem Ruck ohne original NUMBER und LIT,
 
-: LLTEST
-  8 LOCAL
-  10 L0 ! 11 L1 ! 12 L2 ! 13 L3 ! 14 L4 ! 15 L5 ! 16 L6 ! 17 L7 !
-  LTEST
-  L0 ? L1 ? L2 ? L3 ? L4 ? L5 ? L6 ? L7 ?
-  END_LOCAL
-  ;
-
-SP ?
-LLTEST
-SP ?
+: REPLACE_LT 
+  ' MINUS @ ' LT 2DUP M. M.           ( MINUS
+  ' OR 6 M+ @ ' LT 1 M+  2DUP M. M.   ( M+
+  ' 0LT @ ' LT 2 M+  2DUP M. M.       ( 0LT
+  ' OR 1 M+ @ ' LT 3 M+  2DUP M. M.   ( ;
+  ! ! ! ! ;
+REPLACE_LT
