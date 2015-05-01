@@ -178,8 +178,8 @@ solange S3 nicht weiter programmiert ist, ein Skript zur Erstellung von ... aus 
 ###!!! ebenso wenn Reset gedrückt auf dem Spartan3, dann muss es hier losgehen:
 #cp FFINIT1.txt /dev/ttyAMA0
 #echo 'HERE 100 + DPMERK ! 3400 BANF !' >/dev/ttyAMA0
-echo 'DP @ DPMERK ! BZEIG @ BANF !' >/dev/ttyAMA0
-echo '1800 ERGEBNIS ! ' >/dev/ttyAMA0
+echo ': 1- -1 M+ ; DP @ DPMERK ! BZEIG @ BANF !' >/dev/ttyAMA0
+echo '1C00 ERGEBNIS ! ' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 echo 'HERE 2F23 ( ERGEBNIS ) ! ' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
@@ -192,7 +192,7 @@ cp FFINIT2NEU.txt /dev/ttyAMA0 # für Step_11
 cp FFINIT1NEU.txt /dev/ttyAMA0
 echo '1800 2F23 ! ' >/dev/ttyAMA0 ## weil ERGEBNIS immer noch weiterruckt
 cp FFINIT1NEU.txt /dev/ttyAMA0 ## das auch zusätzlich, da steckt noch irgendwas drin, könnte weggehen, wenn ich + in M+ umschreibe...
-echo 'HERE 100 + DPMERK ! 3400 BANF !' >/dev/ttyAMA0
+echo '1400 DPMERK ! 3400 BANF !' >/dev/ttyAMA0 #warum geht hier nicht HERE 100 +
 echo '1800 2F23 ! ' >/dev/ttyAMA0 # weil ERGEBNIS immer noch weiterruckt
 cp FFINIT1NEU.txt /dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
