@@ -7,14 +7,14 @@
 <sekt inhalt="vorab der Ablauf, was tun, wenn diese Axiome geändert werden müssen">
 ( wenn die Axiome so bleiben wie sie sind, ganz normal 1x hintereinanderweg compilieren )
 ( wenn die Axiome verändert werden sollen, dann )
-  ( zuerst RESET und 1x die ursprünglichen Axiome laden ) 
+  ( zuerst RESET und 1x die ursprünglichen Axiome laden )
   ( anschließend die neuen Axiome compilieren, so: )
     ( HERE 100 + DPMERK ! 3400 BANF ! )
     ( 2x neue Axiome compilieren <REF1/> )
     ( 0020 DPMERK ! 3000 BANF ! )
-    ( 2x neue Axiome compilieren <REF1/> nochmal ) 
+    ( 2x neue Axiome compilieren <REF1/> nochmal )
     ( danach alles, was nach den AXIOMEN folgt, 1x compilieren )
-  ( bei verzwickten Veränderungen kann es vorkommen, 
+  ( bei verzwickten Veränderungen kann es vorkommen, )
   ( dass noch weitere Zwischenschritte eingefügt werden müssen. )
 </sekt>
 

@@ -165,6 +165,7 @@ ok den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
 .. das JR und JR0 heißt eigentlich BRANCH und ?BRANCH
 .. ein kritischer Bereich ist von : ( bis MCODE + weil dadrin das langsame + drin ist.
      das ist gewissermaßen das, was als "weiterprogrammieren" zählt.
+.. sowohl 77 als auch - zählt ERGEBNIS weiter, obwohl gar nicht nötig
 
 
 
@@ -185,6 +186,18 @@ cp FFINIT1NEU.txt /dev/ttyAMA0
 echo '020 DPMERK ! 3000 BANF !' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 ### wenn einmal bis hierher durchgeĺaufen, dann reicht auch ab jetzt
+cp FFINIT1NEU.txt /dev/ttyAMA0
+cp FFINIT2NEU.txt /dev/ttyAMA0 # für Step_11
+#jetzt müsste normal der Anfang wieder losgehen, naja, noch nicht ganz wegen ERGEBNIS, also NR nochmal schauen...
+cp FFINIT1NEU.txt /dev/ttyAMA0
+echo '1800 2F23 ! ' >/dev/ttyAMA0 ## weil ERGEBNIS immer noch weiterruckt
+cp FFINIT1NEU.txt /dev/ttyAMA0 ## das auch zusätzlich, da steckt noch irgendwas drin, könnte weggehen, wenn ich + in M+ umschreibe...
+echo 'HERE 100 + DPMERK ! 3400 BANF !' >/dev/ttyAMA0
+echo '1800 2F23 ! ' >/dev/ttyAMA0 # weil ERGEBNIS immer noch weiterruckt
+cp FFINIT1NEU.txt /dev/ttyAMA0
+cp FFINIT1NEU.txt /dev/ttyAMA0
+echo '0020 DPMERK ! 3000 BANF !' >/dev/ttyAMA0
+cp FFINIT1NEU.txt /dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 cp FFINIT2NEU.txt /dev/ttyAMA0 # für Step_11
 
