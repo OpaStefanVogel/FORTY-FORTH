@@ -10,7 +10,7 @@
   ROT ROT BEGIN DUP WHILE >R 2DUP ! 1+ R> 1- REPEAT DROP 2DROP ;
 
 : DUMP ( addr n --> )
-  BEGIN SWAP ( CR DUP . ) DUP @ . 1+ SWAP 1- DUP 0= UNTIL DROP ;
+  BEGIN SWAP ( CR DUP M. ) DUP @ M. 1+ SWAP 1- DUP 0= UNTIL DROP ;
 
 : MAX ( a b --> c )
   2DUP LT IF SWAP END_IF DROP ;
@@ -37,7 +37,7 @@ A 1FF 1111 FILL
 B 1FF 1111 FILL
 C 3FF 0000 FILL
 
-1111 0 C B 4 SUPERMULT . . . .
+1111 0 C B 4 SUPERMULT M. M. M. M.
 C 8 DUMP
 
 
@@ -73,19 +73,19 @@ C 8 DUMP
   ;
 
 C 8 0 FILL
-0 2 A 0 2 B C SMUL . . .
+0 2 A 0 2 B C SMUL M. M. M.
 C 8 DUMP
 
 C 201 0 FILL
-0 100 A 0 100 B C SMUL . . .
+0 100 A 0 100 B C SMUL M. M. M.
 C 8 DUMP
 
 C 101 0 FILL
-0 80 A 0 80 B C SMUL . . .
+0 80 A 0 80 B C SMUL M. M. M.
 C 8 DUMP
 
 ( C 2001 0 FILL
-( 0 1000 A 0 1000 B C SMUL . . .
+( 0 1000 A 0 1000 B C SMUL M. M. M.
 ( C 8 DUMP
 </sekt>
 
@@ -107,7 +107,7 @@ C 8 DUMP
         OVER DUP L1 @ LT IF L2 @ DUP @ SWAP 1+ L2 ! ELSE 0 END_IF
         SWAP L4 @ LT IF L5 @ DUP @ SWAP 1+ L5 ! NOT ELSE -1 END_IF
         U+ L6 @ DUP 1+ L6 ! !
-        ROT ROT 1+ 2DUP M- 0= UNTIL 2DROP ( DUP .
+        ROT ROT 1+ 2DUP M- 0= UNTIL 2DROP ( DUP M.
         0= IF DUP L6 !
           ROT NOT ROT ROT
           1 L1 @ L4 @ MAX 0 BEGIN ROT
@@ -120,38 +120,38 @@ C 8 DUMP
 
 
 C 8 0 FILL
-0 2 A 0 2 B C ADDIER . . .
+0 2 A 0 2 B C ADDIER M. M. M.
 C 8 DUMP
 
 C 8 0 FILL
-0 5 A 0 7 B C ADDIER . . .
+0 5 A 0 7 B C ADDIER M. M. M.
 C 8 DUMP
 
 C 8 0 FILL
-0 7 A 0 3 B C ADDIER . . .
+0 7 A 0 3 B C ADDIER M. M. M.
 C 8 DUMP
 
 A 8 FFFF FILL
 C 8 0 FILL
-0 2 A 0 2 B C ADDIER . . .
+0 2 A 0 2 B C ADDIER M. M. M.
 C 8 DUMP ( 1110 1111 0001 0000 )
 
 
 A 8 2222 FILL
 C 8 0 FILL
-0 2 A -1 2 B C ADDIER . . .
+0 2 A -1 2 B C ADDIER M. M. M.
 C 8 DUMP
 
 C 8 0 FILL
--1 2 A 0 2 B C ADDIER . . .
+-1 2 A 0 2 B C ADDIER M. M. M.
 C 8 DUMP
 
 C 8 0 FILL
-0 2 B -1 2 A C ADDIER . . .
+0 2 B -1 2 A C ADDIER M. M. M.
 C 8 DUMP
 
 C 8 0 FILL
--1 2 B 0 2 A C ADDIER . . .
+-1 2 B 0 2 A C ADDIER M. M. M.
 C 8 DUMP
 </sekt>
 
@@ -191,7 +191,7 @@ BEGIN WHILE
    U+ SWAP >R OVER L2 @ M+ ! R>
    ROT ROT 1+ 2DUP M- 0= UNTIL 2DROP
 (   0 L2 @ L4 @ M+ @ U+ L2 @ L4 @ M+ !
-(   DUP . 7 EMIT
+(   DUP M. 7 EMIT
  -1 L2 @ L4 @ M+ 1+ +!
 REPEAT
     -1 L2 +!
@@ -213,7 +213,7 @@ REPEAT
 ( 333333 4 N^ 10 N* VARIABLE NA
 ( 333333 DUP N* 10 N* VARIABLE NB
 ( NA @ 10 DUMP
-( NA @ NB @ 2OPERANDEN->2SLX OVER . DUP . SDIV
+( NA @ NB @ 2OPERANDEN->2SLX OVER M. DUP M. SDIV
 
 654321 A !
 234567 A 1+ !
@@ -221,10 +221,10 @@ REPEAT
 432101 B !
 A98765 B 1+ !
 
-0 3 A 0 2 B C SMUL . . .
+0 3 A 0 2 B C SMUL M. M. M.
 C 8 DUMP
 
-0 4 C 0 2 B A SDIV . . . . . .
+0 4 C 0 2 B A SDIV M. M. M. M. M. M.
 A 8 DUMP
 </sekt>
 
@@ -255,7 +255,7 @@ A 8 DUMP
       END_IF
     END_IF
   ;
-0 8 C SLX->ERGEBNIS .
+0 8 C SLX->ERGEBNIS M.
 
 : OPERAND->SLX ( op --> sx lx ax )
   DUP @ ( op x )
@@ -271,11 +271,11 @@ A 8 DUMP
   ;
 
 77 OPERAND1 !
-OPERAND1 OPERAND->SLX . . .
+OPERAND1 OPERAND->SLX M. M. M.
 -77 OPERAND1 !
-OPERAND1 OPERAND->SLX . . .
+OPERAND1 OPERAND->SLX M. M. M.
 5800 OPERAND1 !
-OPERAND1 OPERAND->SLX . . .
+OPERAND1 OPERAND->SLX M. M. M.
 
 
 
@@ -303,8 +303,8 @@ ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
   SPEICHERHOL
   ;
 
-77 88 2OPERANDEN->2SLX . . . . . . .
-77 5800 2OPERANDEN->2SLX . . . . . . .
+77 88 2OPERANDEN->2SLX M. M. M. M. M. M. M.
+77 5800 2OPERANDEN->2SLX M. M. M. M. M. M. M.
 </sekt>
 
 <sekt inhalt="N+ N- N* N/MOD N.">
@@ -385,7 +385,7 @@ ZAHLENSPEICHER @ VARIABLE BLOCKENDE
   ERGEBNIS @ BLOCKENDE ! ;
 : INIT ZAHLENSPEICHER @ ERGEBNIS ! RECHENBLOCK RECHENBLOCK ;
 INIT
-ERGEBNIS ?
+ERGEBNIS M?
 : A+0 ( a --> a+0 ) 
   DUP OPERAND1 !
   OPERAND1 OPERAND->SLX
@@ -473,9 +473,9 @@ ERGEBNIS ?
 
 ( REPLACE: NUMBER NNUMBER ;
 
-N" 111111111111111" DUP N* DUP N. DUP .
-N" 111111111111111" DUP N. DUP .
-N/MOD OVER . DUP . NB.
+N" 111111111111111" DUP N* DUP N. DUP M.
+N" 111111111111111" DUP N. DUP M.
+N/MOD OVER M. DUP M. NB.
 
 N" 0026D4346A00" DUP N.
 N" 00000FC82800" DUP N.
@@ -558,7 +558,7 @@ INIT
   3FFF AND DUP 1+ SWAP @ ;
 
 N" 111111111111111" DUP N* DUP N.
-DUP ZERLEG SWAP . .
+DUP ZERLEG SWAP M. M.
 
 : OBJ? ( a --> flag )
   ABS DUP 04 000 MLIT LT IF DROP 0 ELSE
@@ -676,8 +676,8 @@ DUP ZERLEG SWAP . .
   DUP OBJ? IF
     ZERLEG 3FFF AND                ( adr n )
       BEGIN DUP WHILE SWAP         ( n adr )
-        CR OVER . DUP . DUP @ 
-        DUP . DUP ABS 3FFF > NOT IF -1 . -1 . ELSE DUP ABS ZERLEG . . END_IF
+        CR OVER M. DUP M. DUP @ 
+        DUP M. DUP ABS 3FFF > NOT IF -1 M. -1 M. ELSE DUP ABS ZERLEG M. M. END_IF
         DUP O. RECURSE             ( n adr )
         1+ SWAP 1-                 ( adr+1 n-1 )
         REPEAT                     ( adr+n 0 )
@@ -692,7 +692,7 @@ DUP ZERLEG SWAP . .
   ( L0=nr L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
   8 LOCAL NEBENRECHNUNG L0 !
   L1 ! 1 ( mat nenner )
-  L1 @ L2 ! BEGIN -1 L2 +! ( CR L2 ? ERGEBNIS ?
+  L1 @ L2 ! BEGIN -1 L2 +! ( CR L2 M? ERGEBNIS M?
     L7 ! ( mat ) 0 L5 ! 0 L6 !
     DUP L2 @ L L2 @ L ( mat neuernenner )
     L1 @ L3 ! BEGIN -1 L3 +!
@@ -703,7 +703,7 @@ DUP ZERLEG SWAP . .
     L6 @ L2 @ L L7 @ N- L6 @ L2 @ ROT H L6 !
     L1 @ L3 ! BEGIN -1 L3 +!
       OVER L3 @ L ( mat nenner mat[L3] )
-      L1 @ L4 ! BEGIN -1 L4 +! ( CR L3 ? L4 ? ERGEBNIS ?
+      L1 @ L4 ! BEGIN -1 L4 +! ( CR L3 M? L4 M? ERGEBNIS M?
         NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner )
         OVER L4 @ L OVER N*
         L5 @ L3 @ L L6 @ L4 @ L N* N-
@@ -716,9 +716,9 @@ DUP ZERLEG SWAP . .
       L3 @ 0= UNTIL
     A+0 ( verschiebt nenner hinter matneu )
     ( RECHENBLOCK )
-    ( CR ." vor 1. OBJ+0 " ERGEBNIS ? ( OVER OBJDUMP DUP N. DUP ABS .
+    ( CR ." vor 1. OBJ+0 " ERGEBNIS M? ( OVER OBJDUMP DUP N. DUP ABS M.
     L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
-    ( ." nach 1. OBJ+0 " ERGEBNIS ? ( OVER OBJDUMP DUP N. DUP ABS .
+    ( ." nach 1. OBJ+0 " ERGEBNIS M? ( OVER OBJDUMP DUP N. DUP ABS M.
     L2 @ 0= UNTIL
   END_LOCAL
   ;
@@ -729,7 +729,7 @@ DUP ZERLEG SWAP . .
   [ 1E 14 0F ] ( dezimal 30 20 15 )
   [ 14 0F 0C ] ( dezimal 20 15 12 )
   ] 3
-OVER O. DUP .
+OVER O. DUP M.
 INVERTIEREN
 OVER O. DUP N.
 ( herauskommen muss dabei )
@@ -746,7 +746,7 @@ INIT
   ]
 4 INVERTIEREN
 OVER O. DUP N.
-ERGEBNIS ?
+ERGEBNIS M?
 ( herauskommen soll [ [ 480 -360 180 -48 ] [ -4E0 558 -2A0 84 ] ... ] 120 )
 
 INIT
@@ -758,7 +758,7 @@ INIT
   ]
 5 INVERTIEREN
 OVER O. DUP N.
-ERGEBNIS ?
+ERGEBNIS M?
 ( herauskommen soll  [ [ 2A300 -2A300 ... ] ] 8700 )
 
 : VANDERMONDEMATRIX ( n --> mat )
@@ -782,7 +782,7 @@ INIT
 4 VANDERMONDEMATRIX
 4 INVERTIEREN
 OVER O. DUP N.
-ERGEBNIS ?
+ERGEBNIS M?
 ( herauskommen soll [ [ 480 -360 180 -48 ] [ -4E0 558 -2A0 84 ] [ 1B0 -240 150 -48 ] [ -30 48 -30 C ] ] 120
 ( gekürzt [ [ 60 -48 20 -6 ] [ -68 72 -38 B ] [ 24 -30 1C -6 ] [ -4 6 -4 1 ] ] 18 ok
 
@@ -790,7 +790,7 @@ INIT
 5 VANDERMONDEMATRIX
 5 INVERTIEREN
 OVER O. DUP N.
-ERGEBNIS ?
+ERGEBNIS M?
 ( herauskommen soll [ [ 2A300 -2A300 1C200 -A8C0 1B00 ] [ -36240 4B3C0 -36D80 15720 -3840 ] [ 18F60 -297C0 22740 -E6A0 2760 ] [ -4EC0 9240 -8700 3DE0 -B40 ] [ 5A0 -B40 B40 -5A0 120 ] ] 8700
 ( gekürzt [ [ 258 -258 190 -96 18 ] [ -302 42E -30C 131 -32 ] ... [ 5 -A A -5 1 ] ] 78 ok
 
@@ -798,60 +798,60 @@ INIT
 6 VANDERMONDEMATRIX
 6 INVERTIEREN
 OVER O. DUP N.
-ERGEBNIS ?
+ERGEBNIS M?
 ( herauskommen soll [ [ 8E62000 -B1FA800 9E34000 ... -32A00 8700 ] ] 17BB000
 ( gekürzt [ [ -10E0 1518 -12C0 A8C -360 78 ] ... [ 6 -F 14 -F 6 -1 ] ] -2D0 ok
 
 INIT
 7 VANDERMONDEMATRIX
-ERGEBNIS ?
+ERGEBNIS M?
 7 INVERTIEREN
 OVER O. DUP N.
-ERGEBNIS ?
+ERGEBNIS M?
 ( herauskommen soll [ [ CC65AF0000 -13298868000 ... 17BB000 ] ] 1D33190000 
 ( gekürzt [ [ -89D0 CEB8 -E5B0 AC44 -52B0 16F8 -2D0 ]  ... [ -7 15 -23 23 -15 7 -1 ] ] -13B0 ok
 
 INIT
 8 VANDERMONDEMATRIX
-ERGEBNIS ?
+ERGEBNIS M?
 8 INVERTIEREN
 OVER O. DUP N.
-ERGEBNIS ?
+ERGEBNIS M?
 ( herauskommen soll [ [ 8FB77F0C000000 -FB811E55000000 ... 1D33190000 ] ] 11F6EFE1800000
 ( gekürzt [ [ 4EC00 -89D00 B7C00 -AC440 6E400 -2DF00 B400 -13B0 ] ... [ -( 1C -38 46 -38 1C -8 1 ] ] 9D80 ok
 
 INIT
 9 VANDERMONDEMATRIX
-ERGEBNIS ?
+ERGEBNIS M?
 9 INVERTIEREN
 OVER O. DUP N.
-ERGEBNIS ?
+ERGEBNIS M?
 ( herauskommen soll [ [ 37F3F5B381040000000 ... 11F6EFE1800000 ] ] 6378D13F1E40000000
 ( gekürzt [ [ 31D580 -63AB00 9B0A00 -AE6B40 8B8900 -4D8500 1C7A00 -63AB0 9D80 ] ... [ 9 -24 54 -7E 7E -54 24 -9 1 ] ] 58980 ok
 
 INIT
 0A VANDERMONDEMATRIX
-ERGEBNIS ?
+ERGEBNIS M?
 0A INVERTIEREN
 OVER O. DUP N.
-ERGEBNIS ?
+ERGEBNIS M?
 ( herauskommen soll [ [ D726B3E61B37C18000000000 ... 6378D13F1E40000000 ] ] 1583DECA35EBF9C000000000
 ( gekürzt [ [ -229B600 4DDD980 -8A6D800 B5AFB80 ... -D2 78 -2D A -1 ] ] -375F00 ok
 
 INIT
 0B VANDERMONDEMATRIX
-ERGEBNIS ?
+ERGEBNIS M?
 0B INVERTIEREN
 OVER O. DUP N.
-ERGEBNIS ?
+ERGEBNIS M?
 ( herauskommen soll [ [ 2331530F3797CA8619C400000000000 -57FB4FA60AFB7A4F406A00000000000 ... 1583DECA35EBF9C000000000 ] ] 333078D050DCC97D3CC00000000000
 ( gekürzt [ [ -1A2BE700 416DC180 -82DB8300 ... -14A A5 -37 B -1 ] ] -2611500 ok
 
 INIT
 0C VANDERMONDEMATRIX
-ERGEBNIS ?
+ERGEBNIS M?
 ( 0C INVERTIEREN OVER O. DUP N.
-ERGEBNIS ?
+ERGEBNIS M?
 ( herauskommen soll 
 ( OVER O. DUP N. [ [ 1569BD000 -3AE2C7C00 82DB83000 ... -318 1EF -DC 42 -C 1 ] ] 1C8CFC00 ok
 
@@ -880,7 +880,7 @@ DUP O.
   DROP ;
 
 : WLIST
-  LFA @ BEGIN ( CR ) DUP .
+  LFA @ BEGIN ( CR ) DUP M.
     DUP 1+ @ OVER 2 M+ @ TYPE 20 EMIT 
     DUP @ WHILE DUP @ M+ REPEAT
   DROP
@@ -916,7 +916,7 @@ DUP O.
 
 ( ganz neu: Steuerungstasten: ^A bis ^G, weiter ^H=^A ^L=^B ... )
 2F18 8 0 FILL
-: STRG: : HERE 3 M- DUP . @ 1+ DUP . @ DUP . 40 M- HERE SWAP 7 AND 2F18 M+ ! ;
+: STRG: : HERE 3 M- DUP M. @ 1+ DUP M. @ DUP M. 40 M- HERE SWAP 7 AND 2F18 M+ ! ;
 STRG: ^G 7 EMIT ." /1xPIEP/" ;
 STRG: ^F 7 EMIT ." QUIT" QUIT ;
 STRG: ^A ." Angehalten für genau eine Eingabezeile: "
@@ -950,11 +950,11 @@ IMMEDIATE: (*REM*)
 IMMEDIATE: DO COMPILE (DO) HERE ;
 IMMEDIATE: LOOP COMPILE (LOOP) 0BRANCH, ;
 IMMEDIATE: +LOOP COMPILE (+LOOP) 0BRANCH, ;
-( : LL 0 DO I . LOOP ; 7 LL ( ok geht )
+( : LL 0 DO I M. LOOP ; 7 LL ( ok geht )
 
 
 IMMEDIATE: () 0 WORD 2DROP ;
-: B. ( a b --> ) SWAP . . ;
+: B. ( a b --> ) SWAP M. M. ;
 : 2@ ( adr --> a b )
   DUP 1+ @ SWAP @ ;
 : 2! ( a b adr --> )
@@ -978,7 +978,7 @@ D00D CONSTANT UHRL
 TLISTE VARIABLE TLISTENZEIGER
 : TLISTY 
   TLISTENZEIGER @ TLISTE BEGIN 
-    DUP @ CR DUP . 3 M- 2@ SWAP TYPE 
+    DUP @ CR DUP M. 3 M- 2@ SWAP TYPE 
     1+ 2DUP = UNTIL 2DROP ;
 
 0 VARIABLE REMOPFA
@@ -1136,8 +1136,8 @@ IOSTART
 </sekt>
 
 <sekt inhalt="DEMO">
-56 89 M* .
-77 88 M+ .
+56 89 M* M.
+77 88 M+ M.
 
 ( aktuelles Vokabular
 
@@ -1154,15 +1154,15 @@ WLIST
 
 ( erreichte Programmdresse in 0000-1FFF )
 
-HERE .
+HERE M.
 
 ( erreichte Adresse in Textspeicher E000-FFFF )
 
-BZEIG ?
+BZEIG M?
 
 ( aktuelle Stapelhoehe )
 
-SP ?
+SP M?
 
 ( Ein neues Wort definieren )
 
@@ -1183,28 +1183,28 @@ H
 ( Programmschleifen, die für DO LOOP ist aber momentan stillgelegt. )
 
 ( : X ( n --> )
-(   0 DO I . LOOP ;
+(   0 DO I M. LOOP ;
 ( 13 X 
 
 ( oder )
 
 : Y ( n --> )
-  0 BEGIN DUP . 1+ 2DUP = UNTIL 2DROP ;
+  0 BEGIN DUP M. 1+ 2DUP = UNTIL 2DROP ;
 
 13 Y
 
 ( oder )
 
 : Z ( n --> )
-  0 BEGIN 2DUP > WHILE DUP . 1+ REPEAT 2DROP ;
+  0 BEGIN 2DUP > WHILE DUP M. 1+ REPEAT 2DROP ;
 
 13 Z
 
 ( alles ab LEDS wieder vergessen )
 
-HERE . BZEIG ?
+HERE M. BZEIG M?
 FORGET LEDS
-HERE . BZEIG ?
+HERE M. BZEIG M?
 
 
 
@@ -1229,20 +1229,20 @@ HERE . BZEIG ?
 ( bezeichnet ab welcher Adresse das nächste Ergebnis gespeichert wird,
 ( Platz dafür ist von 1400H bis 1FFFH, aktuell erreicht: )
  
-ERGEBNIS ? ( Zahlenspeicher gefuellt bis ) 
+ERGEBNIS M? ( Zahlenspeicher gefuellt bis ) 
 
 ZAHLENSPEICHER @ ERGEBNIS ! ( Zahlenspeicher leeren )
 
-ERGEBNIS ?
+ERGEBNIS M?
 
 N" 111111111111111" DUP N* N.
 
-ERGEBNIS ?
+ERGEBNIS M?
 
 ( dritte binomische Formel 10^20-{10^10+1}*{10^10-1}=1 )
 10 20 N^ 10 10 N^ 1 N- 10 10 N^ 1 N+ N* N- N.
 
-ERGEBNIS ?
+ERGEBNIS M?
 
 
 ( Zahlenbasis wechseln )
@@ -1261,7 +1261,6 @@ HEX DUP N.
 
 <sekt inhalt="in den Zustand für Step_11 bringen und wieder RAM generieren">
 REPLACE: NUMBER NNUMBER ;
-: M. . ; 
 : . O. ; : + N+ ; : - N- ; : * N* ; : / N/ ; : /MOD N/MOD ; : MOD NMOD ; 
 : GGT NGGT ; : BK NBK ; : ^ N^ ; : ? @ . ;
 

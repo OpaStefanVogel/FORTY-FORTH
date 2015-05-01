@@ -69,7 +69,7 @@ COMPILE: (CONSTANT:) R> @ STAT @ IF LIT, END_IF ;
 2F16 CONSTANT DUBIT
 2F17 CONSTANT LOCALADRESSE
 
-VERSION 1+ CONSTANT VERSION VERSION .
+VERSION 1+ CONSTANT VERSION VERSION M.
 </sekt>
 
 <sekt inhalt="Maschinencode">
@@ -163,13 +163,12 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
   2DROP ;
 : HG. SHL16 DIG EMIT SHL16 DIG EMIT SHL16 DIG EMIT
   SHL16 DIG EMIT DROP ;
-: H. HG. 20 EMIT ;
-: . H. ;
-: ? @ . ;
+: M. HG. 20 EMIT ;
+: M? @ M. ;
 : CR 
   CRDP @ DP @ M- STAT @ 0= NOT OR XBIT @ 0= NOT AND IF 
-    3C EMIT ." fl>" CRDP @ . CRBZEIG @ . 3C EMIT ." /fl>"
-    3C EMIT ." fr>" DP @ . BZEIG @ . 3C EMIT ." /fr>"
+    3C EMIT ." fl>" CRDP @ M. CRBZEIG @ M. 3C EMIT ." /fl>"
+    3C EMIT ." fr>" DP @ M. BZEIG @ M. 3C EMIT ." /fr>"
     DP @ CRDP ! BZEIG @ CRBZEIG ! 
     END_IF
   0A EMIT ;
@@ -182,7 +181,7 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
   0 STAT !
   CR IN1 @ IN3 @ IN1 @ M- 1- TYPE ." ???"
   " FEHLERTEXT" INTERPRET
-  CR ." ERROR - Fehler Nummer " . 
+  CR ." ERROR - Fehler Nummer " M. 
   DISABLE QUIT ;
 : CSP! SP @ CSP ! ;
 : CSP? SP @ CSP @ M- IF 9 ERROR END_IF ;
@@ -354,7 +353,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
       DUP @ M+ REPEAT
   R> DROP R>
   ROT 0= IF DROP DROP 0 0 END_IF
-  ( OVER LFA @ SWAP LT IF ." *" OVER . LFA @ . END_IF ( vref wenn gebraucht )
+  ( OVER LFA @ SWAP LT IF M." *" OVER M. LFA @ M. END_IF ( vref wenn gebraucht )
   ;
 
 : LCFA ( lfa r --> cfa r ) SWAP 3 M+ SWAP ;
@@ -440,7 +439,7 @@ IMMEDIATE: ; 0 STAT ! CSP? RETURN , SMUDGE { SMUDGE } ;
 
 <sekt inhalt="neues Vokabular abkoppeln und Programm neu starten">
 0 DPMERK @ ! ( abkoppeln )
-HERE . BZEIG ?
+HERE M. BZEIG M?
 
 START
 </sekt>
@@ -477,7 +476,7 @@ START
   R> XBIT !
   ;
 
-HERE . BZEIG ?
+HERE M. BZEIG M?
 </sekt>
 
 <sekt inhalt="ProgRAM und ByteRAM für Step_9 und Step_10 erstellen">
