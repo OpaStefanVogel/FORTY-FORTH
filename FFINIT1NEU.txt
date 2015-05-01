@@ -140,7 +140,7 @@ IMMEDIATE: REPEAT ROT COMPILE AGAIN COMPILE END_IF ;
 : 1+ ( a --> a+1 ) 1 + ;
 : - MINUS + ;
 : = - 0= ;
-: LT ( a b --> r ) 08 000 MLIT + SWAP NOT 08 000 MLIT + 0 U+ DROP 0= NOT ;
+: LT ( a b --> r ) - 0LT ;
 : > ( a b --> r ) SWAP LT ;
 : * ( a b --> a*b ) 0 ROT ROT U* SWAP DROP ;
 : BYE BEGIN ." BYE " AGAIN ;
