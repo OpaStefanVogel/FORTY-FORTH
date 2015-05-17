@@ -54,7 +54,7 @@ Ein Beispielprogramm wie</pr>
 ok
 </DEMO>
 
-<p>Von 900 ns bis 1220 ns wartet der Programmzähler PC darauf, dass von testbench.vhd aus EMIT_EMPFANGEN negiert wird, und so auch bei jedem weiteren ausgegebenen Zeichen. Schließlich ab 15540 ns wiederholt sich endlos eine 420 ns lange Progammschleife - ja weil noch eine Nutzereingabe fehlt...</p>
+<p>Von 900 ns bis 1220 ns wartet der Programmzähler PC darauf, dass von testbench.vhd aus EMIT_ANGEKOMMEN negiert wird, und so auch bei jedem weiteren ausgegebenen Zeichen. Schließlich ab 15540 ns wiederholt sich endlos eine 420 ns lange Progammschleife - ja weil noch eine Nutzereingabe fehlt...</p>
 
 <weiter /><a href="R10_Nutzereingabe.xml">R10 Nutzereingabe</a>
 
