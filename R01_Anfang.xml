@@ -36,7 +36,7 @@ anschließend in Vivado die Simulation starten:
 
 <Tcl_Console>
   <li> close_sim -force -quiet </li>
-  <li> launch_simulation # auch Button "Run Behavioral Simulation" geht </li>
+  <li> launch_simulation </li>
   <li> run 1000 ns </li>
   </Tcl_Console>
 
