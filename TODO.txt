@@ -166,6 +166,7 @@ ok den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
 .. ein kritischer Bereich ist von : ( bis MCODE + weil dadrin das langsame + drin ist.
      das ist gewissermaßen das, was als "weiterprogrammieren" zählt.
 .. sowohl 77 als auch - zählt ERGEBNIS weiter, obwohl gar nicht nötig
+o. ich hab mal eine Tabelle "Rechenoperationen bei verschiedenen Datentypen" angefangen in INIT.xml
 
 
 
