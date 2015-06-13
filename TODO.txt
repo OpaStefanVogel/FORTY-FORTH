@@ -200,6 +200,7 @@ cp FFINIT2NEU.txt /dev/ttyAMA0 # für Step_11
 
 #wenn alles ok, dann neues screenlog.xml: FFINIT1NEU und FFINIT2NEU in INIT.xml packen,
 echo '-1 XBIT !' >/dev/ttyAMA0
+rm ../../../screenlog.0
 #screenlog starten ^AH
 cp INIT.xml /dev/ttyAMA0
 #screenlog anhalten ^AH
