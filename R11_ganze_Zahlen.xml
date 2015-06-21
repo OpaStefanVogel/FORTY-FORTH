@@ -54,7 +54,7 @@ ok
 <u>DUP .</u> 288 ok
 </DEMO>
 
-<p>Die Nutzereingaben <u>56 89 * ....</u> beginnen ab 30000 ns in KEY_BYTE. Die Ergebnisse werden jeweils ab 3822640 ns, ab 7633120 ns, ab 11160200 ns auf EMIT_BYTE ausgegeben. Darin enthaltene ESCAPE-Sequenzen wie 1B-5B-33-36-6D (ESC-[-3-6-m) stellen die Schriftfarbe ein. DECIMAL schaltet auf dezimale Zahlenbasis um. INVERTIEREN holt vom Stapel die Matrix [ [ 1 ... ] ] und die Dimension 4 und gibt deren Inverse [ [ 1152 ... ] ] und den gemeinsamen Nenner 288 aller Matrixelemente auf dem Stapel zurück (ab 54644980 ns).</p>  
+<p>Die Nutzereingaben <u>56 89 * ....</u> beginnen ab 30000 ns in KEY_BYTE. Die Ergebnisse werden jeweils ab 3305220 ns, ab 6370100 ns, ab 95745000 ns auf EMIT_BYTE ausgegeben. Darin enthaltene ESCAPE-Sequenzen wie 1B-5B-33-36-6D (ESC-[-3-6-m) stellen die Schriftfarbe ein. DECIMAL schaltet auf dezimale Zahlenbasis um. INVERTIEREN holt vom Stapel die Matrix [ [ 1 ... ] ] und die Dimension 4 und gibt deren Inverse [ [ 1152 ... ] ] und den gemeinsamen Nenner 288 aller Matrixelemente auf dem Stapel zurück (ab 40609560 ns).</p>  
 
 <weiter /><a href="Spartan3.xml">Installation Spartan3 Board</a>
 
