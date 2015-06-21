@@ -176,17 +176,21 @@ ok den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
      ja, in 8 und 9, also neues Tabellenformat
 .. ebenso für vhdl-Variablen
 .. dazu kommen dann noch verwendete Doppelpunktdefinitionen.
+.. ein kritischer Bereich ist von : ( bis MCODE + weil dadrin das langsame + drin ist.
+     das ist gewissermaßen das, was als "weiterprogrammieren" zählt.
+.. sowohl 77 als auch - zählt ERGEBNIS weiter, obwohl gar nicht nötig
+o. ich hab mal eine Tabelle "Rechenoperationen bei verschiedenen Datentypen" angefangen in INIT.xml
 
 
 
 Spartan3 ist momentan programmiert auf 
-  1250: 39DE 3715 9CB5 3472 EF59 B9BD F699 180C 9C43 D52A
-  .mcs: d0d2f69b64ea2fc2d42b04a6dc1c421b4c6ebd95
+  1180 8 DUMP 6EC3 BF57 659F 52A3 CF07 F694 EB89 00E0
+  .mcs: ????
 solange S3 nicht weiter programmiert ist, ein Skript zur Erstellung von ... aus ..:
 ###!!! wenn es ab hier losgehen soll wegen neuer AXIOME, dann zuerst RESET drücken auf dem Spartan3
 ###!!! ebenso wenn Reset gedrückt auf dem Spartan3, dann muss es hier losgehen:
 cp FFINIT1.txt /dev/ttyAMA0
-echo 'HERE 100 + DPMERK ! 3400 BANF !' >/dev/ttyAMA0
+echo 'HERE 100 M+ DPMERK ! 3400 BANF !' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 echo '020 DPMERK ! 3000 BANF !' >/dev/ttyAMA0
@@ -197,6 +201,7 @@ cp FFINIT2NEU.txt /dev/ttyAMA0 # für Step_11
 
 #wenn alles ok, dann neues screenlog.xml: FFINIT1NEU und FFINIT2NEU in INIT.xml packen,
 echo '-1 XBIT !' >/dev/ttyAMA0
+rm ../../../screenlog.0
 #screenlog starten ^AH
 cp INIT.xml /dev/ttyAMA0
 #screenlog anhalten ^AH
@@ -209,4 +214,4 @@ echo '0 XBIT !' >/dev/ttyAMA0
 #dann Spartan3 .mcs neu programmieren, mit SHA von P20
 #und dann FFINIT1NEU in FFINIT.txt packen.
 
-cp TESTFUERNEUES.TXT /dev/ttyAMA0
+#cp TESTFUERNEUES.TXT /dev/ttyAMA0

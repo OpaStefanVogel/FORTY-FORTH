@@ -14,44 +14,4 @@ FORGET NLIT,
 
 ( jetzt kann es weitergehen mit neuen Wortdefinitionen:
 
-( da versuch ich jetzt mal LOCAL auf neue Adressen umzubiegen
 
-HEX
-2000 VARIABLE LOCALADRESSE
-: LOCAL ( n --> ) 1 + LOCALADRESSE @ OVER - DUP LOCALADRESSE ! ! ;
-: END_LOCAL ( --> ) LOCALADRESSE @ DUP @ + LOCALADRESSE ! ;
-: L0 LOCALADRESSE @ 1 + ;
-: L1 LOCALADRESSE @ 2 + ;
-: L2 LOCALADRESSE @ 3 + ;
-: L3 LOCALADRESSE @ 4 + ;
-: L4 LOCALADRESSE @ 5 + ;
-: L5 LOCALADRESSE @ 6 + ;
-: L6 LOCALADRESSE @ 7 + ;
-: L7 LOCALADRESSE @ 8 + ;
-
-LOCALADRESSE ? SP ?
-8 LOCAL LOCALADRESSE ?
-0 L0 ! 1 L1 ! 2 L2 ! 3 L3 ! 4 L4 ! 5 L5 ! 6 L6 ! 7 L7 !
-LOCALADRESSE @ DUP @ DUMP
-END_LOCAL
-LOCALADRESSE ? SP ?
-
-
-: LTEST
-  8 LOCAL
-  0 L0 ! 1 L1 ! 2 L2 ! 3 L3 ! 4 L4 ! 5 L5 ! 6 L6 ! 7 L7 !
-  L0 ? L1 ? L2 ? L3 ? L4 ? L5 ? L6 ? L7 ?
-  END_LOCAL
-  ;
-
-: LLTEST
-  8 LOCAL
-  10 L0 ! 11 L1 ! 12 L2 ! 13 L3 ! 14 L4 ! 15 L5 ! 16 L6 ! 17 L7 !
-  LTEST
-  L0 ? L1 ? L2 ? L3 ? L4 ? L5 ? L6 ? L7 ?
-  END_LOCAL
-  ;
-
-SP ?
-LLTEST
-SP ?
