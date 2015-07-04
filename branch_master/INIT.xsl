@@ -12,7 +12,7 @@
     </html>
   </xsl:template>
 
-<xsl:template match="INIT"><INIT>zurück zu <a href="R11_ganze_Zahlen.xml">R11_ganze_Zahlen.xml</a>
+<xsl:template match="INIT"><INIT>zurück zu <a href="../branch_gh-pages/R11_ganze_Zahlen.xml">R11_ganze_Zahlen.xml</a>
 
 Wozu die beiden Files INIT.xml und screenlog.xml verwendet werden:
   <a href="INIT.xml">INIT.xml</a>: FORTH-Interpreter recompilieren mit cp INIT.xml /dev/tty..

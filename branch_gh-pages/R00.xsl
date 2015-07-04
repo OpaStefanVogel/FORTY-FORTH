@@ -14,6 +14,7 @@
        DOCTYPE HTML5 in XHTML 1.1, xmlns mittels xsl:attribute,
          geht aber nicht überall in gleicher Form, deshalb alles wieder html5
        meta Cache-Control und ETag ergänzt
+       link href jetzt mit ../ davor
     <!-->
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
@@ -21,9 +22,9 @@
     <meta http-equiv="ETag" content="201505170812"/>
     <title><xsl:value-of select="los/step" /></title>
 
-    <link rel="stylesheet" href="stylesheets/styles.css"/>
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
-    <script src="javascripts/scale.fix.js"></script>
+    <link rel="stylesheet" href="../stylesheets/styles.css"/>
+    <link rel="stylesheet" href="../stylesheets/pygment_trac.css"/>
+    <script src="../javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes"/>
 
     <!--[if lt IE 9]>
@@ -81,11 +82,11 @@
          </g>
        </svg>
      <span class="zuruecktext"> zum <a href="#Terminal">Terminal</a> oder 
-     <a href="index.html#Inhalt">zurück zu Inhalt</a>
+     <a href="../index.html#Inhalt">zurück zu Inhalt</a>
      </span></span>
    </xsl:template>
 <xsl:template match="weiter">Das war <xsl:value-of select="/los/step" /><br />
-weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inhalt.</a></span></xsl:template>
+weiter mit <span class="zurueck"><a href="../index.html#Inhalt">oder zurück zu Inhalt.</a></span></xsl:template>
 
 <xsl:template match="favicon"><img src="favicon.ico"/></xsl:template>
 <xsl:template match="DEMO">
