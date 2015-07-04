@@ -158,6 +158,7 @@ ok vielleicht auch mal 10-2F mit in Prog aufnehmen, das geistert so versteckt mi
    .. ein Verzeichnis branch_master sollte jedoch machbar sein...
       ja, und auch branch_Spartan3, und beide nur in gh hinein mergen.
       allerdings, wenn dann beispielsweise INIT.xsl versehentlich im gh-Branch INIT.xsl geändert wird, wird es im master-branch nicht bemerkt, und einfach master vorsetzen geht dann nicht, muss ein extra merge gemacht werden. also es ist noch nicht im Lot alles. 
+     - auch geht nicht wenn P01.vhd in branch_master drin muss auch branch_master in Project_FFP hinein und dann geht Step1 nicht mehr... 
 .. aktuelle Speicherübersicht mit hinein in screenlog.xml zaubern
 ok den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
    ok 12-17B mit in : KEY
