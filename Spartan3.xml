@@ -61,13 +61,13 @@ zu sehen und auch eine Nutzereingabe möglich sein. Wenn nicht, erstmal mit Eing
 <Terminal_1>
   <li> echo '-1 XBIT !' >/dev/ttyS0 <i># schaltet xml-Ausgabemodus ein</i> </li>
   <li> <i># jetzt screenlog starten, (C-a H) bei Verwendung von <a href="http://www.gnu.org/software/screen/manual/html_node/Log.html#Log">screen</a></i> </li>
-  <li> cp branch_master/INIT.xml /dev/ttyS0  <i># recompiliert alles</i> </li>
+  <li> cp INIT.xml /dev/ttyS0    <i># recompiliert den vorhandenen FORTH-Interpreter</i> </li>
   <li> <i># jetzt screenlog stoppen, nochmal (C-a H)</i> </li>
   <li> echo '0 XBIT !' >/dev/ttyS0 <i># schaltet xml-Ausgabemodus aus</i> </li>
   <li> <i>#</i></li>
   </Terminal_1>
 
-<p>Das bei 'screenlog' erzeugte Logfile habe ich als branch_master/screenlog.xml abgespeichert. Es ist der in <a href="R11_ganze_Zahlen.xml">R11 Rechnen mit großen ganzen Zahlen</a> angegebene Link screenlog.xml.</p>
+<p>Das bei 'screenlog' erzeugte Logfile habe ich als screenlog.xml im master-branch gespeichert. Man kann es in einem xml-Browser formatiert anschauen.</p>
 
 <weiter />Pause
 
