@@ -6,7 +6,7 @@
 <head>
   <title>Invertieren einer Matrix</title>
   <style type="text/css"> 
-body { font-size:100%; border:solid; margin-right:120px; }
+body { font-size:100%; }
 textarea { font-family: Courier,monospace; font-size: 100%; }
 
 ha { display: flex; align-items: center; font-family: Courier,monospace; font-size: 100%; }
@@ -71,7 +71,7 @@ function invertieren() {
         <hh>1+1</hh><hh>2</hh><hh>3</hh><hh>4</hh>
         </hi></hd><hj>·</hj>
       <hd><hh>1-1</hh><hh>1</hh><hh>1</hh><hh>1</hh></hd>
-    </hb><hj>:</hj><hc>1</hc><hj>=</hj>
+    </hb><hj>:</hj><hc>1</hc><hj>:</hj><hc>1</hc><hj>=</hj>
     <hd>
       <hi><hh>1</hh><hh>2</hh><hh>3</hh><hh>4</hh></hi>
       <hi><hh>-1</hh><hh>2</hh><hh>6</hh><hh>12</hh></hi>
