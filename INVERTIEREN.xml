@@ -71,7 +71,14 @@ function invertieren() {
         <hh>1+1</hh><hh>2</hh><hh>3</hh><hh>4</hh>
         </hi></hd><hj>·</hj>
       <hd><hh>1-1</hh><hh>1</hh><hh>1</hh><hh>1</hh></hd>
-    </hb><hj>:</hj><hc>1</hc>
+    </hb><hj>:</hj><hc>1</hc><hj>=</hj>
+    <hd>
+      <hi><hh>1</hh><hh>2</hh><hh>3</hh><hh>4</hh></hi>
+      <hi><hh>-1</hh><hh>2</hh><hh>6</hh><hh>12</hh></hi>
+      <hi><hh>-1</hh><hh>6</hh><hh>24</hh><hh>60</hh></hi>
+      <hi><hh>-1</hh><hh>12</hh><hh>60</hh><hh>252</hh></hi>
+      </hd><hj>:</hj><he>1</he>
+    
   </ha>
 </body>
 </html>
