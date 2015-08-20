@@ -22,7 +22,7 @@ hi { display: flex; flex-direction: column; align-items: stretch; }
 hj { display: flex; padding: 4px; }
 
 c0 { border-radius: 5px; background-color: lightgreen; }
-c1 { border-radius: 5px; background-color: pink; }
+c1 { border-radius: 5px; background-color: HotPink; }
 c2 { border-radius: 5px; background-color: aqua; }
 c3 { border-radius: 5px; background-color: yellow; }
     </style> 
@@ -60,6 +60,10 @@ function invertieren() {
   }
 
 function ADISP(Ergebnis,i) {
+  ck = document.createElement("c"+eval((i+1)%4));
+    t = document.createTextNode(NeuerNenner);ck.appendChild(t);   
+  cl = document.createElement("c"+eval(i%4));
+    t = document.createTextNode(AlterNenner);cl.appendChild(t);   
   ha = document.createElement("ha");Ergebnis.appendChild(ha);
     hb = document.createElement("hb");ha.appendChild(hb);
       hd = document.createElement("hd");hb.appendChild(hd);
@@ -75,8 +79,7 @@ function ADISP(Ergebnis,i) {
       hj = document.createElement("hj");hb.appendChild(hj);
        t = document.createTextNode("·");hj.appendChild(t);
       hc = document.createElement("hc");hb.appendChild(hc);
-        ci = document.createElement("c"+eval((i+1)%4));hc.appendChild(ci);
-          t = document.createTextNode(NeuerNenner);ci.appendChild(t);
+        hc.appendChild(ck.cloneNode(ck));
       hj = document.createElement("hj");hb.appendChild(hj);
        t = document.createTextNode("-");hj.appendChild(t);
       hd = document.createElement("hd");hb.appendChild(hd);
@@ -84,12 +87,9 @@ function ADISP(Ergebnis,i) {
         for (j=0;j<n;j++) { 
           hh = document.createElement("hh");hi.appendChild(hh);
           if (j==i) {
-  cj = document.createElement("c"+eval((i+1)%4));hh.appendChild(cj);
-  t = document.createTextNode(A[i][i]);cj.appendChild(t);   
+            hh.appendChild(cl.cloneNode(cl));
             t = document.createTextNode("+");
-            hh.appendChild(t);
-  cj = document.createElement("c"+eval(i%4));hh.appendChild(cj);
-  t = document.createTextNode(AlterNenner);cj.appendChild(t);   
+            hh.appendChild(t);hh.appendChild(ck.cloneNode(ck));
             } else {
               t = document.createTextNode(A[j][i]) 
               hh.appendChild(t);
@@ -101,12 +101,9 @@ function ADISP(Ergebnis,i) {
         for (k=0;k<n;k++) { 
           hh = document.createElement("hh");hd.appendChild(hh);
           if (k==i) {
-  cj = document.createElement("c"+eval(i%4));hh.appendChild(cj);
-  t = document.createTextNode(AlterNenner);cj.appendChild(t);   
+            hh.appendChild(cl.cloneNode(cl));
             t = document.createTextNode("-");
-            hh.appendChild(t); 
-  cj = document.createElement("c"+eval((i+1)%4));hh.appendChild(cj);
-  t = document.createTextNode(A[i][i]);cj.appendChild(t);   
+            hh.appendChild(t);hh.appendChild(ck.cloneNode(ck));
             }
             else {
               t = document.createTextNode(A[i][k]);
@@ -115,13 +112,11 @@ function ADISP(Ergebnis,i) {
     hj = document.createElement("hj");ha.appendChild(hj);
      t = document.createTextNode(":");hj.appendChild(t);
     hc = document.createElement("hc");ha.appendChild(hc);
-      ci = document.createElement("c"+eval(i%4));hc.appendChild(ci);
-        t = document.createTextNode(AlterNenner);ci.appendChild(t);
+      hc.appendChild(cl.cloneNode(cl));
     hj = document.createElement("hj");ha.appendChild(hj);
      t = document.createTextNode(":");hj.appendChild(t);
     hc = document.createElement("hc");ha.appendChild(hc);
-      ci = document.createElement("c"+eval((i+1)%4));hc.appendChild(ci);
-        t = document.createTextNode(NeuerNenner);ci.appendChild(t);
+      hc.appendChild(ck.cloneNode(ck));
   }
 
 function EDISP(ha,i) {
