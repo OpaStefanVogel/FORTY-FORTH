@@ -10,9 +10,9 @@ body { font-size:100%; }
 textarea { font-family: Courier,monospace; font-size: 100%; }
 
 ha { display: flex; align-items: center; font-family: Courier,monospace; font-size: 100%; margin-top: 15px; }
-hb { display: flex; align-items: center; border:solid; border-radius: 20px; padding: 4px; }
+hb { display: flex; align-items: center; border-left:solid; border-right:solid; border-radius: 15px; padding: 4px; }
 hc { display: flex; }
-hd { display: flex; border:solid; border-radius: 15px; padding: 4px; }
+hd { display: flex; border-left:solid; border-right:solid; border-radius: 10px; padding: 4px; }
 he { display: flex; }
 hf { display: flex; flex-direction: column; align-items: center; border:solid; border-radius: 10px; padding: 4px; }
 hg { display: flex; border:solid; border-radius: 10px; padding: 4px; }
@@ -26,7 +26,9 @@ hj { display: flex; padding: 4px; }
 function invertieren() {
   event.preventDefault();
   A=eval(document.getElementById("matrix input").value);
-  Ergebnis=document.getElementById("Ergebnis");
+  body=document.getElementsByTagName("body")[0];
+  body.removeChild(body.lastChild);
+  Ergebnis=document.createElement("div");body.appendChild(Ergebnis);
   n=A.length;
   NeuerNenner=1;
   for (i=0;i<n;i++) {
@@ -43,6 +45,7 @@ function invertieren() {
     for (j=0;j<n;j++) { for (k=0;k<n;k++) { 
       A[j][k]=(A[j][k]*NeuerNenner-Y[j]*Z[k])/AlterNenner;
       } }
+    EDISP(ha);
     //alert("i="+i+"\nNeuerNenner="+NeuerNenner+" AlterNenner="+AlterNenner+"\nY="+Y+"\nZ="+Z+"\nA=("+A+")/"+NeuerNenner);
     }
   }
@@ -68,7 +71,7 @@ function ADISP(Ergebnis,i) {
         for (j=0;j<n;j++) { 
           hh = document.createElement("hh");hi.appendChild(hh);
           if (j==i) 
-            { t = document.createTextNode(A[j][i]+"+"+AlterNenner);}
+            { t = document.createTextNode(AlterNenner+"+"+A[j][i]);}
             else
             { t = document.createTextNode(A[j][i]) };
           hh.appendChild(t);
@@ -92,16 +95,24 @@ function ADISP(Ergebnis,i) {
      t = document.createTextNode(":");hj.appendChild(t);
     hc = document.createElement("hc");ha.appendChild(hc);
      t = document.createTextNode(NeuerNenner);hc.appendChild(t);
-    hj = document.createElement("hj");ha.appendChild(hj);
-     t = document.createTextNode("=");hj.appendChild(t);
-    hb = document.createElement("hb");ha.appendChild(hb);
-    hj = document.createElement("hj");ha.appendChild(hj);
-     t = document.createTextNode(":");hj.appendChild(t);
-    hc = document.createElement("hc");ha.appendChild(hc);
-     t = document.createTextNode(NeuerNenner);hc.appendChild(t);
-
   }
 
+function EDISP(ha) {
+  hj = document.createElement("hj");ha.appendChild(hj);
+    t = document.createTextNode("=");hj.appendChild(t);
+  hd = document.createElement("hd");ha.appendChild(hd);
+    for (k=0;k<n;k++) { 
+      hi = document.createElement("hi");hd.appendChild(hi);
+      for (j=0;j<n;j++) { 
+        hh = document.createElement("hh");hi.appendChild(hh);
+        t = document.createTextNode(A[j][k]);hh.appendChild(t);
+      } }
+  hj = document.createElement("hj");ha.appendChild(hj);
+   t = document.createTextNode(":");hj.appendChild(t);
+  hc = document.createElement("hc");ha.appendChild(hc);
+   t = document.createTextNode(NeuerNenner);hc.appendChild(t);
+
+  }
 
   ]]>
 </script>
