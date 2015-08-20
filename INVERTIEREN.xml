@@ -21,6 +21,10 @@ hh { display: flex; flex-direction: row-reverse; padding: 0px; background-color:
 hi { display: flex; flex-direction: column; align-items: stretch; }
 hj { display: flex; padding: 4px; }
 
+c0 { border-radius: 5px; background-color: lightgreen; }
+c1 { border-radius: 5px; background-color: pink; }
+c2 { border-radius: 5px; background-color: aqua; }
+c3 { border-radius: 5px; background-color: yellow; }
     </style> 
 <script type="application/ecmascript">
 <![CDATA[
@@ -35,7 +39,7 @@ function invertieren() {
   NeuerNenner=1;
   Ausgangsmatrix.removeChild(Ausgangsmatrix.lastChild);
   ha = document.createElement("ha");Ausgangsmatrix.appendChild(ha);
-  EDISP(ha);
+  EDISP(ha,0);
   for (i=0;i<n;i++) {
     //alert("i="+i);
     AlterNenner=NeuerNenner;
@@ -50,7 +54,7 @@ function invertieren() {
     for (j=0;j<n;j++) { for (k=0;k<n;k++) { 
       A[j][k]=(A[j][k]*NeuerNenner-Y[j]*Z[k])/AlterNenner;
       } }
-    EDISP(ha);
+    EDISP(ha,i+1);
     //alert("i="+i+"\nNeuerNenner="+NeuerNenner+" AlterNenner="+AlterNenner+"\nY="+Y+"\nZ="+Z+"\nA=("+A+")/"+NeuerNenner);
     }
   }
@@ -63,50 +67,68 @@ function ADISP(Ergebnis,i) {
           hi = document.createElement("hi");hd.appendChild(hi);
           for (j=0;j<n;j++) { 
             hh = document.createElement("hh");hi.appendChild(hh);
+            if (j==i & k==i) {
+              ci = document.createElement("c"+eval((i+1)%4));
+              hh.appendChild(ci);hh=ci; }
             t = document.createTextNode(A[j][k]);hh.appendChild(t);
           } }
       hj = document.createElement("hj");hb.appendChild(hj);
        t = document.createTextNode("·");hj.appendChild(t);
       hc = document.createElement("hc");hb.appendChild(hc);
-       t = document.createTextNode(NeuerNenner);hc.appendChild(t);
+        ci = document.createElement("c"+eval((i+1)%4));hc.appendChild(ci);
+          t = document.createTextNode(NeuerNenner);ci.appendChild(t);
       hj = document.createElement("hj");hb.appendChild(hj);
        t = document.createTextNode("-");hj.appendChild(t);
       hd = document.createElement("hd");hb.appendChild(hd);
         hi = document.createElement("hi");hd.appendChild(hi);
         for (j=0;j<n;j++) { 
           hh = document.createElement("hh");hi.appendChild(hh);
-          if (j==i) 
-            { t = document.createTextNode(AlterNenner+"+"+A[j][i]);}
-            else
-            { t = document.createTextNode(A[j][i]) };
-          hh.appendChild(t);
+          if (j==i) {
+  cj = document.createElement("c"+eval((i+1)%4));hh.appendChild(cj);
+  t = document.createTextNode(A[i][i]);cj.appendChild(t);   
+            t = document.createTextNode("+");
+            hh.appendChild(t);
+  cj = document.createElement("c"+eval(i%4));hh.appendChild(cj);
+  t = document.createTextNode(AlterNenner);cj.appendChild(t);   
+            } else {
+              t = document.createTextNode(A[j][i]) 
+              hh.appendChild(t);
+              };
           }
       hj = document.createElement("hj");hb.appendChild(hj);
        t = document.createTextNode("·");hj.appendChild(t);
       hd = document.createElement("hd");hb.appendChild(hd);
         for (k=0;k<n;k++) { 
           hh = document.createElement("hh");hd.appendChild(hh);
-          if (k==i) 
-            { t = document.createTextNode(A[i][k]+"-"+AlterNenner);}
-            else
-            { t = document.createTextNode(A[i][k]) };
-          hh.appendChild(t);
+          if (k==i) {
+  cj = document.createElement("c"+eval(i%4));hh.appendChild(cj);
+  t = document.createTextNode(AlterNenner);cj.appendChild(t);   
+            t = document.createTextNode("-");
+            hh.appendChild(t); 
+  cj = document.createElement("c"+eval((i+1)%4));hh.appendChild(cj);
+  t = document.createTextNode(A[i][i]);cj.appendChild(t);   
+            }
+            else {
+              t = document.createTextNode(A[i][k]);
+              hh.appendChild(t); };
           }
     hj = document.createElement("hj");ha.appendChild(hj);
      t = document.createTextNode(":");hj.appendChild(t);
     hc = document.createElement("hc");ha.appendChild(hc);
-     t = document.createTextNode(AlterNenner);hc.appendChild(t);
+      ci = document.createElement("c"+eval(i%4));hc.appendChild(ci);
+        t = document.createTextNode(AlterNenner);ci.appendChild(t);
     hj = document.createElement("hj");ha.appendChild(hj);
      t = document.createTextNode(":");hj.appendChild(t);
     hc = document.createElement("hc");ha.appendChild(hc);
-     t = document.createTextNode(NeuerNenner);hc.appendChild(t);
+      ci = document.createElement("c"+eval((i+1)%4));hc.appendChild(ci);
+        t = document.createTextNode(NeuerNenner);ci.appendChild(t);
   }
 
-function EDISP(ha) {
+function EDISP(ha,i) {
   hj = document.createElement("hj");ha.appendChild(hj);
     t = document.createTextNode("=");hj.appendChild(t);
   hd = document.createElement("hd");ha.appendChild(hd);
-    for (k=0;k<n;k++) { 
+    for (k=0;k<n;k++) {
       hi = document.createElement("hi");hd.appendChild(hi);
       for (j=0;j<n;j++) { 
         hh = document.createElement("hh");hi.appendChild(hh);
@@ -115,7 +137,8 @@ function EDISP(ha) {
   hj = document.createElement("hj");ha.appendChild(hj);
    t = document.createTextNode(":");hj.appendChild(t);
   hc = document.createElement("hc");ha.appendChild(hc);
-   t = document.createTextNode(NeuerNenner);hc.appendChild(t);
+    ci = document.createElement("c"+eval(i%4));hc.appendChild(ci);
+      t = document.createTextNode(NeuerNenner);ci.appendChild(t);
 
   }
 
