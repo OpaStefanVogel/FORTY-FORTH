@@ -9,7 +9,7 @@
 body { font-size:100%; }
 textarea { font-family: Courier,monospace; font-size: 100%; }
 
-ha { display: flex; align-items: center; font-family: Courier,monospace; font-size: 100%; }
+ha { display: flex; align-items: center; font-family: Courier,monospace; font-size: 100%; margin-top: 15px; }
 hb { display: flex; align-items: center; border:solid; border-radius: 20px; padding: 4px; }
 hc { display: flex; }
 hd { display: flex; border:solid; border-radius: 15px; padding: 4px; }
@@ -26,6 +26,7 @@ hj { display: flex; padding: 4px; }
 function invertieren() {
   event.preventDefault();
   A=eval(document.getElementById("matrix input").value);
+  Ergebnis=document.getElementById("Ergebnis");
   n=A.length;
   NeuerNenner=1;
   for (i=0;i<n;i++) {
@@ -38,13 +39,71 @@ function invertieren() {
       }
     Y[i]=Y[i]+AlterNenner;
     Z[i]=Z[i]-AlterNenner;
+    ADISP(Ergebnis,i);
     for (j=0;j<n;j++) { for (k=0;k<n;k++) { 
       A[j][k]=(A[j][k]*NeuerNenner-Y[j]*Z[k])/AlterNenner;
       } }
     //alert("i="+i+"\nNeuerNenner="+NeuerNenner+" AlterNenner="+AlterNenner+"\nY="+Y+"\nZ="+Z+"\nA=("+A+")/"+NeuerNenner);
     }
   }
-]]>
+
+function ADISP(Ergebnis,i) {
+  ha = document.createElement("ha");Ergebnis.appendChild(ha);
+    hb = document.createElement("hb");ha.appendChild(hb);
+      hd = document.createElement("hd");hb.appendChild(hd);
+        for (k=0;k<n;k++) { 
+          hi = document.createElement("hi");hd.appendChild(hi);
+          for (j=0;j<n;j++) { 
+            hh = document.createElement("hh");hi.appendChild(hh);
+            t = document.createTextNode(A[j][k]);hh.appendChild(t);
+          } }
+      hj = document.createElement("hj");hb.appendChild(hj);
+       t = document.createTextNode("·");hj.appendChild(t);
+      hc = document.createElement("hc");hb.appendChild(hc);
+       t = document.createTextNode(NeuerNenner);hc.appendChild(t);
+      hj = document.createElement("hj");hb.appendChild(hj);
+       t = document.createTextNode("-");hj.appendChild(t);
+      hd = document.createElement("hd");hb.appendChild(hd);
+        hi = document.createElement("hi");hd.appendChild(hi);
+        for (j=0;j<n;j++) { 
+          hh = document.createElement("hh");hi.appendChild(hh);
+          if (j==i) 
+            { t = document.createTextNode(A[j][i]+"+"+AlterNenner);}
+            else
+            { t = document.createTextNode(A[j][i]) };
+          hh.appendChild(t);
+          }
+      hj = document.createElement("hj");hb.appendChild(hj);
+       t = document.createTextNode("·");hj.appendChild(t);
+      hd = document.createElement("hd");hb.appendChild(hd);
+        for (k=0;k<n;k++) { 
+          hh = document.createElement("hh");hd.appendChild(hh);
+          if (k==i) 
+            { t = document.createTextNode(A[i][k]+"-"+AlterNenner);}
+            else
+            { t = document.createTextNode(A[i][k]) };
+          hh.appendChild(t);
+          }
+    hj = document.createElement("hj");ha.appendChild(hj);
+     t = document.createTextNode(":");hj.appendChild(t);
+    hc = document.createElement("hc");ha.appendChild(hc);
+     t = document.createTextNode(AlterNenner);hc.appendChild(t);
+    hj = document.createElement("hj");ha.appendChild(hj);
+     t = document.createTextNode(":");hj.appendChild(t);
+    hc = document.createElement("hc");ha.appendChild(hc);
+     t = document.createTextNode(NeuerNenner);hc.appendChild(t);
+    hj = document.createElement("hj");ha.appendChild(hj);
+     t = document.createTextNode("=");hj.appendChild(t);
+    hb = document.createElement("hb");ha.appendChild(hb);
+    hj = document.createElement("hj");ha.appendChild(hj);
+     t = document.createTextNode(":");hj.appendChild(t);
+    hc = document.createElement("hc");ha.appendChild(hc);
+     t = document.createTextNode(NeuerNenner);hc.appendChild(t);
+
+  }
+
+
+  ]]>
 </script>
   </head>
 <body onload="invertieren()">
@@ -60,25 +119,6 @@ function invertieren() {
 -->
 <div/>
 <button id="invertieren" class="butbut" onclick="doSend7()" ontouchstart="invertieren()">diese Matrix invertieren</button>
-<ha>
-  <hb>
-    <hd>
-      <hi><hh>1</hh><hh>2</hh><hh>3</hh><hh>4</hh></hi>
-      <hi><hh>1</hh><hh>4</hh><hh>9</hh><hh>16</hh></hi>
-      <hi><hh>1</hh><hh>8</hh><hh>27</hh><hh>64</hh></hi>
-      <hi><hh>1</hh><hh>16</hh><hh>81</hh><hh>256</hh></hi>
-      </hd><hj>·</hj><he>1</he><hj>-</hj><hd><hi>
-        <hh>1+1</hh><hh>2</hh><hh>3</hh><hh>4</hh>
-        </hi></hd><hj>·</hj>
-      <hd><hh>1-1</hh><hh>1</hh><hh>1</hh><hh>1</hh></hd>
-    </hb><hj>:</hj><hc>1</hc><hj>:</hj><hc>1</hc><hj>=</hj>
-    <hd>
-      <hi><hh>1</hh><hh>2</hh><hh>3</hh><hh>4</hh></hi>
-      <hi><hh>-1</hh><hh>2</hh><hh>6</hh><hh>12</hh></hi>
-      <hi><hh>-1</hh><hh>6</hh><hh>24</hh><hh>60</hh></hi>
-      <hi><hh>-1</hh><hh>12</hh><hh>60</hh><hh>252</hh></hi>
-      </hd><hj>:</hj><he>1</he>
-    
-  </ha>
+<div id="Ergebnis" />
 </body>
 </html>
