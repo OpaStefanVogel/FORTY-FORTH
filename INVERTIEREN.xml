@@ -9,6 +9,7 @@
 body { font-size:100%; }
 textarea { font-family: Courier,monospace; font-size: 100%; }
 
+h0 { display: inline-flex; align-items: flex-start; font-family: Courier,monospace; font-size: 100%; margin-top: 15px; }
 ha { display: flex; align-items: center; font-family: Courier,monospace; font-size: 100%; margin-top: 15px; }
 hb { display: flex; align-items: center; border-left:solid; border-right:solid; border-radius: 15px; padding: 4px; }
 hc { display: flex; }
@@ -29,8 +30,12 @@ function invertieren() {
   body=document.getElementsByTagName("body")[0];
   body.removeChild(body.lastChild);
   Ergebnis=document.createElement("div");body.appendChild(Ergebnis);
+  Ausgangsmatrix=document.getElementById("Ausgangsmatrix");
   n=A.length;
   NeuerNenner=1;
+  Ausgangsmatrix.removeChild(Ausgangsmatrix.lastChild);
+  ha = document.createElement("ha");Ausgangsmatrix.appendChild(ha);
+  EDISP(ha);
   for (i=0;i<n;i++) {
     //alert("i="+i);
     AlterNenner=NeuerNenner;
@@ -118,18 +123,19 @@ function EDISP(ha) {
 </script>
   </head>
 <body onload="invertieren()">
+<h0 id="Ausgangsmatrix">
 <textarea id="matrix input" cols="40" rows="10" >[ [ 1, 1, 1, 1 ],
   [ 2, 4, 8, 16 ],
   [ 3, 9, 27, 81 ],
   [ 4, 16, 64, 256 ] ]
 </textarea>
+<ha /></h0>
+<button id="invertieren" class="butbut" onclick="doSend7()" ontouchstart="invertieren()">diese Matrix invertieren</button>
 <!--
 <textarea id="matrix input" cols="20" rows="10" >[ [ 2, 2 ],
   [ 4, 8 ] ]
 </textarea>
 -->
-<div/>
-<button id="invertieren" class="butbut" onclick="doSend7()" ontouchstart="invertieren()">diese Matrix invertieren</button>
 <div id="Ergebnis" />
 </body>
 </html>
