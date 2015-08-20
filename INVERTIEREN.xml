@@ -20,6 +20,8 @@ hg { display: flex; border:solid; border-radius: 10px; padding: 4px; }
 hh { display: flex; flex-direction: row-reverse; padding: 0px; background-color: lightgrey; margin: 2px; border-radius: 4px; min-width: 1.5em; }
 hi { display: flex; flex-direction: column; align-items: stretch; }
 hj { display: flex; padding: 4px; }
+hv { display: flex; flex-direction: row-reverse; padding: 0px; background-color: Bisque; margin: 2px; border-radius: 4px; min-width: 1.5em; }
+hw { display: flex; flex-direction: row-reverse; padding: 0px; background-color: Plum; margin: 2px; border-radius: 4px; min-width: 1.5em; }
 
 c0 { border-radius: 5px; background-color: lightgreen; }
 c1 { border-radius: 5px; background-color: HotPink; }
@@ -70,7 +72,13 @@ function ADISP(Ergebnis,i) {
         for (k=0;k<n;k++) { 
           hi = document.createElement("hi");hd.appendChild(hi);
           for (j=0;j<n;j++) { 
-            hh = document.createElement("hh");hi.appendChild(hh);
+            if (j==i & k==i | k!=i & j!=i) { 
+              hh = document.createElement("hh") } 
+            if (j==i & k!=i ) {
+               hh = document.createElement("hw") }
+            if (k==i & j!=i ) {
+               hh = document.createElement("hv") }
+            hi.appendChild(hh);
             if (j==i & k==i) {
               ci = document.createElement("c"+eval((i+1)%4));
               hh.appendChild(ci);hh=ci; }
@@ -85,12 +93,13 @@ function ADISP(Ergebnis,i) {
       hd = document.createElement("hd");hb.appendChild(hd);
         hi = document.createElement("hi");hd.appendChild(hi);
         for (j=0;j<n;j++) { 
-          hh = document.createElement("hh");hi.appendChild(hh);
           if (j==i) {
+            hh = document.createElement("hh");hi.appendChild(hh);
             hh.appendChild(cl.cloneNode(cl));
             t = document.createTextNode("+");
             hh.appendChild(t);hh.appendChild(ck.cloneNode(ck));
             } else {
+              hh = document.createElement("hv");hi.appendChild(hh);
               t = document.createTextNode(A[j][i]) 
               hh.appendChild(t);
               };
@@ -99,13 +108,14 @@ function ADISP(Ergebnis,i) {
        t = document.createTextNode("·");hj.appendChild(t);
       hd = document.createElement("hd");hb.appendChild(hd);
         for (k=0;k<n;k++) { 
-          hh = document.createElement("hh");hd.appendChild(hh);
           if (k==i) {
+            hh = document.createElement("hh");hd.appendChild(hh);
             hh.appendChild(cl.cloneNode(cl));
             t = document.createTextNode("-");
             hh.appendChild(t);hh.appendChild(ck.cloneNode(ck));
             }
             else {
+              hh = document.createElement("hw");hd.appendChild(hh);
               t = document.createTextNode(A[i][k]);
               hh.appendChild(t); };
           }
