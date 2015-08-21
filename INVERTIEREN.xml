@@ -11,9 +11,9 @@ textarea { font-family: Courier,monospace; font-size: 100%; }
 
 h0 { display: inline-flex; align-items: flex-start; font-family: Courier,monospace; font-size: 100%; margin-top: 15px; }
 ha { display: flex; align-items: center; font-family: Courier,monospace; font-size: 100%; margin-top: 15px; }
-hb { display: flex; align-items: center; border-left:solid; border-right:solid; border-radius: 15px; padding: 4px; }
+hb { display: flex; align-items: center; border-left:solid; border-right:solid; border-radius: 15px; padding: 4px; background-color: LightYellow; }
 hc { display: flex; }
-hd { display: flex; border-left:solid; border-right:solid; border-radius: 10px; padding: 4px; }
+hd { display: flex; border-left:solid; border-right:solid; border-radius: 10px; padding: 4px; border-color: dimgrey; background-color: WhiteSmoke; }
 he { display: flex; }
 hf { display: flex; flex-direction: column; align-items: center; border:solid; border-radius: 10px; padding: 4px; }
 hg { display: flex; border:solid; border-radius: 10px; padding: 4px; }
@@ -21,7 +21,7 @@ hh { display: flex; flex-direction: row-reverse; padding: 0px; background-color:
 hi { display: flex; flex-direction: column; align-items: stretch; }
 hj { display: flex; padding: 4px; }
 hv { display: flex; flex-direction: row-reverse; padding: 0px; background-color: Bisque; margin: 2px; border-radius: 4px; min-width: 1.5em; }
-hw { display: flex; flex-direction: row-reverse; padding: 0px; background-color: Plum; margin: 2px; border-radius: 4px; min-width: 1.5em; }
+hw { display: flex; flex-direction: row-reverse; padding: 0px; background-color: Thistle; margin: 2px; border-radius: 4px; min-width: 1.5em; }
 
 c0 { border-radius: 5px; background-color: lightgreen; }
 c1 { border-radius: 5px; background-color: HotPink; }
@@ -158,7 +158,7 @@ function EDISP(ha,i) {
   [ 4, 16, 64, 256 ] ]
 </textarea>
 <ha /></h0>
-<button id="invertieren" class="butbut" onclick="doSend7()" ontouchstart="invertieren()">diese Matrix invertieren</button>
+<button id="invertieren" class="butbut" onclick="doSend7()" ontouchstart="invertieren()">die geänderte Eingabematrix invertieren</button>
 <!--
 <textarea id="matrix input" cols="20" rows="10" >[ [ 2, 2 ],
   [ 4, 8 ] ]
