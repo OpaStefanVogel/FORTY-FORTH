@@ -35,13 +35,19 @@ function invertieren() {
   A=eval(document.getElementById("matrix input").value);
   body=document.getElementsByTagName("body")[0];
   body.removeChild(body.lastChild);
+  body.removeChild(body.lastChild);
   Ergebnis=document.createElement("div");body.appendChild(Ergebnis);
+  Probe=document.createElement("div");body.appendChild(Probe);
   Ausgangsmatrix=document.getElementById("Ausgangsmatrix");
   n=A.length;
   NeuerNenner=1;
   Ausgangsmatrix.removeChild(Ausgangsmatrix.lastChild);
   ha = document.createElement("ha");Ausgangsmatrix.appendChild(ha);
   EDISP(ha,0);
+  hap = document.createElement("ha");Probe.appendChild(hap);
+  hap.appendChild(document.createTextNode("Probe"));
+  EDISP(hap,0);
+  hap.appendChild(document.createTextNode("·"));
   for (i=0;i<n;i++) {
     //alert("i="+i);
     AlterNenner=NeuerNenner;
@@ -59,6 +65,7 @@ function invertieren() {
     EDISP(ha,i+1);
     //alert("i="+i+"\nNeuerNenner="+NeuerNenner+" AlterNenner="+AlterNenner+"\nY="+Y+"\nZ="+Z+"\nA=("+A+")/"+NeuerNenner);
     }
+  EDISP(hap,n);
   }
 
 function ADISP(Ergebnis,i) {
@@ -87,7 +94,7 @@ function ADISP(Ergebnis,i) {
       hj = document.createElement("hj");hb.appendChild(hj);
        t = document.createTextNode("·");hj.appendChild(t);
       hc = document.createElement("hc");hb.appendChild(hc);
-        hc.appendChild(ck.cloneNode(ck));
+        hc.appendChild(ck.cloneNode(true));
       hj = document.createElement("hj");hb.appendChild(hj);
        t = document.createTextNode("-");hj.appendChild(t);
       hd = document.createElement("hd");hb.appendChild(hd);
@@ -95,9 +102,9 @@ function ADISP(Ergebnis,i) {
         for (j=0;j<n;j++) { 
           if (j==i) {
             hh = document.createElement("hh");hi.appendChild(hh);
-            hh.appendChild(cl.cloneNode(cl));
+            hh.appendChild(cl.cloneNode(true));
             t = document.createTextNode("+");
-            hh.appendChild(t);hh.appendChild(ck.cloneNode(ck));
+            hh.appendChild(t);hh.appendChild(ck.cloneNode(true));
             } else {
               hh = document.createElement("hv");hi.appendChild(hh);
               t = document.createTextNode(A[j][i]) 
@@ -110,9 +117,9 @@ function ADISP(Ergebnis,i) {
         for (k=0;k<n;k++) { 
           if (k==i) {
             hh = document.createElement("hh");hd.appendChild(hh);
-            hh.appendChild(cl.cloneNode(cl));
+            hh.appendChild(cl.cloneNode(true));
             t = document.createTextNode("-");
-            hh.appendChild(t);hh.appendChild(ck.cloneNode(ck));
+            hh.appendChild(t);hh.appendChild(ck.cloneNode(true));
             }
             else {
               hh = document.createElement("hw");hd.appendChild(hh);
@@ -122,11 +129,11 @@ function ADISP(Ergebnis,i) {
     hj = document.createElement("hj");ha.appendChild(hj);
      t = document.createTextNode(":");hj.appendChild(t);
     hc = document.createElement("hc");ha.appendChild(hc);
-      hc.appendChild(cl.cloneNode(cl));
+      hc.appendChild(cl.cloneNode(true));
     hj = document.createElement("hj");ha.appendChild(hj);
      t = document.createTextNode(":");hj.appendChild(t);
     hc = document.createElement("hc");ha.appendChild(hc);
-      hc.appendChild(ck.cloneNode(ck));
+      hc.appendChild(ck.cloneNode(true));
   }
 
 function EDISP(ha,i) {
@@ -165,5 +172,6 @@ function EDISP(ha,i) {
 </textarea>
 -->
 <div id="Ergebnis" />
+<div id="Probe" />
 </body>
 </html>
