@@ -46,10 +46,12 @@ function invertieren() {
   Ausgangsmatrix.removeChild(Ausgangsmatrix.lastChild);
   ha = document.createElement("ha");Ausgangsmatrix.appendChild(ha);
   EDISP(ha,0,true);
+  Probe.appendChild(document.createElement("hr"));
   hap = document.createElement("ha");Probe.appendChild(hap);
   hap.appendChild(document.createTextNode("Probe: "));
   EDISP(hap,0,false);
-  hap.appendChild(document.createTextNode(" · "));
+  hap.appendChild(Rechenzeichen("·"));
+  Probe.appendChild(document.createElement("hr"));
   for (i=0;i<n;i++) {
     //alert("i="+i);
     AlterNenner=NeuerNenner;
@@ -68,19 +70,26 @@ function invertieren() {
     //alert("i="+i+"\nNeuerNenner="+NeuerNenner+" AlterNenner="+AlterNenner+"\nY="+Y+"\nZ="+Z+"\nA=("+A+")/"+NeuerNenner);
     }
   EDISP(hap,n,false);
-  hap.appendChild(document.createTextNode(" = "));
-  alert(A+"#"+AMERK+"#"+PRO);
+  hap.appendChild(Rechenzeichen("="));
+  //alert(A+"#"+AMERK+"#"+PRO);
   for (i=0;i<n;i++) { for (j=0;j<n;j++) { 
     PRO[i][j]=0;
     for (k=0;k<n;k++) { 
       PRO[i][j]=PRO[i][j]+A[i][k]*AMERK[k][j];
       } 
-    PRO[i][j]=PRO[i][j]/NeuerNenner;
+    PRO[i][j]=PRO[i][j]/NeuerNenner/NMERK;
     } }
   A=PRO;
   EDISP(hap,n,2);
-  alert(A+"#"+AMERK+"#"+PRO);
+  //alert(A+"#"+AMERK+"#"+PRO);
   }
+
+function Rechenzeichen(t) {
+  var hj = document.createElement("hj");
+  var  t = document.createTextNode(t);hj.appendChild(t);
+  return hj;
+  }
+  
 
 function ADISP(Ergebnis,i) {
   ck = document.createElement("c"+eval((i+1)%4));
@@ -105,12 +114,10 @@ function ADISP(Ergebnis,i) {
               hh.appendChild(ci);hh=ci; }
             t = document.createTextNode(A[j][k]);hh.appendChild(t);
           } }
-      hj = document.createElement("hj");hb.appendChild(hj);
-       t = document.createTextNode("·");hj.appendChild(t);
+      hb.appendChild(Rechenzeichen("·"));
       hc = document.createElement("hc");hb.appendChild(hc);
         hc.appendChild(ck.cloneNode(true));
-      hj = document.createElement("hj");hb.appendChild(hj);
-       t = document.createTextNode("-");hj.appendChild(t);
+      hb.appendChild(Rechenzeichen("-"));
       hd = document.createElement("hd");hb.appendChild(hd);
         hi = document.createElement("hi");hd.appendChild(hi);
         for (j=0;j<n;j++) { 
@@ -125,8 +132,7 @@ function ADISP(Ergebnis,i) {
               hh.appendChild(t);
               };
           }
-      hj = document.createElement("hj");hb.appendChild(hj);
-       t = document.createTextNode("·");hj.appendChild(t);
+      hb.appendChild(Rechenzeichen("·"));
       hd = document.createElement("hd");hb.appendChild(hd);
         for (k=0;k<n;k++) { 
           if (k==i) {
@@ -140,21 +146,16 @@ function ADISP(Ergebnis,i) {
               t = document.createTextNode(A[i][k]);
               hh.appendChild(t); };
           }
-    hj = document.createElement("hj");ha.appendChild(hj);
-     t = document.createTextNode(":");hj.appendChild(t);
+    ha.appendChild(Rechenzeichen("/"));
     hc = document.createElement("hc");ha.appendChild(hc);
       hc.appendChild(cl.cloneNode(true));
-    hj = document.createElement("hj");ha.appendChild(hj);
-     t = document.createTextNode(":");hj.appendChild(t);
+    ha.appendChild(Rechenzeichen("/"));
     hc = document.createElement("hc");ha.appendChild(hc);
       hc.appendChild(ck.cloneNode(true));
   }
 
 function EDISP(ha,i,T) {
-  if (T==1) {
-    hj = document.createElement("hj");ha.appendChild(hj);
-      t = document.createTextNode("=");hj.appendChild(t);
-    }
+  if (T==1) { ha.appendChild(Rechenzeichen("=")); }
   hd = document.createElement("hd");ha.appendChild(hd);
     for (k=0;k<n;k++) {
       hi = document.createElement("hi");hd.appendChild(hi);
@@ -163,8 +164,7 @@ function EDISP(ha,i,T) {
         t = document.createTextNode(A[j][k]);hh.appendChild(t);
       } }
   if (T<2) {
-    hj = document.createElement("hj");ha.appendChild(hj);
-     t = document.createTextNode(":");hj.appendChild(t);
+    ha.appendChild(Rechenzeichen("/"));
     hc = document.createElement("hc");ha.appendChild(hc);
       ci = document.createElement("c"+eval(i%4));hc.appendChild(ci);
         t = document.createTextNode(NeuerNenner);ci.appendChild(t);
