@@ -11,7 +11,7 @@ textarea { font-family: Courier,monospace; font-size: 100%; }
 
 h0 { display: inline-flex; align-items: flex-start; font-family: Courier,monospace; font-size: 100%; margin-top: 15px; }
 ha { display: flex; align-items: center; font-family: Courier,monospace; font-size: 100%; margin-top: 15px; }
-hb { display: flex; align-items: center; border-left:solid; border-right:solid; border-radius: 15px; padding: 4px; background-color: LightYellow; }
+hb { display: flex; align-items: center; border-left:solid; border-right:solid; border-radius: 15px; border-color: Maroon; padding: 4px; background-color: LightYellow; }
 hc { display: flex; }
 hd { display: flex; border-left:solid; border-right:solid; border-radius: 10px; padding: 4px; border-color: dimgrey; background-color: WhiteSmoke; }
 he { display: flex; }
@@ -33,6 +33,8 @@ c3 { border-radius: 5px; background-color: yellow; }
 function invertieren() {
   event.preventDefault();
   A=eval(document.getElementById("matrix input").value);
+  AMERK=eval(document.getElementById("matrix input").value);
+  PRO=eval(document.getElementById("matrix input").value);
   body=document.getElementsByTagName("body")[0];
   body.removeChild(body.lastChild);
   body.removeChild(body.lastChild);
@@ -40,14 +42,14 @@ function invertieren() {
   Probe=document.createElement("div");body.appendChild(Probe);
   Ausgangsmatrix=document.getElementById("Ausgangsmatrix");
   n=A.length;
-  NeuerNenner=1;
+  NeuerNenner=1;NMERK=NeuerNenner;
   Ausgangsmatrix.removeChild(Ausgangsmatrix.lastChild);
   ha = document.createElement("ha");Ausgangsmatrix.appendChild(ha);
-  EDISP(ha,0);
+  EDISP(ha,0,true);
   hap = document.createElement("ha");Probe.appendChild(hap);
-  hap.appendChild(document.createTextNode("Probe"));
-  EDISP(hap,0);
-  hap.appendChild(document.createTextNode("·"));
+  hap.appendChild(document.createTextNode("Probe: "));
+  EDISP(hap,0,false);
+  hap.appendChild(document.createTextNode(" · "));
   for (i=0;i<n;i++) {
     //alert("i="+i);
     AlterNenner=NeuerNenner;
@@ -62,10 +64,22 @@ function invertieren() {
     for (j=0;j<n;j++) { for (k=0;k<n;k++) { 
       A[j][k]=(A[j][k]*NeuerNenner-Y[j]*Z[k])/AlterNenner;
       } }
-    EDISP(ha,i+1);
+    EDISP(ha,i+1,true);
     //alert("i="+i+"\nNeuerNenner="+NeuerNenner+" AlterNenner="+AlterNenner+"\nY="+Y+"\nZ="+Z+"\nA=("+A+")/"+NeuerNenner);
     }
-  EDISP(hap,n);
+  EDISP(hap,n,false);
+  hap.appendChild(document.createTextNode(" = "));
+  alert(A+"#"+AMERK+"#"+PRO);
+  for (i=0;i<n;i++) { for (j=0;j<n;j++) { 
+    PRO[i][j]=0;
+    for (k=0;k<n;k++) { 
+      PRO[i][j]=PRO[i][j]+A[i][k]*AMERK[k][j];
+      } 
+    PRO[i][j]=PRO[i][j]/NeuerNenner;
+    } }
+  A=PRO;
+  EDISP(hap,n,2);
+  alert(A+"#"+AMERK+"#"+PRO);
   }
 
 function ADISP(Ergebnis,i) {
@@ -136,9 +150,11 @@ function ADISP(Ergebnis,i) {
       hc.appendChild(ck.cloneNode(true));
   }
 
-function EDISP(ha,i) {
-  hj = document.createElement("hj");ha.appendChild(hj);
-    t = document.createTextNode("=");hj.appendChild(t);
+function EDISP(ha,i,T) {
+  if (T==1) {
+    hj = document.createElement("hj");ha.appendChild(hj);
+      t = document.createTextNode("=");hj.appendChild(t);
+    }
   hd = document.createElement("hd");ha.appendChild(hd);
     for (k=0;k<n;k++) {
       hi = document.createElement("hi");hd.appendChild(hi);
@@ -146,12 +162,13 @@ function EDISP(ha,i) {
         hh = document.createElement("hh");hi.appendChild(hh);
         t = document.createTextNode(A[j][k]);hh.appendChild(t);
       } }
-  hj = document.createElement("hj");ha.appendChild(hj);
-   t = document.createTextNode(":");hj.appendChild(t);
-  hc = document.createElement("hc");ha.appendChild(hc);
-    ci = document.createElement("c"+eval(i%4));hc.appendChild(ci);
-      t = document.createTextNode(NeuerNenner);ci.appendChild(t);
-
+  if (T<2) {
+    hj = document.createElement("hj");ha.appendChild(hj);
+     t = document.createTextNode(":");hj.appendChild(t);
+    hc = document.createElement("hc");ha.appendChild(hc);
+      ci = document.createElement("c"+eval(i%4));hc.appendChild(ci);
+        t = document.createTextNode(NeuerNenner);ci.appendChild(t);
+    }
   }
 
   ]]>
