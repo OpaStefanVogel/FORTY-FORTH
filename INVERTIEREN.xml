@@ -6,27 +6,24 @@
 <head>
   <title>Invertieren einer Matrix</title>
   <style type="text/css"> 
-body { font-size:100%; }
-textarea { font-family: Courier,monospace; font-size: 100%; }
+body { font-family: Courier,monospace; }
 
-h0 { display: inline-flex; align-items: flex-start; font-family: Courier,monospace; font-size: 100%; margin-top: 15px; }
-ha { display: flex; align-items: center; font-family: Courier,monospace; font-size: 100%; margin-top: 15px; }
+h0 { display: inline-flex; align-items: flex-start; }
+ha { display: flex; align-items: center; margin-top: 8px; margin-bottom: 8px; }
 hb { display: flex; align-items: center; border-left:solid; border-right:solid; border-radius: 15px; border-color: Maroon; padding: 4px; background-color: LightYellow; }
-hc { display: flex; }
 hd { display: flex; border-left:solid; border-right:solid; border-radius: 10px; padding: 4px; border-color: dimgrey; background-color: WhiteSmoke; }
-he { display: flex; }
-hf { display: flex; flex-direction: column; align-items: center; border:solid; border-radius: 10px; padding: 4px; }
-hg { display: flex; border:solid; border-radius: 10px; padding: 4px; }
-hh { display: flex; flex-direction: row-reverse; padding: 0px; background-color: lightgrey; margin: 2px; border-radius: 4px; min-width: 1.5em; }
 hi { display: flex; flex-direction: column; align-items: stretch; }
 hj { display: flex; padding: 4px; }
-hv { display: flex; flex-direction: row-reverse; padding: 0px; background-color: Bisque; margin: 2px; border-radius: 4px; min-width: 1.5em; }
-hw { display: flex; flex-direction: row-reverse; padding: 0px; background-color: Thistle; margin: 2px; border-radius: 4px; min-width: 1.5em; }
+hh, hv, hw { display: flex; flex-direction: row-reverse; margin: 2px; border-radius: 4px; min-width: 1.5em; }
+hh { background-color: lightgrey; }
+hv { background-color: Bisque; }
+hw { background-color: Thistle; }
 
-c0 { border-radius: 5px; background-color: lightgreen; }
-c1 { border-radius: 5px; background-color: HotPink; }
-c2 { border-radius: 5px; background-color: aqua; }
-c3 { border-radius: 5px; background-color: yellow; }
+c0, c1, c2, c3 { border-radius: 5px; }
+c0 { background-color: lightgreen; }
+c1 { background-color: HotPink; }
+c2 { background-color: aqua; }
+c3 { background-color: yellow; }
     </style> 
 <script type="application/ecmascript">
 <![CDATA[
@@ -115,8 +112,7 @@ function ADISP(Ergebnis,i) {
             t = document.createTextNode(A[j][k]);hh.appendChild(t);
           } }
       hb.appendChild(Rechenzeichen("·"));
-      hc = document.createElement("hc");hb.appendChild(hc);
-        hc.appendChild(ck.cloneNode(true));
+      hb.appendChild(ck.cloneNode(true));
       hb.appendChild(Rechenzeichen("-"));
       hd = document.createElement("hd");hb.appendChild(hd);
         hi = document.createElement("hi");hd.appendChild(hi);
@@ -147,11 +143,9 @@ function ADISP(Ergebnis,i) {
               hh.appendChild(t); };
           }
     ha.appendChild(Rechenzeichen("/"));
-    hc = document.createElement("hc");ha.appendChild(hc);
-      hc.appendChild(cl.cloneNode(true));
+    ha.appendChild(cl.cloneNode(true));
     ha.appendChild(Rechenzeichen("/"));
-    hc = document.createElement("hc");ha.appendChild(hc);
-      hc.appendChild(ck.cloneNode(true));
+    ha.appendChild(ck.cloneNode(true));
   }
 
 function EDISP(ha,i,T) {
@@ -165,9 +159,8 @@ function EDISP(ha,i,T) {
       } }
   if (T<2) {
     ha.appendChild(Rechenzeichen("/"));
-    hc = document.createElement("hc");ha.appendChild(hc);
-      ci = document.createElement("c"+eval(i%4));hc.appendChild(ci);
-        t = document.createTextNode(NeuerNenner);ci.appendChild(t);
+    ci = document.createElement("c"+eval(i%4));ha.appendChild(ci);
+      t = document.createTextNode(NeuerNenner);ci.appendChild(t);
     }
   }
 
