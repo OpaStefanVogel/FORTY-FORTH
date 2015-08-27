@@ -9,7 +9,7 @@
 body { font-family: Courier,monospace; }
 
 h0 { display: inline-flex; align-items: flex-start; }
-ha { display: flex; align-items: center; margin-top: 8px; margin-bottom: 8px; }
+ha { display: flex; align-items: center; margin-top: 8px; margin-bottom: 8px; overflow: auto; }
 hb { display: flex; align-items: center; border-left:solid; border-right:solid; border-radius: 15px; border-color: Maroon; padding: 4px; background-color: LightYellow; }
 hd { display: flex; border-left:solid; border-right:solid; border-radius: 10px; padding: 4px; border-color: dimgrey; background-color: WhiteSmoke; }
 hi { display: flex; flex-direction: column; align-items: stretch; }
@@ -42,6 +42,7 @@ function invertieren() {
   NeuerNenner=1;NMERK=NeuerNenner;
   Ausgangsmatrix.removeChild(Ausgangsmatrix.lastChild);
   ha = document.createElement("ha");Ausgangsmatrix.appendChild(ha);
+  ha.appendChild(Rechenzeichen("= A"));
   EDISP(ha,0,true);
   Probe.appendChild(document.createElement("hr"));
   hap = document.createElement("ha");Probe.appendChild(hap);
@@ -66,6 +67,10 @@ function invertieren() {
     EDISP(ha,i+1,true);
     //alert("i="+i+"\nNeuerNenner="+NeuerNenner+" AlterNenner="+AlterNenner+"\nY="+Y+"\nZ="+Z+"\nA=("+A+")/"+NeuerNenner);
     }
+  ha.appendChild(Rechenzeichen("="));
+  ha.appendChild(Rechenzeichen("1"));
+  ha.appendChild(Rechenzeichen("/"));
+  ha.appendChild(Rechenzeichen("A"));
   EDISP(hap,n,false);
   hap.appendChild(Rechenzeichen("="));
   //alert(A+"#"+AMERK+"#"+PRO);
