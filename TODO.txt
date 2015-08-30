@@ -181,6 +181,7 @@ ok den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
      das ist gewissermaßen das, was als "weiterprogrammieren" zählt.
 .. sowohl 77 als auch - zählt ERGEBNIS weiter, obwohl gar nicht nötig
 o. ich hab mal eine Tabelle "Rechenoperationen bei verschiedenen Datentypen" angefangen in INIT.xml
+.. INVERTIEREN.xml läuft noch nicht in Epiphany-Browser (wegen flex-direction: column;?)
 
 
 
