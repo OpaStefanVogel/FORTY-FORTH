@@ -82,6 +82,9 @@ Bedeutung der verwendeten Hintergrundfarben:
   <a href="https://de.wikipedia.org/wiki/Compiler#Einordnung_verschiedener_Compiler-Arten">multi-pass</a>
   </xsl:template>
   
+<xsl:template match="h"><a><xsl:attribute name="href"><xsl:value-of select="@href" /></xsl:attribute><xsl:value-of select="@href" /></a>
+  </xsl:template>
+
 <xsl:template match="table"><xsl:copy-of select="." /></xsl:template>
 
 </xsl:stylesheet>

@@ -715,7 +715,7 @@ DUP ZERLEG SWAP M. M.
 [ 12 18 1B ] OBJDUMP
 [ [ 12 18 1B ] [ 1E 21 24 ] ] OBJDUMP
 
-: INVERTIEREN ( matrix dim --> invmat nenner )
+: INVERTIEREN ( matrix dim --> invmat nenner ) <h href="INVERTIEREN.xml" />
   ( L0=nr L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
   8 LOCAL NEBENRECHNUNG L0 !
   L1 ! 1 ( mat nenner )

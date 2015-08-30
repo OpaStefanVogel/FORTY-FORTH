@@ -1411,7 +1411,7 @@ DUP ZERLEG SWAP M. M. <ok>1406 0008 </ok>
 0002 147C 0021 FFFF FFFF 21 
 0001 147D 0024 FFFF FFFF 24 </ok>
  <ok></ok>
-: INVERTIEREN ( matrix dim --> invmat nenner ) <ok></ok><fl>0F6B 354F </fl><fr>0F6F 355B </fr>
+: INVERTIEREN ( matrix dim --> invmat nenner ) <h href="INVERTIEREN.xml" /> <ok></ok><fl>0F6B 354F </fl><fr>0F6F 355B </fr>
   ( L0=nr L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner ) <ok></ok><fl>0F6F 355B </fl><fr>0F6F 355B </fr>
   8 LOCAL NEBENRECHNUNG L0 ! <ok></ok><fl>0F6F 355B </fl><fr>0F74 355B </fr>
   L1 ! 1 ( mat nenner ) <ok></ok><fl>0F74 355B </fl><fr>0F77 355B </fr>
