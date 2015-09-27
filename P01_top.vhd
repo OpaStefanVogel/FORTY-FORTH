@@ -20,7 +20,7 @@ entity top is
     CLK_SIM : out STD_LOGIC;
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     PD_SIM: out STD_LOGIC_VECTOR (15 downto 0);
-    SP_SIM: out integer;
+    SP_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     A_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     B_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     C_SIM: out STD_LOGIC_VECTOR (15 downto 0);
@@ -51,7 +51,7 @@ component FortyForthProcessor
     -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     PD_SIM: out STD_LOGIC_VECTOR (15 downto 0);
-    SP_SIM: out integer;
+    SP_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     A_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     B_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     C_SIM: out STD_LOGIC_VECTOR (15 downto 0);

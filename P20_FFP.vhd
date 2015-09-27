@@ -24,7 +24,7 @@ entity FortyForthProcessor is
    -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     PD_SIM: out STD_LOGIC_VECTOR (15 downto 0);
-    SP_SIM: out integer;
+    SP_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     A_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     B_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     C_SIM: out STD_LOGIC_VECTOR (15 downto 0);
@@ -581,7 +581,7 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
       PC:=PC+1;
       end if;                                           -- Simulation --
   WE:='0';                                              PD_SIM<=PD;
-  DIST:=PD(11)&PD(11)&PD(11)&PD(11)&PD(11 downto 0);    SP_SIM<=SP;
+  DIST:=PD(11)&PD(11)&PD(11)&PD(11)&PD(11 downto 0);    SP_SIM<=CONV_STD_LOGIC_VECTOR(SP,16);
   -- oberste 4 Stapeleintraege entnehmen
   R:=HOLE_VOM_STAPEL;                                   -- Simulation --
   A:=R(P(SP-1));                                        A_SIM<=A;
