@@ -38,14 +38,19 @@ fr {
   float: right; 
   }
 
-ul { 
+ul,table { 
   white-space: nowrap;
   }
 
-DUMPZ { 
+td { 
+  padding-left: 5px;
+  }
+
+DUMPZ {
+  display: block;
+  font-size: 66%;
   background-color: Pink; 
   white-space: pre;
-  overflow: hidden;
   }
 
 .zurück { 
