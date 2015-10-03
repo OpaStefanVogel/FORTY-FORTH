@@ -2,6 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
+library std;
+use std.textio.all;
 
 -------------------------------------------------------------------------------
 
@@ -119,5 +121,17 @@ begin
       end if;
     I:=I+1;
   end process;
+
+write_output: process -- zusaetzliche Ausgabe von EMIT_BYTE in Datei "test_file.txt"
+        type char_file is file of character;
+        file c_file_handle: char_file;
+        variable C: character := 'V';
+        variable char_count: integer := 0;
+   begin
+     wait until EMIT_ABGESCHICKT'event;
+     if char_count=0 then  file_open(c_file_handle, "test_file.txt", WRITE_MODE); end if;
+     write (c_file_handle, character'val(CONV_INTEGER(EMIT_BYTE))) ;    
+     char_count := char_count + 1;  -- Keep track of the number of
+   end process;
 
 end test_Step_11;
