@@ -44,11 +44,11 @@ signal LEDS : STD_LOGIC_VECTOR (7 downto 0);
 
 signal PC_SIM: STD_LOGIC_VECTOR (15 downto 0);
 signal PD_SIM: STD_LOGIC_VECTOR (15 downto 0);
-signal SP_SIM: STD_LOGIC_VECTOR (15 downto 0);
 signal A_SIM: STD_LOGIC_VECTOR (15 downto 0);
 signal B_SIM: STD_LOGIC_VECTOR (15 downto 0);
 signal C_SIM: STD_LOGIC_VECTOR (15 downto 0);
 signal D_SIM: STD_LOGIC_VECTOR (15 downto 0);
+signal SP_SIM: STD_LOGIC_VECTOR (15 downto 0);
     -- EMIT --
 signal EMIT_ABGESCHICKT: STD_LOGIC;
 signal EMIT_BYTE: STD_LOGIC_VECTOR (7 downto 0);
