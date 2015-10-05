@@ -186,8 +186,14 @@ ab 201510:
 .. XOFF="0000" setzen innerhalb von DUMPZ
 .. dann die memory-collision irgendwie umgehen
 .. jetzt geht Step_12 los:
-   ok erstmal EXXI wieder reaktivieren, etwas geändert (direkt in KEY, ohne LOOP)
-   ..
+  ok erstmal EXXI wieder reaktivieren, etwas geändert (direkt in KEY, ohne LOOP)
+  .. grob erstmal paar EXXI-Worte
+    ok XY-PROC mit behelfsmäßigem ABSCHICKEN
+  .. dann auf dem Spartan 1 RAMB so verknüpfen und damit 0 0 BIN-ICH testen
+  .. wenn geht 1x Durchcompileren mit den neuen EXXI-Worten
+  .. und auch in XSIM simulieren
+.. Vergleiche = < > mit in die +-*/ Tabelle
+
 
 
 
