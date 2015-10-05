@@ -186,7 +186,8 @@ ab 201510:
 .. XOFF="0000" setzen innerhalb von DUMPZ
 .. dann die memory-collision irgendwie umgehen
 .. jetzt geht Step_12 los:
-   ok erstmal EXXI wieder reaktivieren, etwas geändert aber
+   ok erstmal EXXI wieder reaktivieren, etwas geändert (direkt in KEY, ohne LOOP)
+   ..
 
 
 
