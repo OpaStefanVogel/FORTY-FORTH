@@ -189,6 +189,7 @@ ab 201510:
   ok erstmal EXXI wieder reaktivieren, etwas geändert (direkt in KEY, ohne LOOP)
   .. grob erstmal paar EXXI-Worte
     ok XY-PROC mit behelfsmäßigem ABSCHICKEN
+    ok ABSCHICKEN ist jetzt auch soweit erstmal ok
   .. dann auf dem Spartan 1 RAMB so verknüpfen und damit 0 0 BIN-ICH testen
   .. wenn geht 1x Durchcompileren mit den neuen EXXI-Worten
   .. und auch in XSIM simulieren
