@@ -182,6 +182,11 @@ ok den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
 .. sowohl 77 als auch - zählt ERGEBNIS weiter, obwohl gar nicht nötig
 o. ich hab mal eine Tabelle "Rechenoperationen bei verschiedenen Datentypen" angefangen in INIT.xml
 .. INVERTIEREN.xml läuft noch nicht in Epiphany-Browser (wegen flex-direction: column;?)
+ab 201510:
+.. XOFF="0000" setzen innerhalb von DUMPZ
+.. dann die memory-collision irgendwie umgehen
+.. jetzt geht Step_12 los:
+   ok erstmal EXXI wieder reaktivieren, etwas geändert aber
 
 
 

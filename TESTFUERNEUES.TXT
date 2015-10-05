@@ -1,17 +1,81 @@
-( : . N. ; in DEMO.TXT war Unfug, war nur, um Step_11 Simulation zu ermöglichen )
-( deshalb muss ich das jetzt mühsam rückgängig machen:
+( EXXI reaktivieren, muss dann aus den "nicht mehr verwendeten" noch raus...
+: 2@ ( adr --> a b )
+  DUP 1+ @ SWAP @ ;
+: 2! ( a b adr --> )
+  SWAP OVER ! 1+ ! ;
+: 2? 2@ B. ;
 
-( nach RESET zuerst FFINIT.TXT und FFINIT1SMUL1.TXT neu laden oder
-2 2 * DUP * BASE ! ( HEX )
-7 ' NUMBER ' EXPECT 1 + @ OVER 1 + ! ! ( original NUMBER
-B501 ' LIT, ! 3FFF ' LIT, 1 + !        ( original LIT,
-FORGET NLIT, 
-( --- ohne dem geht nix
+XBIT VARIABLE RAMP3 ( RAMP3 TIB RAMP1
+: RAMBUF ( /name/  n --> )
+  MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her )
+
+: I RP @ 1+ @ ;
+: J RP @ 3 M+ @ ;
+: K RP @ 5 M+ @ ;
+: (DO) SWAP R> ROT ROT >R >R >R ;
+: (LOOP) R> R> 1+ DUP R LT IF >R 0 
+  ELSE R> DROP DROP -1 END_IF SWAP >R ;
+: (+LOOP) R> R>  ROT DUP  0LT IF M+ R OVER
+  ELSE M+ DUP R END_IF LT IF >R 0 
+  ELSE R> DROP DROP -1 END_IF SWAP >R  ;
+IMMEDIATE: DO COMPILE (DO) HERE ;
+IMMEDIATE: LOOP COMPILE (LOOP) 0BRANCH, ;
+IMMEDIATE: +LOOP COMPILE (+LOOP) 0BRANCH, ;
+( : LL 0 DO I M. LOOP ; 7 LL ( ok geht )
 
 
 
 
 
-( jetzt kann es weitergehen mit neuen Wortdefinitionen:
+20 RAMBUF TLISTE
+TLISTE VARIABLE TLISTENZEIGER
+: TLISTY 
+  TLISTENZEIGER @ TLISTE BEGIN 
+    DUP @ CR DUP M. 3 M- 2@ SWAP TYPE 
+    1+ 2DUP = UNTIL 2DROP ;
 
+0 VARIABLE REMOPFA
+0 VARIABLE STATMERK
+0 VARIABLE EXXIUHR
+: EXXI
+  ( UHRL @ >R
+  STAT @ STATMERK ! 0 STAT ! ( eigentlich >R )
+  TLISTE
+  BEGIN DUP TLISTENZEIGER @ LT WHILE
+    DUP >R @ EXECUTE R> 1+ REPEAT DROP
+  STATMERK @ STAT ! 
+  ( UHRL @ R> M- EXXIUHR ! 
+  ;
+
+( EXXI in KEY einbauen
+04 ' EXXI MLIT ' KEY ! ( KEY war vorher : KEY BEGIN NOOP ... REPEAT ;
+
+: ENTFERNE 
+  20 WORD FIND LCFA DROP 1+
+  ( DUP 0= IF 3 ERROR END_IF )
+  0 REMOPFA !
+  TLISTENZEIGER @ TLISTE > IF
+    TLISTENZEIGER @ TLISTE DO
+      DUP I @ = IF
+        1 REMOPFA !
+        -1 TLISTENZEIGER +!
+        END_IF
+      REMOPFA @ IF
+        I 1+ @ I !
+        END_IF
+      LOOP END_IF
+  REMOPFA !
+  ;
+  
+: BEFESTIGE ENTFERNE
+  REMOPFA @ TLISTENZEIGER @ !
+  1 TLISTENZEIGER +! 
+  ;
+
+0 VARIABLE EMAIL_DA
+: ZUCK EMAIL_DA @ 2D04 ! ;
+BEFESTIGE ZUCK
+
+( -1 EMAIL_DA !
+( 0 EMAIL_DA !
 
