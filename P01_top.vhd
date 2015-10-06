@@ -48,6 +48,18 @@ component FortyForthProcessor
     KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0);
     KEY_ANGEKOMMEN: out STD_LOGIC;
 
+    -- LINKS --
+    LINKS_ABGESCHICKT: in STD_LOGIC;
+    LINKS_DAT:  in STD_LOGIC_VECTOR (15 downto 0);
+    LINKS_ADR: out STD_LOGIC_VECTOR (15 downto 0);
+    LINKS_ANGEKOMMEN: out STD_LOGIC;
+    
+    -- RECHTS --
+    RECHTS_ABGESCHICKT: out STD_LOGIC;
+    RECHTS_DAT: out STD_LOGIC_VECTOR (15 downto 0);
+    RECHTS_ADR:  in STD_LOGIC_VECTOR (15 downto 0);
+    RECHTS_ANGEKOMMEN: in STD_LOGIC;
+    
     -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     PD_SIM: out STD_LOGIC_VECTOR (15 downto 0);
@@ -61,6 +73,8 @@ component FortyForthProcessor
 
 signal WE      : STD_LOGIC;
 signal ADR,DAT : STD_LOGIC_VECTOR (15 downto 0);
+
+signal L0_ABGESCHICKT,R0_ANGEKOMMEN: STD_LOGIC;
 
 begin
   -- component instantiation
@@ -82,7 +96,18 @@ DUT0: FortyForthProcessor
     KEY_BYTE => KEY_BYTE,
     KEY_ANGEKOMMEN => KEY_ANGEKOMMEN,
 
-
+    -- LINKS --
+    LINKS_ABGESCHICKT => L0_ABGESCHICKT,
+    LINKS_DAT => x"0000",
+    LINKS_ADR => open,
+    LINKS_ANGEKOMMEN => R0_ANGEKOMMEN,
+    
+    -- RECHTS --
+    RECHTS_ABGESCHICKT => L0_ABGESCHICKT,
+    RECHTS_DAT => open,
+    RECHTS_ADR => x"0000",
+    RECHTS_ANGEKOMMEN => R0_ANGEKOMMEN,
+    
     -- nur fuer Simulation
     PC_SIM => PC_SIM,
     PD_SIM => PD_SIM,

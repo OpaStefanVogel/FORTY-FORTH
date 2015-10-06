@@ -16,11 +16,23 @@ entity FortyForthProcessor is
     EMIT_BYTE: out STD_LOGIC_VECTOR (7 downto 0);
     EMIT_ANGEKOMMEN: in STD_LOGIC;
     
-     -- EMIT --
+    -- KEY --
     KEY_ABGESCHICKT: in STD_LOGIC;
     KEY_BYTE: in STD_LOGIC_VECTOR (7 downto 0);
     KEY_ANGEKOMMEN: out STD_LOGIC;
 
+    -- LINKS --
+    LINKS_ABGESCHICKT: in STD_LOGIC;
+    LINKS_DAT:  in STD_LOGIC_VECTOR (15 downto 0);
+    LINKS_ADR: out STD_LOGIC_VECTOR (15 downto 0);
+    LINKS_ANGEKOMMEN: out STD_LOGIC;
+    
+    -- RECHTS --
+    RECHTS_ABGESCHICKT: out STD_LOGIC;
+    RECHTS_DAT: out STD_LOGIC_VECTOR (15 downto 0);
+    RECHTS_ADR:  in STD_LOGIC_VECTOR (15 downto 0);
+    RECHTS_ANGEKOMMEN: in STD_LOGIC;
+    
    -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     PD_SIM: out STD_LOGIC_VECTOR (15 downto 0);
@@ -541,6 +553,8 @@ signal WE_ZUM_RAM,WE_ZUM_ProgRAM,WE_ZUM_ByteRAM,WE_ZUM_stapR: STD_LOGIC;
 signal EMIT_ABGESCHICKT_LOCAL,EMIT_ANGEKOMMEN_RUHEND,XOFF_INPUT_L: STD_LOGIC:='0';
 signal KEY_ANGEKOMMEN_LOCAL,KEY_ABGESCHICKT_RUHEND,KEY_ABGESCHICKT_MERK: STD_LOGIC:='0';
 signal KEY_BYTE_RUHEND: STD_LOGIC_VECTOR (7 downto 0);
+-- fuer LINKS-RECHTS-OBEN-UNTEN
+signal LINKS_ABGESCHICKT_RUHEND,RECHTS_ANGEKOMMEN_RUHEND: STD_LOGIC:='0';
 
 
 begin
@@ -549,6 +563,8 @@ process begin wait until (CLK_I'event and CLK_I='1'); --ruhende Eingangsdaten f√
   EMIT_ANGEKOMMEN_RUHEND<=EMIT_ANGEKOMMEN;
   KEY_BYTE_RUHEND<=KEY_BYTE;
   KEY_ABGESCHICKT_RUHEND<=KEY_ABGESCHICKT;
+  LINKS_ABGESCHICKT_RUHEND<=LINKS_ABGESCHICKT;
+  RECHTS_ANGEKOMMEN_RUHEND<=RECHTS_ANGEKOMMEN;
   end process;
   
 
@@ -649,6 +665,8 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
         when x"2801" => SP:=CONV_INTEGER(B);
         when x"2802" => RP<=B;
         when x"2803" => PC:=B;
+        when x"2804" => RECHTS_ABGESCHICKT<=B(1);
+        when x"2805" => LINKS_ANGEKOMMEN<=B(1);
         when others => ADR:=A;DAT:=B;WE:='1' ;
         end case;
       T:=0;
@@ -659,6 +677,8 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
         when x"2801" => A:=CONV_STD_LOGIC_VECTOR(SP-1,16);
         when x"2802" => A:=RP;
         when x"2803" => A:=PC;
+        when x"2804" => A:="000000000000000"&LINKS_ABGESCHICKT_RUHEND;
+        when x"2805" => A:="000000000000000"&RECHTS_ANGEKOMMEN_RUHEND;
         when others => A:=EXFET;
         end case;
       T:=1;
