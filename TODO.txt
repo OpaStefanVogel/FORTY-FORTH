@@ -191,15 +191,19 @@ ab 201510:
     ok XY-PROC mit behelfsmäßigem ABSCHICKEN
     ok ABSCHICKEN ist jetzt auch soweit erstmal ok
     ok als nächstes dann die empfangenen Bytes auswerten ok AUSLES geht auch durch
-  .. dann die neuen RAMB hinzu
+  OK dann die neuen RAMB hinzu
     ok S3 ist wieder am impact, nach Beschreibung "Linux-Eingaben" hat es auf Anhieb funktioniert!!!
     ok die neuen PORTS sind auch angeschlossen und Adressen 2804,2805
     ok der erste RAMB RECHTS läuft jeppp!!!
     ok genauso auch RAMB UNTEN, läuft auch
     ok und 2 Fehler noch raus, B(0) statt B(1) und LINKS-MERK zusätzlich
-  ok dann TESTFUERNEUES entsprechend anpassen die Adressen
-    ok cp TESTFUERNEUES.txt /dev/ttyAMA0 geht, desalb gleich alles in INIT.txt und #(8) perfekt ok 
-  .. und auch in XSIM simulieren
+  ok dann TESTFUERNEUES.txt entsprechend anpassen die Adressen
+    ok cp TESTFUERNEUES.txt /dev/ttyAMA0 geht, deshalb gleich alles in INIT.txt und #(8) perfekt ok 
+  OK und auch in XSIM simulieren
+    ok für XSIM zuerst noch paar Variablen auf Anfangswerte '0' anstatt 'U' setzen
+    ok dann der neue Input 0 0 XY-PROC
+    ok und bei der Gelegenheit auch noch ein test_input_file.txt
+
 .. Vergleiche = < > mit in die +-*/ Tabelle
 
 
