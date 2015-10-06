@@ -60,6 +60,18 @@ component FortyForthProcessor
     RECHTS_ADR:  in STD_LOGIC_VECTOR (15 downto 0);
     RECHTS_ANGEKOMMEN: in STD_LOGIC;
     
+    -- OBEN --
+    OBEN_ABGESCHICKT: in STD_LOGIC;
+    OBEN_DAT:  in STD_LOGIC_VECTOR (15 downto 0);
+    OBEN_ADR: out STD_LOGIC_VECTOR (15 downto 0);
+    OBEN_ANGEKOMMEN: out STD_LOGIC;
+    
+    -- UNTEN --
+    UNTEN_ABGESCHICKT: out STD_LOGIC;
+    UNTEN_DAT: out STD_LOGIC_VECTOR (15 downto 0);
+    UNTEN_ADR:  in STD_LOGIC_VECTOR (15 downto 0);
+    UNTEN_ANGEKOMMEN: in STD_LOGIC;
+    
     -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     PD_SIM: out STD_LOGIC_VECTOR (15 downto 0);
@@ -76,6 +88,8 @@ signal ADR,DAT : STD_LOGIC_VECTOR (15 downto 0);
 
 signal L0_ABGESCHICKT,R0_ANGEKOMMEN: STD_LOGIC;
 signal L0_ADR,R0_DAT: STD_LOGIC_VECTOR (15 downto 0);
+signal O0_ABGESCHICKT,U0_ANGEKOMMEN: STD_LOGIC;
+signal O0_ADR,U0_DAT: STD_LOGIC_VECTOR (15 downto 0);
 
 begin
   -- component instantiation
@@ -108,6 +122,18 @@ DUT0: FortyForthProcessor
     RECHTS_DAT => R0_DAT,
     RECHTS_ADR => L0_ADR,
     RECHTS_ANGEKOMMEN => R0_ANGEKOMMEN,
+    
+    -- OBEN --
+    OBEN_ABGESCHICKT => O0_ABGESCHICKT,
+    OBEN_DAT => U0_DAT,
+    OBEN_ADR => O0_ADR,
+    OBEN_ANGEKOMMEN => U0_ANGEKOMMEN,
+    
+    -- UNTEN --
+    UNTEN_ABGESCHICKT => O0_ABGESCHICKT,
+    UNTEN_DAT => U0_DAT,
+    UNTEN_ADR => O0_ADR,
+    UNTEN_ANGEKOMMEN => U0_ANGEKOMMEN,
     
     -- nur fuer Simulation
     PC_SIM => PC_SIM,

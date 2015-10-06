@@ -33,6 +33,18 @@ entity FortyForthProcessor is
     RECHTS_ADR:  in STD_LOGIC_VECTOR (15 downto 0);
     RECHTS_ANGEKOMMEN: in STD_LOGIC;
     
+    -- OBEN --
+    OBEN_ABGESCHICKT: in STD_LOGIC;
+    OBEN_DAT:  in STD_LOGIC_VECTOR (15 downto 0);
+    OBEN_ADR: out STD_LOGIC_VECTOR (15 downto 0);
+    OBEN_ANGEKOMMEN: out STD_LOGIC;
+    
+    -- UNTEN --
+    UNTEN_ABGESCHICKT: out STD_LOGIC;
+    UNTEN_DAT: out STD_LOGIC_VECTOR (15 downto 0);
+    UNTEN_ADR:  in STD_LOGIC_VECTOR (15 downto 0);
+    UNTEN_ANGEKOMMEN: in STD_LOGIC;
+    
    -- nur zur Simulation und Fehlersuche:
     PC_SIM: out STD_LOGIC_VECTOR (15 downto 0);
     PD_SIM: out STD_LOGIC_VECTOR (15 downto 0);
@@ -532,6 +544,7 @@ shared variable stapR: stapRAMTYPE:=(
 -- RECHTS,UNTEN
 type RUTYPE is array(0 to 1024-1) of STD_LOGIC_VECTOR (15 downto 0);
 shared variable RechtsRAM: RUTYPE:=(others=>x"0000");
+shared variable UntenRAM: RUTYPE:=(others=>x"0000");
 
 --diese Funktion √ºbernimmt von SP nur die beiden niedrigsten Bits
   function P(SP : integer) return integer is begin
@@ -560,6 +573,8 @@ signal KEY_BYTE_RUHEND: STD_LOGIC_VECTOR (7 downto 0);
 -- fuer LINKS-RECHTS-OBEN-UNTEN
 signal LINKS_ABGESCHICKT_RUHEND,RECHTS_ANGEKOMMEN_RUHEND: STD_LOGIC:='0';
 signal WE_ZUM_RechtsRAM: STD_LOGIC:='0';
+signal OBEN_ABGESCHICKT_RUHEND,UNTEN_ANGEKOMMEN_RUHEND: STD_LOGIC:='0';
+signal WE_ZUM_UntenRAM: STD_LOGIC:='0';
 
 
 begin
@@ -570,6 +585,8 @@ process begin wait until (CLK_I'event and CLK_I='1'); --ruhende Eingangsdaten f√
   KEY_ABGESCHICKT_RUHEND<=KEY_ABGESCHICKT;
   LINKS_ABGESCHICKT_RUHEND<=LINKS_ABGESCHICKT;
   RECHTS_ANGEKOMMEN_RUHEND<=RECHTS_ANGEKOMMEN;
+  OBEN_ABGESCHICKT_RUHEND<=OBEN_ABGESCHICKT;
+  UNTEN_ANGEKOMMEN_RUHEND<=UNTEN_ANGEKOMMEN;
   end process;
   
 
@@ -672,6 +689,8 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
         when x"2803" => PC:=B;
         when x"2804" => RECHTS_ABGESCHICKT<=B(1);
         when x"2805" => LINKS_ANGEKOMMEN<=B(1);
+        when x"2806" => UNTEN_ABGESCHICKT<=B(1);
+        when x"2807" => OBEN_ANGEKOMMEN<=B(1);
         when others => ADR:=A;DAT:=B;WE:='1' ;
         end case;
       T:=0;
@@ -684,6 +703,8 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
         when x"2803" => A:=PC;
         when x"2804" => A:="000000000000000"&LINKS_ABGESCHICKT_RUHEND;
         when x"2805" => A:="000000000000000"&RECHTS_ANGEKOMMEN_RUHEND;
+        when x"2806" => A:="000000000000000"&OBEN_ABGESCHICKT_RUHEND;
+        when x"2807" => A:="000000000000000"&UNTEN_ANGEKOMMEN_RUHEND;
         when others => A:=EXFET;
         end case;
       T:=1;
@@ -763,19 +784,22 @@ WE_O<=WE_ZUM_RAM;
 EMIT_ABGESCHICKT<=EMIT_ABGESCHICKT_LOCAL;
 KEY_ANGEKOMMEN<=KEY_ANGEKOMMEN_LOCAL;
 LINKS_ADR<=ADRESSE_ZUM_RAM;
+OBEN_ADR<=ADRESSE_ZUM_RAM;
 
 -- hier werden die Lesedaten der unterschiedlichen Speicher zusammengefuehrt
 EXFET<=FETCH_VOM_ProgRAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else
        FETCH_VOM_stapR when ADRESSE_ZUM_RAM(15 downto 10)="001011" else
        LINKS_DAT when ADRESSE_ZUM_RAM(15 downto 10)="001000" else
+       OBEN_DAT when ADRESSE_ZUM_RAM(15 downto 10)="001001" else
        x"00"&FETCH_VOM_ByteRAM(7 downto 0) when ADRESSE_ZUM_RAM(15 downto 12)="0011" else
        DAT_I;
 
 -- hier wird WE auf die unterschiedlichen Speicher aufgeteilt
 WE_ZUM_ProgRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else '0';
+WE_ZUM_RechtsRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001000" else '0';
+WE_ZUM_UntenRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001001" else '0';
 WE_ZUM_stapR  <=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001011" else '0';
 WE_ZUM_ByteRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 12)="0011" else '0';
-WE_ZUM_RechtsRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001000" else '0';
 
 
 process -- Programmspeicher 0000H-1FFFH,
@@ -849,7 +873,7 @@ process begin wait until (CLK_I'event and CLK_I='1');
     end if;
   end process;
 
-process --RechtsRAM
+process --RechtsRAM --DUAL-PORT
 begin wait until (CLK_I'event and CLK_I='1');
   if WE_ZUM_RechtsRAM='1' then 
     RechtsRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0))):=STORE_ZUM_RAM; 
@@ -862,6 +886,22 @@ process begin wait until (CLK_I'event and CLK_I='1');
     --RPCC<=RPC;
      else
       RECHTS_DAT<=RechtsRAM(CONV_INTEGER(RECHTS_ADR(9 downto 0)));
+    end if;
+  end process;
+
+process --UntenRAM --DUAL-PORT
+begin wait until (CLK_I'event and CLK_I='1');
+  if WE_ZUM_UntenRAM='1' then 
+    UntenRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0))):=STORE_ZUM_RAM; 
+    end if;
+  --FETCH_VOM_stapR<=stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0)));
+  end process;
+process begin wait until (CLK_I'event and CLK_I='1');
+  if false then
+    --stapR(CONV_INTEGER(RP(9 downto 0))):=RPC;
+    --RPCC<=RPC;
+     else
+      UNTEN_DAT<=UntenRAM(CONV_INTEGER(UNTEN_ADR(9 downto 0)));
     end if;
   end process;
 
