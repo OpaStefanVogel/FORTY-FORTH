@@ -197,7 +197,8 @@ ab 201510:
     ok der erste RAMB RECHTS läuft jeppp!!!
     ok genauso auch RAMB UNTEN, läuft auch
     ok und 2 Fehler noch raus, B(0) statt B(1) und LINKS-MERK zusätzlich
-  .. dann TESTFUERNEUES entsprechend anpassen die Adressen
+  ok dann TESTFUERNEUES entsprechend anpassen die Adressen
+    cp TESTFUERNEUES.txt /dev/ttyAMA0 geht, desalb gleich alles in INIT.txt und #(8)
   .. dann auf dem Spartan 1 RAMB so verknüpfen und damit 0 0 BIN-ICH testen
   .. wenn geht 1x Durchcompileren mit den neuen EXXI-Worten
   .. und auch in XSIM simulieren
@@ -222,7 +223,7 @@ cp FFINIT1NEU.txt /dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 cp FFINIT2NEU.txt /dev/ttyAMA0 # für Step_11
 
-#wenn alles ok, dann neues screenlog.xml: FFINIT1NEU und FFINIT2NEU in INIT.xml packen,
+#(8)wenn alles ok, dann neues screenlog.xml: FFINIT1NEU und FFINIT2NEU in INIT.xml packen,
 echo '-1 XBIT !' >/dev/ttyAMA0
 rm ../../../screenlog.0
 #screenlog starten ^AH
@@ -230,6 +231,7 @@ cp INIT.xml /dev/ttyAMA0
 #screenlog anhalten ^AH
 echo '0 XBIT !' >/dev/ttyAMA0
 #dann screenlog.0 nach screenlog.xml kopieren
+cp ../../../screenlog.0 screenlog.xml
 #dann commit
 #dann erst neues P20_FFP.vhd, dort auch SHA von screenlog.xml einsetzen
 #und mit Vivado und Spartan3 testen

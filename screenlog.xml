@@ -69,7 +69,7 @@ COMPILE: (CONSTANT:) R> @ STAT @ IF LIT, END_IF ; <ok></ok><fl>0065 301C </fl><f
 2F16 CONSTANT DUBIT <ok></ok><fl>00FB 30B9 </fl><fr>0100 30BF </fr>
 2F17 CONSTANT LOCALADRESSE <ok></ok><fl>0100 30BF </fl><fr>0105 30CC </fr>
  <ok></ok>
-VERSION 1+ CONSTANT VERSION VERSION M. <ok>01C9 </ok><fl>0105 30CC </fl><fr>010A 30D4 </fr>
+VERSION 1+ CONSTANT VERSION VERSION M. <ok>01CA </ok><fl>0105 30CC </fl><fr>010A 30D4 </fr>
 </sekt> 
  <ok></ok>
 <sekt inhalt="Maschinencode"> 
@@ -500,7 +500,7 @@ HERE 0 0 DUMPZ          ( generiert ProgRAM für P20_FFP.vhd Step_10 ) <ok>
   x"0003",x"4069",x"2F0D",x"FFFB",x"308F",x"0007",x"4069",x"2F0E",x"FFFB",x"3097",x"0002",x"4069",x"2F0F",x"FFFB",x"309A",x"0004", -- 00D0-00DF
   x"4069",x"2F10",x"FFFB",x"309F",x"0003",x"4069",x"2F11",x"FFFB",x"30A3",x"0004",x"4069",x"2F12",x"FFFB",x"30A8",x"0005",x"4069", -- 00E0-00EF
   x"2F13",x"FFFB",x"30AE",x"0006",x"4069",x"2F14",x"FFFB",x"30B5",x"0003",x"4069",x"2F15",x"FFFB",x"30B9",x"0005",x"4069",x"2F16", -- 00F0-00FF
-  x"FFFB",x"30BF",x"000C",x"4069",x"2F17",x"FFFB",x"30CC",x"0007",x"4069",x"01C9",x"FFFB",x"30D4",x"0006",x"4781",x"000A",x"0003", -- 0100-010F
+  x"FFFB",x"30BF",x"000C",x"4069",x"2F17",x"FFFB",x"30CC",x"0007",x"4069",x"01CA",x"FFFB",x"30D4",x"0006",x"4781",x"000A",x"0003", -- 0100-010F
   x"4047",x"A003",x"FFF8",x"30DB",x"0008",x"477A",x"42CF",x"2F10",x"A00A",x"9003",x"A00A",x"4300",x"8001",x"430B",x"A003",x"FFF3", -- 0110-011F
   x"30E4",x"0005",x"4781",x"46B1",x"4115",x"4300",x"410E",x"4300",x"476B",x"A003",x"FFF5",x"30EA",x"0005",x"4116",x"A000",x"A003", -- 0120-012F
   x"FFFA",x"30F0",x"0002",x"4116",x"A001",x"A003",x"FFFA",x"30F3",x"0002",x"4116",x"A002",x"A003",x"FFFA",x"30F6",x"0002",x"4116", -- 0130-013F
@@ -1885,7 +1885,7 @@ BZEIG M? <ok>36DD </ok>
  <ok></ok>
 ( aktuelle Stapelhoehe ) <ok></ok>
  <ok></ok>
-SP M? <ok>00C6 </ok>
+SP M? <ok>002E </ok>
  <ok></ok>
 ( Ein neues Wort definieren ) <ok></ok>
  <ok></ok>
@@ -1982,11 +1982,219 @@ DECIMAL DUP . <ok>4294967296 </ok>
 HEX DUP . <ok>100000000 </ok>
 </sekt> 
  <ok></ok>
-<sekt inhalt="in den Zustand für Step_11 bringen und wieder RAM generieren"> 
-REPLACE: NUMBER NNUMBER ; <ok></ok><fl>116E 36E4 </fl><fr>1170 36E4 </fr>
+<sekt inhalt="Multiproc."> 
+REPLACE: NUMBER NNUMBER ; ( kann auch weiter hoch... <ok></ok><fl>116E 36E4 </fl><fr>1170 36E4 </fr>
 : ? @ . ; <ok></ok><fl>1170 36E4 </fl><fr>1177 36E6 </fr>
  <ok></ok>
-( jetzt rechnen auch + - * / mit großen ganzen Zahlen,  <ok></ok>
+( EXXI reaktivieren, muss dann aus den "nicht mehr verwendeten" noch raus... <ok></ok>
+: 2@ ( adr --> a b ) <ok></ok><fl>1177 36E6 </fl><fr>117B 36E9 </fr>
+  DUP 1+ @ SWAP @ ; <ok></ok><fl>117B 36E9 </fl><fr>1181 36E9 </fr>
+: 2! ( a b adr --> ) <ok></ok><fl>1181 36E9 </fl><fr>1185 36EC </fr>
+  SWAP OVER ! 1+ ! ; <ok></ok><fl>1185 36EC </fl><fr>118B 36EC </fr>
+: 2? 2@ B. ; <ok></ok><fl>118B 36EC </fl><fr>1192 36EF </fr>
+ <ok></ok>
+XBIT VARIABLE RAMP3 ( RAMP3 TIB RAMP1 <ok></ok><fl>1192 36EF </fl><fr>1197 36F5 </fr>
+: RAMBUF ( /name/  n --> ) <ok></ok><fl>1197 36F5 </fl><fr>119B 36FC </fr>
+  MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her ) <ok></ok><fl>119B 36FC </fl><fr>11A2 36FC </fr>
+ <ok></ok>
+20 RAMBUF TLISTE <ok></ok><fl>11A2 36FC </fl><fr>11A7 3703 </fr>
+TLISTE VARIABLE TLISTENZEIGER <ok></ok><fl>11A7 3703 </fl><fr>11AC 3711 </fr>
+: TLISTY  <ok></ok><fl>11AC 3711 </fl><fr>11B0 3718 </fr>
+  TLISTE BEGIN TLISTENZEIGER @ OVER > WHILE  <ok></ok><fl>11B0 3718 </fl><fr>11B6 3718 </fr>
+    DUP @ CR DUP M. 3 M- 2@ SWAP TYPE  <ok></ok><fl>11B6 3718 </fl><fr>11C0 3718 </fr>
+    1+ REPEAT DROP ; <ok></ok><fl>11C0 3718 </fl><fr>11C4 3718 </fr>
+ <ok></ok>
+0 VARIABLE REMOPFA <ok></ok><fl>11C4 3718 </fl><fr>11C9 3720 </fr>
+0 VARIABLE STATMERK <ok></ok><fl>11C9 3720 </fl><fr>11CE 3729 </fr>
+0 VARIABLE EXXIUHR <ok></ok><fl>11CE 3729 </fl><fr>11D3 3731 </fr>
+: EXXI <ok></ok><fl>11D3 3731 </fl><fr>11D7 3736 </fr>
+  ( UHRL @ >R <ok></ok><fl>11D7 3736 </fl><fr>11D7 3736 </fr>
+  STAT @ STATMERK ! 0 STAT ! ( eigentlich >R ) <ok></ok><fl>11D7 3736 </fl><fr>11DE 3736 </fr>
+  TLISTE <ok></ok><fl>11DE 3736 </fl><fr>11DF 3736 </fr>
+  BEGIN DUP TLISTENZEIGER @ LT WHILE <ok></ok><fl>11DF 3736 </fl><fr>11E4 3736 </fr>
+    DUP >R @ EXECUTE R> 1+ REPEAT DROP <ok></ok><fl>11E4 3736 </fl><fr>11EC 3736 </fr>
+  STATMERK @ STAT !  <ok></ok><fl>11EC 3736 </fl><fr>11F0 3736 </fr>
+  ( UHRL @ R> M- EXXIUHR !  <ok></ok><fl>11F0 3736 </fl><fr>11F0 3736 </fr>
+  ; <ok></ok><fl>11F0 3736 </fl><fr>11F1 3736 </fr>
+ <ok></ok>
+( EXXI in KEY einbauen <ok></ok>
+04 ' EXXI MLIT ' KEY ! ( KEY war vorher : KEY BEGIN NOOP ... REPEAT ; <ok></ok>
+ <ok></ok>
+: ENTFERNE  <ok></ok><fl>11F1 3736 </fl><fr>11F5 373F </fr>
+  20 WORD FIND LCFA DROP 1+ <ok></ok><fl>11F5 373F </fl><fr>11FB 373F </fr>
+  ( DUP 0= IF 3 ERROR END_IF ) <ok></ok><fl>11FB 373F </fl><fr>11FB 373F </fr>
+  0 REMOPFA ! <ok></ok><fl>11FB 373F </fl><fr>11FE 373F </fr>
+  TLISTE BEGIN TLISTENZEIGER @ OVER > WHILE <ok></ok><fl>11FE 373F </fl><fr>1204 373F </fr>
+    2DUP @ = IF <ok></ok><fl>1204 373F </fl><fr>1208 373F </fr>
+      1 REMOPFA ! <ok></ok><fl>1208 373F </fl><fr>120B 373F </fr>
+      -1 TLISTENZEIGER +! <ok></ok><fl>120B 373F </fl><fr>120E 373F </fr>
+      END_IF <ok></ok><fl>120E 373F </fl><fr>120E 373F </fr>
+    REMOPFA @ IF <ok></ok><fl>120E 373F </fl><fr>1211 373F </fr>
+      DUP 1+ @ OVER ! <ok></ok><fl>1211 373F </fl><fr>1216 373F </fr>
+      END_IF <ok></ok><fl>1216 373F </fl><fr>1216 373F </fr>
+    1+ REPEAT DROP <ok></ok><fl>1216 373F </fl><fr>1219 373F </fr>
+  REMOPFA ! <ok></ok><fl>1219 373F </fl><fr>121B 373F </fr>
+  ; <ok></ok><fl>121B 373F </fl><fr>121C 373F </fr>
+   <ok></ok>
+: BEFESTIGE ENTFERNE <ok></ok><fl>121C 373F </fl><fr>1221 3749 </fr>
+  REMOPFA @ TLISTENZEIGER @ ! <ok></ok><fl>1221 3749 </fl><fr>1226 3749 </fr>
+  1 TLISTENZEIGER +!  <ok></ok><fl>1226 3749 </fl><fr>1229 3749 </fr>
+  ; <ok></ok><fl>1229 3749 </fl><fr>122A 3749 </fr>
+ <ok></ok>
+( zum Ausprobieren: <ok></ok>
+( 0 VARIABLE EMAIL_DA <ok></ok>
+( : ZUCK EMAIL_DA @ 2D04 ! ; <ok></ok>
+( <ok></ok>
+( BEFESTIGE ZUCK TLISTY <ok></ok>
+( -1 EMAIL_DA ! <ok></ok>
+( 0 EMAIL_DA ! <ok></ok>
+( ENTFERNE ZUCK <ok></ok>
+ <ok></ok>
+ <ok></ok>
+1800 ERGEBNIS ! <ok></ok>
+ <ok></ok>
+ <ok></ok>
+( jetzt los mit LINKS-RECHTS-OBEN-UNTEN <ok></ok>
+1FF0 10 0 FILL <ok></ok>
+2804 CONSTANT LINKS-ABGESCHICKT <ok></ok><fl>122A 3749 </fl><fr>122F 375B </fr>
+2804 CONSTANT RECHTS-ABGESCHICKT <ok></ok><fl>122F 375B </fl><fr>1234 376E </fr>
+2805 CONSTANT LINKS-ANGEKOMMEN <ok></ok><fl>1234 376E </fl><fr>1239 377F </fr>
+2805 CONSTANT RECHTS-ANGEKOMMEN <ok></ok><fl>1239 377F </fl><fr>123E 3791 </fr>
+2806 CONSTANT OBEN-ABGESCHICKT <ok></ok><fl>123E 3791 </fl><fr>1243 37A2 </fr>
+2806 CONSTANT UNTEN-ABGESCHICKT <ok></ok><fl>1243 37A2 </fl><fr>1248 37B4 </fr>
+2807 CONSTANT OBEN-ANGEKOMMEN <ok></ok><fl>1248 37B4 </fl><fr>124D 37C4 </fr>
+2807 CONSTANT UNTEN-ANGEKOMMEN <ok></ok><fl>124D 37C4 </fl><fr>1252 37D5 </fr>
+2000 CONSTANT RECHTS-BYTES <ok></ok><fl>1252 37D5 </fl><fr>1257 37E2 </fr>
+2400 CONSTANT UNTEN-BYTES <ok></ok><fl>1257 37E2 </fl><fr>125C 37EE </fr>
+2000 CONSTANT LINKS-BYTES <ok></ok><fl>125C 37EE </fl><fr>1261 37FA </fr>
+2400 CONSTANT OBEN-BYTES <ok></ok><fl>1261 37FA </fl><fr>1266 3805 </fr>
+-1 VARIABLE IAM1X <ok></ok><fl>1266 3805 </fl><fr>126B 380B </fr>
+-1 VARIABLE IAM1Y <ok></ok><fl>126B 380B </fl><fr>1270 3811 </fr>
+ <ok></ok>
+-1 VARIABLE IAM2X <ok></ok><fl>1270 3811 </fl><fr>1275 3817 </fr>
+-1 VARIABLE IAM2Y <ok></ok><fl>1275 3817 </fl><fr>127A 381D </fr>
+0 VARIABLE LINKS-MERK <ok></ok><fl>127A 381D </fl><fr>127F 3828 </fr>
+0 VARIABLE OBEN-MERK <ok></ok><fl>127F 3828 </fl><fr>1284 3832 </fr>
+0 VARIABLE RECHTS-MERK <ok></ok><fl>1284 3832 </fl><fr>1289 383E </fr>
+0 VARIABLE UNTEN-MERK <ok></ok><fl>1289 383E </fl><fr>128E 3849 </fr>
+ <ok></ok>
+: ABSCHICKEN ( x y n op adr --> ) <ok></ok><fl>128E 3849 </fl><fr>1292 3854 </fr>
+  CR ." abgeschickt nach " . ." mit " 2DROP SWAP . . ; <ok></ok><fl>1292 3854 </fl><fr>129F 386B </fr>
+: R-ABSCHICKEN ( x y n op --> ) <ok></ok><fl>129F 386B </fl><fr>12A3 3878 </fr>
+  BEGIN RECHTS-ANGEKOMMEN @ RECHTS-MERK @ = UNTIL <ok></ok><fl>12A3 3878 </fl><fr>12A9 3878 </fr>
+  RECHTS-BYTES @ <ok></ok><fl>12A9 3878 </fl><fr>12AB 3878 </fr>
+  SWAP OVER ! 1+ SWAP >R SWAP >R <ok></ok><fl>12AB 3878 </fl><fr>12B3 3878 </fr>
+  SWAP OVER ! 1+ R> OVER ! 1+ R> SWAP ! <ok></ok><fl>12B3 3878 </fl><fr>12BE 3878 </fr>
+  RECHTS-ANGEKOMMEN @ NOT 1 AND RECHTS-MERK ! <ok></ok><fl>12BE 3878 </fl><fr>12C5 3878 </fr>
+  RECHTS-ANGEKOMMEN @ NOT RECHTS-ABGESCHICKT ! <ok></ok><fl>12C5 3878 </fl><fr>12CA 3878 </fr>
+  CR ." r-abgeschickt" <ok></ok><fl>12CA 3878 </fl><fr>12CE 3886 </fr>
+  ; <ok></ok><fl>12CE 3886 </fl><fr>12CF 3886 </fr>
+: U-ABSCHICKEN ( x y n op --> ) <ok></ok><fl>12CF 3886 </fl><fr>12D3 3893 </fr>
+  BEGIN UNTEN-ANGEKOMMEN @ UNTEN-MERK @ = UNTIL <ok></ok><fl>12D3 3893 </fl><fr>12D9 3893 </fr>
+  UNTEN-BYTES @ <ok></ok><fl>12D9 3893 </fl><fr>12DB 3893 </fr>
+  SWAP OVER ! 1+ SWAP >R SWAP >R <ok></ok><fl>12DB 3893 </fl><fr>12E3 3893 </fr>
+  SWAP OVER ! 1+ R> OVER ! 1+ R> SWAP ! <ok></ok><fl>12E3 3893 </fl><fr>12EE 3893 </fr>
+  UNTEN-ANGEKOMMEN @ NOT 1 AND UNTEN-MERK ! <ok></ok><fl>12EE 3893 </fl><fr>12F5 3893 </fr>
+  UNTEN-ANGEKOMMEN @ NOT UNTEN-ABGESCHICKT ! <ok></ok><fl>12F5 3893 </fl><fr>12FA 3893 </fr>
+  CR ." u-abgeschickt" <ok></ok><fl>12FA 3893 </fl><fr>12FE 38A1 </fr>
+  ; <ok></ok><fl>12FE 38A1 </fl><fr>12FF 38A1 </fr>
+ <ok></ok>
+( 1 2 0 0 R-ABSCHICKEN <ok></ok>
+( RECHTS-BYTES 8 DUMP RECHTS-ABGESCHICKT ? RECHTS-ANGEKOMMEN ? <ok></ok>
+( RECHTS-ANGEKOMMEN @ RECHTS-ABGESCHICKT ! <ok></ok>
+( 5 6 1 9 U-ABSCHICKEN <ok></ok>
+( UNTEN-BYTES 8 DUMP UNTEN-ABGESCHICKT ? UNTEN-ANGEKOMMEN ? <ok></ok>
+( UNTEN-ANGEKOMMEN @ UNTEN-ABGESCHICKT ! <ok></ok>
+ <ok></ok>
+: XY-PROC ( x y --> ) <ok></ok><fl>12FF 38A1 </fl><fr>1303 38A9 </fr>
+  CR ." XY " OVER . DUP . <ok></ok><fl>1303 38A9 </fl><fr>130B 38AD </fr>
+  OVER IAM2X @ LT OVER IAM2Y @ LT AND IF -1 IAM1X ! -1 IAM1Y ! -1 IAM2X ! -1 IAM2Y ! END_IF <ok></ok><fl>130B 38AD </fl><fr>1321 38AD </fr>
+  OVER IAM1X @ = NOT IAM2X @ -1 = AND IF  <ok></ok><fl>1321 38AD </fl><fr>132C 38AD </fr>
+    IAM1X @ -1 = IF OVER IAM1X ! ELSE OVER IAM2X ! END_IF <ok></ok><fl>132C 38AD </fl><fr>1338 38AD </fr>
+    CR IAM1X ? IAM1Y ? IAM2X ? IAM2Y ? <ok></ok><fl>1338 38AD </fl><fr>1341 38AD </fr>
+    2DUP 0 0 U-ABSCHICKEN <ok></ok><fl>1341 38AD </fl><fr>1345 38AD </fr>
+    END_IF <ok></ok><fl>1345 38AD </fl><fr>1345 38AD </fr>
+  DUP IAM1Y @ = NOT IAM2Y @ -1 = AND IF  <ok></ok><fl>1345 38AD </fl><fr>1350 38AD </fr>
+    IAM1Y @ -1 = IF DUP IAM1Y ! ELSE DUP IAM2Y ! END_IF <ok></ok><fl>1350 38AD </fl><fr>135C 38AD </fr>
+    CR IAM1X ? IAM1Y ? IAM2X ? IAM2Y ? <ok></ok><fl>135C 38AD </fl><fr>1365 38AD </fr>
+    2DUP 0 0 R-ABSCHICKEN <ok></ok><fl>1365 38AD </fl><fr>1369 38AD </fr>
+    END_IF <ok></ok><fl>1369 38AD </fl><fr>1369 38AD </fr>
+  2DROP ; <ok></ok><fl>1369 38AD </fl><fr>136B 38AD </fr>
+ <ok></ok>
+( -1 IAM1X ! -1 IAM1Y ! -1 IAM2X ! -1 IAM2Y !  <ok></ok>
+( OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+( 0 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+( 0 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+( 0 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+( 0 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+( 5 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+( 5 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+( 0 3 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+( 0 3 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+( 5 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+( 5 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+( 0 3 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+( 0 3 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+( 0A 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+ <ok></ok>
+ <ok></ok>
+( empfangene Bytes jetzt auswerten <ok></ok>
+ <ok></ok>
+: L-AUSLES <ok></ok><fl>136B 38AD </fl><fr>136F 38B6 </fr>
+  LINKS-MERK @ LINKS-ABGESCHICKT @ = NOT IF <ok></ok><fl>136F 38B6 </fl><fr>1376 38B6 </fr>
+    LINKS-BYTES @ 0= IF  <ok></ok><fl>1376 38B6 </fl><fr>137A 38B6 </fr>
+      LINKS-BYTES @ 1+ DUP @ SWAP 1+ @ 1+  <ok></ok><fl>137A 38B6 </fl><fr>1383 38B6 </fr>
+      LINKS-ABGESCHICKT @ LINKS-MERK ! <ok></ok><fl>1383 38B6 </fl><fr>1387 38B6 </fr>
+      LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok><fl>1387 38B6 </fl><fr>138B 38B6 </fr>
+      XY-PROC END_IF <ok></ok><fl>138B 38B6 </fl><fr>138C 38B6 </fr>
+    END_IF <ok></ok><fl>138C 38B6 </fl><fr>138C 38B6 </fr>
+  ; <ok></ok><fl>138C 38B6 </fl><fr>138D 38B6 </fr>
+ <ok></ok>
+: O-AUSLES <ok></ok><fl>138D 38B6 </fl><fr>1391 38BF </fr>
+  OBEN-MERK @ OBEN-ABGESCHICKT @ = NOT IF <ok></ok><fl>1391 38BF </fl><fr>1398 38BF </fr>
+    OBEN-BYTES @ 0= IF  <ok></ok><fl>1398 38BF </fl><fr>139C 38BF </fr>
+      OBEN-BYTES @ 1+ DUP @ 1+ SWAP 1+ @  <ok></ok><fl>139C 38BF </fl><fr>13A5 38BF </fr>
+      OBEN-ABGESCHICKT @ OBEN-MERK ! <ok></ok><fl>13A5 38BF </fl><fr>13A9 38BF </fr>
+      OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! <ok></ok><fl>13A9 38BF </fl><fr>13AD 38BF </fr>
+      XY-PROC END_IF <ok></ok><fl>13AD 38BF </fl><fr>13AE 38BF </fr>
+    END_IF <ok></ok><fl>13AE 38BF </fl><fr>13AE 38BF </fr>
+  ; <ok></ok><fl>13AE 38BF </fl><fr>13AF 38BF </fr>
+ <ok></ok>
+( -1 IAM1X ! -1 IAM1Y ! -1 IAM2X ! -1 IAM2Y !  <ok></ok>
+( OBEN-ABGESCHICKT @ OBEN-MERK !  <ok></ok>
+( OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !  <ok></ok>
+( LINKS-ABGESCHICKT @ LINKS-MERK ! <ok></ok>
+( LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN ! <ok></ok>
+( UNTEN-ANGEKOMMEN @ UNTEN-MERK !  <ok></ok>
+( RECHTS-ANGEKOMMEN @ RECHTS-MERK ! <ok></ok>
+( LINKS-ABGESCHICKT ? LINKS-MERK ? OBEN-ABGESCHICKT ? OBEN-MERK ? RECHTS-ANGEKOMMEN ? RECHTS-MERK ? UNTEN-ANGEKOMMEN ? UNTEN-MERK ? <ok></ok>
+( 0 0 XY-PROC <ok></ok>
+( LINKS-ABGESCHICKT ? LINKS-ANGEKOMMEN ? <ok></ok>
+( L-AUSLES <ok></ok>
+( LINKS-ABGESCHICKT ? LINKS-ANGEKOMMEN ? <ok></ok>
+( L-AUSLES <ok></ok>
+( LINKS-ABGESCHICKT ? LINKS-ANGEKOMMEN ? <ok></ok>
+( L-AUSLES <ok></ok>
+( LINKS-ABGESCHICKT ? LINKS-ANGEKOMMEN ? <ok></ok>
+  <ok></ok>
+( OBEN-ABGESCHICKT ? OBEN-ANGEKOMMEN ? <ok></ok>
+( O-AUSLES <ok></ok>
+( OBEN-ABGESCHICKT ? OBEN-ANGEKOMMEN ? <ok></ok>
+( O-AUSLES <ok></ok>
+( OBEN-ABGESCHICKT ? OBEN-ANGEKOMMEN ? <ok></ok>
+( O-AUSLES <ok></ok>
+( OBEN-ABGESCHICKT ? OBEN-ANGEKOMMEN ? <ok></ok>
+ <ok></ok>
+ <ok></ok>
+BEFESTIGE L-AUSLES <ok></ok>
+BEFESTIGE O-AUSLES <ok></ok>
+ <ok></ok>
+( 0 0 XY-PROC  <ok></ok>
+( IAM1X ? IAM1Y ? IAM2X ? IAM2Y ? <ok></ok>
+</sekt> 
+ <ok></ok>
+<sekt inhalt="in den Zustand für Step_12 bringen und wieder RAM generieren"> 
+ <ok></ok>
 ( allerdings beim Compilieren von großen ganzen Zahlen im Moment noch 1234 ERROR <ok></ok>
  <ok></ok>
  <ok></ok>
@@ -2012,7 +2220,7 @@ HERE 0 0 DUMPZ           ( generiert progRAM für P20_FFP.vhd Step_11 <ok>
   x"0003",x"4069",x"2F0D",x"FFFB",x"308F",x"0007",x"4069",x"2F0E",x"FFFB",x"3097",x"0002",x"4069",x"2F0F",x"FFFB",x"309A",x"0004", -- 00D0-00DF
   x"4069",x"2F10",x"FFFB",x"309F",x"0003",x"4069",x"2F11",x"FFFB",x"30A3",x"0004",x"4069",x"2F12",x"FFFB",x"30A8",x"0005",x"4069", -- 00E0-00EF
   x"2F13",x"FFFB",x"30AE",x"0006",x"4069",x"2F14",x"FFFB",x"30B5",x"0003",x"4069",x"2F15",x"FFFB",x"30B9",x"0005",x"4069",x"2F16", -- 00F0-00FF
-  x"FFFB",x"30BF",x"000C",x"4069",x"2F17",x"FFFB",x"30CC",x"0007",x"4069",x"01C9",x"FFFB",x"30D4",x"0006",x"4781",x"000A",x"0003", -- 0100-010F
+  x"FFFB",x"30BF",x"000C",x"4069",x"2F17",x"FFFB",x"30CC",x"0007",x"4069",x"01CA",x"FFFB",x"30D4",x"0006",x"4781",x"000A",x"0003", -- 0100-010F
   x"4047",x"A003",x"FFF8",x"30DB",x"0008",x"477A",x"42CF",x"2F10",x"A00A",x"9003",x"A00A",x"4300",x"8001",x"430B",x"A003",x"FFF3", -- 0110-011F
   x"30E4",x"0005",x"4781",x"46B1",x"4115",x"4300",x"410E",x"4300",x"476B",x"A003",x"FFF5",x"30EA",x"0005",x"4116",x"A000",x"A003", -- 0120-012F
   x"FFFA",x"30F0",x"0002",x"4116",x"A001",x"A003",x"FFFA",x"30F3",x"0002",x"4116",x"A002",x"A003",x"FFFA",x"30F6",x"0002",x"4116", -- 0130-013F
@@ -2045,7 +2253,7 @@ HERE 0 0 DUMPZ           ( generiert progRAM für P20_FFP.vhd Step_11 <ok>
   x"0002",x"4781",x"2802",x"A00A",x"B501",x"428D",x"2802",x"B603",x"A00A",x"A00A",x"B412",x"B501",x"428D",x"2802",x"A009",x"A009", -- 02E0-02EF
   x"A009",x"A009",x"A003",x"FFEB",x"31ED",x"0001",x"4781",x"2802",x"A00A",x"4286",x"A00A",x"A003",x"FFF7",x"31EF",x"0001",x"4781", -- 02F0-02FF
   x"2F0F",x"A00A",x"A009",x"0001",x"2F0F",x"42C4",x"A003",x"FFF5",x"31F1",x"0007",x"4781",x"2803",x"A009",x"A003",x"FFF9",x"31F9", -- 0300-030F
-  x"0003",x"4781",x"8000",x"44AC",x"A00B",x"9002",x"B300",x"8FFA",x"A003",x"FFF5",x"31FD",x"0004",x"4781",x"014C",x"430B",x"A003", -- 0310-031F
+  x"0003",x"4781",x"51D7",x"44AC",x"A00B",x"9002",x"B300",x"8FFA",x"A003",x"FFF5",x"31FD",x"0004",x"4781",x"014C",x"430B",x"A003", -- 0310-031F
   x"FFF9",x"3202",x"0005",x"4781",x"0000",x"B412",x"0010",x"A002",x"B412",x"A003",x"FFF6",x"3208",x"0003",x"4781",x"B501",x"000A", -- 0320-032F
   x"42A2",x"9001",x"8002",x"0007",x"A007",x"0030",x"A007",x"A003",x"FFF2",x"320C",x"0004",x"4781",x"B501",x"9008",x"B412",x"B501", -- 0330-033F
   x"427A",x"431D",x"4286",x"B412",x"428D",x"8FF6",x"B200",x"A003",x"FFF0",x"3211",x"0003",x"4781",x"4324",x"432E",x"431D",x"4324", -- 0340-034F
@@ -2275,7 +2483,42 @@ HERE 0 0 DUMPZ           ( generiert progRAM für P20_FFP.vhd Step_11 <ok>
   x"36B9",x"0005",x"4781",x"2F09",x"A00A",x"0100",x"44D2",x"A003",x"FFF7",x"36BF",x"0007",x"4773",x"003C",x"431D",x"36C7",x"0004", -- 1140-114F
   x"41F5",x"436D",x"5143",x"36CC",x"0007",x"41EF",x"462A",x"9FF9",x"003C",x"431D",x"36D4",x"0003",x"41F5",x"A003",x"FFEA",x"36D8", -- 1150-115F
   x"0003",x"4781",x"0010",x"2F08",x"A009",x"A003",x"FFF8",x"36DC",x"0007",x"4781",x"000A",x"2F08",x"A009",x"A003",x"4CF5",x"A003", -- 1160-116F
-  x"FFF6",x"36E4",x"0001",x"4781",x"A00A",x"4ECB",x"A003",x"41F5",x"36FE",x"000C",x"41F5",x"A003",x"FFEF",x"370B",x"0001",x"4781", -- 1170-117F
+  x"FFF6",x"36E4",x"0001",x"4781",x"A00A",x"4ECB",x"A003",x"FFF9",x"36E6",x"0002",x"4781",x"B501",x"4286",x"A00A",x"B412",x"A00A", -- 1170-117F
+  x"A003",x"FFF6",x"36E9",x"0002",x"4781",x"B412",x"B502",x"A009",x"4286",x"A009",x"A003",x"FFF6",x"36EC",x"0002",x"4781",x"517B", -- 1180-118F
+  x"4EEA",x"A003",x"FFF9",x"36EF",x"0005",x"4069",x"2F2A",x"FFFB",x"36F5",x"0006",x"4781",x"A000",x"2F2A",x"42C4",x"2F2A",x"A00A", -- 1190-119F
+  x"4074",x"A003",x"FFF5",x"36FC",x"0006",x"4069",x"2EE0",x"FFFB",x"3703",x"000D",x"4069",x"2F2B",x"FFFB",x"3711",x"0006",x"4781", -- 11A0-11AF
+  x"2EE0",x"2F2B",x"A00A",x"B502",x"42A9",x"900C",x"B501",x"A00A",x"436D",x"B501",x"435E",x"0003",x"4294",x"517B",x"B412",x"433C", -- 11B0-11BF
+  x"4286",x"8FEF",x"B300",x"A003",x"FFE8",x"3718",x"0007",x"4069",x"2F2C",x"FFFB",x"3720",x"0008",x"4069",x"2F2D",x"FFFB",x"3729", -- 11C0-11CF
+  x"0007",x"4069",x"2F2E",x"FFFB",x"3731",x"0004",x"4781",x"2F10",x"A00A",x"2F2D",x"A009",x"0000",x"2F10",x"A009",x"2EE0",x"B501", -- 11D0-11DF
+  x"2F2B",x"A00A",x"42A2",x"9007",x"B501",x"42E2",x"A00A",x"430B",x"42CF",x"4286",x"8FF4",x"B300",x"2F2D",x"A00A",x"2F10",x"A009", -- 11E0-11EF
+  x"A003",x"FFE2",x"3736",x"0008",x"4781",x"0020",x"45E4",x"465E",x"469E",x"B300",x"4286",x"0000",x"2F2C",x"A009",x"2EE0",x"2F2B", -- 11F0-11FF
+  x"A00A",x"B502",x"42A9",x"9014",x"B603",x"A00A",x"429B",x"9006",x"0001",x"2F2C",x"A009",x"FFFF",x"2F2B",x"42C4",x"2F2C",x"A00A", -- 1200-120F
+  x"9005",x"B501",x"4286",x"A00A",x"B502",x"A009",x"4286",x"8FE7",x"B300",x"2F2C",x"A009",x"A003",x"FFD5",x"373F",x"0009",x"4781", -- 1210-121F
+  x"51F5",x"2F2C",x"A00A",x"2F2B",x"A00A",x"A009",x"0001",x"2F2B",x"42C4",x"A003",x"FFF2",x"3749",x"0011",x"4069",x"2804",x"FFFB", -- 1220-122F
+  x"375B",x"0012",x"4069",x"2804",x"FFFB",x"376E",x"0010",x"4069",x"2805",x"FFFB",x"377F",x"0011",x"4069",x"2805",x"FFFB",x"3791", -- 1230-123F
+  x"0010",x"4069",x"2806",x"FFFB",x"37A2",x"0011",x"4069",x"2806",x"FFFB",x"37B4",x"000F",x"4069",x"2807",x"FFFB",x"37C4",x"0010", -- 1240-124F
+  x"4069",x"2807",x"FFFB",x"37D5",x"000C",x"4069",x"2000",x"FFFB",x"37E2",x"000B",x"4069",x"2400",x"FFFB",x"37EE",x"000B",x"4069", -- 1250-125F
+  x"2000",x"FFFB",x"37FA",x"000A",x"4069",x"2400",x"FFFB",x"3805",x"0005",x"4069",x"2F2F",x"FFFB",x"380B",x"0005",x"4069",x"2F30", -- 1260-126F
+  x"FFFB",x"3811",x"0005",x"4069",x"2F31",x"FFFB",x"3817",x"0005",x"4069",x"2F32",x"FFFB",x"381D",x"000A",x"4069",x"2F33",x"FFFB", -- 1270-127F
+  x"3828",x"0009",x"4069",x"2F34",x"FFFB",x"3832",x"000B",x"4069",x"2F35",x"FFFB",x"383E",x"000A",x"4069",x"2F36",x"FFFB",x"3849", -- 1280-128F
+  x"000A",x"4781",x"436D",x"3854",x"0011",x"41F5",x"4ECB",x"3866",x"0004",x"41F5",x"B200",x"B412",x"4ECB",x"4ECB",x"A003",x"FFEF", -- 1290-129F
+  x"386B",x"000C",x"4781",x"2805",x"A00A",x"2F35",x"A00A",x"429B",x"9FFA",x"2000",x"A00A",x"B412",x"B502",x"A009",x"4286",x"B412", -- 12A0-12AF
+  x"42E2",x"B412",x"42E2",x"B412",x"B502",x"A009",x"4286",x"42CF",x"B502",x"A009",x"4286",x"42CF",x"B412",x"A009",x"2805",x"A00A", -- 12B0-12BF
+  x"A00B",x"0001",x"A008",x"2F35",x"A009",x"2805",x"A00A",x"A00B",x"2804",x"A009",x"436D",x"3878",x"000D",x"41F5",x"A003",x"FFD0", -- 12C0-12CF
+  x"3886",x"000C",x"4781",x"2807",x"A00A",x"2F36",x"A00A",x"429B",x"9FFA",x"2400",x"A00A",x"B412",x"B502",x"A009",x"4286",x"B412", -- 12D0-12DF
+  x"42E2",x"B412",x"42E2",x"B412",x"B502",x"A009",x"4286",x"42CF",x"B502",x"A009",x"4286",x"42CF",x"B412",x"A009",x"2807",x"A00A", -- 12E0-12EF
+  x"A00B",x"0001",x"A008",x"2F36",x"A009",x"2807",x"A00A",x"A00B",x"2806",x"A009",x"436D",x"3893",x"000D",x"41F5",x"A003",x"FFD0", -- 12F0-12FF
+  x"38A1",x"0007",x"4781",x"436D",x"38A9",x"0003",x"41F5",x"B502",x"4ECB",x"B501",x"4ECB",x"B502",x"2F31",x"A00A",x"42A2",x"B502", -- 1300-130F
+  x"2F32",x"A00A",x"42A2",x"A008",x"900C",x"FFFF",x"2F2F",x"A009",x"FFFF",x"2F30",x"A009",x"FFFF",x"2F31",x"A009",x"FFFF",x"2F32", -- 1310-131F
+  x"A009",x"B502",x"2F2F",x"A00A",x"429B",x"A00B",x"2F31",x"A00A",x"FFFF",x"429B",x"A008",x"9019",x"2F2F",x"A00A",x"FFFF",x"429B", -- 1320-132F
+  x"9004",x"B502",x"2F2F",x"A009",x"8003",x"B502",x"2F31",x"A009",x"436D",x"2F2F",x"5174",x"2F30",x"5174",x"2F31",x"5174",x"2F32", -- 1330-133F
+  x"5174",x"B603",x"0000",x"0000",x"52D3",x"B501",x"2F30",x"A00A",x"429B",x"A00B",x"2F32",x"A00A",x"FFFF",x"429B",x"A008",x"9019", -- 1340-134F
+  x"2F30",x"A00A",x"FFFF",x"429B",x"9004",x"B501",x"2F30",x"A009",x"8003",x"B501",x"2F32",x"A009",x"436D",x"2F2F",x"5174",x"2F30", -- 1350-135F
+  x"5174",x"2F31",x"5174",x"2F32",x"5174",x"B603",x"0000",x"0000",x"52A3",x"B200",x"A003",x"FF94",x"38AD",x"0008",x"4781",x"2F33", -- 1360-136F
+  x"A00A",x"2804",x"A00A",x"429B",x"A00B",x"9016",x"2000",x"A00A",x"A00D",x"9012",x"2000",x"A00A",x"4286",x"B501",x"A00A",x"B412", -- 1370-137F
+  x"4286",x"A00A",x"4286",x"2804",x"A00A",x"2F33",x"A009",x"2804",x"A00A",x"2805",x"A009",x"5303",x"A003",x"FFDE",x"38B6",x"0008", -- 1380-138F
+  x"4781",x"2F34",x"A00A",x"2806",x"A00A",x"429B",x"A00B",x"9016",x"2400",x"A00A",x"A00D",x"9012",x"2400",x"A00A",x"4286",x"B501", -- 1390-139F
+  x"A00A",x"4286",x"B412",x"4286",x"A00A",x"2806",x"A00A",x"2F34",x"A009",x"2806",x"A00A",x"2807",x"A009",x"5303",x"A003",x"0000", -- 13A0-13AF
 </DUMPZ></ok>
 BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM für P20_FFP.vhd Step_11 <ok>
 <DUMPZ>
@@ -2389,7 +2632,36 @@ BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM für P20_FFP.vhd Step_11 <ok>
   x"69",x"6C",x"65",x"3A",x"20",x"20",x"6F",x"6B",x"20",x"51",x"55",x"45",x"52",x"59",x"20",x"28", -- 36B0-36BF
   x"2A",x"52",x"45",x"4D",x"2A",x"29",x"20",x"2F",x"6F",x"6B",x"3E",x"20",x"28",x"2A",x"45",x"4E", -- 36C0-36CF
   x"44",x"2A",x"29",x"20",x"6F",x"6B",x"3E",x"20",x"48",x"45",x"58",x"20",x"44",x"45",x"43",x"49", -- 36D0-36DF
-  x"4D",x"41",x"4C",x"20",x"3F",x"20",x"65",x"6C",x"74",x"20",x"20",x"57",x"20",x"44",x"61",x"73", -- 36E0-36EF
+  x"4D",x"41",x"4C",x"20",x"3F",x"20",x"32",x"40",x"20",x"32",x"21",x"20",x"32",x"3F",x"20",x"52", -- 36E0-36EF
+  x"41",x"4D",x"50",x"33",x"20",x"52",x"41",x"4D",x"42",x"55",x"46",x"20",x"54",x"4C",x"49",x"53", -- 36F0-36FF
+  x"54",x"45",x"20",x"54",x"4C",x"49",x"53",x"54",x"45",x"4E",x"5A",x"45",x"49",x"47",x"45",x"52", -- 3700-370F
+  x"20",x"54",x"4C",x"49",x"53",x"54",x"59",x"20",x"52",x"45",x"4D",x"4F",x"50",x"46",x"41",x"20", -- 3710-371F
+  x"53",x"54",x"41",x"54",x"4D",x"45",x"52",x"4B",x"20",x"45",x"58",x"58",x"49",x"55",x"48",x"52", -- 3720-372F
+  x"20",x"45",x"58",x"58",x"49",x"20",x"45",x"4E",x"54",x"46",x"45",x"52",x"4E",x"45",x"20",x"42", -- 3730-373F
+  x"45",x"46",x"45",x"53",x"54",x"49",x"47",x"45",x"20",x"4C",x"49",x"4E",x"4B",x"53",x"2D",x"41", -- 3740-374F
+  x"42",x"47",x"45",x"53",x"43",x"48",x"49",x"43",x"4B",x"54",x"20",x"52",x"45",x"43",x"48",x"54", -- 3750-375F
+  x"53",x"2D",x"41",x"42",x"47",x"45",x"53",x"43",x"48",x"49",x"43",x"4B",x"54",x"20",x"4C",x"49", -- 3760-376F
+  x"4E",x"4B",x"53",x"2D",x"41",x"4E",x"47",x"45",x"4B",x"4F",x"4D",x"4D",x"45",x"4E",x"20",x"52", -- 3770-377F
+  x"45",x"43",x"48",x"54",x"53",x"2D",x"41",x"4E",x"47",x"45",x"4B",x"4F",x"4D",x"4D",x"45",x"4E", -- 3780-378F
+  x"20",x"4F",x"42",x"45",x"4E",x"2D",x"41",x"42",x"47",x"45",x"53",x"43",x"48",x"49",x"43",x"4B", -- 3790-379F
+  x"54",x"20",x"55",x"4E",x"54",x"45",x"4E",x"2D",x"41",x"42",x"47",x"45",x"53",x"43",x"48",x"49", -- 37A0-37AF
+  x"43",x"4B",x"54",x"20",x"4F",x"42",x"45",x"4E",x"2D",x"41",x"4E",x"47",x"45",x"4B",x"4F",x"4D", -- 37B0-37BF
+  x"4D",x"45",x"4E",x"20",x"55",x"4E",x"54",x"45",x"4E",x"2D",x"41",x"4E",x"47",x"45",x"4B",x"4F", -- 37C0-37CF
+  x"4D",x"4D",x"45",x"4E",x"20",x"52",x"45",x"43",x"48",x"54",x"53",x"2D",x"42",x"59",x"54",x"45", -- 37D0-37DF
+  x"53",x"20",x"55",x"4E",x"54",x"45",x"4E",x"2D",x"42",x"59",x"54",x"45",x"53",x"20",x"4C",x"49", -- 37E0-37EF
+  x"4E",x"4B",x"53",x"2D",x"42",x"59",x"54",x"45",x"53",x"20",x"4F",x"42",x"45",x"4E",x"2D",x"42", -- 37F0-37FF
+  x"59",x"54",x"45",x"53",x"20",x"49",x"41",x"4D",x"31",x"58",x"20",x"49",x"41",x"4D",x"31",x"59", -- 3800-380F
+  x"20",x"49",x"41",x"4D",x"32",x"58",x"20",x"49",x"41",x"4D",x"32",x"59",x"20",x"4C",x"49",x"4E", -- 3810-381F
+  x"4B",x"53",x"2D",x"4D",x"45",x"52",x"4B",x"20",x"4F",x"42",x"45",x"4E",x"2D",x"4D",x"45",x"52", -- 3820-382F
+  x"4B",x"20",x"52",x"45",x"43",x"48",x"54",x"53",x"2D",x"4D",x"45",x"52",x"4B",x"20",x"55",x"4E", -- 3830-383F
+  x"54",x"45",x"4E",x"2D",x"4D",x"45",x"52",x"4B",x"20",x"41",x"42",x"53",x"43",x"48",x"49",x"43", -- 3840-384F
+  x"4B",x"45",x"4E",x"20",x"61",x"62",x"67",x"65",x"73",x"63",x"68",x"69",x"63",x"6B",x"74",x"20", -- 3850-385F
+  x"6E",x"61",x"63",x"68",x"20",x"20",x"6D",x"69",x"74",x"20",x"20",x"52",x"2D",x"41",x"42",x"53", -- 3860-386F
+  x"43",x"48",x"49",x"43",x"4B",x"45",x"4E",x"20",x"72",x"2D",x"61",x"62",x"67",x"65",x"73",x"63", -- 3870-387F
+  x"68",x"69",x"63",x"6B",x"74",x"20",x"55",x"2D",x"41",x"42",x"53",x"43",x"48",x"49",x"43",x"4B", -- 3880-388F
+  x"45",x"4E",x"20",x"75",x"2D",x"61",x"62",x"67",x"65",x"73",x"63",x"68",x"69",x"63",x"6B",x"74", -- 3890-389F
+  x"20",x"58",x"59",x"2D",x"50",x"52",x"4F",x"43",x"20",x"58",x"59",x"20",x"20",x"4C",x"2D",x"41", -- 38A0-38AF
+  x"55",x"53",x"4C",x"45",x"53",x"20",x"4F",x"2D",x"41",x"55",x"53",x"4C",x"45",x"53",x"20",x"00", -- 38B0-38BF
 </DUMPZ></ok>
 3000 2C00 0 DUMPZ        ( generiert stapR   für P20_FFP.vhd Step_11 <ok>
 <DUMPZ>
@@ -2439,12 +2711,12 @@ BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM für P20_FFP.vhd Step_11 <ok>
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2EB0-2EBF
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2EC0-2ECF
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2ED0-2EDF
-  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0008", -- 2EE0-2EEF
+  x"136F",x"1391",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0008", -- 2EE0-2EEF
   x"0008",x"0000",x"0001",x"2F22",x"0000",x"0001",x"2F23",x"1406",x"0008",x"3B0A",x"0001",x"0001",x"3B45",x"00BB",x"0001",x"FFFF", -- 2EF0-2EFF
-  x"0000",x"0000",x"3000",x"3FAE",x"3FAE",x"FFFF",x"36E6",x"1177",x"0010",x"3B00",x"3B00",x"3B0C",x"3B12",x"3B45",x"0000",x"1177", -- 2F00-2F0F
-  x"0000",x"1170",x"3000",x"36E6",x"0020",x"00C8",x"0000",x"2F00",x"0000",x"1133",x"0000",x"0000",x"0000",x"0000",x"1128",x"111E", -- 2F10-2F1F
-  x"2F2A",x"0000",x"0000",x"1400",x"1400",x"2000",x"0001",x"1400",x"1400",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F20-2F2F
-  x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F30-2F3F
+  x"0000",x"0000",x"3000",x"3E52",x"3E52",x"FFFF",x"38BF",x"13AF",x"0010",x"3B00",x"3B00",x"3B0C",x"3B12",x"3B45",x"0000",x"13AF", -- 2F00-2F0F
+  x"0000",x"138D",x"3000",x"38BF",x"0020",x"0030",x"0000",x"2F00",x"0000",x"1133",x"0000",x"0000",x"0000",x"0000",x"1128",x"111E", -- 2F10-2F1F
+  x"2F37",x"0000",x"0000",x"1400",x"1400",x"2000",x"0001",x"1400",x"1400",x"0000",x"2EE0",x"2EE2",x"1391",x"0000",x"0000",x"FFFF", -- 2F20-2F2F
+  x"FFFF",x"FFFF",x"FFFF",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F30-2F3F
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F40-2F4F
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F50-2F5F
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2F60-2F6F
@@ -2483,5 +2755,6 @@ DUP . <ok>288 </ok>
 (        [ -48 72 -48 12 ] ] ok     ) <ok></ok>
 ( und gemeinsamer Nenner: DUP . 288 ) <ok></ok>
 </sekt> 
+ <ok></ok>
 </FFINIT2> 
 </INIT> 
