@@ -97,20 +97,10 @@ begin
   variable I: integer:=1;
   variable c: STD_LOGIC_VECTOR ( 7 downto 0 ) ;
   constant Enter:string(1 to 1) := "" & character'val(10) ;
-  constant DEMO: string(1 to 139) := 
-    "56 89 * ." & Enter &
-    "111111111111111 DUP * . " & Enter & 
-    "DECIMAL" & Enter & 
-    "56 89 * ." & Enter & 
-    "[" & Enter & 
-    "[ 1 1 1 1 ]" & Enter & 
-    "[ 2 4 8 16 ]" & Enter & 
-    "[ 3 9 27 81 ]" & Enter & 
-    "[ 4 16 64 256 ]" & Enter & 
-    "]" & Enter & 
-    "4 INVERTIEREN" & Enter & 
-    "OVER ." & Enter & 
-    "DUP ." & Enter ;
+  constant DEMO: string(1 to 44) := 
+    "0 0 XY-PROC" & Enter &
+    "IAM1X ? IAM1Y ? IAM2X ? IAM2Y ?" & Enter
+     ;
 
   begin
     wait for 30000 ns;
