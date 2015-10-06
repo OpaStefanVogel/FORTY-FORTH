@@ -25,10 +25,10 @@ entity FortyForthProcessor is
     LINKS_ABGESCHICKT: in STD_LOGIC;
     LINKS_DAT:  in STD_LOGIC_VECTOR (15 downto 0);
     LINKS_ADR: out STD_LOGIC_VECTOR (15 downto 0);
-    LINKS_ANGEKOMMEN: out STD_LOGIC;
+    LINKS_ANGEKOMMEN: out STD_LOGIC:='0';
     
     -- RECHTS --
-    RECHTS_ABGESCHICKT: out STD_LOGIC;
+    RECHTS_ABGESCHICKT: out STD_LOGIC:='0';
     RECHTS_DAT: out STD_LOGIC_VECTOR (15 downto 0);
     RECHTS_ADR:  in STD_LOGIC_VECTOR (15 downto 0);
     RECHTS_ANGEKOMMEN: in STD_LOGIC;
@@ -37,10 +37,10 @@ entity FortyForthProcessor is
     OBEN_ABGESCHICKT: in STD_LOGIC;
     OBEN_DAT:  in STD_LOGIC_VECTOR (15 downto 0);
     OBEN_ADR: out STD_LOGIC_VECTOR (15 downto 0);
-    OBEN_ANGEKOMMEN: out STD_LOGIC;
+    OBEN_ANGEKOMMEN: out STD_LOGIC:='0';
     
     -- UNTEN --
-    UNTEN_ABGESCHICKT: out STD_LOGIC;
+    UNTEN_ABGESCHICKT: out STD_LOGIC:='0';
     UNTEN_DAT: out STD_LOGIC_VECTOR (15 downto 0);
     UNTEN_ADR:  in STD_LOGIC_VECTOR (15 downto 0);
     UNTEN_ANGEKOMMEN: in STD_LOGIC;
