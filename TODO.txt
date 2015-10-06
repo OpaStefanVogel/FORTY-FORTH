@@ -187,10 +187,17 @@ ab 201510:
 .. dann die memory-collision irgendwie umgehen
 .. jetzt geht Step_12 los:
   ok erstmal EXXI wieder reaktivieren, etwas geändert (direkt in KEY, ohne LOOP)
-  .. grob erstmal paar EXXI-Worte
+  ok grob erstmal paar EXXI-Worte
     ok XY-PROC mit behelfsmäßigem ABSCHICKEN
     ok ABSCHICKEN ist jetzt auch soweit erstmal ok
-    .. als nächstes dann die empfangenen Bytes auswerten
+    ok als nächstes dann die empfangenen Bytes auswerten ok AUSLES geht auch durch
+  .. dann die neuen RAMB hinzu
+    ok S3 ist wieder am impact, nach Beschreibung "Linux-Eingaben" hat es auf Anhieb funktioniert!!!
+    ok die neuen PORTS sind auch angeschlossen und Adressen 2804,2805
+    ok der erste RAMB RECHTS läuft jeppp!!!
+    ok genauso auch RAMB UNTEN, läuft auch
+    ok und 2 Fehler noch raus, B(0) statt B(1) und LINKS-MERK zusätzlich
+  .. dann TESTFUERNEUES entsprechend anpassen die Adressen
   .. dann auf dem Spartan 1 RAMB so verknüpfen und damit 0 0 BIN-ICH testen
   .. wenn geht 1x Durchcompileren mit den neuen EXXI-Worten
   .. und auch in XSIM simulieren
