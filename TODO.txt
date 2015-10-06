@@ -198,9 +198,7 @@ ab 201510:
     ok genauso auch RAMB UNTEN, läuft auch
     ok und 2 Fehler noch raus, B(0) statt B(1) und LINKS-MERK zusätzlich
   ok dann TESTFUERNEUES entsprechend anpassen die Adressen
-    cp TESTFUERNEUES.txt /dev/ttyAMA0 geht, desalb gleich alles in INIT.txt und #(8)
-  .. dann auf dem Spartan 1 RAMB so verknüpfen und damit 0 0 BIN-ICH testen
-  .. wenn geht 1x Durchcompileren mit den neuen EXXI-Worten
+    ok cp TESTFUERNEUES.txt /dev/ttyAMA0 geht, desalb gleich alles in INIT.txt und #(8) perfekt ok 
   .. und auch in XSIM simulieren
 .. Vergleiche = < > mit in die +-*/ Tabelle
 
@@ -209,7 +207,7 @@ ab 201510:
 
 Spartan3 ist momentan programmiert auf 
   1180 8 DUMP 6EC3 BF57 659F 52A3 CF07 F694 EB89 00E0
-  .mcs: ????
+  13B0 8 DUMP EF1A 385E 927D C9D0 15AF 1205 2FB8 6E55 8F10 5425  .mcs: 6b81bfb0be499781a56608cb775a6646edf76657
 solange S3 nicht weiter programmiert ist, ein Skript zur Erstellung von ... aus ..:
 ###!!! wenn es ab hier losgehen soll wegen neuer AXIOME, dann zuerst RESET drücken auf dem Spartan3
 ###!!! ebenso wenn Reset gedrückt auf dem Spartan3, dann muss es hier losgehen:
