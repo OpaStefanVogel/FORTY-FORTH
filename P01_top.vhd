@@ -75,6 +75,7 @@ signal WE      : STD_LOGIC;
 signal ADR,DAT : STD_LOGIC_VECTOR (15 downto 0);
 
 signal L0_ABGESCHICKT,R0_ANGEKOMMEN: STD_LOGIC;
+signal L0_ADR,R0_DAT: STD_LOGIC_VECTOR (15 downto 0);
 
 begin
   -- component instantiation
@@ -98,14 +99,14 @@ DUT0: FortyForthProcessor
 
     -- LINKS --
     LINKS_ABGESCHICKT => L0_ABGESCHICKT,
-    LINKS_DAT => x"0000",
-    LINKS_ADR => open,
+    LINKS_DAT => R0_DAT,
+    LINKS_ADR => L0_ADR,
     LINKS_ANGEKOMMEN => R0_ANGEKOMMEN,
     
     -- RECHTS --
     RECHTS_ABGESCHICKT => L0_ABGESCHICKT,
-    RECHTS_DAT => open,
-    RECHTS_ADR => x"0000",
+    RECHTS_DAT => R0_DAT,
+    RECHTS_ADR => L0_ADR,
     RECHTS_ANGEKOMMEN => R0_ANGEKOMMEN,
     
     -- nur fuer Simulation

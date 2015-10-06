@@ -529,6 +529,10 @@ shared variable stapR: stapRAMTYPE:=(
   x"02D6",x"0624",x"02D6",x"02D6",x"031F",x"0345",x"01F6",x"029C",x"0809",x"FFFF",x"06EE",x"3B05",x"3B06",x"3B00",x"3B00",x"0738", -- 2FF0-2FFF
   others=>x"0000");
 
+-- RECHTS,UNTEN
+type RUTYPE is array(0 to 1024-1) of STD_LOGIC_VECTOR (15 downto 0);
+shared variable RechtsRAM: RUTYPE:=(others=>x"0000");
+
 --diese Funktion übernimmt von SP nur die beiden niedrigsten Bits
   function P(SP : integer) return integer is begin
 --    return CONV_INTEGER(CONV_UNSIGNED(SP,2));
@@ -555,6 +559,7 @@ signal KEY_ANGEKOMMEN_LOCAL,KEY_ABGESCHICKT_RUHEND,KEY_ABGESCHICKT_MERK: STD_LOG
 signal KEY_BYTE_RUHEND: STD_LOGIC_VECTOR (7 downto 0);
 -- fuer LINKS-RECHTS-OBEN-UNTEN
 signal LINKS_ABGESCHICKT_RUHEND,RECHTS_ANGEKOMMEN_RUHEND: STD_LOGIC:='0';
+signal WE_ZUM_RechtsRAM: STD_LOGIC:='0';
 
 
 begin
@@ -757,10 +762,12 @@ DAT_O<=STORE_ZUM_RAM;
 WE_O<=WE_ZUM_RAM;
 EMIT_ABGESCHICKT<=EMIT_ABGESCHICKT_LOCAL;
 KEY_ANGEKOMMEN<=KEY_ANGEKOMMEN_LOCAL;
+LINKS_ADR<=ADRESSE_ZUM_RAM;
 
 -- hier werden die Lesedaten der unterschiedlichen Speicher zusammengefuehrt
 EXFET<=FETCH_VOM_ProgRAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else
        FETCH_VOM_stapR when ADRESSE_ZUM_RAM(15 downto 10)="001011" else
+       LINKS_DAT when ADRESSE_ZUM_RAM(15 downto 10)="001000" else
        x"00"&FETCH_VOM_ByteRAM(7 downto 0) when ADRESSE_ZUM_RAM(15 downto 12)="0011" else
        DAT_I;
 
@@ -768,6 +775,7 @@ EXFET<=FETCH_VOM_ProgRAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else
 WE_ZUM_ProgRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else '0';
 WE_ZUM_stapR  <=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001011" else '0';
 WE_ZUM_ByteRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 12)="0011" else '0';
+WE_ZUM_RechtsRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001000" else '0';
 
 
 process -- Programmspeicher 0000H-1FFFH,
@@ -840,5 +848,24 @@ process begin wait until (CLK_I'event and CLK_I='1');
       HOLE_VOM_STAPEL(3)<=stap3(CONV_INTEGER(ADRESSE_ZUM_STAPEL(3)(6 downto 2)));
     end if;
   end process;
+
+process --RechtsRAM
+begin wait until (CLK_I'event and CLK_I='1');
+  if WE_ZUM_RechtsRAM='1' then 
+    RechtsRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0))):=STORE_ZUM_RAM; 
+    end if;
+  --FETCH_VOM_stapR<=stapR(CONV_INTEGER(ADRESSE_ZUM_RAM(9 downto 0)));
+  end process;
+process begin wait until (CLK_I'event and CLK_I='1');
+  if false then
+    --stapR(CONV_INTEGER(RP(9 downto 0))):=RPC;
+    --RPCC<=RPC;
+     else
+      RECHTS_DAT<=RechtsRAM(CONV_INTEGER(RECHTS_ADR(9 downto 0)));
+    end if;
+  end process;
+
+
+
 
 end Step_9;
