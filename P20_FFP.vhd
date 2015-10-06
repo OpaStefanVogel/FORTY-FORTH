@@ -687,10 +687,10 @@ begin wait until (CLK_I'event and CLK_I='0'); PC_SIM<=PC;--Simulation
         when x"2801" => SP:=CONV_INTEGER(B);
         when x"2802" => RP<=B;
         when x"2803" => PC:=B;
-        when x"2804" => RECHTS_ABGESCHICKT<=B(1);
-        when x"2805" => LINKS_ANGEKOMMEN<=B(1);
-        when x"2806" => UNTEN_ABGESCHICKT<=B(1);
-        when x"2807" => OBEN_ANGEKOMMEN<=B(1);
+        when x"2804" => RECHTS_ABGESCHICKT<=B(0);
+        when x"2805" => LINKS_ANGEKOMMEN<=B(0);
+        when x"2806" => UNTEN_ABGESCHICKT<=B(0);
+        when x"2807" => OBEN_ANGEKOMMEN<=B(0);
         when others => ADR:=A;DAT:=B;WE:='1' ;
         end case;
       T:=0;
