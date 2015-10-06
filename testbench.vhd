@@ -92,7 +92,7 @@ begin
   CLK <= not CLK after 10 ns;
   EMIT_ANGEKOMMEN<=EMIT_ABGESCHICKT after 800 ns; -- simuliert Dauer der seriellen Ausgabe
 
---  -- simuliert eine Tastatureingabe
+--  -- simuliert eine Tastatureingabe, jedoch ersetzt durch nächsten process
 --  process
 --  variable I: integer:=1;
 --  variable c: STD_LOGIC_VECTOR ( 7 downto 0 ) ;
@@ -127,7 +127,6 @@ read_input: process -- ersetzt vorhergehenden Ausgabe-process
        char_count := char_count + 1;
        end if;
    end process;
->>>>>>> Step_11
 
 write_output: process -- zusaetzliche Ausgabe von EMIT_BYTE in Datei "test_file.txt"
         type char_file is file of character;
