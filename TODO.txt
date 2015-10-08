@@ -203,9 +203,11 @@ ab 201510:
     ok für XSIM zuerst noch paar Variablen auf Anfangswerte '0' anstatt 'U' setzen
     ok dann der neue Input 0 0 XY-PROC
     ok und bei der Gelegenheit auch noch ein test_input_file.txt
+  ok top.vhd neu verdrahtet auf 2x2 mit ausgiebiger Fehlersuche wieder
 
+.. Step_11 das erste ausgegebene Zeichen vor dem F... ist ein ???
 .. Vergleiche = < > mit in die +-*/ Tabelle
-
+.. Die Korrektur von RECHTS-BYTES @ ... in RECHTS-BYTES @ noch mit durchgängig compilieren
 
 
 
