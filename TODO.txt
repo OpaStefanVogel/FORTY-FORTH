@@ -204,6 +204,8 @@ ab 201510:
     ok dann der neue Input 0 0 XY-PROC
     ok und bei der Gelegenheit auch noch ein test_input_file.txt
   ok top.vhd neu verdrahtet auf 2x2 mit ausgiebiger Fehlersuche wieder
+  ok x+1 und y+1 wird jetzt vorm abschicken gerechnet, dabei auch ERGEBNIS weitergesetzt
+    und alles Neue zurück in FFINIT1.txt und FFINIT2.txt, HERE . 13B0
 
 .. Step_11 das erste ausgegebene Zeichen vor dem F... ist ein ???
 .. Vergleiche = < > mit in die +-*/ Tabelle
@@ -225,7 +227,7 @@ echo '020 DPMERK ! 3000 BANF !' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 ### wenn einmal bis hierher durchgeĺaufen, dann reicht auch ab jetzt
 cp FFINIT1NEU.txt /dev/ttyAMA0
-cp FFINIT2NEU.txt /dev/ttyAMA0 # für Step_11
+cp FFINIT2NEU.txt /dev/ttyAMA0 # für Step_12 jetzt
 
 #(8)wenn alles ok, dann neues screenlog.xml: FFINIT1NEU und FFINIT2NEU in INIT.xml packen,
 echo '-1 XBIT !' >/dev/ttyAMA0

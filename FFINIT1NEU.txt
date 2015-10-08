@@ -21,7 +21,8 @@
 <sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
 ( zuerst alles Notwendige wieder auf Ausgangszustand schalten )
 2 2 M* DUP M* BASE !           ( HEX )
-DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG auf Anfangswerte zurücksetzen )
+DPMERK @ DP ! BANF @ BZEIG !   ( DP und BZEIG auf Anfangswerte zurücksetzen )
+' NOOP @ ' KEY !               ( EXXI ausschalten )
 </sekt>
 
 <sekt inhalt="so, mit irgendwas muss das Compilieren losgehen">
@@ -446,7 +447,7 @@ START
 </sekt>
 </AXIOME>
 
-<FFINIT2>
+<NACH_DEN_AXIOMEN>
 <sekt inhalt="bis Adresse 0800H passt noch DUMPZ drauf (inzwischen nicht mehr)">
 ( erste Forth Erweiterungen )
 ( - DUMPZ )
@@ -467,6 +468,7 @@ START
       2DUP M+
       DUP IRAMADR = IF DROP JRAMADR END_IF
       DUP LOCALADRESSE = IF DROP 2F00 2F80 ! 2F80 END_IF
+      DUP XOFF = IF DROP XBIT END_IF
       @ NG. 1+ DUP 10 =
       UNTIL DROP
     ."  -- " DUP HG. ." -" DUP 0F M+ HG.
@@ -484,3 +486,4 @@ HERE 0 0 DUMPZ          ( generiert ProgRAM für P20_FFP.vhd Step_10 )
 BZEIG @ 3000 -1 DUMPZ   ( generiert ByteRAM für P20_FFP.vhd Step_10 )
 </sekt>
 
+( -------- zwischen diesen beiden Zeilen ist momentan die Aufteilung: hier endet FFINIT1.txt und
