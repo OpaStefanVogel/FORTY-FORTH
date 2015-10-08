@@ -107,8 +107,8 @@ ENTFERNE O-AUSLES
             END_IF
         ELSE ( endlich in x angekommen, jetzt dasselbe noch y )
           OBEN-BYTES 2 + @ 1 - IF ( bei y>0 weiterschicken )
-            OBEN-BYTES 1+ @
-            OBEN-BYTES 2 + @ 1 -
+            OBEN-BYTES 1+ @ 1 -
+            OBEN-BYTES 2 + @
             CR ." nach rechts umlenken mit: " 2DUP B.
             OBEN-BYTES 3 + @
             OBEN-BYTES 5 +
@@ -137,3 +137,39 @@ BEFESTIGE O-AUSLES
 
 4 8 7 " HALLO2" 1 U-ABSCHICKEN
 
+bei 2x2 kam raus:
+
+FORTY-FORTH
+
+ok
+0 0 XY-PROC 
+XY 0 0 
+0 -1 -1 -1 
+1 0 u-abgeschickt
+0 0 -1 -1 
+0 1 r-abgeschicktok
+
+XY 2 0 
+0 0 2 -1 
+3 0 u-abgeschickt77 77 * 
+XY 0 2 
+0 0 2 2 
+0 3 r-abgeschickt
+XY 4 0 . 3751 ok
+
+XY 0 4 4 8 7 " HALLO2" 1 U-ABSCHICKEN 
+4 8 u-abgeschicktok
+ ok
+
+nach unten schick mit: 2 8 
+2 8 u-abgeschickt
+nach rechts umlenken mit: 0 8 
+0 8 r-abgeschickt
+nach rechts schick mit: 0 6 
+0 6 r-abgeschickt
+nach rechts schick mit: 0 4 
+0 4 r-abgeschickt
+nach rechts schick mit: 0 2 
+0 2 r-abgeschickt
+angekommen zu op=1: 7 HALLO2
+ 

@@ -1460,8 +1460,8 @@ TLISTE VARIABLE TLISTENZEIGER
             END_IF
         ELSE ( endlich in x angekommen, jetzt dasselbe noch y )
           OBEN-BYTES 2 + @ 1 - IF ( bei y>0 weiterschicken )
-            OBEN-BYTES 1+ @
-            OBEN-BYTES 2 + @ 1 -
+            OBEN-BYTES 1+ @ 1 -
+            OBEN-BYTES 2 + @
             CR ." nach rechts umlenken mit: " 2DUP B.
             OBEN-BYTES 3 + @
             OBEN-BYTES 5 +
