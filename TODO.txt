@@ -208,7 +208,7 @@ ab 201510:
 .. Step_11 das erste ausgegebene Zeichen vor dem F... ist ein ???
 .. Vergleiche = < > mit in die +-*/ Tabelle
 .. Die Korrektur von RECHTS-BYTES @ ... in RECHTS-BYTES @ noch mit durchgängig compilieren
-
+.. ERGEBNIS=1800 zeigt wieder, da ist noch eine unnötige Veränderung drin bei ohne große ganze Zahlen
 
 
 Spartan3 ist momentan programmiert auf 
