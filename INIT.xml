@@ -21,7 +21,8 @@
 <sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
 ( zuerst alles Notwendige wieder auf Ausgangszustand schalten )
 2 2 M* DUP M* BASE !           ( HEX )
-DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG auf Anfangswerte zurücksetzen )
+DPMERK @ DP ! BANF @ BZEIG !   ( DP und BZEIG auf Anfangswerte zurücksetzen )
+' NOOP @ ' KEY !               ( EXXI ausschalten )
 </sekt>
 
 <sekt inhalt="so, mit irgendwas muss das Compilieren losgehen">
@@ -467,6 +468,7 @@ START
       2DUP M+
       DUP IRAMADR = IF DROP JRAMADR END_IF
       DUP LOCALADRESSE = IF DROP 2F00 2F80 ! 2F80 END_IF
+      DUP XOFF = IF DROP XBIT END_IF
       @ NG. 1+ DUP 10 =
       UNTIL DROP
     ."  -- " DUP HG. ." -" DUP 0F M+ HG.
@@ -1867,8 +1869,6 @@ TLISTE VARIABLE TLISTENZEIGER
 0 VARIABLE RECHTS-MERK
 0 VARIABLE UNTEN-MERK
 
-: ABSCHICKEN ( x y n op adr --> )
-  CR ." abgeschickt nach " . ." mit " 2DROP SWAP . . ;
 : R-ABSCHICKEN ( x y n op --> )
   BEGIN RECHTS-ANGEKOMMEN @ RECHTS-MERK @ = UNTIL
   RECHTS-BYTES
@@ -1929,6 +1929,8 @@ TLISTE VARIABLE TLISTENZEIGER
 
 
 ( empfangene Bytes jetzt auswerten
+( ENTFERNE L-AUSLES
+( ENTFERNE O-AUSLES
 
 : L-AUSLES
   LINKS-MERK @ LINKS-ABGESCHICKT @ = NOT IF
