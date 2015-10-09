@@ -220,6 +220,7 @@ ab 201510:
       .. das muss ich unbedingt noch verbessern
     ok dann das AUSLES so modifizieren dass weiter solange x y nicht erreicht,
     ok sonst ein passendes AUSFUEHR, blos wie. ok momentan alles INTERPRET
+    ok geht auch in 2x2
   .. ???
 
 .. Step_11 das erste ausgegebene Zeichen vor dem F... ist ein ???
