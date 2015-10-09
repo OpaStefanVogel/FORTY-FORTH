@@ -226,6 +226,7 @@ ab 201510:
     ok Ein A*x und ein Y*Z wird gebraucht, ok und jede Menge mehr davon bis [A*x-Y*Z]/gx
     ok jedoch reicht auch nur ein einziges (A*x+Y*Z)/gx ok nach dem alten IVERTIEREN gut ok
     ok ob das mknod verwendbar ist für xsim, tatsächlich mkfifo text_outputfile.txt geht
+    .. auch nur kleine Ausschnitte zoomen, daran liegt vielleicht das xsim nicht weiter geht
     .. doch jetzt muss das A*x her
        .. Fehler gefunden, ich kann ja noch gar nicht das A als n abschicken... 
 
