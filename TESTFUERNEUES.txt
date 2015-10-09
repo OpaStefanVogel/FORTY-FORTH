@@ -1,15 +1,1 @@
 HEX ( ist noch als einzigstes zurückzustellen zum Programmieren )
-( warum ERGEBNIS unnötig weitergesetzt wird
-7 7 + ERGEBNIS ?
-7 7 ERGEBNIS ?
-2OPERANDEN->2SLX  ERGEBNIS ?
-ADDIER  ERGEBNIS ?
-SLX->ERGEBNIS  ERGEBNIS ?
-
-( deshalb vorübergehend
-: + ( x y --> z ) NEBENRECHNUNG ROT ROT + SWAP HAUPTRECHNUNG A+0 ;
-: - ( x y --> z ) NEBENRECHNUNG ROT ROT - SWAP HAUPTRECHNUNG A+0 ;
-: * ( x y --> z ) NEBENRECHNUNG ROT ROT * SWAP HAUPTRECHNUNG A+0 ;
-7 7 + ERGEBNIS ?
-7 7 - ERGEBNIS ?
-7 7 * ERGEBNIS ?
