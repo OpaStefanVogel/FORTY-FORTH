@@ -1435,7 +1435,7 @@ TLISTE VARIABLE TLISTENZEIGER
           LINKS-BYTES 3 + @
           LINKS-BYTES 5 +
           LINKS-BYTES 4 + @
-          CR IAM1X ? IAM1Y ? ." angekommen: " INTERPRET
+          CR IAM1X ? IAM1Y ? ." angekommen: " 2DUP B. 2DUP TYPE INTERPRET
           LINKS-ABGESCHICKT @ LINKS-MERK !
           LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
           END_IF
@@ -1483,7 +1483,7 @@ TLISTE VARIABLE TLISTENZEIGER
               OBEN-BYTES 3 + @
               OBEN-BYTES 5 +
               OBEN-BYTES 4 + @
-              CR IAM1X ? IAM1Y ? ." angekommen: " INTERPRET
+              CR IAM1X ? IAM1Y ? ." angekommen: " 2DUP B. 2DUP TYPE INTERPRET
               OBEN-ABGESCHICKT @ OBEN-MERK !
               OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
               END_IF
