@@ -33,6 +33,24 @@ HEX ( ist noch als einzigstes zurückzustellen zum Programmieren )
 1 0 1 " SWAP OVER A*x DUP ." 1 ABSCHICKEN
 1 1 1 " SWAP OVER A*x DUP ." 1 ABSCHICKEN
 
+[ [ 1   1   1    1 ]
+  [ 2   4   8   16 ]
+  [ 3   9  27   81 ]
+  [ 4  16  64  256 ] ]
+1 A*x DUP .
+[ 2 2 3 4 ] [ 0 1 1 1 ] Y*Z DUP .
+-1 A*x OVER . DUP .
+A+A . SP ?
+
+DECIMAL
+[ [ 1   1   1    1 ]
+  [ 2   4   8   16 ]
+  [ 3   9  27   81 ]
+  [ 4  16  64  256 ] ] 1 SP ?
+1 [ 2 2 3 4 ] [ 0 1 1 1 ] [A*x-Y*Z]/gx OVER . DUP . SP ?
+2 [ -1 3 6 12 ] [ 2 1 6 14 ] [A*x-Y*Z]/gx OVER . DUP . SP ?
+12 [ 4 -6 14 48 ] [ -6 6 10 72 ] [A*x-Y*Z]/gx OVER . DUP . SP ?
+288 [ -72 132 -72 300 ] [ 48 -72 48 276 ] [A*x-Y*Z]/gx OVER . DUP . SP ?
 
 
 <u>[ [ 1   1   1    1 ]</u> ok

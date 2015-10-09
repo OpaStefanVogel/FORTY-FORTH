@@ -222,9 +222,11 @@ ab 201510:
     ok sonst ein passendes AUSFUEHR, blos wie. ok momentan alles INTERPRET
     ok geht auch in 2x2
   .. weiter mit Matrix aufteilen...
-    .. die x y besser in i j umbenennen
-    .. Ein A*x und ein Y*Z wird gebraucht
+    .. BRANCH die x y besser in i j umbenennen
+    ok Ein A*x und ein Y*Z wird gebraucht, ok und jede Menge mehr davon bis [A*x-Y*Z]/gx
+    .. jedoch reicht auch nur ein einziges (A*x+Y*Z)/gx
     ok ob das mknod verwendbar ist für xsim, tatsächlich mkfifo text_outputfile.txt geht
+    .. doch jetzt muss das A*x her
 
 .. Step_11 das erste ausgegebene Zeichen vor dem F... ist ein ???
 .. Vergleiche = < > mit in die +-*/ Tabelle

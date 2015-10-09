@@ -1550,11 +1550,33 @@ BEFESTIGE O-AUSLES
   R> DROP
   ;
 
+: V/gx ( vektor gx --> vektor/gx )
+  >R
+  DUP SIZE BEGIN ( vektor i
+    1 - G ( vektor i b
+    R / ( vektor i b'
+    OVER >R H R> ( vektor' i
+    DUP 0= UNTIL ( vektor" 0
+  DROP ( vektor"
+  R> DROP
+  ;
+
 : A*x ( matrix x --> matrix*x )
   >R
   DUP SIZE BEGIN ( matrix i
     1 - G ( vektor i b
     R V*x ( vektor i b'
+    OVER >R H R> ( vektor' i
+    DUP 0= UNTIL ( vektor" 0
+  DROP ( vektor"
+  R> DROP
+  ;
+
+: A/gx ( matrix gx --> matrix/gx )
+  >R
+  DUP SIZE BEGIN ( matrix i
+    1 - G ( vektor i b
+    R V/gx ( vektor i b'
     OVER >R H R> ( vektor' i
     DUP 0= UNTIL ( vektor" 0
   DROP ( vektor"
@@ -1588,11 +1610,28 @@ BEFESTIGE O-AUSLES
   SWAP DROP ( vektor"
   ;
 
+: [A*x-Y*Z]/gx ( A gx x Y Z --> A' x )
+  -1 V*x Y*Z CR CR DUP . >R
+  ROT OVER A*x CR DUP .
+  R> A+A CR DUP .
+  ROT A/gx CR DUP . SWAP
+  ;
+
 ( [ 7 8 9 ] 2 V*x .
 ( [ [ 2 3 4 ] [ 5 6 7 ] [ 8 9 1 ] ] 2 A*x .
 ( [ 7 8 9 ] [ 1 2 3 ] Y*Z .
 ( [ 1 2 3 ] [ 5 6 7 ] V+V . SP ?
 ( [ [ 2 3 4 ] [ 5 6 7 ] [ 8 9 1 ] ] [ [ 1 1 1 ] [ -1 -1 -1 ] [ -3 -3 -3 ] ] A+A . SP ?
+
+( DECIMAL
+( [ [ 1   1   1    1 ]
+(   [ 2   4   8   16 ]
+(   [ 3   9  27   81 ]
+(   [ 4  16  64  256 ] ] 1 SP ?
+( 1 [ 2 2 3 4 ] [ 0 1 1 1 ] [A*x-Y*Z]/gx OVER . DUP .
+( 2 [ -1 3 6 12 ] [ 2 1 6 14 ] [A*x-Y*Z]/gx OVER . DUP .
+( 12 [ 4 -6 14 48 ] [ -6 6 10 72 ] [A*x-Y*Z]/gx OVER . DUP .
+( 288 [ -72 132 -72 300 ] [ 48 -72 48 276 ] [A*x-Y*Z]/gx OVER . DUP .
 
 </sekt>
 
