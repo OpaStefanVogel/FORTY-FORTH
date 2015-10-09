@@ -430,7 +430,10 @@ ERGEBNIS M?
 
 
 
-<sekt inhalt="Anwenden in / MOD GGT BK...">
+<sekt inhalt="Anwenden in + - * / MOD GGT BK...">
+: + ( x y --> z ) NEBENRECHNUNG ROT ROT + SWAP HAUPTRECHNUNG A+0 ;
+: - ( x y --> z ) NEBENRECHNUNG ROT ROT - SWAP HAUPTRECHNUNG A+0 ;
+: * ( x y --> z ) NEBENRECHNUNG ROT ROT * SWAP HAUPTRECHNUNG A+0 ;
 : / ( b d --> q )
   NEBENRECHNUNG ROT ROT 
   /MOD SWAP DROP
