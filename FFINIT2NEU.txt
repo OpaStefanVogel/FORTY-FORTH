@@ -1525,8 +1525,78 @@ BEFESTIGE O-AUSLES
 ( IAM1X ? IAM1Y ? IAM2X ? IAM2Y ?
 </sekt>
 
-<sekt inhalt="in den Zustand für Step_12 bringen und wieder RAM generieren">
+<sekt inhalt="neues Invertieren">
+: SIZE ( obj --> n )
+  ZERLEG SWAP DROP 3FFF AND ;
 
+: V+0 ( vektor --> vektor+0 )
+  0 >R
+  DUP SIZE BEGIN ( vektor i
+    1 - G ( vektor i b
+    OVER R> SWAP ROT H >R
+    DUP 0= UNTIL ( vektor" 0
+  2DROP ( vektor"
+  R>
+  ;
+
+: V*x ( vektor x --> vektor*x )
+  >R
+  DUP SIZE BEGIN ( vektor i
+    1 - G ( vektor i b
+    R * ( vektor i b'
+    OVER >R H R> ( vektor' i
+    DUP 0= UNTIL ( vektor" 0
+  DROP ( vektor"
+  R> DROP
+  ;
+
+: A*x ( matrix x --> matrix*x )
+  >R
+  DUP SIZE BEGIN ( matrix i
+    1 - G ( vektor i b
+    R V*x ( vektor i b'
+    OVER >R H R> ( vektor' i
+    DUP 0= UNTIL ( vektor" 0
+  DROP ( vektor"
+  R> DROP
+  ;
+
+: Y*Z ( vektor vektor --> vektor*vektor^T )
+  >R
+  DUP SIZE BEGIN ( matrix i
+    1 - G CR DUP . ( vektor i b
+    R V+0 DUP . SWAP V*x DUP . ( vektor i b'
+    OVER >R H  DUP . R> ( vektor' i
+    DUP 0= UNTIL ( vektor" 0
+  DROP ( vektor"
+  R> DROP
+  ;
+
+: V+V ( vektor1 vektor2 --> vektor1+vektor2 )
+  DUP SIZE BEGIN ( vektor1 vektor2 i
+    1 - >R
+    OVER R L OVER R L + R SWAP H
+    R> DUP 0= UNTIL DROP
+  SWAP DROP ( vektor"
+  ;
+
+: A+A ( vektor1 vektor2 --> vektor1+vektor2 )
+  DUP SIZE BEGIN ( vektor1 vektor2 i
+    1 - >R
+    OVER R L OVER R L V+V R SWAP H
+    R> DUP 0= UNTIL DROP
+  SWAP DROP ( vektor"
+  ;
+
+( [ 7 8 9 ] 2 V*x .
+( [ [ 2 3 4 ] [ 5 6 7 ] [ 8 9 1 ] ] 2 A*x .
+( [ 7 8 9 ] [ 1 2 3 ] Y*Z .
+( [ 1 2 3 ] [ 5 6 7 ] V+V . SP ?
+( [ [ 2 3 4 ] [ 5 6 7 ] [ 8 9 1 ] ] [ [ 1 1 1 ] [ -1 -1 -1 ] [ -3 -3 -3 ] ] A+A . SP ?
+
+</sekt>
+
+<sekt inhalt="in den Zustand für Step_12 bringen und wieder RAM generieren">
 ( allerdings beim Compilieren von großen ganzen Zahlen im Moment noch 1234 ERROR
 
 
