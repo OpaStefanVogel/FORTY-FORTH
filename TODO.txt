@@ -228,6 +228,7 @@ ab 201510:
     ok ob das mknod verwendbar ist für xsim, tatsächlich mkfifo text_outputfile.txt geht
     .. doch jetzt muss das A*x her
 
+.. nicht allzuviel Testeingabe weil das XOFF EMIT nicht ausgewertet wird. 
 .. Step_11 das erste ausgegebene Zeichen vor dem F... ist ein ???
 .. Vergleiche = < > mit in die +-*/ Tabelle
 .. Die Korrektur von RECHTS-BYTES @ ... in RECHTS-BYTES @ noch mit durchgängig compilieren
