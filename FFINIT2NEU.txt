@@ -577,6 +577,7 @@ N" 000002330657FDD698" N" 4C0CF598D2" * .
     HAUPTRECHNUNG
     END_IF
   ;
+: B. SWAP . . ; ( muss hier nochmal stehen )
 
 777 99 BK B.
 INIT
@@ -645,6 +646,7 @@ DUP ZERLEG SWAP M. M.
      ." ] "
     ELSE . END_IF
   ;
+: B. SWAP . . ; ( und hier nochmal )
 
 7 DUP .
 2 9 H DUP .
