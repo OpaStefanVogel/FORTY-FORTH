@@ -577,7 +577,6 @@ N" 000002330657FDD698" N" 4C0CF598D2" * .
     HAUPTRECHNUNG
     END_IF
   ;
-: B. SWAP . . ;
 
 777 99 BK B.
 INIT
@@ -646,7 +645,6 @@ DUP ZERLEG SWAP M. M.
      ." ] "
     ELSE . END_IF
   ;
-: B. SWAP . . ;
 
 7 DUP .
 2 9 H DUP .
@@ -1339,7 +1337,7 @@ TLISTE VARIABLE TLISTENZEIGER
   RECHTS-BYTES 1 + !
   RECHTS-ANGEKOMMEN @ NOT 1 AND RECHTS-MERK !
   RECHTS-ANGEKOMMEN @ NOT RECHTS-ABGESCHICKT !
-  CR SWAP . . ." r-abgeschickt"
+  ." r: " B. ." :r "
   ;
 : U-ABSCHICKEN ( x y Z adr n op --> )
   BEGIN UNTEN-ANGEKOMMEN @ UNTEN-MERK @ = UNTIL
@@ -1352,7 +1350,7 @@ TLISTE VARIABLE TLISTENZEIGER
   UNTEN-BYTES 1 + !
   UNTEN-ANGEKOMMEN @ NOT 1 AND UNTEN-MERK !
   UNTEN-ANGEKOMMEN @ NOT UNTEN-ABGESCHICKT !
-  CR SWAP . . ." u-abgeschickt"
+  ." u: " B. ." :u " 
   ;
 : ABSCHICKEN ( x y Z adr n op --> )
   >R >R 2OVER R> R> 2SWAP ( x y Z adr n op x y )
@@ -1362,15 +1360,17 @@ TLISTE VARIABLE TLISTENZEIGER
         END_IF END_IF
   ;
 
-( 1 2 0 0 R-ABSCHICKEN
+( 5 6 1 " 77 . " 1 ABSCHICKEN
+
+( 1 2 0 0 0 1 R-ABSCHICKEN
 ( RECHTS-BYTES 8 DUMP RECHTS-ABGESCHICKT ? RECHTS-ANGEKOMMEN ?
 ( RECHTS-ANGEKOMMEN @ RECHTS-ABGESCHICKT !
-( 5 6 1 9 U-ABSCHICKEN
+( 5 6 1 " 77 . " 1 U-ABSCHICKEN
 ( UNTEN-BYTES 8 DUMP UNTEN-ABGESCHICKT ? UNTEN-ANGEKOMMEN ?
 ( UNTEN-ANGEKOMMEN @ UNTEN-ABGESCHICKT !
 
 : XY-PROC ( x y --> )
-  CR ." XY " OVER . DUP .
+  CR ." X: " 2DUP B. ." :X "
   OVER IAM2X @ LT OVER IAM2Y @ LT AND IF -1 IAM1X ! -1 IAM1Y ! -1 IAM2X ! -1 IAM2Y ! END_IF
   OVER IAM1X @ = NOT IAM2X @ -1 = AND IF 
     IAM1X @ -1 = IF OVER IAM1X ! ELSE OVER IAM2X ! END_IF
@@ -1418,7 +1418,7 @@ TLISTE VARIABLE TLISTENZEIGER
       LINKS-BYTES 2 + @ 1 - IF ( bei y>0 weiterschicken )
         LINKS-BYTES 1+ @
         LINKS-BYTES 2 + @ 1 -
-        CR ." nach rechts schick mit: " 2DUP B.
+        CR ." l: " 2DUP B. ." :l "
         LINKS-BYTES 3 + @
         LINKS-BYTES 5 +
         LINKS-BYTES 4 + @ 1 
@@ -1435,7 +1435,7 @@ TLISTE VARIABLE TLISTENZEIGER
           LINKS-BYTES 3 + @
           LINKS-BYTES 5 +
           LINKS-BYTES 4 + @
-          CR IAM1X ? IAM1Y ? ." angekommen: " 2DUP B. 2DUP TYPE INTERPRET
+          CR ." n: " 2DUP B. 2DUP TYPE ." :n " INTERPRET
           LINKS-ABGESCHICKT @ LINKS-MERK !
           LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
           END_IF
@@ -1455,7 +1455,7 @@ TLISTE VARIABLE TLISTENZEIGER
       OBEN-BYTES 1+ @ 1 - IF ( bei y>0 weiterschicken )
         OBEN-BYTES 1+ @ 1 -
         OBEN-BYTES 2 + @
-        CR ." nach unten schick mit: " 2DUP B.
+        CR ." o: " 2DUP B. ." :o "
         OBEN-BYTES 3 + @
         OBEN-BYTES 5 +
         OBEN-BYTES 4 + @ 1 
@@ -1472,7 +1472,7 @@ TLISTE VARIABLE TLISTENZEIGER
           OBEN-BYTES 2 + @ IF ( bei y>0 nach rechts weiterschicken )
             OBEN-BYTES 1+ @ 1 -
             OBEN-BYTES 2 + @
-            CR ." nach rechts umlenken mit: " 2DUP B.
+            CR ." O: " 2DUP B. ." :O "
             OBEN-BYTES 3 + @
             OBEN-BYTES 5 +
             OBEN-BYTES 4 + @ 1 
@@ -1483,7 +1483,7 @@ TLISTE VARIABLE TLISTENZEIGER
               OBEN-BYTES 3 + @
               OBEN-BYTES 5 +
               OBEN-BYTES 4 + @
-              CR IAM1X ? IAM1Y ? ." angekommen: " 2DUP B. 2DUP TYPE INTERPRET
+              CR ." N: " 2DUP B. 2DUP TYPE ." :N" INTERPRET
               OBEN-ABGESCHICKT @ OBEN-MERK !
               OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
               END_IF
