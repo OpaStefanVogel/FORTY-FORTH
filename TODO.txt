@@ -221,7 +221,10 @@ ab 201510:
     ok dann das AUSLES so modifizieren dass weiter solange x y nicht erreicht,
     ok sonst ein passendes AUSFUEHR, blos wie. ok momentan alles INTERPRET
     ok geht auch in 2x2
-  .. ???
+  .. weiter mit Matrix aufteilen...
+    .. die x y besser in i j umbenennen
+    .. Ein A*x und ein Y*Z wird gebraucht
+    ok ob das mknod verwendbar ist für xsim, tatsächlich mkfifo text_outputfile.txt geht
 
 .. Step_11 das erste ausgegebene Zeichen vor dem F... ist ein ???
 .. Vergleiche = < > mit in die +-*/ Tabelle
