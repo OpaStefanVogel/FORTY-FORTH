@@ -1428,7 +1428,7 @@ TLISTE VARIABLE TLISTENZEIGER
           LINKS-BYTES 3 + @
           LINKS-BYTES 5 +
           LINKS-BYTES 4 + @
-          CR ." angekommen zu op=1: " ROT . TYPE
+          CR IAM1X ? IAM1Y ? ." angekommen: " INTERPRET
           LINKS-ABGESCHICKT @ LINKS-MERK !
           LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
           END_IF
@@ -1462,7 +1462,7 @@ TLISTE VARIABLE TLISTENZEIGER
             OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
             END_IF
         ELSE ( endlich in x angekommen, jetzt dasselbe noch y )
-          OBEN-BYTES 2 + @ 1 - IF ( bei y>0 weiterschicken )
+          OBEN-BYTES 2 + @ IF ( bei y>0 nach rechts weiterschicken )
             OBEN-BYTES 1+ @ 1 -
             OBEN-BYTES 2 + @
             CR ." nach rechts umlenken mit: " 2DUP B.
@@ -1476,7 +1476,7 @@ TLISTE VARIABLE TLISTENZEIGER
               OBEN-BYTES 3 + @
               OBEN-BYTES 5 +
               OBEN-BYTES 4 + @
-              CR ." angekommen zu op=1: " ROT . TYPE
+              CR IAM1X ? IAM1Y ? ." angekommen: " INTERPRET
               OBEN-ABGESCHICKT @ OBEN-MERK !
               OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
               END_IF

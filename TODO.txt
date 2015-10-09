@@ -206,19 +206,21 @@ ab 201510:
   ok top.vhd neu verdrahtet auf 2x2 mit ausgiebiger Fehlersuche wieder
   ok x+1 und y+1 wird jetzt vorm abschicken gerechnet, dabei auch ERGEBNIS weitergesetzt
     und alles Neue zurück in FFINIT1.txt und FFINIT2.txt, HERE . 13B0
-  .. als nächstes dann halt SEND-TO ( x y --> ) einfach mal losmach
-    .. da brauch ich das SEND-TO selbst
-      .. x y relativ, damit auch bei 1x1 alles getestet werden kann 
+  OK als nächstes dann halt SEND-TO ( x y --> ) einfach mal losmach ok ist ABSCHICK geworden
+    OK da brauch ich das SEND-TO selbst
+      OK x y relativ, damit auch bei 1x1 alles getestet werden kann 
       .. vorübergehendes INTERPRET später wieder raus
       .. ggZ später rein
-      .. 1x1 ist insofern extra, weil nicht R-Schreiben vor L-Lesen geht
+      OK 1x1 ist insofern extra, weil nicht R-Schreiben vor L-Lesen geht
         .. das ist aber insofern vielleicht eine Möglichkeit ganz ohne ABESCHICKT/ANGEKOMMEN
-        .. vorerst muss ich das behelfsmäßig überbrücken
-        .. und zwar so, nur bei IAM2Y>1 weiterschicken, sonst reicht nichts tun!!!
+        OK vorerst muss ich das behelfsmäßig überbrücken
+        OK und zwar so, nur bei IAM2Y>1 weiterschicken, sonst reicht nichts tun!!!
         ok ist recht überschaubar geworden bei IAM2Y @ 1 = IF ...
-        .. wo wird ERGEBNIS soviel weitergesetzt?
-    .. dann das AUSLES so modifizieren dass weiter solange x y nicht erreicht,
-    .. sonst ein passendes AUSFUEHR, blos wie.
+    ok wo wird ERGEBNIS soviel weitergesetzt? Sieht aus wie bei + * ok aber
+      .. das muss ich unbedingt noch verbessern
+    ok dann das AUSLES so modifizieren dass weiter solange x y nicht erreicht,
+    ok sonst ein passendes AUSFUEHR, blos wie. ok momentan alles INTERPRET
+  .. ???
 
 .. Step_11 das erste ausgegebene Zeichen vor dem F... ist ein ???
 .. Vergleiche = < > mit in die +-*/ Tabelle
