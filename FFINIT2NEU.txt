@@ -1435,7 +1435,7 @@ TLISTE VARIABLE TLISTENZEIGER
           LINKS-BYTES 3 + @
           LINKS-BYTES 5 +
           LINKS-BYTES 4 + @
-          CR IAM1X ? IAM1Y ? ." angekommen: " INTERPRET
+          CR IAM1X ? IAM1Y ? ." angekommen: " 2DUP B. 2DUP TYPE INTERPRET
           LINKS-ABGESCHICKT @ LINKS-MERK !
           LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
           END_IF
@@ -1483,7 +1483,7 @@ TLISTE VARIABLE TLISTENZEIGER
               OBEN-BYTES 3 + @
               OBEN-BYTES 5 +
               OBEN-BYTES 4 + @
-              CR IAM1X ? IAM1Y ? ." angekommen: " INTERPRET
+              CR IAM1X ? IAM1Y ? ." angekommen: " 2DUP B. 2DUP TYPE INTERPRET
               OBEN-ABGESCHICKT @ OBEN-MERK !
               OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
               END_IF
@@ -1529,99 +1529,28 @@ BEFESTIGE O-AUSLES
 : SIZE ( obj --> n )
   ZERLEG SWAP DROP 3FFF AND ;
 
-: V+0 ( vektor --> vektor+0 )
-  0 >R
-  DUP SIZE BEGIN ( vektor i
-    1 - G ( vektor i b
-    OVER R> SWAP ROT H >R
-    DUP 0= UNTIL ( vektor" 0
-  2DROP ( vektor"
-  R>
-  ;
-
-: V*x ( vektor x --> vektor*x )
-  >R
-  DUP SIZE BEGIN ( vektor i
-    1 - G ( vektor i b
-    R * ( vektor i b'
-    OVER >R H R> ( vektor' i
-    DUP 0= UNTIL ( vektor" 0
-  DROP ( vektor"
-  R> DROP
-  ;
-
-: V/gx ( vektor gx --> vektor/gx )
-  >R
-  DUP SIZE BEGIN ( vektor i
-    1 - G ( vektor i b
-    R / ( vektor i b'
-    OVER >R H R> ( vektor' i
-    DUP 0= UNTIL ( vektor" 0
-  DROP ( vektor"
-  R> DROP
-  ;
-
-: A*x ( matrix x --> matrix*x )
-  >R
-  DUP SIZE BEGIN ( matrix i
-    1 - G ( vektor i b
-    R V*x ( vektor i b'
-    OVER >R H R> ( vektor' i
-    DUP 0= UNTIL ( vektor" 0
-  DROP ( vektor"
-  R> DROP
-  ;
-
-: A/gx ( matrix gx --> matrix/gx )
-  >R
-  DUP SIZE BEGIN ( matrix i
-    1 - G ( vektor i b
-    R V/gx ( vektor i b'
-    OVER >R H R> ( vektor' i
-    DUP 0= UNTIL ( vektor" 0
-  DROP ( vektor"
-  R> DROP
-  ;
-
-: Y*Z ( vektor vektor --> vektor*vektor^T )
-  >R
-  DUP SIZE BEGIN ( matrix i
-    1 - G CR DUP . ( vektor i b
-    R V+0 DUP . SWAP V*x DUP . ( vektor i b'
-    OVER >R H  DUP . R> ( vektor' i
-    DUP 0= UNTIL ( vektor" 0
-  DROP ( vektor"
-  R> DROP
-  ;
-
-: V+V ( vektor1 vektor2 --> vektor1+vektor2 )
-  DUP SIZE BEGIN ( vektor1 vektor2 i
-    1 - >R
-    OVER R L OVER R L + R SWAP H
-    R> DUP 0= UNTIL DROP
-  SWAP DROP ( vektor"
-  ;
-
-: A+A ( vektor1 vektor2 --> vektor1+vektor2 )
-  DUP SIZE BEGIN ( vektor1 vektor2 i
-    1 - >R
-    OVER R L OVER R L V+V R SWAP H
-    R> DUP 0= UNTIL DROP
-  SWAP DROP ( vektor"
-  ;
-
 : [A*x-Y*Z]/gx ( A gx x Y Z --> A' x )
-  -1 V*x Y*Z CR CR DUP . >R
-  ROT OVER A*x CR DUP .
-  R> A+A CR DUP .
-  ROT A/gx CR DUP . SWAP
+  ( L0=nr L1=Nj L2=Nk L3=j L4=k L5=Y L6=Z L7=alternenner )
+  8 LOCAL NEBENRECHNUNG L0 !
+  OVER SIZE L1 ! DUP SIZE L2 !
+  L6 ! L5 ! SWAP L7 !
+  L1 @ L3 ! BEGIN -1 L3 +!
+    OVER L3 @ L ( mat nenner mat[L3] )
+    L2 @ L4 ! BEGIN -1 L4 +! ( CR L3 M? L4 M? ERGEBNIS M?
+      NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner )
+      OVER L4 @ L OVER *
+      L5 @ L3 @ L L6 @ L4 @ L * -
+      L7 @ / ( mat erg mat[L3] nenner bijneu )
+      2SWAP SWAP ( mat nenner bijneu mat[L3] erg )
+      HAUPTRECHNUNG SWAP A+0 ( mat nenner mat[L3] bijneu+0 )
+      SWAP L4 @ ROT H ( mat nenner mat[L3]neu )
+      L4 @ 0= UNTIL
+    ROT L3 @ ROT H SWAP ( matneu nenner )
+    L3 @ 0= UNTIL
+  A+0 ( verschiebt nenner hinter matneu )
+  L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0 ( A' x )
+  END_LOCAL
   ;
-
-( [ 7 8 9 ] 2 V*x .
-( [ [ 2 3 4 ] [ 5 6 7 ] [ 8 9 1 ] ] 2 A*x .
-( [ 7 8 9 ] [ 1 2 3 ] Y*Z .
-( [ 1 2 3 ] [ 5 6 7 ] V+V . SP ?
-( [ [ 2 3 4 ] [ 5 6 7 ] [ 8 9 1 ] ] [ [ 1 1 1 ] [ -1 -1 -1 ] [ -3 -3 -3 ] ] A+A . SP ?
 
 ( DECIMAL
 ( [ [ 1   1   1    1 ]

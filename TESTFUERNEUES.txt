@@ -1,33 +1,6 @@
 HEX ( ist noch als einzigstes zurückzustellen zum Programmieren )
 0 0 XY-PROC HERE .
 
-: NEBENRECHNUNG1 0 ; ( da geht was nicht )
-: HAUPTRECHNUNG1 DROP ;
-: HAUPT
-: [A*x-Y*Z]/gx ( A gx x Y Z --> A' x )
-  ( L0=nr L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
-  8 LOCAL NEBENRECHNUNG L0 !
-  DUP SIZE L1 !
-  L6 ! L5 ! SWAP L7 !
-  L1 @ L3 ! BEGIN -1 L3 +!
-    OVER L3 @ L ( mat nenner mat[L3] )
-    L1 @ L4 ! BEGIN -1 L4 +! ( CR L3 M? L4 M? ERGEBNIS M?
-      NEBENRECHNUNG1 ROT ROT SWAP ( mat erg mat[L3] nenner )
-      OVER L4 @ L OVER *
-      L5 @ L3 @ L L6 @ L4 @ L * -
-      L7 @ / ( mat erg mat[L3] nenner bijneu )
-      2SWAP SWAP ( mat nenner bijneu mat[L3] erg )
-      HAUPTRECHNUNG1 SWAP A+0 ( mat nenner mat[L3] bijneu+0 )
-      SWAP L4 @ ROT H ( mat nenner mat[L3]neu )
-      L4 @ 0= UNTIL
-    ROT L3 @ ROT H SWAP ( matneu nenner )
-    L3 @ 0= UNTIL
-  
-  
-  A+0 ( verschiebt nenner hinter matneu )
-  L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0 ( A' x )
-  ;
-
 DECIMAL
 [ [ 1   1   1    1 ]
   [ 2   4   8   16 ]
@@ -37,3 +10,4 @@ DECIMAL
 2 [ -1 3 6 12 ] [ 2 1 6 14 ] [A*x-Y*Z]/gx OVER . DUP . SP ?
 12 [ 4 -6 14 48 ] [ -6 6 10 72 ] [A*x-Y*Z]/gx OVER . DUP . SP ?
 288 [ -72 132 -72 300 ] [ 48 -72 48 276 ] [A*x-Y*Z]/gx OVER . DUP . SP ?
+HEX ERGEBNIS ?
