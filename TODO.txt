@@ -234,7 +234,7 @@ ab 201510:
       auch die Fenster nicht verrucken
     o. Fehler gefunden, ich kann ja noch gar nicht das A als n abschicken...,versuch OBJ+0
       ok da könnte ich auch adr n bei n>0 als INTERPRET machen und bei n=0 als EXECUTE
-      .. vor BEFESTIGE nochmal ABGESCHICKT ANGEKOMMEN ausgleichen
+      ok vor BEFESTIGE die verwendeten Eingänge rücksetzen
   ok damit funktioniert jetzt [Ax-YZ]/gx in 00 01 ab 147 ms 10 ab 156 ms 11 ab 166 ms
 
 .. nicht allzuviel Testeingabe weil das XOFF EMIT nicht ausgewertet wird. 
