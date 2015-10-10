@@ -4,9 +4,9 @@ HEX ( ist noch als einzigstes zurückzustellen zum Programmieren )
 : OBJ_STRUCT_COPY ( obj --> obj_copy )
   DUP OBJ? IF
     ZERLEG DUP ERGEBNIS @ ! 3FFF AND DUP >R >R
-    ERGEBNIS @ 1+ R 1+ ERGEBNIS +! ( obj erg ) ERGEBNIS ?
+    ERGEBNIS @ 1+ R 1+ ERGEBNIS +! ( obj erg )
     BEGIN
-      OVER @ DUP M. RECURSE DUP M. OVER !
+      OVER @ RECURSE OVER !
       SWAP 1+ SWAP 1+
       R> 1 - DUP >R 0= UNTIL
     R> DROP R> - 1 - 04 000 MLIT OR SWAP DROP
@@ -22,9 +22,9 @@ REPLACE: R-ABSCHICKEN ( x y Z adr n op --> )
     ELSE SWAP RECHTS-BYTES 5 + ! END_IF
   DUP RECHTS-BYTES 4 + !
     NEBENRECHNUNG ROT ROT
-    RECHTS-BYTES 6 + + ERGEBNIS ! ERGEBNIS ?
+    RECHTS-BYTES 6 + + ERGEBNIS !
     400 SPEICHERENDE +!
-    CR DUP M. OBJ_STRUCT_COPY DUP M. CR
+    OBJ_STRUCT_COPY
     -400 SPEICHERENDE +!
     SWAP HAUPTRECHNUNG
   RECHTS-BYTES 3 + !
@@ -49,7 +49,7 @@ REPLACE: R-ABSCHICKEN ( x y Z adr n op --> )
         LINKS-BYTES 1+ @
         LINKS-BYTES 2 + @ 1 -
         CR ." l: " 2DUP B. ." :l "
-        LINKS-BYTES 3 + @
+        LINKS-BYTES 3 + @ OBJ_STRUCT_COPY
         LINKS-BYTES 5 +
         LINKS-BYTES 4 + @ 0= IF @ END_IF
         LINKS-BYTES 4 + @ 1
@@ -63,7 +63,7 @@ REPLACE: R-ABSCHICKEN ( x y Z adr n op --> )
             LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
             END_IF
         ELSE ( endlich angekommen )
-          LINKS-BYTES 3 + @ DUP M. CR DUP 3FFF AND 8 DUMP ( OBJ_STRUCT_COPY DUP M. ERGEBNIS ?
+          LINKS-BYTES 3 + @
           LINKS-BYTES 5 +
           LINKS-BYTES 4 + @
           CR ." n: " 2DUP B. 2DUP TYPE ." :n " CR
@@ -79,8 +79,11 @@ REPLACE: L-AUSLES L-AUSLES1 ;
 
 0 1 77 0 0 1 R-ABSCHICKEN
 0 9 77 0 0 1 R-ABSCHICKEN
-0 1 [ 1 2 3 ] "    " 1 R-ABSCHICKEN
-0 1 [ [ 1 2 3 ] [ 4 5 6 ] ] "    " 1 R-ABSCHICKEN
+0 1 [ 1 2 3 ] "DUP M." 1 R-ABSCHICKEN
+0 1 [ [ 1 2 3 ] [ 4 5 6 ] ] " DUP M. DUP ." 1 R-ABSCHICKEN
+0 1 [ [ 1 2 3 ] [ 4 5 6 ] ] ' . 0 1 R-ABSCHICKEN
+0 2 [ [ 1 2 3 ] [ 4 5 6 ] ] ' . 0 1 R-ABSCHICKEN
+0 9 [ [ 1 2 3 ] [ 4 5 6 ] ] ' . 0 1 R-ABSCHICKEN
 
 ---------
 : AB 1 ABSCHICKEN ;
