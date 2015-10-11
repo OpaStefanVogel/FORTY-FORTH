@@ -253,7 +253,11 @@ ab 201510:
           ok Fehlerursache: bei A+0 wird von ERGEBNIS>2006 gelesen, um führende Nullen zu entfernen
           .. bei R-ABSCHICK könnte das deshalb durchgehen, weil vorher JK-PROC durchläuft
           .. eventuell dann auch noch mehrere solche Stellen.
+          ok aber die erste Fehlerstelle ist jetzt weg, mit A+0=A*1 als Behelf
+          .. doch mehr kann noch nicht gehen, da muss erst das richtige A+0 her.        
   ok damit funktioniert jetzt [Ax-YZ]/gx in 00 01 ab 147 ms 10 ab 156 ms 11 ab 166 ms
+open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr
+launch_simulation
 
 .. nicht allzuviel Testeingabe weil das XOFF EMIT nicht ausgewertet wird. 
 .. Step_11 das erste ausgegebene Zeichen vor dem F... ist ein ???

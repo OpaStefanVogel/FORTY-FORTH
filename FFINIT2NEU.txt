@@ -719,6 +719,34 @@ DUP ZERLEG SWAP M. M.
 [ 12 18 1B ] OBJDUMP
 [ [ 12 18 1B ] [ 1E 21 24 ] ] OBJDUMP
 
+: SLX->ERGEBNIS1 ( sz lz az --> z )
+  OVER 0= IF 2DROP DROP 0 ELSE ( 0 bei 1/7 )
+    2DUP M+ BEGIN 1- ( DUP @ 0= NOT ) -1 UNTIL ( fuehrende Nullen weg )
+    1+ OVER MAX ( sz lz az ez )
+    ( DUP ERGEBNIS ! ( nicht wegen 0 1 OPERAND1 )
+    2DUP = IF 2DROP 2DROP 0 ELSE
+      OVER M- ( sz lz az lneu )
+      OVER @ 0C 000 MLIT AND 0=
+      OVER 1 = AND IF
+        DROP @ ELSE ( warum war da -1 ERGEBNIS +! )
+          OVER 1- !
+          1- 04 000 MLIT OR
+          END_IF 
+      SWAP DROP 
+      SWAP IF MINUS END_IF
+      END_IF
+    END_IF
+  ;
+: A*1 ( a --> a*1 ) 
+  DUP OPERAND1 !
+  OPERAND1 OPERAND->SLX
+  DUP OPERAND1 M- IF
+    OVER ERGEBNIS @ 1+ SWAP MOVE ( SPEICHERHOL will hier nicht gehen )
+    ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz )
+    ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF ( da ist es passiert )
+    SLX->ERGEBNIS1 SWAP DROP
+    ELSE 2DROP DROP END_IF
+  ;
 : OBJ_STRUCT_COPY ( obj --> obj_copy )
   DUP OBJ? IF
     ZERLEG DUP ERGEBNIS @ ! 3FFF AND DUP >R >R
@@ -728,9 +756,9 @@ DUP ZERLEG SWAP M. M.
       SWAP 1+ SWAP 1+
       R> 1 - DUP >R 0= UNTIL
     R> DROP R> - 1 - 04 000 MLIT OR SWAP DROP
-    ELSE A+0 END_IF
+    ELSE A*1 END_IF
   ;
-  
+
 [ 1 2 3 ] DUP M. OBJ_STRUCT_COPY DUP M. .
 
 : INVERTIEREN ( matrix dim --> invmat nenner ) <h href="INVERTIEREN.xml" />
