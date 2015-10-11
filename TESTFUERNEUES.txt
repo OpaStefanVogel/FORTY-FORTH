@@ -36,8 +36,8 @@ HEX ( ist noch als einzigstes zurückzustellen zum Programmieren )
     BEGIN
       OVER @ RECURSE OVER !
       SWAP 1+ SWAP 1+
-      R> 1 - DUP >R 0= UNTIL
-    R> DROP R> - 1 - 04 000 MLIT OR SWAP DROP
+      R> 1 M- DUP >R 0= UNTIL
+    R> DROP R> M- 1 M- 04 000 MLIT OR SWAP DROP
     ELSE A*1 END_IF
   ;
 
