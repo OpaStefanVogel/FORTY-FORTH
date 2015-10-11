@@ -238,6 +238,21 @@ ab 201510:
     ok OBJ_STRUCT_COPY isT jetzt komplett eingesetzt
       .. OBJ_STRUCT_COPY funktioniert zwar, aber nochmal bessser mach
       .. bills aufpassen weil am Ende von nach ABSCHICK mit Absicht kein OBJ_STRUCT_COPY
+      .. 1x1 läuft alles bestens, doch bei 2x2 ist 1 1 ... AC? ERROR: Zahlenspeicher voll
+        .. und zwas vor dem ersten u: :u
+        .. und auch wenn ich erste zwei AB wegnehme...
+        .. jedoch nicht wenn nur drittes AB weg, anscheinend hängt das mit dem U-AB zusammen
+        ok da fällt wieder auf, dass vor dem r: ein 0 1 steht und vor dem u: nur 1
+          ok nee das muss so sein, weil das aufeinanderfolgende IF sind
+        .. nix zu machen, egal wieviele dazwischen, immer beim zweiten U
+        .. aha, aber kein Fehler wenn 77 statt OBJ!!!
+        .. auch wenn gleich hintereinander 1 0 OBJ AB 1 0 OBJ AB
+        .. keiner bei 1 0 77 AB 1 0 OBJ AB und auch nicht bei 1 0 OBJ AB 1 0 77 AB
+        .. möglich wäre, wenn ERGEBNIS auf 2006 steht, wird von dort wegen A+0 oder so gelesen
+          ok !!! ja klar, das wird auf alle Fälle wegen den führenden Nullen wegmachen gemacht
+          ok Fehlerursache: bei A+0 wird von ERGEBNIS>2006 gelesen, um führende Nullen zu entfernen
+          .. bei R-ABSCHICK könnte das deshalb durchgehen, weil vorher JK-PROC durchläuft
+          .. eventuell dann auch noch mehrere solche Stellen.
   ok damit funktioniert jetzt [Ax-YZ]/gx in 00 01 ab 147 ms 10 ab 156 ms 11 ab 166 ms
 
 .. nicht allzuviel Testeingabe weil das XOFF EMIT nicht ausgewertet wird. 
