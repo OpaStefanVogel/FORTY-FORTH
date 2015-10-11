@@ -1,129 +1,47 @@
 HEX ( ist noch als einzigstes zurückzustellen zum Programmieren )
 0 0 JK-PROC HERE .
 
-: OBJ_STRUCT_COPY ( obj --> obj_copy )
-  DUP OBJ? IF
-    ZERLEG DUP ERGEBNIS @ ! 3FFF AND DUP >R >R
-    ERGEBNIS @ 1+ R 1+ ERGEBNIS +! ( obj erg )
-    BEGIN
-      OVER @ RECURSE OVER !
-      SWAP 1+ SWAP 1+
-      R> 1 - DUP >R 0= UNTIL
-    R> DROP R> - 1 - 04 000 MLIT OR SWAP DROP
-    ELSE A+0 END_IF
-  ;
-
-77 88 99 [ 1 2 3 ] DUP M. OBJ_STRUCT_COPY DUP M. . . . .
-
-REPLACE: R-ABSCHICKEN ( x y Z adr n op --> )
-  BEGIN RECHTS-ANGEKOMMEN @ RECHTS-MERK @ = UNTIL
-  RECHTS-BYTES !      ( x y Z adr n
-  DUP IF SWAP OVER RECHTS-BYTES 5 + SWAP MOVE ( x y Z n
-    ELSE SWAP RECHTS-BYTES 5 + ! END_IF
-  DUP RECHTS-BYTES 4 + !
-    NEBENRECHNUNG ROT ROT
-    RECHTS-BYTES 6 + + ERGEBNIS !
-    400 SPEICHERENDE +!
-    OBJ_STRUCT_COPY
-    -400 SPEICHERENDE +!
-    SWAP HAUPTRECHNUNG
-  RECHTS-BYTES 3 + !
-  2DUP
-  RECHTS-BYTES 2 + !
-  RECHTS-BYTES 1 + !
-  RECHTS-ANGEKOMMEN @ NOT 1 AND RECHTS-MERK !
-  RECHTS-ANGEKOMMEN @ NOT RECHTS-ABGESCHICKT !
-  ." r: " B. ." :r "
-  ;
-
-: L-AUSLES1
-  LINKS-MERK @ LINKS-ABGESCHICKT @ = NOT IF
-    LINKS-BYTES @ 0= IF
-      LINKS-BYTES 1+ DUP @ SWAP 1+ @
-      LINKS-ABGESCHICKT @ LINKS-MERK !
-      LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-      JK-PROC
-      END_IF
-    LINKS-BYTES @ 1 = IF
-      LINKS-BYTES 2 + @ 1 - IF ( bei y>0 weiterschicken )
-        LINKS-BYTES 1+ @
-        LINKS-BYTES 2 + @ 1 -
-        CR ." l: " 2DUP B. ." :l "
-        LINKS-BYTES 3 + @ OBJ_STRUCT_COPY
-        LINKS-BYTES 5 +
-        LINKS-BYTES 4 + @ 0= IF @ END_IF
-        LINKS-BYTES 4 + @ 1
-        IAM2Y @ 1 = IF
-          LINKS-ABGESCHICKT @ LINKS-MERK !
-          LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-          R-ABSCHICKEN
-          ELSE
-            R-ABSCHICKEN
-            LINKS-ABGESCHICKT @ LINKS-MERK !
-            LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-            END_IF
-        ELSE ( endlich angekommen )
-          LINKS-BYTES 3 + @
-          LINKS-BYTES 5 +
-          LINKS-BYTES 4 + @
-          CR ." n: " 2DUP B. 2DUP TYPE ." :n " CR
-          DUP IF INTERPRET ELSE DROP @
-            DUP IF EXECUTE ELSE DROP END_IF END_IF
-          LINKS-ABGESCHICKT @ LINKS-MERK !
-          LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-          END_IF
-      END_IF
-    END_IF
-  ;
-REPLACE: L-AUSLES L-AUSLES1 ;
-
-0 1 77 0 0 1 R-ABSCHICKEN
-0 9 77 0 0 1 R-ABSCHICKEN
-0 1 [ 1 2 3 ] "DUP M." 1 R-ABSCHICKEN
-0 1 [ [ 1 2 3 ] [ 4 5 6 ] ] " DUP M. DUP ." 1 R-ABSCHICKEN
-0 1 [ [ 1 2 3 ] [ 4 5 6 ] ] ' . 0 1 R-ABSCHICKEN
-0 2 [ [ 1 2 3 ] [ 4 5 6 ] ] ' . 0 1 R-ABSCHICKEN
-0 9 [ [ 1 2 3 ] [ 4 5 6 ] ] ' . 0 1 R-ABSCHICKEN
-
----------
-: AB 1 ABSCHICKEN ;
-: AC 1 " SP ? ERGEBNIS ? DUP ." 1 ABSCHICKEN ;
-
+: AB " DUP . " 1 ABSCHICKEN ;
+: AC ' OBJ_STRUCT_COPY 0 1 ABSCHICKEN ;
+: ERG HEX ERGEBNIS ? DECIMAL ;
+DECIMAL ERG
+( A
+0 0 [ [ 1  1 ] [  3  27 ] ] AB ERG       
+0 1 [ [ 1  1 ] [  9  81 ] ] AC ERG
+1 0 [ [ 2  8 ] [  4  64 ] ] AC ERG 
+1 1 [ [ 4 16 ] [ 16 256 ] ] AC ERG 
+: AB " DUP . " 1 ABSCHICKEN ;
+: AC ' OBJ_STRUCT_COPY 0 1 ABSCHICKEN ;
 DECIMAL
 ( A
-SP ?
-0 0 0 " DROP [ [ 1  1 ] [  3  27 ] ] DUP ." AB
-0 1 0 " DROP [ [ 1  1 ] [  9  81 ] ] DUP ." AB
-1 0 0 " DROP [ [ 2  8 ] [  4  64 ] ] DUP ." AB
-1 1 0 " DROP [ [ 4 16 ] [ 16 256 ] ] DUP ." AB
+0 0 [ [ 1  1 ] [  3  27 ] ] AB     
+0 1 [ [ 1  1 ] [  9  81 ] ] AC
+1 0 [ [ 2  8 ] [  4  64 ] ] AC
+1 1 [ [ 4 16 ] [ 16 256 ] ] AC
 ( gx
-0 0 AC
-0 1 AC
-1 0 AC
-1 1 AC
+0 0 1 AB
+0 1 1 AB
+1 0 1 AB
+1 1 1 AB
 ( x
-0 0 AC
-0 1 AC
-1 0 AC
-1 1 AC
+0 0 1 AB
+0 1 1 AB
+1 0 1 AB
+1 1 1 AB
 ( Y
-0 0 0 " DROP [ 2 3 ] DUP ." AB
-0 1 0 " DROP [ 2 3 ] DUP ." AB
-1 0 0 " DROP [ 2 4 ] DUP ." AB
-1 1 0 " DROP [ 2 4 ] DUP ." AB
+0 0 [ 2 3 ] AC
+0 1 [ 2 3 ] AC
+1 0 [ 2 4 ] AC
+1 1 [ 2 4 ] AC
 ( Z
-0 0 0 " DROP [ 0 1 ] CDISP [A*x-Y*Z]/gx OVER . DUP ." AB
-0 1 0 " DROP [ 1 1 ] CDISP [A*x-Y*Z]/gx OVER . DUP ." AB
-1 0 0 " DROP [ 0 1 ] CDISP [A*x-Y*Z]/gx OVER . DUP ." AB
-1 1 0 " DROP [ 1 1 ] CDISP [A*x-Y*Z]/gx OVER . DUP ." AB
+0 0 [ 0 1 ] " [A*x-Y*Z]/gx OVER . DUP ." 1 ABSCHICKEN
+0 1 [ 1 1 ] " [A*x-Y*Z]/gx OVER . DUP ." 1 ABSCHICKEN
+1 0 [ 0 1 ] " [A*x-Y*Z]/gx OVER . DUP ." 1 ABSCHICKEN  
+1 1 [ 1 1 ] " [A*x-Y*Z]/gx OVER . DUP ." 1 ABSCHICKEN
 
+0 1 [ 1 1 ] AB
+[ [ 1  1 ] [  9  81 ] ] 1 1 [ 2 3 ] [ 1 1 ] [A*x-Y*Z]/gx
 ------------Rester:
-( Z
-0 0 0 " DROP [ 0 1 ] SP ? ERGEBNIS ? . . . . ." AB
-0 1 0 " DROP [ 1 1 ] SP ? ERGEBNIS ? . . . . ." AB
-1 0 0 " DROP [ 0 1 ] SP ? ERGEBNIS ? . . . . ." AB
-1 1 0 " DROP [ 1 1 ] SP ? ERGEBNIS ? . . . . ." AB
-
 DECIMAL
 [ [ 1   1   1    1 ]
   [ 2   4   8   16 ]
