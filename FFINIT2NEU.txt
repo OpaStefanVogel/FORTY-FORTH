@@ -264,26 +264,32 @@ A 8 DUMP
 2000 VARIABLE SPEICHERENDE
 0 VARIABLE SCHIEB
 
+: TRIM ( sz lz az --> sz lz' az )
+  SWAP 2DUP M+ 1- ( sz az lz ez 
+  BEGIN OVER 0= NOT OVER @ 0= AND WHILE 
+    SWAP 1- SWAP 1- REPEAT ( sz az lz' ez' )
+  DROP SWAP ( sz lz' az )
+  ;
+
+1A01 20 0 FILL
+1A01 11 7 FILL
+0 20 1A01 TRIM ROT M. SWAP M. M.
 
 : SLX->ERGEBNIS ( sz lz az --> z )
-  OVER 0= IF 2DROP DROP 0 ELSE ( 0 bei 1/7 )
-    2DUP M+ BEGIN 1- DUP @ 0= NOT UNTIL 
-    1+ OVER MAX ( sz lz az ez )
-    ( DUP ERGEBNIS ! ( nicht wegen 0 1 OPERAND1 )
-    2DUP = IF 2DROP 2DROP 0 ELSE
-      OVER M- ( sz lz az lneu )
-      OVER @ 0C 000 MLIT AND 0=
-      OVER 1 = AND IF
-        DROP @ ELSE ( warum war da -1 ERGEBNIS +! )
-          OVER 1- !
-          1- 04 000 MLIT OR
-          END_IF 
-      SWAP DROP 
-      SWAP IF MINUS END_IF
-      END_IF
-    END_IF
+  OVER IF
+    OVER 1 = ( falls lz=1 )
+    OVER @ 0C 000 MLIT AND 0= AND ( und az@ kleiner 4000 )
+    IF @ SWAP DROP ELSE
+      1-             ( sz lz az-1 )
+      SWAP OVER !    ( sz az-1 )
+      04 000 MLIT OR ( sz z )
+      END_IF 
+    SWAP IF MINUS END_IF ( z )
+    ELSE 2DROP DROP 0 END_IF ( 0 zum Beispiel bei 1/7 )
   ;
-0 8 C SLX->ERGEBNIS M.
+
+0 11 1A01 SLX->ERGEBNIS M. ( 5A00 )
+1A00 @ M. ( 0011 )
 
 : OPERAND->SLX ( op --> sx lx ax )
   DUP @ ( op x )
@@ -337,11 +343,11 @@ ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
 
 <sekt inhalt="+ - * /MOD .">
 : + ( x y --> z )
-  2OPERANDEN->2SLX ADDIER SLX->ERGEBNIS ;
+  2OPERANDEN->2SLX ADDIER TRIM SLX->ERGEBNIS ;
 : - ( x y --> z )
   MINUS + ;
 : * ( x y --> z )
-  2OPERANDEN->2SLX SMUL SLX->ERGEBNIS ;
+  2OPERANDEN->2SLX SMUL TRIM SLX->ERGEBNIS ;
 
 
 IMMEDIATE: RECURSE LFA @ 4 M+ COMPILE, ;
@@ -358,8 +364,8 @@ IMMEDIATE: RECURSE LFA @ 4 M+ COMPILE, ;
     ROT ROT *
     ELSE DROP 1 SCHIEB ! END_IF 
   2OPERANDEN->2SLX SDIV
-  SLX->ERGEBNIS >R 
-  SLX->ERGEBNIS R>
+  TRIM SLX->ERGEBNIS >R 
+  TRIM SLX->ERGEBNIS R>
   SCHIEB @ 1- IF 
     SWAP SCHIEB @ RECURSE SWAP DROP
     SWAP END_IF
@@ -424,6 +430,23 @@ ERGEBNIS M?
     SLX->ERGEBNIS SWAP DROP
     ELSE 2DROP DROP END_IF
   ;
+
+: ERGEBNIS_NEU! ( ergneu --> )
+  DUP SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
+  ERGEBNIS ! ;
+
+: A+0 ( a --> a+0 ) 
+  DUP OPERAND1 !
+  OPERAND1 OPERAND->SLX ( a sz lz az )
+  DUP OPERAND1 M- IF
+    ERGEBNIS @ 1+ SWAP OVER 2OVER ( a sz lz erg+1 az erg+1 lz erg+1 )
+    OVER M+ ERGEBNIS_NEU!          ( a sz lz erg+1 az erg+1 lz )
+    MOVE SLX->ERGEBNIS SWAP DROP  ( a+0 )
+    ELSE 2DROP DROP END_IF ( a+0 )
+  ;
+
+05 0A00 MLIT A+0 M.
+
 : B+0 ( a b --> a+0 b+0 )
   SWAP A+0 SWAP A+0 ;
 </sekt>
@@ -719,47 +742,22 @@ DUP ZERLEG SWAP M. M.
 [ 12 18 1B ] OBJDUMP
 [ [ 12 18 1B ] [ 1E 21 24 ] ] OBJDUMP
 
-: SLX->ERGEBNIS1 ( sz lz az --> z )
-  OVER 0= IF 2DROP DROP 0 ELSE ( 0 bei 1/7 )
-    2DUP M+ BEGIN 1- ( DUP @ 0= NOT ) -1 UNTIL ( fuehrende Nullen weg )
-    1+ OVER MAX ( sz lz az ez )
-    ( DUP ERGEBNIS ! ( nicht wegen 0 1 OPERAND1 )
-    2DUP = IF 2DROP 2DROP 0 ELSE
-      OVER M- ( sz lz az lneu )
-      OVER @ 0C 000 MLIT AND 0=
-      OVER 1 = AND IF
-        DROP @ ELSE ( warum war da -1 ERGEBNIS +! )
-          OVER 1- !
-          1- 04 000 MLIT OR
-          END_IF 
-      SWAP DROP 
-      SWAP IF MINUS END_IF
-      END_IF
-    END_IF
-  ;
-: A*1 ( a --> a*1 ) 
-  DUP OPERAND1 !
-  OPERAND1 OPERAND->SLX
-  DUP OPERAND1 M- IF
-    OVER ERGEBNIS @ 1+ SWAP MOVE ( SPEICHERHOL will hier nicht gehen )
-    ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz )
-    ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF ( da ist es passiert )
-    SLX->ERGEBNIS1 SWAP DROP
-    ELSE 2DROP DROP END_IF
-  ;
-: OBJ_STRUCT_COPY ( obj --> obj_copy )
+: OBJ_STRUCT_COPY ( obj --> copy )
   DUP OBJ? IF
-    ZERLEG DUP ERGEBNIS @ ! 3FFF AND DUP >R >R
-    ERGEBNIS @ 1+ R 1+ ERGEBNIS +! ( obj erg )
-    BEGIN
-      OVER @ RECURSE OVER !
-      SWAP 1+ SWAP 1+
-      R> 1 M- DUP >R 0= UNTIL
-    R> DROP R> M- 1 M- 04 000 MLIT OR SWAP DROP
-    ELSE A*1 END_IF
+    ERGEBNIS @ 04 000 MLIT OR SWAP   ( copy obj )
+    ZERLEG DUP ERGEBNIS @ ! 3FFF AND ( copy adr n )
+    ERGEBNIS @ 1+ SWAP               ( copy adr erg+1 n )
+    2DUP M+ ERGEBNIS_NEU!            ( copy adr erg+1 n )
+    ROT ROT BEGIN                    ( copy n adr erg+1 )
+      OVER @ RECURSE OVER !          ( copy n adr erg+1 )
+      ROT 1- DUP WHILE                  ( copy adr erg+1 n )
+        ROT 1+ ROT 1+ REPEAT  ( copy adr+1 erg+2 n-1 )
+    2DROP DROP                       ( copy )
+    ELSE A+0 END_IF
   ;
 
-[ 1 2 3 ] DUP M. OBJ_STRUCT_COPY DUP M. .
+[ 111 222 333 ] DUP M. OBJ_STRUCT_COPY M.
+[ [ 1  1 ] [ 3 2 ^ 3 4 ^ ] ] DUP M. OBJ_STRUCT_COPY M.
 
 : INVERTIEREN ( matrix dim --> invmat nenner ) <h href="INVERTIEREN.xml" />
   ( L0=nr L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )

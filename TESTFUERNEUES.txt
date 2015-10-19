@@ -1,100 +1,36 @@
 HEX ( ist noch als einzigstes zurückzustellen zum Programmieren )
 0 0 JK-PROC HERE .
 
-: SLX->ERGEBNIS1 ( sz lz az --> z )
-  OVER 0= IF 2DROP DROP 0 ELSE ( 0 bei 1/7 )
-    2DUP M+ BEGIN 1- ( DUP @ 0= NOT ) -1 UNTIL ( fuehrende Nullen weg )
-    1+ OVER MAX ( sz lz az ez )
-    ( DUP ERGEBNIS ! ( nicht wegen 0 1 OPERAND1 )
-    2DUP = IF 2DROP 2DROP 0 ELSE
-      OVER M- ( sz lz az lneu )
-      OVER @ 0C 000 MLIT AND 0=
-      OVER 1 = AND IF
-        DROP @ ELSE ( warum war da -1 ERGEBNIS +! )
-          OVER 1- !
-          1- 04 000 MLIT OR
-          END_IF 
-      SWAP DROP 
-      SWAP IF MINUS END_IF
-      END_IF
-    END_IF
-  ;
-: A*1 ( a --> a*1 ) 
-  DUP OPERAND1 !
-  OPERAND1 OPERAND->SLX
-  DUP OPERAND1 M- IF
-    OVER ERGEBNIS @ 1+ SWAP MOVE ( SPEICHERHOL will hier nicht gehen )
-    ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz )
-    ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF ( da ist es passiert )
-    SLX->ERGEBNIS1 SWAP DROP
-    ELSE 2DROP DROP END_IF
-  ;
-: OBJ_STRUCT_COPY ( obj --> obj_copy )
-  DUP OBJ? IF
-    ZERLEG DUP ERGEBNIS @ ! 3FFF AND DUP >R >R
-    ERGEBNIS @ 1+ R 1+ ERGEBNIS +! ( obj erg )
-    BEGIN
-      OVER @ RECURSE OVER !
-      SWAP 1+ SWAP 1+
-      R> 1 M- DUP >R 0= UNTIL
-    R> DROP R> M- 1 M- 04 000 MLIT OR SWAP DROP
-    ELSE A*1 END_IF
-  ;
-
-: AB " DUP M. OBJ_STRUCT_COPY DUP M. DUP . " 1 ABSCHICKEN ;
-: ERG CR HEX SP ? ERGEBNIS ? SPEICHERENDE ? DECIMAL ;
-DECIMAL ERG
-( A
-0 0 [ [ 1  1 ] [  3  27 ] ] DUP M. DUP . ERG AB ERG
-0 1 [ [ 1  1 ] [  9  81 ] ] DUP M. DUP . ERG AB ERG
-1 1 [ [ 4 16 ] [ 16 256 ] ] DUP M. DUP . ERG AB ERG
-1 0 [ [ 2  4 ] [  4  64 ] ] DUP M. DUP . ERG AB ERG 
-
-: AB " DUP . " 1 ABSCHICKEN ;
-: AC ' OBJ_STRUCT_COPY 0 1 ABSCHICKEN ;
-: ERG HEX ERGEBNIS ? DECIMAL ;
-DECIMAL ERG
-( A
-0 0 [ [ 1  1 ] [  3  27 ] ] AB ERG
-0 1 [ [ 1  1 ] [  9  81 ] ] AC ERG
-1 0 [ [ 2  8 ] [  4  64 ] ] AC ERG
-1 1 [ [ 4 16 ] [ 16 256 ] ] AC ERG
 : AB " DUP . " 1 ABSCHICKEN ;
 : AC ' OBJ_STRUCT_COPY 0 1 ABSCHICKEN ;
 DECIMAL
 ( A
-0 0 [ [ 1  1 ] [  3  27 ] ] AB
-0 1 [ [ 1  1 ] [  9  81 ] ] AC
-1 0 [ [ 2  8 ] [  4  64 ] ] AC
-1 1 [ [ 4 16 ] [ 16 256 ] ] AC
+0 0 [ [ 1  1 ] [ 3 1 ^ 3 3 ^ ] ] AB
+0 1 [ [ 1  1 ] [ 3 2 ^ 3 4 ^ ] ] AC
+1 0 [ [ 2 1 ^ 2 3 ^ ] [ 4 1 ^ 4 3 ^ ] ] AC
+1 1 [ [ 2 2 ^ 2 4 ^ ] [ 4 2 ^ 4 4 ^ ] ] AC
 ( gx
 0 0 1 AB
-0 1 1 AB
-1 0 1 AB
-1 1 1 AB
+0 1 1 AC
+1 0 1 AC
+1 1 1 AC
 ( x
 0 0 1 AB
-0 1 1 AB
-1 0 1 AB
-1 1 1 AB
+0 1 1 AC
+1 0 1 AC
+1 1 1 AC
 ( Y
-0 0 [ 2 3 ] AC
+0 0 [ 2 3 ] AB
 0 1 [ 2 3 ] AC
 1 0 [ 2 4 ] AC
 1 1 [ 2 4 ] AC
 ( Z
-0 0 [ 0 1 ] " . . . . ." 1 ABSCHICKEN
-0 1 [ 1 1 ] " . . . . ." 1 ABSCHICKEN
-1 0 [ 0 1 ] " . . . . ." 1 ABSCHICKEN
-1 1 [ 1 1 ] " . . . . ." 1 ABSCHICKEN
-0 0 [ 0 1 ] " [A*x-Y*Z]/gx OVER . DUP ." 1 ABSCHICKEN
-0 1 [ 1 1 ] " [A*x-Y*Z]/gx OVER . DUP ." 1 ABSCHICKEN
-1 0 [ 0 1 ] " [A*x-Y*Z]/gx OVER . DUP ." 1 ABSCHICKEN  
-1 1 [ 1 1 ] " [A*x-Y*Z]/gx OVER . DUP ." 1 ABSCHICKEN
+0 0 [ 0 1 ] " [A*x-Y*Z]/gx OVER . DUP . " 1 ABSCHICKEN
+0 1 [ 1 1 ] " [A*x-Y*Z]/gx OVER 0 1 ROT ' . 0 1 ABSCHICKEN" 1 ABSCHICKEN
+1 0 [ 0 1 ] " [A*x-Y*Z]/gx OVER 1 0 ROT ' . 0 1 ABSCHICKEN" 1 ABSCHICKEN  
+1 1 [ 1 1 ] " [A*x-Y*Z]/gx OVER 1 1 ROT ' . 0 1 ABSCHICKEN" 1 ABSCHICKEN
 
-0 1 [ 1 1 ] AB
-[ [ 1  1 ] [  9  81 ] ] 1 1 [ 2 3 ] [ 1 1 ] [A*x-Y*Z]/gx
-------------Rester:
+------------was herauskommen soll:
 DECIMAL
 [ [ 1   1   1    1 ]
   [ 2   4   8   16 ]
@@ -107,6 +43,7 @@ DECIMAL
 HEX ERGEBNIS ?
 
 ergibt
+
 1 [ 2 2 3 4 ] [ 0 1 1 1 ] [A*x-Y*Z]/gx OVER . DUP . SP ? [ [ 1 -1 -1 -1 ] [ 2 2 6 14 ] [ 3 6 24 78 ] [ 4 12 60 252 ] ] 1 140 ok
 2 [ -1 3 6 12 ] [ 2 1 6 14 ] [A*x-Y*Z]/gx OVER . DUP . SP ? [ [ 4 -1 4 12 ] [ -2 1 -6 -14 ] [ -6 6 12 72 ] [ -16 12 48 336 ] ] 2 140 ok
 12 [ 4 -6 14 48 ] [ -6 6 10 72 ] [A*x-Y*Z]/gx OVER . DUP . SP ? [ [ 36 -18 4 -72 ] [ -30 24 -6 132 ] [ 6 -6 2 -72 ] [ 48 -72 48 288 ] ] 12 140 ok

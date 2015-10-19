@@ -209,8 +209,8 @@ ab 201510:
   OK als nächstes dann halt SEND-TO ( x y --> ) einfach mal losmach ok ist ABSCHICK geworden
     OK da brauch ich das SEND-TO selbst
       OK x y relativ, damit auch bei 1x1 alles getestet werden kann 
-      .. vorübergehendes INTERPRET später wieder raus
-      .. ggZ später rein
+      OK vorübergehendes INTERPRET später wieder raus
+      .. ggZ später rein ???
       OK 1x1 ist insofern extra, weil nicht R-Schreiben vor L-Lesen geht
         .. das ist aber insofern vielleicht eine Möglichkeit ganz ohne ABESCHICKT/ANGEKOMMEN
         OK vorerst muss ich das behelfsmäßig überbrücken
@@ -221,8 +221,8 @@ ab 201510:
     ok dann das AUSLES so modifizieren dass weiter solange x y nicht erreicht,
     ok sonst ein passendes AUSFUEHR, blos wie. ok momentan alles INTERPRET
     ok geht auch in 2x2
-  .. weiter mit Matrix aufteilen...
-    .. die x y besser in j k umbenennen
+  o. weiter mit Matrix aufteilen...der erste Versuch geht jetzt
+    ok die x y besser in j k umbenennen
     ok Ein A*x und ein Y*Z wird gebraucht, ok und jede Menge mehr davon bis [A*x-Y*Z]/gx
     ok jedoch reicht auch nur ein einziges (A*x+Y*Z)/gx ok nach dem alten IVERTIEREN gut ok
     ok ob das mknod verwendbar ist für xsim, tatsächlich mkfifo text_outputfile.txt geht
@@ -232,40 +232,49 @@ ab 201510:
       default layout mit kleinstem Ausschnitt, 
       alle .wcfg disablen außer einer,
       auch die Fenster nicht verrucken
-    o. Fehler gefunden, ich kann ja noch gar nicht das A als n abschicken...,versuch OBJ+0
+    ok Fehler gefunden, ich kann ja noch gar nicht das A als n abschicken...,versuch OBJ+0
       ok da könnte ich auch adr n bei n>0 als INTERPRET machen und bei n=0 als EXECUTE
       ok vor BEFESTIGE die verwendeten Eingänge rücksetzen
     ok OBJ_STRUCT_COPY isT jetzt komplett eingesetzt
-      .. OBJ_STRUCT_COPY funktioniert zwar, aber nochmal bessser mach
-      .. bills aufpassen weil am Ende von nach ABSCHICK mit Absicht kein OBJ_STRUCT_COPY
-      .. 1x1 läuft alles bestens, doch bei 2x2 ist 1 1 ... AC? ERROR: Zahlenspeicher voll
-        .. und zwas vor dem ersten u: :u
-        .. und auch wenn ich erste zwei AB wegnehme...
-        .. jedoch nicht wenn nur drittes AB weg, anscheinend hängt das mit dem U-AB zusammen
+      OK OBJ_STRUCT_COPY funktioniert zwar, aber nochmal bessser mach
+      OK bissl aufpassen weil am Ende von nach ABSCHICK mit Absicht kein OBJ_STRUCT_COPY
+      OK 1x1 läuft alles bestens, doch bei 2x2 ist 1 1 ... AC? ERROR: Zahlenspeicher voll
+        OK und zwas vor dem ersten u: :u
+        OK und auch wenn ich erste zwei AB wegnehme...
+        OK jedoch nicht wenn nur drittes AB weg, anscheinend hängt das mit dem U-AB zusammen
         ok da fällt wieder auf, dass vor dem r: ein 0 1 steht und vor dem u: nur 1
           ok nee das muss so sein, weil das aufeinanderfolgende IF sind
-        .. nix zu machen, egal wieviele dazwischen, immer beim zweiten U
-        .. aha, aber kein Fehler wenn 77 statt OBJ!!!
-        .. auch wenn gleich hintereinander 1 0 OBJ AB 1 0 OBJ AB
-        .. keiner bei 1 0 77 AB 1 0 OBJ AB und auch nicht bei 1 0 OBJ AB 1 0 77 AB
-        .. möglich wäre, wenn ERGEBNIS auf 2006 steht, wird von dort wegen A+0 oder so gelesen
+        OK nix zu machen, egal wieviele dazwischen, immer beim zweiten U
+        OK aha, aber kein Fehler wenn 77 statt OBJ!!!
+        OK auch wenn gleich hintereinander 1 0 OBJ AB 1 0 OBJ AB
+        OK keiner bei 1 0 77 AB 1 0 OBJ AB und auch nicht bei 1 0 OBJ AB 1 0 77 AB
+        OK möglich wäre, wenn ERGEBNIS auf 2006 steht, wird von dort wegen A+0 oder so gelesen
           ok !!! ja klar, das wird auf alle Fälle wegen den führenden Nullen wegmachen gemacht
           ok Fehlerursache: bei A+0 wird von ERGEBNIS>2006 gelesen, um führende Nullen zu entfernen
-          .. bei R-ABSCHICK könnte das deshalb durchgehen, weil vorher JK-PROC durchläuft
-          .. eventuell dann auch noch mehrere solche Stellen.
+          OK bei R-ABSCHICK könnte das deshalb durchgehen, weil vorher JK-PROC durchläuft
+          OK eventuell dann auch noch mehrere solche Stellen.
           ok aber die erste Fehlerstelle ist jetzt weg, mit A+0=A*1 als Behelf
           ok und die zweite Fehlerstelle auch mit M- statt -
-          .. doch mehr kann noch nicht gehen, da muss erst das richtige A+0 her.        
-  ok damit funktioniert jetzt [Ax-YZ]/gx in 00 01 ab 147 ms 10 ab 156 ms 11 ab 166 ms
-open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr
-launch_simulation
+          ok doch mehr kann noch nicht gehen, da muss erst das richtige A+0 her.        
+            ok 1- statt 1 M- wird vorher oft verwendet
+            ok ein extra TRIM
+            ok dann SLX->ERGEBNIS1 stark verkürzt
+            ok in A+0 0369 ERROR vor ERGEBNIS! und das wiederum vor MOVE
+            ok OBJ_STRUCT_COPY ohne >R
+    ok damit funktioniert jetzt [Ax-YZ]/gx in 00 01 ab 147 ms 10 ab 156 ms 11 ab 166 ms
 
-.. nicht allzuviel Testeingabe weil das XOFF EMIT nicht ausgewertet wird. 
+.. auf vivado -mode tcl umstellen ab Step_12 mit
+    open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr
+    launch_simulation
+    close_sim
+.. fileinput auch committen
+ok nicht allzuviel Testeingabe weil das XOFF EMIT nicht ausgewertet wird. 
+ok danach noch xoff in testbench.vhd einbauen
 .. Step_11 das erste ausgegebene Zeichen vor dem F... ist ein ???
 .. Vergleiche = < > mit in die +-*/ Tabelle
 .. Die Korrektur von RECHTS-BYTES @ ... in RECHTS-BYTES @ noch mit durchgängig compilieren
 .. ERGEBNIS=1800 zeigt wieder, da ist noch eine unnötige Veränderung drin bei ohne große ganze Zahlen
-.. ERROR Zahlenspeicher voll vor MOVE ausgeben
+ok ERROR Zahlenspeicher voll vor MOVE ausgeben
 
 Spartan3 ist momentan programmiert auf 
   1180 8 DUMP 6EC3 BF57 659F 52A3 CF07 F694 EB89 00E0
