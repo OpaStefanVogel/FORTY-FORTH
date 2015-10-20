@@ -55,6 +55,7 @@ signal SP_SIM: STD_LOGIC_VECTOR (15 downto 0);
 signal EMIT_ABGESCHICKT: STD_LOGIC;
 signal EMIT_BYTE: STD_LOGIC_VECTOR (7 downto 0);
 signal EMIT_ANGEKOMMEN: STD_LOGIC:='0';
+signal XOFF_BIT: STD_LOGIC:='0';
 -- KEY --
 signal KEY_ABGESCHICKT: STD_LOGIC:='0';
 signal KEY_BYTE: STD_LOGIC_VECTOR (7 downto 0);
@@ -92,27 +93,7 @@ begin
   CLK <= not CLK after 10 ns;
   EMIT_ANGEKOMMEN<=EMIT_ABGESCHICKT after 800 ns; -- simuliert Dauer der seriellen Ausgabe
 
---  -- simuliert eine Tastatureingabe, jedoch ersetzt durch nächsten process
---  process
---  variable I: integer:=1;
---  variable c: STD_LOGIC_VECTOR ( 7 downto 0 ) ;
---  constant Enter:string(1 to 1) := "" & character'val(10) ;
---  constant DEMO: string(1 to 44) := 
---    "0 0 XY-PROC" & Enter &
---    "IAM1X ? IAM1Y ? IAM2X ? IAM2Y ?" & Enter
---     ;
-
---  begin
---    wait for 30000 ns;
---    if I <= DEMO'length then
---      c := CONV_STD_LOGIC_VECTOR(character'pos ( DEMO ( I ) ),8) ;
---      KEY_BYTE <= c ;
---      KEY_ABGESCHICKT<=not KEY_ABGESCHICKT;
---      end if;
---    I:=I+1;
---  end process;
-
-read_input: process -- ersetzt vorhergehenden Ausgabe-process
+read_input: process
         type char_file is file of character;
         file c_file_handle: char_file;
         variable C: character;
@@ -120,7 +101,7 @@ read_input: process -- ersetzt vorhergehenden Ausgabe-process
    begin
      wait for 30000 ns;
      if char_count=0 then  file_open(c_file_handle, "../../../../test_input_file.txt", READ_MODE); end if;
-     if not endfile(c_file_handle) then
+     if not endfile(c_file_handle) and XOFF_BIT='0' then
        read (c_file_handle, C) ;    
        KEY_BYTE <= CONV_STD_LOGIC_VECTOR(character'pos(C),8) ;
        KEY_ABGESCHICKT<=not KEY_ABGESCHICKT;
@@ -136,7 +117,11 @@ write_output: process -- zusaetzliche Ausgabe von EMIT_BYTE in Datei "test_file.
    begin
      wait until EMIT_ABGESCHICKT'event;
      if char_count=0 then  file_open(c_file_handle, "../../../../test_output_file.txt", WRITE_MODE); end if;
-     write (c_file_handle, character'val(CONV_INTEGER(EMIT_BYTE))) ;    
+     if EMIT_BYTE=x"13" then XOFF_BIT<='1';
+       elsif EMIT_BYTE=x"11" then XOFF_BIT<='0';
+         else
+          write (c_file_handle, character'val(CONV_INTEGER(EMIT_BYTE)));
+          end if;
      char_count := char_count + 1;  -- Keep track of the number of
    end process;
 
