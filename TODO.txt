@@ -183,7 +183,7 @@ ok den Programmbereich 0010-0027 mit in das Vokabular einbeziehen
 o. ich hab mal eine Tabelle "Rechenoperationen bei verschiedenen Datentypen" angefangen in INIT.xml
 .. INVERTIEREN.xml läuft noch nicht in Epiphany-Browser (wegen flex-direction: column;?)
 ab 201510:
-.. XOFF="0000" setzen innerhalb von DUMPZ
+ok XOFF="0000" setzen innerhalb von DUMPZ
 .. dann die memory-collision irgendwie umgehen
 .. jetzt geht Step_12 los:
   ok erstmal EXXI wieder reaktivieren, etwas geändert (direkt in KEY, ohne LOOP)
@@ -262,6 +262,9 @@ ab 201510:
             ok in A+0 0369 ERROR vor ERGEBNIS! und das wiederum vor MOVE
             ok OBJ_STRUCT_COPY ohne >R
     ok damit funktioniert jetzt [Ax-YZ]/gx in 00 01 ab 147 ms 10 ab 156 ms 11 ab 166 ms
+    .. weiter mit 2 ABSCHICKEN
+      .. besser das erste gleich ausführen statt einmal im Kreis herum
+      ok aber der erste Versuch hat funktioniert ok
 
 .. auf vivado -mode tcl umstellen ab Step_12 mit
     open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr
@@ -272,8 +275,8 @@ ok nicht allzuviel Testeingabe weil das XOFF EMIT nicht ausgewertet wird.
 ok danach noch xoff in testbench.vhd einbauen
 .. Step_11 das erste ausgegebene Zeichen vor dem F... ist ein ???
 .. Vergleiche = < > mit in die +-*/ Tabelle
-.. Die Korrektur von RECHTS-BYTES @ ... in RECHTS-BYTES @ noch mit durchgängig compilieren
-.. ERGEBNIS=1800 zeigt wieder, da ist noch eine unnötige Veränderung drin bei ohne große ganze Zahlen
+OK Die Korrektur von RECHTS-BYTES @ ... in RECHTS-BYTES @ noch mit durchgängig compilieren
+OK ERGEBNIS=1800 zeigt wieder, da ist noch eine unnötige Veränderung drin bei ohne große ganze Zahlen
 ok ERROR Zahlenspeicher voll vor MOVE ausgeben
 
 Spartan3 ist momentan programmiert auf 
