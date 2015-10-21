@@ -262,13 +262,16 @@ ok XOFF="0000" setzen innerhalb von DUMPZ
             ok in A+0 0369 ERROR vor ERGEBNIS! und das wiederum vor MOVE
             ok OBJ_STRUCT_COPY ohne >R
     ok damit funktioniert jetzt [Ax-YZ]/gx in 00 01 ab 147 ms 10 ab 156 ms 11 ab 166 ms
-    .. weiter mit 2 ABSCHICKEN
+    ok weiter mit 2 ABSCHICKEN...
       .. besser das erste gleich ausführen statt einmal im Kreis herum
       ok aber der erste Versuch hat funktioniert ok
+      ok 3 ABSCHICKEN soweit auch (COPY nicht vergessen!)
+      ok und auch ganz durch, also alles ok
 
 .. auf vivado -mode tcl umstellen ab Step_12 mit
     open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr
     launch_simulation
+    restart ; run 200 ms
     close_sim
 .. fileinput auch committen
 ok nicht allzuviel Testeingabe weil das XOFF EMIT nicht ausgewertet wird. 
