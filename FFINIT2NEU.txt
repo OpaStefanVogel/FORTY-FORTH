@@ -1483,7 +1483,7 @@ TLISTE VARIABLE TLISTENZEIGER
           LINKS-BYTES 3 M+ @
           LINKS-BYTES 5 M+
           LINKS-BYTES 4 M+ @
-          CR ." :n " 2DUP B. 2DUP TYPE ." n: " CR
+          CR ." :n " 2DUP B. 2DUP TYPE ." n: "
           DUP IF INTERPRET ELSE DROP @
             DUP IF EXECUTE ELSE DROP END_IF END_IF
           LINKS-ABGESCHICKT @ LINKS-MERK !
@@ -1501,7 +1501,7 @@ TLISTE VARIABLE TLISTENZEIGER
       OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
       JK-PROC
       END_IF
-    OBEN-BYTES @ 1 = IF
+    OBEN-BYTES @ 1 = OBEN-BYTES @ 3 = OR IF
       OBEN-BYTES 1+ @ 1- IF ( bei y>0 weiterschicken )
         OBEN-BYTES 1+ @ 1-
         OBEN-BYTES 2 M+ @
@@ -1516,6 +1516,14 @@ TLISTE VARIABLE TLISTENZEIGER
           U-ABSCHICKEN
           ELSE
             U-ABSCHICKEN
+            OBEN-BYTES @ 3 = IF
+              OBEN-BYTES 3 M+ @
+              OBEN-BYTES 5 M+
+              OBEN-BYTES 4 M+ @
+              CR ." :NN " 2DUP B. 2DUP TYPE ." NN: "
+              DUP IF INTERPRET ELSE DROP @ 
+                DUP IF EXECUTE ELSE DROP END_IF END_IF
+              END_IF
             OBEN-ABGESCHICKT @ OBEN-MERK !
             OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
             END_IF
@@ -1535,7 +1543,7 @@ TLISTE VARIABLE TLISTENZEIGER
               OBEN-BYTES 3 M+ @
               OBEN-BYTES 5 M+
               OBEN-BYTES 4 M+ @
-              CR ." :N " 2DUP B. 2DUP TYPE ." N:"
+              CR ." :N " 2DUP B. 2DUP TYPE ." N: "
               DUP IF INTERPRET ELSE DROP @ 
                 DUP IF EXECUTE ELSE DROP END_IF END_IF
               OBEN-ABGESCHICKT @ OBEN-MERK !
