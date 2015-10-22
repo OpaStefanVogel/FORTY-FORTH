@@ -262,11 +262,12 @@ ok XOFF="0000" setzen innerhalb von DUMPZ
             ok in A+0 0369 ERROR vor ERGEBNIS! und das wiederum vor MOVE
             ok OBJ_STRUCT_COPY ohne >R
     ok damit funktioniert jetzt [Ax-YZ]/gx in 00 01 ab 147 ms 10 ab 156 ms 11 ab 166 ms
-    ok weiter mit 2 ABSCHICKEN...
-      .. besser das erste gleich ausführen statt einmal im Kreis herum
+    ok weiter mit 2 ABSCHICKEN...dann 3 ABSCHICKEN...
+      ok besser das erste gleich ausführen statt einmal im Kreis herum ok läuft jetzt auch
       ok aber der erste Versuch hat funktioniert ok
       ok 3 ABSCHICKEN soweit auch (COPY nicht vergessen!)
       ok und auch ganz durch, also alles ok
+    .. dann jetzt Martix automatisch aufteilen
 
 .. auf vivado -mode tcl umstellen ab Step_12 mit
     open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr

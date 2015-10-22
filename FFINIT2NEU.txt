@@ -1409,13 +1409,24 @@ TLISTE VARIABLE TLISTENZEIGER
   ." :u " B. ." u: " 
   ;
 : ABSCHICKEN ( j k Z adr n op --> )
-  >R >R 2OVER R> R> 2SWAP ( j k Z adr n op j k )
-  OVER DUP . IF 2DROP U-ABSCHICKEN 
-    ELSE DUP DUP . IF 2DROP R-ABSCHICKEN 
+  6 LOCAL
+  L5 ! L4 ! L3 ! L2 ! L1 ! L0 !
+  L0 @ L1 @ L2 @ L3 @ L4 @ L5 @ L0 @ L1 @  ( j k Z adr n op j k )
+  OVER DUP . IF 2DROP U-ABSCHICKEN
+    L5 @ 3 = IF L2 @ L3 @ L4 @ ( Z adr n )
+      DUP IF INTERPRET ELSE DROP
+        DUP IF EXECUTE ELSE DROP END_IF END_IF
+      END_IF
+    ELSE DUP DUP . IF 2DROP R-ABSCHICKEN
+      L5 @ 2 = IF L2 @ L3 @ L4 @ ( Z adr n )
+        DUP IF INTERPRET ELSE DROP
+          DUP IF EXECUTE ELSE DROP END_IF END_IF
+        END_IF
       ELSE 2DROP DROP >R >R >R 2DROP R> R> R>
         DUP IF INTERPRET ELSE DROP DUP IF EXECUTE ELSE DROP END_IF END_IF
         END_IF END_IF
-  ; HERE . BZEIG ?
+  END_LOCAL
+  ;
 
 ( 5 6 1 " 77 . " 1 ABSCHICKEN
 
