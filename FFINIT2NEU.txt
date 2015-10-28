@@ -1630,37 +1630,38 @@ BEFESTIGE O-AUSLES
 0 VARIABLE NK
 0 VARIABLE JLOC
 0 VARIABLE KLOC
-0 VARIABLE AMERK
 0 VARIABLE GXMERK
 
 : M/ M/MOD DROP ;
 
+: JLOC! JLOC ! ;
+: KLOC! KLOC ! ;
+
 : ZLOS ( A gx x Y --> A' gx' )
   ." ZLOS " 2OVER B. 2DUP B.
-  AMERK @ JLOC @ L DUP . ( A gx x Y Z )
-  NJ @ 0 ROT  ( A gx x Y NJ@ 0 Z )
-  IAM1X @ IAM1Y @ = IF KLOC @ G GXMERK @ - H ENDIF ( das 2x IAM1X=IAM1Y nur vorläufig!!! )
-  DUP .
+  2OVER DROP JLOC @ L DUP . ( A gx x Y Z )
+  NJ @ 1- 0 ROT  ( A gx x Y NJ@-1 0 Z )
+  IAM1X @ IAM1Y @ = IF KLOC @ G GXMERK @ - H ENDIF DUP .
   ' [A*x-Y*Z]/gx 0 3 ABSCHICKEN
   ;
 
 : XYLOS ( A gx x --> A' gx' )
   ." XYLOS "
-  OVER GXMERK !
-  0 NK @ ROT ' A+0 0 2 ABSCHICKEN ( A gx x )
-  AMERK @ KLOC @ YCOL DUP . ( A gx x Y )
-  0 NK @ ROT ( A gx x 0 NK@ Y )
+  0 NK @ 1- ROT ' A+0 0 2 ABSCHICKEN ( A gx x )
+  KLOC @ 2OVER DROP YCOL DUP . ( A gx x Y )
+  0 NK @ 1- ROT ( A gx x 0 NK@-1 Y )
   IAM1X @ IAM1Y @ = IF JLOC @ G GXMERK @ + H ' ZLOS ELSE 0 END_IF
   OVER . ( A gx x 0 NK@ Y 0 )
   0 2 ABSCHICKEN ( A' gx' )
   ;
 
+( N, NJ, NK werden vorerst beim Matrix Aufteilen mit gesetzt
 : GINV ( A gx n --> A' gx' )
   ." GINV "
-  NN ! N @ NN @ - NI !
-  NI @ N @ NJ @ M/ M/ JLOC !
-  NI @ N @ NK @ M/ M/ KLOC !
-  OVER AMERK !
+  NN ! DUP GXMERK ! ( A gx )
+  N @ NN @ M- NI !
+  0 NK @ 1- NI @ N @ NJ @ M/ M/ ' JLOC! 2 ABSCHICKEN
+  NJ @ 1- 0 NI @ N @ NK @ M/ M/ ' KLOC! 3 ABSCHICKEN
   OVER JLOC @ L KLOC @ L DUP . ( A gx x )
   NJ @ 1- 0 ROT ' XYLOS 0 3 ABSCHICKEN
   NN @ 1- IF 1 1 NN @ 1- ' GINV 0 1 ABSCHICKEN END_IF
