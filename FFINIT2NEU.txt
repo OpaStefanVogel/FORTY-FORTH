@@ -523,10 +523,6 @@ ERGEBNIS M?
 
 22 WORD: N" ( /number/  --> n ) NNUMBER DROP ;
 
-
-
-( REPLACE: NUMBER NNUMBER ;
-
 N" 111111111111111" DUP * DUP . DUP M.
 N" 111111111111111" DUP . DUP M.
 /MOD OVER M. DUP M. B.
@@ -550,6 +546,10 @@ N" 000002330657FDD698" DUP .
 N" 000002330657FDD698" N" 4C0CF598D3" * .
 N" 000002330657FDD698" N" 4C0CF598D2" * .
 
+
+( wenn alles so geht, kann es richig losgehen )<id id="NNUMBER"/>
+REPLACE: NUMBER NNUMBER ;
+111111111111111 DUP * .
 
 
 
@@ -1275,7 +1275,6 @@ HEX DUP .
 </sekt>
 
 <sekt inhalt="Multiproc.">
-REPLACE: NUMBER NNUMBER ; ( kann auch weiter hoch...
 : ? @ . ;
 
 : 2@ ( adr --> a b )
@@ -1369,8 +1368,8 @@ TLISTE VARIABLE TLISTENZEIGER
 0 VARIABLE UNTEN-MERK
 
 : R-ABSCHICKEN ( x y Z adr n op --> )
-  BEGIN RECHTS-ANGEKOMMEN @ RECHTS-MERK @ = UNTIL
-  RECHTS-BYTES !      ( x y Z adr n
+  BEGIN RECHTS-ANGEKOMMEN @ RECHTS-MERK @ M- WHILE ." r_wart " REPEAT
+  RECHTS-BYTES ! ( x y Z adr n
   DUP IF SWAP OVER RECHTS-BYTES 5 + SWAP MOVE ( x y Z n
     ELSE SWAP RECHTS-BYTES 5 + ! END_IF
   DUP RECHTS-BYTES 4 M+ !
@@ -1389,7 +1388,7 @@ TLISTE VARIABLE TLISTENZEIGER
   ." :r " B. ." r: "
   ;
 : U-ABSCHICKEN ( x y Z adr n op --> )
-  BEGIN UNTEN-ANGEKOMMEN @ UNTEN-MERK @ = UNTIL
+  BEGIN UNTEN-ANGEKOMMEN @ UNTEN-MERK @ M- WHILE ." u_wart " REPEAT
   UNTEN-BYTES !
   DUP IF SWAP OVER UNTEN-BYTES 5 + SWAP MOVE ( j k Z n
     ELSE SWAP UNTEN-BYTES 5 + ! END_IF
@@ -1616,18 +1615,62 @@ BEFESTIGE O-AUSLES
 (   [ 2   4   8   16 ]
 (   [ 3   9  27   81 ]
 (   [ 4  16  64  256 ] ] 1 SP ?
-( 1 [ 2 2 3 4 ] [ 0 1 1 1 ] [A*x-Y*Z]/gx OVER . DUP .
-( 2 [ -1 3 6 12 ] [ 2 1 6 14 ] [A*x-Y*Z]/gx OVER . DUP .
-( 12 [ 4 -6 14 48 ] [ -6 6 10 72 ] [A*x-Y*Z]/gx OVER . DUP .
-( 288 [ -72 132 -72 300 ] [ 48 -72 48 276 ] [A*x-Y*Z]/gx OVER . DUP .
+( 1 [ 2 2 3 4 ] [ 0 1 1 1 ] [A*x-Y*Z]/gx OVER . DUP . 
+( [ [ 1 -1 -1 -1 ] [ 2 2 6 14 ] [ 3 6 24 78 ] [ 4 12 60 252 ] ] 1 ok
+( 2 [ -1 3 6 12 ] [ 2 1 6 14 ] [A*x-Y*Z]/gx OVER . DUP . 
+(  [ [ 4 -1 4 12 ] [ -2 1 -6 -14 ] [ -6 6 12 72 ] [ -16 12 48 336 ] ] 2 ok
+( 12 [ 4 -6 14 48 ] [ -6 6 10 72 ] [A*x-Y*Z]/gx OVER . DUP . 
+( [ [ 36 -18 4 -72 ] [ -30 24 -6 132 ] [ 6 -6 2 -72 ] [ 48 -72 48 288 ] ] 12 140 ok
+( 288 [ -72 132 -72 300 ] [ 48 -72 48 276 ] [A*x-Y*Z]/gx OVER . DUP . 
+(  [ [ 1152 -864 384 -72 ] [ -1248 1368 -672 132 ] [ 432 -576 336 -72 ] [ -48 72 -48 12 ] ] 288 ok
+
+0 VARIABLE NN
+0 VARIABLE NI
+0 VARIABLE NJ
+0 VARIABLE NK
+0 VARIABLE JLOC
+0 VARIABLE KLOC
+0 VARIABLE AMERK
+0 VARIABLE GXMERK
+
+: M/ M/MOD DROP ;
+
+: ZLOS ( A gx x Y --> A' gx' )
+  ." ZLOS " 2OVER B. 2DUP B.
+  AMERK @ JLOC @ L DUP . ( A gx x Y Z )
+  NJ @ 0 ROT  ( A gx x Y NJ@ 0 Z )
+  IAM1X @ IAM1Y @ = IF KLOC @ G GXMERK @ - H ENDIF ( das 2x IAM1X=IAM1Y nur vorläufig!!! )
+  DUP .
+  ' [A*x-Y*Z]/gx 0 3 ABSCHICKEN
+  ;
+
+: XYLOS ( A gx x --> A' gx' )
+  ." XYLOS "
+  OVER GXMERK !
+  0 NK @ ROT ' A+0 0 2 ABSCHICKEN ( A gx x )
+  AMERK @ KLOC @ YCOL DUP . ( A gx x Y )
+  0 NK @ ROT ( A gx x 0 NK@ Y )
+  IAM1X @ IAM1Y @ = IF JLOC @ G GXMERK @ + H ' ZLOS ELSE 0 END_IF
+  OVER . ( A gx x 0 NK@ Y 0 )
+  0 2 ABSCHICKEN ( A' gx' )
+  ;
+
+: GINV ( A gx n --> A' gx' )
+  ." GINV "
+  NN ! N @ NN @ - NI !
+  NI @ N @ NJ @ M/ M/ JLOC !
+  NI @ N @ NK @ M/ M/ KLOC !
+  OVER AMERK !
+  OVER JLOC @ L KLOC @ L DUP . ( A gx x )
+  NJ @ 1- 0 ROT ' XYLOS 0 3 ABSCHICKEN
+  NN @ 1- IF 1 1 NN @ 1- ' GINV 0 1 ABSCHICKEN END_IF
+  ;
+
 
 </sekt>
 
 <sekt inhalt="in den Zustand für Step_12 bringen und wieder RAM generieren">
 ( allerdings beim Compilieren von großen ganzen Zahlen im Moment noch 1234 ERROR
-
-
-111111111111111 DUP * .
 
 ( an der Stelle Programm-VHDL-Quelltext für Step_12 ausgeben )
 HEX INIT 

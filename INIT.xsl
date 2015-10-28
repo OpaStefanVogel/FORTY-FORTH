@@ -87,4 +87,7 @@ Bedeutung der verwendeten Hintergrundfarben:
 
 <xsl:template match="table"><xsl:copy-of select="." /></xsl:template>
 
+<xsl:template match="id">
+  <xsl:copy-of select="." />
+  </xsl:template>
 </xsl:stylesheet>

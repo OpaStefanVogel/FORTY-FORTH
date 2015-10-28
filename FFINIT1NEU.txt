@@ -280,7 +280,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
     DUP BASE @ LT NOT IF DROP DROP 0 0 END_IF
     SWAP END_IF ;
 
-: NUMBER ( badr n --> a r )
+: NUMBER ( badr n --> a r ) ( wird später ersetzt durch <h href="#NNUMBER" /> )
   7 LOCAL ( L3 L4 nicht verwendet )
   L1 ! L0 !
   0 L1 @ IF
