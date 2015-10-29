@@ -179,7 +179,7 @@ A<hj>=</hj><textarea id="matrix input" cols="40" rows="10" >[ [ 1, 1, 1, 1 ],
   [ 4, 16, 64, 256 ] ]
 </textarea>
 <ha /></h0>
-<button id="invertieren" class="butbut" onclick="invertieren()" ontouchstart="invertieren()">die geänderte Eingabematrix invertieren</button>
+<button id="invertieren" class="butbut" onclick="invertieren()" ontouchstart="invertieren()">die (geänderte) Eingabematrix invertieren</button>
 <!--
 <textarea id="matrix input" cols="20" rows="10" >[ [ 2, 2 ],
   [ 4, 8 ] ]

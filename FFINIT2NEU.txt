@@ -1638,8 +1638,17 @@ BEFESTIGE O-AUSLES
 : JLOC! JLOC ! ;
 : KLOC! KLOC ! ;
 : YCOL ( k A --> Y )
-  555 ERROR
+  3 LOCAL
+  DUP SIZE L1 ! L0 ! L2 ! ( L0=A L1=jsize L2=k )
+  0 L1 @ BEGIN 1- DUP L1 ! ( 0 jsize-1 )
+    L0 @ OVER L L2 @ L ( 0 jsize-1 a_jk )
+    H ( Y )
+    L1 @ DUP 0= UNTIL ( Y jsize-1 )
+  DROP ( Y )
+  END_LOCAL
   ;
+
+1 [ [ 1 2 ] [ 3 4 ] ] YCOL . ( [ 2 4 ] )
 
 : ZLOS ( A gx x Y --> A' gx' )
   ." ZLOS " 2OVER B. 2DUP B.
@@ -1679,9 +1688,9 @@ BEFESTIGE O-AUSLES
 
 ( an der Stelle Programm-VHDL-Quelltext für Step_12 ausgeben )
 HEX INIT 
-HERE 0 0 DUMPZ           ( generiert progRAM für P20_FFP.vhd Step_11
-BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM für P20_FFP.vhd Step_11
-3000 2C00 0 DUMPZ        ( generiert stapR   für P20_FFP.vhd Step_11
+HERE 0 0 DUMPZ           ( generiert progRAM für P20_FFP.vhd Step_12
+BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM für P20_FFP.vhd Step_12
+3000 2C00 0 DUMPZ        ( generiert stapR   für P20_FFP.vhd Step_12
 </sekt>
 
 <sekt inhalt="noch ein wenig DEMO">

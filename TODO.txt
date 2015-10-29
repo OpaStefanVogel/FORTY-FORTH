@@ -268,6 +268,8 @@ ok XOFF="0000" setzen innerhalb von DUMPZ
       ok 3 ABSCHICKEN soweit auch (COPY nicht vergessen!)
       ok und auch ganz durch, also alles ok
     .. dann jetzt Martix automatisch aufteilen
+  .. obwohl Matrix aufteilen noch nicht komplett, schon GINV losmach
+    .. erster Gesamtversuch
 
 .. auf vivado -mode tcl umstellen ab Step_12 mit
     open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr
@@ -275,7 +277,7 @@ ok XOFF="0000" setzen innerhalb von DUMPZ
     restart ; run 200 ms
     close_sim
 .. fileinput auch committen
-ok nicht allzuviel Testeingabe weil das XOFF EMIT nicht ausgewertet wird. 
+ok nicht allzuviel Testeingabe weil das XOFF EMIT nicht ausgewertet wird. ok inzwischen doch
 ok danach noch xoff in testbench.vhd einbauen
 .. Step_11 das erste ausgegebene Zeichen vor dem F... ist ein ???
 .. Vergleiche = < > mit in die +-*/ Tabelle
