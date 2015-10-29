@@ -1587,6 +1587,7 @@ BEFESTIGE O-AUSLES
 : SIZE ( obj --> n )
   ZERLEG SWAP DROP 3FFF AND ;
 
+: ADEBUG ;
 : [A*x-Y*Z]/gx ( A gx x Y Z --> A' x )
   ( L0=nr L1=Nj L2=Nk L3=j L4=k L5=Y L6=Z L7=alternenner )
   8 LOCAL NEBENRECHNUNG L0 !
@@ -1607,7 +1608,7 @@ BEFESTIGE O-AUSLES
     L3 @ 0= UNTIL
   A+0 ( verschiebt nenner hinter matneu )
   L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0 ( A' x )
-  END_LOCAL
+  END_LOCAL ADEBUG
   ;
 
 ( DECIMAL
@@ -1636,6 +1637,9 @@ BEFESTIGE O-AUSLES
 
 : JLOC! JLOC ! ;
 : KLOC! KLOC ! ;
+: YCOL ( k A --> Y )
+  555 ERROR
+  ;
 
 : ZLOS ( A gx x Y --> A' gx' )
   ." ZLOS " 2OVER B. 2DUP B.
@@ -1655,7 +1659,7 @@ BEFESTIGE O-AUSLES
   0 2 ABSCHICKEN ( A' gx' )
   ;
 
-( N, NJ, NK werden vorerst beim Matrix Aufteilen mit gesetzt
+( N, NJ, NK werden vorerst beim Matrix Aufteilen gesetzt
 : GINV ( A gx n --> A' gx' )
   ." GINV "
   NN ! DUP GXMERK ! ( A gx )
@@ -1687,7 +1691,7 @@ BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM für P20_FFP.vhd Step_11
 
 DECIMAL
 
-[ [ 1 1 ^ 1 2 ^ 1 3 ^ 1 1 ^ ]
+[ [ 1 1 ^ 1 2 ^ 1 3 ^ 1 4 ^ ]
   [ 2 1 ^ 2 2 ^ 2 3 ^ 2 4 ^ ]
   [ 3 1 ^ 3 2 ^ 3 3 ^ 3 4 ^ ]
   [ 4 1 ^ 4 2 ^ 4 3 ^ 4 4 ^ ]

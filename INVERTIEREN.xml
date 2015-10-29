@@ -8,7 +8,7 @@
   <style type="text/css"> 
 body { font-family: Courier,monospace; }
 
-h0 { display: inline-flex; align-items: flex-start; }
+h0 { display: inline-flex; align-items: center; }
 ha { display: flex; align-items: center; margin-top: 8px; margin-bottom: 8px; overflow: auto; }
 hb { display: flex; align-items: center; border-left:solid; border-right:solid; border-radius: 15px; border-color: Maroon; padding: 4px; background-color: LightYellow; }
 hd { display: flex; border-left:solid; border-right:solid; border-radius: 10px; padding: 4px; border-color: dimgrey; background-color: WhiteSmoke; }
@@ -42,7 +42,6 @@ function invertieren() {
   NeuerNenner=1;NMERK=NeuerNenner;
   Ausgangsmatrix.removeChild(Ausgangsmatrix.lastChild);
   ha = document.createElement("ha");Ausgangsmatrix.appendChild(ha);
-  ha.appendChild(Rechenzeichen("= A"));
   EDISP(ha,0,true);
   Probe.appendChild(document.createElement("hr"));
   hap = document.createElement("ha");Probe.appendChild(hap);
@@ -174,7 +173,7 @@ function EDISP(ha,i,T) {
   </head>
 <body onload="invertieren()">
 <h0 id="Ausgangsmatrix">
-<textarea id="matrix input" cols="40" rows="10" >[ [ 1, 1, 1, 1 ],
+A<hj>=</hj><textarea id="matrix input" cols="40" rows="10" >[ [ 1, 1, 1, 1 ],
   [ 2, 4, 8, 16 ],
   [ 3, 9, 27, 81 ],
   [ 4, 16, 64, 256 ] ]
