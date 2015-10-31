@@ -548,6 +548,15 @@ N" 000002330657FDD698" N" 4C0CF598D2" * .
 
 
 ( wenn alles so geht, kann es richig losgehen )<id id="NNUMBER"/>
+: REPLACE: ( /name/ ) 
+  CSP! ( oo )
+  20 WORD FIND DUP IF 
+    LCFA DROP 1+ ( pfa
+(    HERE OVER M- 1- JRBIT XSETBT SWAP !
+    HERE SWAP DP ! DUP COMPILE, RETURN , DP !
+    1 STAT !
+    ELSE 2DROP 3 ERROR END_IF ;
+
 REPLACE: NUMBER NNUMBER ;
 111111111111111 DUP * .
 
@@ -954,15 +963,6 @@ DUP .
   DROP
   ;
 
-: REPLACE: ( /name/ ) 
-  CSP! ( oo )
-  20 WORD FIND DUP IF 
-    LCFA DROP 1+ ( pfa
-(    HERE OVER M- 1- JRBIT XSETBT SWAP !
-    HERE SWAP DP ! DUP COMPILE, RETURN , DP !
-    1 STAT !
-    ELSE 2DROP 3 ERROR END_IF ;
-
 : FORGET ( /name/ )
   20 WORD FIND IF 
     DP !
@@ -988,7 +988,7 @@ DUP .
 STRG: ^G 7 EMIT ." /1xPIEP/" ;
 STRG: ^F 7 EMIT ." QUIT" QUIT ;
 STRG: ^A ." Angehalten für genau eine Eingabezeile: "
-  CR FA00 100 EXPECT INTERPRET ." ok";
+  CR 3A00 100 EXPECT INTERPRET ." ok";
 
 : QUERY ( adr --> n ) TIB @ 100 EXPECT ;
 
@@ -1587,10 +1587,12 @@ BEFESTIGE O-AUSLES
 : SIZE ( obj --> n )
   ZERLEG SWAP DROP 3FFF AND ;
 
-: ADEBUG ;
+: ADEBUG1 CR CR ." ADEBUG1 " TLISTE ? >R 2OVER B. 2DUP B. R> DUP . ;
+: ADEBUG2 CR CR ." ADEBUG2 " TLISTE ? OVER . DUP . ;
 : [A*x-Y*Z]/gx ( A gx x Y Z --> A' x )
   ( L0=nr L1=Nj L2=Nk L3=j L4=k L5=Y L6=Z L7=alternenner )
   8 LOCAL NEBENRECHNUNG L0 !
+  ADEBUG1
   OVER SIZE L1 ! DUP SIZE L2 !
   L6 ! L5 ! SWAP L7 !
   L1 @ L3 ! BEGIN -1 L3 +!
@@ -1608,7 +1610,7 @@ BEFESTIGE O-AUSLES
     L3 @ 0= UNTIL
   A+0 ( verschiebt nenner hinter matneu )
   L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0 ( A' x )
-  END_LOCAL ADEBUG
+  END_LOCAL ADEBUG2
   ;
 
 ( DECIMAL
@@ -1625,6 +1627,9 @@ BEFESTIGE O-AUSLES
 ( 288 [ -72 132 -72 300 ] [ 48 -72 48 276 ] [A*x-Y*Z]/gx OVER . DUP . 
 (  [ [ 1152 -864 384 -72 ] [ -1248 1368 -672 132 ] [ 432 -576 336 -72 ] [ -48 72 -48 12 ] ] 288 ok
 
+1A00 ZAHLENSPEICHER ! INIT
+
+0 VARIABLE N
 0 VARIABLE NN
 0 VARIABLE NI
 0 VARIABLE NJ
@@ -1633,7 +1638,7 @@ BEFESTIGE O-AUSLES
 0 VARIABLE KLOC
 0 VARIABLE GXMERK
 
-: M/ M/MOD DROP ;
+: M/ ( b d --> r q ) M/MOD SWAP DROP ;
 
 : JLOC! JLOC ! ;
 : KLOC! KLOC ! ;
@@ -1652,9 +1657,9 @@ BEFESTIGE O-AUSLES
 
 : ZLOS ( A gx x Y --> A' gx' )
   ." ZLOS " 2OVER B. 2DUP B.
-  2OVER DROP JLOC @ L DUP . ( A gx x Y Z )
+  2OVER DROP JLOC @ L OBJ_STRUCT_COPY DUP . ( A gx x Y Z )
   NJ @ 1- 0 ROT  ( A gx x Y NJ@-1 0 Z )
-  IAM1X @ IAM1Y @ = IF KLOC @ G GXMERK @ - H ENDIF DUP .
+  IAM1X @ IAM1Y @ = IF OBJ_STRUCT_COPY KLOC @ G GXMERK @ - H END_IF OVER . DUP .
   ' [A*x-Y*Z]/gx 0 3 ABSCHICKEN
   ;
 
@@ -1663,7 +1668,7 @@ BEFESTIGE O-AUSLES
   0 NK @ 1- ROT ' A+0 0 2 ABSCHICKEN ( A gx x )
   KLOC @ 2OVER DROP YCOL DUP . ( A gx x Y )
   0 NK @ 1- ROT ( A gx x 0 NK@-1 Y )
-  IAM1X @ IAM1Y @ = IF JLOC @ G GXMERK @ + H ' ZLOS ELSE 0 END_IF
+  IAM1X @ IAM1Y @ = IF OBJ_STRUCT_COPY JLOC @ G GXMERK @ + H ' ZLOS ELSE ' OBJ_STRUCT_COPY END_IF
   OVER . ( A gx x 0 NK@ Y 0 )
   0 2 ABSCHICKEN ( A' gx' )
   ;
@@ -1673,11 +1678,11 @@ BEFESTIGE O-AUSLES
   ." GINV "
   NN ! DUP GXMERK ! ( A gx )
   N @ NN @ M- NI !
-  0 NK @ 1- NI @ N @ NJ @ M/ M/ ' JLOC! 2 ABSCHICKEN
-  NJ @ 1- 0 NI @ N @ NK @ M/ M/ ' KLOC! 3 ABSCHICKEN
+  0 NK @ 1- NI @ N @ NJ @ M/ M/ ' JLOC! 0 2 ABSCHICKEN
+  NJ @ 1- 0 NI @ N @ NK @ M/ M/ ' KLOC! 0 3 ABSCHICKEN
   OVER JLOC @ L KLOC @ L DUP . ( A gx x )
   NJ @ 1- 0 ROT ' XYLOS 0 3 ABSCHICKEN
-  NN @ 1- IF 1 1 NN @ 1- ' GINV 0 1 ABSCHICKEN END_IF
+  NN @ 1- IF 1 1 NN @ 1- " GINV " 1 ABSCHICKEN END_IF
   ;
 
 

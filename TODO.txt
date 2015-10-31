@@ -270,6 +270,31 @@ ok XOFF="0000" setzen innerhalb von DUMPZ
     .. dann jetzt Martix automatisch aufteilen
   .. obwohl Matrix aufteilen noch nicht komplett, schon GINV losmach
     .. erster Gesamtversuch
+      ok bei Y+1 und Z-1 muss OBJ_STRUCT_COPY mit rein, sonst ändert sich A!!! ok 
+      .. [ [ 1 -1 ] [ 3 24 ] ] ist da, aber dann FF, 
+        .. weil irgendwo in XYLOS die TLISTE verändert wird, aber das morgen weiter...
+          .. erster Fingerzeig nach 16 h es kann an dem ? liegen mit @ M. tritt das 1x weniger auf...
+          .. ganz klar nach 2OVER B. stimmt TLISTE @ nicht mehr, also in . suchen...
+          .. naaaa, das könnte es gewesen sein: LOCALADRESSE läuft abwärts von 2F00 in 2EE0 hinein...
+        .. und ' GINV ist innerhalb : GINV auch nicht zugänglich
+        .. jetzt fehlt Y in ADEBUG1 0 [ [ 1 -1 ] [ 3 24 ] ] 1 2 [ 2 6 ] 
+          .. aha und zwar kommt das zu spät an nach Z wo schon INV losgegangen ist. Also ohne OVER . 
+          .. oder - das kann auch so vorkommen wegen zu langer Berechnung, wie besser?
+        .. ohne OVER . kommt jetzt ADEBUG1 5298 [ [ 1 -1 ] [ 3 24 ] ] 1 2 137444589646 [ 2 6 ] an.
+          .. was ist das für ein Y ??? könnte daran liegen, dass schon das nächste n-1 GINV folgt
+        .. so alle 4 Schritte durch, allerdings gelegentlich nur [ [  -1 ] [ 3 24 ] ]
+          .. im -mode tcl aber vollständig bzw. wee .wcfg zu
+        .. nur noch im letzten [ [ 36 4 ] [ 6 2 ] ] 12 288 [ 216 -72 ] [ 48 48 ] muss -72 statt 216
+          .. woher kommt da die 216 ???? wird bereits so [ 216 -72 ] aus A gelesen...
+          .. so muss es sein
+            [ [ -1 0C ] [ 6 48 ] ] 2 0C [ 4 0E ] [ 6 48 ] [A*x-Y*Z]/gx
+            ADEBUG1 14B2 [ [ -1 C ] [ 6 48 ] ] 2 C [ 4 E ] [ 6 48 ] 
+            ADEBUG2 14B2 [ [ -12 -48 ] [ -6 -48 ] ] C
+            und so ist es auch aufm S3 aber nicht in sim. Woher kommt das [ 6 D8 ] ????
+            ADEBUG2 14B2 [ [ 6 D8 ] [ -6 -48 ] ] C 
+            aha, könnte damit zusammenhängen, dass [ 4 E ] [ 6 48 ] aus A ausgelesen werden?
+            ok ja das war's, Z muss mit COPY ausgelesen werden okokok jetzt ist 4 GINV durch!!!
+
 
 .. auf vivado -mode tcl umstellen ab Step_12 mit
     open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr
