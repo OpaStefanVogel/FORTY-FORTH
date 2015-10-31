@@ -113,7 +113,7 @@ DUT00: FortyForthProcessor
 
 DUT01: FortyForthProcessor
   port map (
-    CLK_I => CLK,DAT_I => x"0000",ADR_O => ADR,DAT_O => DAT,WE_O => WE,
+    CLK_I => CLK,DAT_I => x"0000",ADR_O => open,DAT_O => open,WE_O => open,
       EMIT_ABGESCHICKT => NN01,EMIT_BYTE => open, EMIT_ANGEKOMMEN => NN01, -- EMIT --
        KEY_ABGESCHICKT => '0',  KEY_BYTE => x"00", KEY_ANGEKOMMEN => open, -- KEY --
      LINKS_ABGESCHICKT => L01_AB, LINKS_DAT => L01_DAT, LINKS_ADR => L01_ADR, LINKS_ANGEKOMMEN => L01_AN,-- LINKS --
@@ -125,7 +125,7 @@ DUT01: FortyForthProcessor
 
 DUT10: FortyForthProcessor
   port map (
-    CLK_I => CLK,DAT_I => x"0000",ADR_O => ADR,DAT_O => DAT,WE_O => WE,
+    CLK_I => CLK,DAT_I => x"0000",ADR_O => open,DAT_O => open,WE_O => open,
       EMIT_ABGESCHICKT => NN10,EMIT_BYTE => open, EMIT_ANGEKOMMEN => NN10, -- EMIT --
        KEY_ABGESCHICKT => '0',  KEY_BYTE => x"00", KEY_ANGEKOMMEN => open, -- KEY --
      LINKS_ABGESCHICKT => L10_AB, LINKS_DAT => L10_DAT, LINKS_ADR => L10_ADR, LINKS_ANGEKOMMEN => L10_AN,-- LINKS --
@@ -137,7 +137,7 @@ DUT10: FortyForthProcessor
 
 DUT11: FortyForthProcessor
   port map (
-    CLK_I => CLK,DAT_I => x"0000",ADR_O => ADR,DAT_O => DAT,WE_O => WE,
+    CLK_I => CLK,DAT_I => x"0000",ADR_O => open,DAT_O => open,WE_O => open,
       EMIT_ABGESCHICKT => NN11,EMIT_BYTE => open, EMIT_ANGEKOMMEN => NN11, -- EMIT --
        KEY_ABGESCHICKT => '0',  KEY_BYTE => x"00", KEY_ANGEKOMMEN => open, -- KEY --
      LINKS_ABGESCHICKT => L11_AB, LINKS_DAT => L11_DAT, LINKS_ADR => L11_ADR, LINKS_ANGEKOMMEN => L11_AN,-- LINKS --
