@@ -90,13 +90,15 @@ function Rechenzeichen(t) {
   var  t = document.createTextNode(t);hj.appendChild(t);
   return hj;
   }
-  
+
+var BASNUM=10;
+function BAS(val) { return val.toString(BASNUM).toUpperCase(); }
 
 function ADISP(Ergebnis,i) {
   ck = document.createElement("c"+eval((i+1)%4));
-    t = document.createTextNode(NeuerNenner);ck.appendChild(t);   
+    t = document.createTextNode(BAS(NeuerNenner));ck.appendChild(t);   
   cl = document.createElement("c"+eval(i%4));
-    t = document.createTextNode(AlterNenner);cl.appendChild(t);   
+    t = document.createTextNode(BAS(AlterNenner));cl.appendChild(t);   
   ha = document.createElement("ha");Ergebnis.appendChild(ha);
     hb = document.createElement("hb");ha.appendChild(hb);
       hd = document.createElement("hd");hb.appendChild(hd);
@@ -113,7 +115,7 @@ function ADISP(Ergebnis,i) {
             if (j==i & k==i) {
               ci = document.createElement("c"+eval((i+1)%4));
               hh.appendChild(ci);hh=ci; }
-            t = document.createTextNode(A[j][k]);hh.appendChild(t);
+            t = document.createTextNode(BAS(A[j][k]));hh.appendChild(t);
           } }
       hb.appendChild(Rechenzeichen("·"));
       hb.appendChild(ck.cloneNode(true));
@@ -128,7 +130,7 @@ function ADISP(Ergebnis,i) {
             hh.appendChild(t);hh.appendChild(ck.cloneNode(true));
             } else {
               hh = document.createElement("hv");hi.appendChild(hh);
-              t = document.createTextNode(A[j][i]) 
+              t = document.createTextNode(BAS(A[j][i])) 
               hh.appendChild(t);
               };
           }
@@ -143,7 +145,7 @@ function ADISP(Ergebnis,i) {
             }
             else {
               hh = document.createElement("hw");hd.appendChild(hh);
-              t = document.createTextNode(A[i][k]);
+              t = document.createTextNode(BAS(A[i][k]));
               hh.appendChild(t); };
           }
     ha.appendChild(Rechenzeichen("/"));
@@ -159,12 +161,12 @@ function EDISP(ha,i,T) {
       hi = document.createElement("hi");hd.appendChild(hi);
       for (j=0;j<n;j++) { 
         hh = document.createElement("hh");hi.appendChild(hh);
-        t = document.createTextNode(A[j][k]);hh.appendChild(t);
+        t = document.createTextNode(BAS(A[j][k]));hh.appendChild(t);
       } }
   if (T<2) {
     ha.appendChild(Rechenzeichen("/"));
     ci = document.createElement("c"+eval(i%4));ha.appendChild(ci);
-      t = document.createTextNode(NeuerNenner);ci.appendChild(t);
+      t = document.createTextNode(BAS(NeuerNenner));ci.appendChild(t);
     }
   }
 
@@ -172,14 +174,21 @@ function EDISP(ha,i,T) {
 </script>
   </head>
 <body onload="invertieren()">
-<h0 id="Ausgangsmatrix">
+<h0>
 A<hj>=</hj><textarea id="matrix input" cols="40" rows="10" >[ [ 1, 1, 1, 1 ],
   [ 2, 4, 8, 16 ],
   [ 3, 9, 27, 81 ],
   [ 4, 16, 64, 256 ] ]
 </textarea>
+<h0 id="Ausgangsmatrix">
 <ha /></h0>
-<button id="invertieren" class="butbut" onclick="invertieren()" ontouchstart="invertieren()">die (geänderte) Eingabematrix invertieren</button>
+<hi>
+<button class="butbut" onclick="BASNUM=16;invertieren()">HEX</button>
+<button class="butbut" onclick="BASNUM=10;invertieren()">DEC</button>
+<button class="butbut" onclick="BASNUM=2;invertieren()">BIN</button>
+  </hi>
+<button id="invertieren" class="butbut" onclick="invertieren()">die (geänderte) Eingabematrix invertieren</button>
+  </h0>
 <!--
 <textarea id="matrix input" cols="20" rows="10" >[ [ 2, 2 ],
   [ 4, 8 ] ]

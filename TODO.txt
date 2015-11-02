@@ -294,7 +294,12 @@ ok XOFF="0000" setzen innerhalb von DUMPZ
             ADEBUG2 14B2 [ [ 6 D8 ] [ -6 -48 ] ] C 
             aha, könnte damit zusammenhängen, dass [ 4 E ] [ 6 48 ] aus A ausgelesen werden?
             ok ja das war's, Z muss mit COPY ausgelesen werden okokok jetzt ist 4 GINV durch!!!
+    .. doch großes x und Z mit großem Zk gehen nicht durch, was kann das sein
+      .. erstmal nur x nach ." XYLOS" DUP M. DUP . ausgeben ob x da ist.
 
+
+.. in MOVE und FILL die >R und R> ersetzen
+.. eine neue Fehlerbehandlung die auf 0 0 zurückwirkt und RESET auch und ROM eventuell.
 
 .. auf vivado -mode tcl umstellen ab Step_12 mit
     open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr
