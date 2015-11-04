@@ -763,6 +763,46 @@ DUP ZERLEG SWAP M. M.
 [ 111 222 333 ] DUP M. OBJ_STRUCT_COPY M.
 [ [ 1  1 ] [ 3 2 ^ 3 4 ^ ] ] DUP M. OBJ_STRUCT_COPY M.
 
+: ADEBUG1 CR CR ." ADEBUG1 " >R 2OVER B. 2DUP B. R> DUP . -1 LEDS ! ;
+: ADEBUG2 CR CR ." ADEBUG2 " 0 LEDS ! OVER . DUP . ;
+: [A*x-Y*Z]/gx ( A gx x Y Z --> A' x )
+  ( L0=nr L1=Nj L2=Nk L3=j L4=k L5=Y L6=Z L7=alternenner )
+  8 LOCAL NEBENRECHNUNG L0 !
+  ADEBUG1
+  OVER SIZE L1 ! DUP SIZE L2 !
+  L6 ! L5 ! SWAP L7 !
+  L1 @ L3 ! BEGIN -1 L3 +!
+    OVER L3 @ L ( mat nenner mat[L3] )
+    L2 @ L4 ! BEGIN -1 L4 +! ( CR L3 M? L4 M? ERGEBNIS M?
+      NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner )
+      OVER L4 @ L OVER *
+      L5 @ L3 @ L L6 @ L4 @ L * -
+      L7 @ / ( mat erg mat[L3] nenner bijneu )
+      2SWAP SWAP ( mat nenner bijneu mat[L3] erg )
+      HAUPTRECHNUNG SWAP A+0 ( mat nenner mat[L3] bijneu+0 )
+      SWAP L4 @ ROT H ( mat nenner mat[L3]neu )
+      L4 @ 0= UNTIL
+    ROT L3 @ ROT H SWAP ( matneu nenner )
+    L3 @ 0= UNTIL
+  A+0 ( verschiebt nenner hinter matneu )
+  L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0 ( A' x )
+  END_LOCAL ADEBUG2
+  ;
+
+( DECIMAL
+( [ [ 1   1   1    1 ]
+(   [ 2   4   8   16 ]
+(   [ 3   9  27   81 ]
+(   [ 4  16  64  256 ] ] 1 SP ?
+( 1 [ 2 2 3 4 ] [ 0 1 1 1 ] [A*x-Y*Z]/gx OVER . DUP . 
+( [ [ 1 -1 -1 -1 ] [ 2 2 6 14 ] [ 3 6 24 78 ] [ 4 12 60 252 ] ] 1 ok
+( 2 [ -1 3 6 12 ] [ 2 1 6 14 ] [A*x-Y*Z]/gx OVER . DUP . 
+(  [ [ 4 -1 4 12 ] [ -2 1 -6 -14 ] [ -6 6 12 72 ] [ -16 12 48 336 ] ] 2 ok
+( 12 [ 4 -6 14 48 ] [ -6 6 10 72 ] [A*x-Y*Z]/gx OVER . DUP . 
+( [ [ 36 -18 4 -72 ] [ -30 24 -6 132 ] [ 6 -6 2 -72 ] [ 48 -72 48 288 ] ] 12 140 ok
+( 288 [ -72 132 -72 300 ] [ 48 -72 48 276 ] [A*x-Y*Z]/gx OVER . DUP . 
+(  [ [ 1152 -864 384 -72 ] [ -1248 1368 -672 132 ] [ 432 -576 336 -72 ] [ -48 72 -48 12 ] ] 288 ok
+
 : INVERTIEREN ( matrix dim --> invmat nenner ) <h href="INVERTIEREN.xml" />
   ( L0=nr L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
   8 LOCAL NEBENRECHNUNG L0 !
@@ -776,24 +816,7 @@ DUP ZERLEG SWAP M. M.
       L3 @ 0= UNTIL
     L5 @ L2 @ L L7 @ + L5 @ L2 @ ROT H L5 !
     L6 @ L2 @ L L7 @ - L6 @ L2 @ ROT H L6 !
-    L1 @ L3 ! BEGIN -1 L3 +!
-      OVER L3 @ L ( mat nenner mat[L3] )
-      L1 @ L4 ! BEGIN -1 L4 +! ( CR L3 M? L4 M? ERGEBNIS M?
-        NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner )
-        OVER L4 @ L OVER *
-        L5 @ L3 @ L L6 @ L4 @ L * -
-        L7 @ / ( mat erg mat[L3] nenner bijneu )
-        2SWAP SWAP ( mat nenner bijneu mat[L3] erg )
-        HAUPTRECHNUNG SWAP A+0 ( mat nenner mat[L3] bijneu+0 )
-        SWAP L4 @ ROT H ( mat nenner mat[L3]neu )
-        L4 @ 0= UNTIL
-      ROT L3 @ ROT H SWAP ( matneu nenner )
-      L3 @ 0= UNTIL
-    A+0 ( verschiebt nenner hinter matneu )
-    ( RECHENBLOCK )
-    ( CR ." vor 1. OBJ+0 " ERGEBNIS M? ( OVER OBJDUMP DUP . DUP ABS M.
-    L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
-    ( ." nach 1. OBJ+0 " ERGEBNIS M? ( OVER OBJDUMP DUP . DUP ABS M.
+    L7 @ SWAP L5 @ L6 @ [A*x-Y*Z]/gx
     L2 @ 0= UNTIL
   END_LOCAL
   ;
@@ -1581,46 +1604,6 @@ BEFESTIGE O-AUSLES
 <sekt inhalt="neues Invertieren">
 : SIZE ( obj --> n )
   ZERLEG SWAP DROP 3FFF AND ;
-
-: ADEBUG1 CR CR ." ADEBUG1 " >R 2OVER B. 2DUP B. R> DUP . -1 LEDS ! ;
-: ADEBUG2 CR CR ." ADEBUG2 " 0 LEDS ! OVER . DUP . ;
-: [A*x-Y*Z]/gx ( A gx x Y Z --> A' x )
-  ( L0=nr L1=Nj L2=Nk L3=j L4=k L5=Y L6=Z L7=alternenner )
-  8 LOCAL NEBENRECHNUNG L0 !
-  ADEBUG1
-  OVER SIZE L1 ! DUP SIZE L2 !
-  L6 ! L5 ! SWAP L7 !
-  L1 @ L3 ! BEGIN -1 L3 +!
-    OVER L3 @ L ( mat nenner mat[L3] )
-    L2 @ L4 ! BEGIN -1 L4 +! ( CR L3 M? L4 M? ERGEBNIS M?
-      NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner )
-      OVER L4 @ L OVER *
-      L5 @ L3 @ L L6 @ L4 @ L * -
-      L7 @ / ( mat erg mat[L3] nenner bijneu )
-      2SWAP SWAP ( mat nenner bijneu mat[L3] erg )
-      HAUPTRECHNUNG SWAP A+0 ( mat nenner mat[L3] bijneu+0 )
-      SWAP L4 @ ROT H ( mat nenner mat[L3]neu )
-      L4 @ 0= UNTIL
-    ROT L3 @ ROT H SWAP ( matneu nenner )
-    L3 @ 0= UNTIL
-  A+0 ( verschiebt nenner hinter matneu )
-  L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0 ( A' x )
-  END_LOCAL ADEBUG2
-  ;
-
-( DECIMAL
-( [ [ 1   1   1    1 ]
-(   [ 2   4   8   16 ]
-(   [ 3   9  27   81 ]
-(   [ 4  16  64  256 ] ] 1 SP ?
-( 1 [ 2 2 3 4 ] [ 0 1 1 1 ] [A*x-Y*Z]/gx OVER . DUP . 
-( [ [ 1 -1 -1 -1 ] [ 2 2 6 14 ] [ 3 6 24 78 ] [ 4 12 60 252 ] ] 1 ok
-( 2 [ -1 3 6 12 ] [ 2 1 6 14 ] [A*x-Y*Z]/gx OVER . DUP . 
-(  [ [ 4 -1 4 12 ] [ -2 1 -6 -14 ] [ -6 6 12 72 ] [ -16 12 48 336 ] ] 2 ok
-( 12 [ 4 -6 14 48 ] [ -6 6 10 72 ] [A*x-Y*Z]/gx OVER . DUP . 
-( [ [ 36 -18 4 -72 ] [ -30 24 -6 132 ] [ 6 -6 2 -72 ] [ 48 -72 48 288 ] ] 12 140 ok
-( 288 [ -72 132 -72 300 ] [ 48 -72 48 276 ] [A*x-Y*Z]/gx OVER . DUP . 
-(  [ [ 1152 -864 384 -72 ] [ -1248 1368 -672 132 ] [ 432 -576 336 -72 ] [ -48 72 -48 12 ] ] 288 ok
 
 1A00 ZAHLENSPEICHER ! INIT
 
