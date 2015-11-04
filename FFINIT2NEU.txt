@@ -512,6 +512,7 @@ ERGEBNIS M?
   ROT HAUPTRECHNUNG SWAP A+0 SWAP
   ;
 
+( zum Testen erst nur Zahleneingabe mit N" )
 22 WORD: N" ( /number/  --> n ) NNUMBER DROP ;
 
 N" 111111111111111" DUP * DUP . DUP M.
@@ -538,7 +539,7 @@ N" 000002330657FDD698" N" 4C0CF598D3" * .
 N" 000002330657FDD698" N" 4C0CF598D2" * .
 
 
-( wenn alles so geht, kann es richig losgehen )<id id="NNUMBER"/>
+( wenn alles so geht, kann es richtig losgehen )<id id="NNUMBER"/>
 : REPLACE: ( /name/ ) 
   CSP! ( oo )
   20 WORD FIND DUP IF 
@@ -682,7 +683,7 @@ DUP ZERLEG SWAP M. M.
 3 0 H DUP .
 2 0 H DUP .
 2 2444 H DUP .
-0 N" 7777777" H DUP .
+0 7777777 H DUP .
 2 0 H DUP .
 
 
@@ -1186,7 +1187,7 @@ WLIST
 
 HERE M.
 
-( erreichte Adresse in Textspeicher E000-FFFF )
+( erreichte Adresse in Textspeicher 3000-3FFF )
 
 BZEIG M?
 
@@ -1237,27 +1238,8 @@ FORGET LEDS
 HERE M. BZEIG M?
 
 
-
-
-
-
-
-
-
-( Also an der Stelle nach FFINIT1SMUL.TXT hab ich jetzt )
-( N" ( /number/  -> n        liest bis " eine grosse ganze Zahl ein
-(                            kleine ganze Zahlen wie bisher eingeben
-( + - * / /MOD MOD ^  und rechnet damit
-( .   a -->                 und gibt sie aus
-( BK  a b --> a' b'         Kürzen
-( GGT a b --> ggt           groesster gemeinsamer Teiler
-( 
-( also direkt eingeben und mit + - * / rechnen geht hier noch nicht
-
-
-( ERGEBNIS ist unpassend gewählter Variablenname, 
-( bezeichnet ab welcher Adresse das nächste Ergebnis gespeichert wird,
-( Platz dafür ist von 1400H bis 1FFFH, aktuell erreicht: )
+( ERGEBNIS bezeichnet, ab welcher Adresse das nächste Ergebnis gespeichert wird,
+( Platz dafür ist von ZAHLENSPEICHER @ bis 1 vor SPEICHERENDE @, aktuell erreicht: )
  
 ERGEBNIS M? ( Zahlenspeicher gefuellt bis ) 
 
@@ -1265,7 +1247,7 @@ ZAHLENSPEICHER @ ERGEBNIS ! ( Zahlenspeicher leeren )
 
 ERGEBNIS M?
 
-N" 111111111111111" DUP * .
+111111111111111 DUP * .
 
 ERGEBNIS M?
 
@@ -1280,11 +1262,11 @@ ERGEBNIS M?
 : HEX 10 BASE ! ;
 : DECIMAL 0A BASE ! ;
 
-HEX N" 10000"
+HEX 10000
 DECIMAL DUP .
 HEX DUP .
 
-HEX N" 100000000"
+HEX 100000000
 DECIMAL DUP .
 HEX DUP .
 </sekt>
@@ -1346,18 +1328,6 @@ TLISTE VARIABLE TLISTENZEIGER
   REMOPFA @ TLISTENZEIGER @ !
   1 TLISTENZEIGER +! 
   ;
-
-( zum Ausprobieren:
-( 0 VARIABLE EMAIL_DA
-( : ZUCK EMAIL_DA @ 2D04 ! ;
-(
-( BEFESTIGE ZUCK TLISTY
-( -1 EMAIL_DA !
-( 0 EMAIL_DA !
-( ENTFERNE ZUCK
-
-
-1800 ERGEBNIS !
 
 
 ( jetzt los mit LINKS-RECHTS-OBEN-UNTEN
@@ -1695,6 +1665,8 @@ DUP .
 (        [ 432 -576 336 -72 ]       )
 (        [ -48 72 -48 12 ] ] ok     )
 ( und gemeinsamer Nenner: DUP . 288 )
+
+HEX
 </sekt>
 
 </NACH_DEN_AXIOMEN>
