@@ -6,9 +6,9 @@
 
 <sekt inhalt="noch paar hilfreiche Funktionen">
 : MOVE ( adr1 adr2 n --> )
-  BEGIN DUP WHILE >R OVER @ OVER ! SWAP 1+ SWAP 1+ R> 1- REPEAT DROP 2DROP ;
+  BEGIN DUP WHILE ROT ROT OVER @ OVER ! SWAP 1+ SWAP 1+ ROT 1- REPEAT DROP 2DROP ;
 : FILL ( adr n b --> )
-  ROT ROT BEGIN DUP WHILE >R 2DUP ! 1+ R> 1- REPEAT DROP 2DROP ;
+  ROT ROT BEGIN DUP WHILE ROT ROT 2DUP ! 1+ ROT 1- REPEAT DROP 2DROP ;
 
 : DUMP ( addr n --> )
   BEGIN SWAP ( CR DUP M. ) DUP @ M. 1+ SWAP 1- DUP 0= UNTIL 2DROP ;
@@ -28,10 +28,13 @@
   <tr><td>Subtraktion</td>            <td>M- ( a b --> a-b ) </td>      <td>- ( m n --> m-n ) </td></tr>
   <tr><td>Stapelspitze ausgeben</td>  <td>M. ( a -->  /string/ )</td>   <td>. ( m -->  /string/ )</td></tr>
   <tr><td>Speicherinhalt ausgeben</td><td>M? ( adr -->  /string/ )</td> <td>? ( adr -->  /string/ )</td></tr>
+  <tr><td>Addition mit Übertrag</td>  <td>U+ ( u a b --> u' a+b+u ) </td><td></td></tr>
+  <tr><td>Multiplikation mit Übertrag</td><td>U* ( u a b --> u' a*b+u ) </td><td></td></tr>
   <tr><td>Inkrementieren</td>         <td>1+ ( a --> a+1 ) </td>        <td></td></tr>
   <tr><td>Dekrementieren</td>         <td>1- ( a --> a+1 ) </td>        <td></td></tr>
   <tr><td>kleiner als "&lt;"</td>     <td>LT ( a b --> a&lt;b )</td>    <td></td></tr>
   <tr><td>größer als</td>             <td>> ( a b --> a>b )</td>        <td></td></tr>
+  <tr><td>Gleichheit</td>             <td>= ( a b --> a=b )</td>        <td></td></tr>
   <tr><td>Maximum</td>                <td>MAX ( a b --> max )</td>      <td></td></tr>
   <tr><td>Minimum</td>                <td>MIN ( a b --> min )</td>      <td></td></tr>
   <tr><td>Division mit Rest</td>      <td>M/MOD ( a b --> q r )</td>    <td>/MOD ( m n --> q r )</td></tr>
@@ -41,8 +44,6 @@
   <tr><td>größter gemeinsamer Teiler</td><td></td>                      <td>GGT ( m n --> ggt )</td></tr>
   <tr><td>Kürzen</td>                 <td></td>                         <td>BK ( m n --> m/ggt n/ggt )</td></tr>
   <tr><td>Potenzieren</td>            <td></td>                         <td>^ ( m n --> m^n )</td></tr>
-  <tr><td>Addition mit Übertrag</td>  <td>U+ ( u a b --> u' a+b+u ) </td><td></td></tr>
-  <tr><td>Multiplikation mit Übertrag</td><td>U* ( u a b --> u' a*b+u ) </td><td></td></tr>
   </table>
 </sekt>
 
