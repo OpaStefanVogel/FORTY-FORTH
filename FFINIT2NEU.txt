@@ -1637,9 +1637,9 @@ BEFESTIGE O-AUSLES
 
 : JLOC! JLOC ! ;
 : KLOC! KLOC ! ;
-: YCOL ( k A --> Y )
+: YCOL ( A k --> Y )
   3 LOCAL
-  DUP SIZE L1 ! L0 ! L2 ! ( L0=A L1=jsize L2=k )
+  OVER SIZE L1 ! L2 ! L0 ! ( L0=A L1=jsize L2=k )
   0 L1 @ BEGIN 1- DUP L1 ! ( 0 jsize-1 )
     L0 @ OVER L L2 @ L ( 0 jsize-1 a_jk )
     H ( Y )
@@ -1661,7 +1661,7 @@ BEFESTIGE O-AUSLES
 : XYLOS ( A gx x --> A' gx' )
   ." XYLOS "
   0 NK @ 1- ROT ' A+0 0 2 ABSCHICKEN ( A gx x )
-  KLOC @ 2OVER DROP YCOL DUP . ( A gx x Y )
+  KLOC @ 2OVER DROP SWAP YCOL DUP . ( A gx x Y )
   0 NK @ 1- ROT ( A gx x 0 NK@-1 Y )
   IAM1X @ IAM1Y @ = IF OBJ_STRUCT_COPY JLOC @ G GXMERK @ + H ' ZLOS ELSE ' OBJ_STRUCT_COPY END_IF
   OVER . ( A gx x 0 NK@ Y 0 )
