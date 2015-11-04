@@ -275,6 +275,13 @@ A 8 DUMP
 1A01 11 7 FILL
 0 20 1A01 TRIM ROT M. SWAP M. M.
 
+: SLX->ERGEBNIS_KURZ ( sz lz az --> z )
+  1-             ( sz lz az-1 )
+  SWAP OVER !    ( sz az-1 )
+  04 000 MLIT OR ( sz z ) 
+  SWAP IF MINUS END_IF ( z )
+  ;
+
 : SLX->ERGEBNIS ( sz lz az --> z )
   OVER IF
     OVER 1 = ( falls lz=1 )
@@ -308,7 +315,7 @@ A 8 DUMP
 OPERAND1 OPERAND->SLX M. M. M.
 -77 OPERAND1 !
 OPERAND1 OPERAND->SLX M. M. M.
-5800 OPERAND1 !
+05 0800 MLIT OPERAND1 !
 OPERAND1 OPERAND->SLX M. M. M.
 
 
@@ -316,16 +323,16 @@ OPERAND1 OPERAND->SLX M. M. M.
 
 
 
-
+: ERGEBNIS_NEU! ( ergneu --> )
+  DUP SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
+  ERGEBNIS ! ;
 
 : SPEICHERHOL ( l --> addr )
   ERGEBNIS @ 2DUP !
-  1+ 2DUP M+ ERGEBNIS !
+  1+ 2DUP M+ ERGEBNIS_NEU!
   2DUP SWAP 0 FILL
   SWAP DROP
-ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
   ;
-
 
 : 2OPERANDEN->2SLX ( op1 op2 --> sx lx ax sy ly ay az )
   OPERAND2 !
@@ -338,7 +345,7 @@ ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
   ;
 
 77 88 2OPERANDEN->2SLX M. M. M. M. M. M. M.
-77 5800 2OPERANDEN->2SLX M. M. M. M. M. M. M.
+77 05 0800 MLIT 2OPERANDEN->2SLX M. M. M. M. M. M. M.
 </sekt>
 
 <sekt inhalt="+ - * /MOD .">
@@ -421,18 +428,15 @@ ZAHLENSPEICHER @ VARIABLE BLOCKENDE
 INIT
 ERGEBNIS M?
 
-: ERGEBNIS_NEU! ( ergneu --> )
-  DUP SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
-  ERGEBNIS ! ;
-
 : A+0 ( a --> a+0 ) 
   DUP OPERAND1 !
   OPERAND1 OPERAND->SLX ( a sz lz az )
   DUP OPERAND1 M- IF
     ERGEBNIS @ 1+ SWAP OVER 2OVER ( a sz lz erg+1 az erg+1 lz erg+1 )
     OVER M+ ERGEBNIS_NEU!         ( a sz lz erg+1 az erg+1 lz )
-    MOVE SLX->ERGEBNIS SWAP DROP  ( a+0 )
-    ELSE 2DROP DROP END_IF ( a+0 )
+    MOVE SLX->ERGEBNIS_KURZ       ( a a+0 )
+    SWAP DROP                     ( a+0 )
+    ELSE 2DROP DROP END_IF        ( a+0 )
   ;
 
 05 0A00 MLIT A+0 M.

@@ -295,9 +295,11 @@ ok XOFF="0000" setzen innerhalb von DUMPZ
             aha, könnte damit zusammenhängen, dass [ 4 E ] [ 6 48 ] aus A ausgelesen werden?
             ok ja das war's, Z muss mit COPY ausgelesen werden okokok jetzt ist 4 GINV durch!!!
     .. doch großes x und Z mit großem Zk gehen nicht durch, was kann das sein
-      .. erstmal nur x nach ." XYLOS" DUP M. DUP . ausgeben ob x da ist.
+      .. erstmal nur x nach ." XYLOS" DUP M. DUP . ausgeben ob x da ist oder gar DUP OBJ_DUMP
+      .. hab die vermutliche Fehlerursache: SLX->ERGEBNIS liest aus dem Ergebnis zurück,
+          und das darf bei ABSCHICKEN nicht sein!!! Also es geht jetzt wieder normal weiter...
 
-
+.. paar OBJ_STRUCT_COPY können auch wieder raus
 .. in MOVE und FILL die >R und R> ersetzen
 .. eine neue Fehlerbehandlung die auf 0 0 zurückwirkt und RESET auch und ROM eventuell.
 
