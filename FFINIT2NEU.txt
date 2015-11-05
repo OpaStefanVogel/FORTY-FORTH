@@ -1478,12 +1478,19 @@ TLISTE VARIABLE TLISTENZEIGER
       LINKS-BYTES 2 M+ @ 1- IF ( bei k>0 weiterschicken )
         LINKS-BYTES 1+ @
         LINKS-BYTES 2 M+ @ 1- 2DUP 6C ( l ) JK_AUSGEB
-        LINKS-BYTES B_AUSLES 1 R-ABSCHICKEN
-        LINKS-BYTES @ 2 = IF
-          LINKS-BYTES B_AUSLES 6D ( m ) B_AUSGEB B_INTERP
-          END_IF
-        LINKS-ABGESCHICKT @ LINKS-MERK !
-        LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
+        LINKS-BYTES B_AUSLES 1
+        IAM2Y @ 1 = IF
+          LINKS-ABGESCHICKT @ LINKS-MERK !
+          LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
+          R-ABSCHICKEN
+          ELSE
+            R-ABSCHICKEN
+            LINKS-BYTES @ 2 = IF
+              LINKS-BYTES B_AUSLES 6D ( m ) B_AUSGEB B_INTERP
+              END_IF
+            LINKS-ABGESCHICKT @ LINKS-MERK !
+            LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
+            END_IF
         ELSE ( endlich angekommen )
           LINKS-BYTES B_AUSLES 6E ( n ) B_AUSGEB B_INTERP
           LINKS-ABGESCHICKT @ LINKS-MERK !
@@ -1505,12 +1512,19 @@ TLISTE VARIABLE TLISTENZEIGER
       OBEN-BYTES 1+ @ 1- IF ( bei j>0 weiterschicken )
         OBEN-BYTES 1+ @ 1-
         OBEN-BYTES 2 M+ @ 2DUP 6F ( o ) JK_AUSGEB
-        OBEN-BYTES B_AUSLES 1 U-ABSCHICKEN
-        OBEN-BYTES @ 3 = IF
-          OBEN-BYTES B_AUSLES 4D ( M ) B_AUSGEB B_INTERP
-          END_IF
-        OBEN-ABGESCHICKT @ OBEN-MERK !
-        OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
+        OBEN-BYTES B_AUSLES 1
+        IAM2X @ 1 = IF
+          OBEN-ABGESCHICKT @ OBEN-MERK !
+          OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
+          U-ABSCHICKEN
+          ELSE
+            U-ABSCHICKEN
+            OBEN-BYTES @ 3 = IF
+              OBEN-BYTES B_AUSLES 4D ( M ) B_AUSGEB B_INTERP
+              END_IF
+            OBEN-ABGESCHICKT @ OBEN-MERK !
+            OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
+            END_IF
         ELSE ( endlich in j angekommen, jetzt dasselbe noch k )
           OBEN-BYTES 2 M+ @ IF ( bei k>0 nach rechts weiterschicken )
             OBEN-BYTES 1+ @ 1-
