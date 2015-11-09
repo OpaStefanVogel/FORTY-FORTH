@@ -15,7 +15,8 @@ DECIMAL
 1 0 1 " 0 1 ROT 0 0 2 ABSCHICKEN " 3 ABSCHICKEN
 ( bei GINV nur noch
 4 GINV
-
+ABWART
+OVER . DUP .
 
 ------------was herauskommen soll:
 DECIMAL
