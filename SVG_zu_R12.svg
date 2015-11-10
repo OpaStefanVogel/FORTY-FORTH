@@ -1,0 +1,46 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+  <symbol id="Kasten">
+    <rect x="0" y="0" width="60" height="60"/>
+    </symbol>
+  <marker id="pfeilspitze"
+    viewbox="0 0 5 10"
+    refX="0" refY="5"
+    markerWidth="5" markerHeight="10"
+    markerUnits="userSpaceOnUse"
+    orient="auto" >
+    <polyline points="0,5 0,0 5,5 0,10 0,5" fill="black" stroke="none"/>
+    </marker>  
+  <symbol id="kurzePfeile">
+    <polyline points="0,0 35,0" stroke-width="1" marker-end="url(#pfeilspitze)"/>
+    <polyline points="0,10 35,10" stroke-width="3" marker-end="url(#pfeilspitze)"/>
+    <polyline points="40,20 5,20" stroke-width="1" marker-end="url(#pfeilspitze)"/>
+    </symbol>
+  <symbol id="langePfeileoben">
+    <polyline points="100,0 115,0 115,-60 -80,-60 -80,0 -65,0" stroke-width="1" marker-end="url(#pfeilspitze)"/>
+    <polyline points="100,10 115,10 115,-60 -80,-60 -80,10 -65,10" stroke-width="3" marker-end="url(#pfeilspitze)"/>
+    <polyline points="-60,20 -80,20 -80,-60 115,-60 115,20 105,20" stroke-width="1" marker-end="url(#pfeilspitze)"/>
+    </symbol>
+  <symbol id="langePfeileunten">
+    <polyline points="100,0 115,0 115,80 -80,80 -80,0 -65,0" stroke-width="1" marker-end="url(#pfeilspitze)"/>
+    <polyline points="100,10 115,10 115,80 -80,80 -80,10 -65,10" stroke-width="3" marker-end="url(#pfeilspitze)"/>
+    <polyline points="-60,20 -80,20 -80,80 115,80 115,20 105,20" stroke-width="1" marker-end="url(#pfeilspitze)"/>
+    </symbol>
+  </defs>
+<g fill="none" stroke="black" transform="translate(10,10)">
+<use xlink:href="#Kasten" x="40" y="40"/>
+<use xlink:href="#Kasten" x="140" y="40"/>
+<use xlink:href="#Kasten" x="40" y="140"/>
+<use xlink:href="#Kasten" x="140" y="140"/>
+<use xlink:href="#kurzePfeile" transform="translate(100,60)"/>
+<use xlink:href="#kurzePfeile" transform="translate(100,160)"/>
+<use xlink:href="#kurzePfeile" transform="translate(80,100) rotate(90)"/>
+<use xlink:href="#kurzePfeile" transform="translate(180,100) rotate(90)"/>
+<use xlink:href="#langePfeileoben" transform="translate(100,60)"/>
+<use xlink:href="#langePfeileoben" transform="translate(180,100) rotate(90)"/>
+<use xlink:href="#langePfeileunten" transform="translate(100,160)"/>
+<use xlink:href="#langePfeileunten" transform="translate(80,100) rotate(90)"/>
+  </g>
+
+
+  </svg>
