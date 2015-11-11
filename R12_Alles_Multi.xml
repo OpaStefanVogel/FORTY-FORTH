@@ -11,15 +11,21 @@ Mehrere Kopien des Forth-Prozessors werden zusammengeschaltet, um gemeinsam eine
 
 <object data="SVG_zu_R12.svg" width="550" height="260" />
 
-Der Datenaustausch erfolgt über die Speicheradressen
+Der Datenaustausch erfolgt über die Speicheradressen 2000H…27FFH und 2804H…2807H. <i>Weil sich die übrigen Speicheradressen geändert haben, nochmal eine komplette Übersicht:</i>
 
 Adresse   Datenbreite   Verwendung
-2000-23FF     16        nach rechts schreiben, von links lesen
-2400-27FF     16        nach unten schreiben, von oben lesen
+<i>0000-1FFF     16        Programm- und Datenspeicher</i>
+2000…23FF     16        nach rechts schreiben, von links lesen
+2400…27FF     16        nach unten schreiben, von oben lesen
+<i>2801          16        Lesen und Setzen von SP
+2802          16        Lesen und Setzen von RP
+2803          16        Lesen und Setzen von PC</i>
 2804           1        RECHTS-ABGESCHICKT, LINKS-ABGESCHICKT
 2805           1        RECHTS-ANGEKOMMEN, LINKS-ANGEKOMMEN
 2806           1        UNTEN-ABGESCHICKT, OBEN-ABGESCHICKT
 2807           1        UNTEN-ANGEKOMMEN, OBEN-ANGEKOMMEN
+<i>2C00-2FFF     16        Rückkehrstapel und Daten
+3000-3FFF      8        Textspeicher (nur Bytes)</i>
 
 Jeder FORTH-Prozessor kann im Adressbereich 2000H-23FFH Daten zum rechts daneben befindlichen Prozessor schicken und mit 
 
@@ -29,9 +35,9 @@ mitteilen, dass die zu übertragenden Daten komplett in den Adressbereich 2000H-
 
 LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
 
-dass das Auslesen beendet ist und die nächsten Daten gesendet werden können. Entsprechsendes gilt auch für die Übertragungsrichtung von oben nach unten und den Adressbereich 2400H-27FFH.
+dass das Auslesen beendet ist und die nächsten Daten gesendet werden können. Entsprechendes gilt auch im Adressbereich 2400H-27FFH für die Übertragungsrichtung von oben nach unten.
 
-Zu beachten ist, was in 2000H-27FFH gespeichert wird, kann nicht vom gleichen Prozessor zurückgelesen werden (um unnötige Verbindungen zu vermeiden) sondern nur vom Prozessor rechts oder unterhalb davon. Dieser wiederum kann diese Daten nur von 2000H-27FFH auslesen und nicht durch Zurückspeichern vorher nochmal verändern. Entsprechende Schreibversuche gehen dann weiter an den nächsten rechten oder unteren Prozessor.
+Zu beachten ist, was in 2000H-27FFH gespeichert wird, kann (um unnötige Verbindungen zu vermeiden) nicht vom gleichen Prozessor zurückgelesen werden sondern nur vom Prozessor rechts oder unterhalb davon. Dieser wiederum kann diese Daten nur von 2000H-27FFH auslesen und nicht durch Zurückspeichern vorher nochmal verändern. Entsprechende Schreibversuche gehen weiter an den nächsten rechten oder unteren Prozessor.
 </pr>
 
 <p>Im Beispielprogramm wird wieder die gleiche Matrix invertiert wie in Step_11. Die Matrixein- und -ausgabe erfolgt vorerst noch behelfsmäßig durch vorheriges manuelle Aufteilen der Matrix auf die einzelnen Prozessoren und wieder Zusammensetzen nach dem Invertieren.
@@ -52,17 +58,25 @@ Neu sind das Eingabefile <i>test_input.txt</i> und das Ausgabefile <i>test_outpu
 <DEMO>FORTY-FORTH
 
 ok
-<u>56 89 * .</u> 2E06 ok
-<u>111111111111111 DUP * .</u> 123456789ABCDEFEDCBA987654321 ok
-<u>DECIMAL</u> ok
-<u>56 89 * .</u> 4984 ok
-<u>[ [ 1   1   1    1 ]</u> ok
-<u>  [ 2   4   8   16 ]</u> ok
-<u>  [ 3   9  27   81 ]</u> ok
-<u>  [ 4  16  64  256 ] ] </u> ok
-<u>4 INVERTIEREN</u> 
-<u>OVER .</u> [ [ 1152 -864 384 -72 ] [ -1248 1368 -672 132 ] [ 432 -576 336 -72 ] [ -48 72 -48 12 ] ] ok
-<u>DUP .</u> 288 ok
+<u>HEX ( zum Programmieren )</u>
+<u>0 0 JK-PROC HERE .</u>
+
+<u>: AB " 4 N ! 2 NJ ! 2 NK ! DUP . " 1 ABSCHICKEN ;</u>
+<u>: AC " 4 N ! 2 NJ ! 2 NK ! OBJ_STRUCT_COPY " 1 ABSCHICKEN ;</u>
+<u>REPLACE: ADEBUG CR CR ." ADEBUG " OVER . DUP . ;</u>
+
+<u>DECIMAL</u>
+<u>( A )</u>
+<u>0 0 [ [ 1  1 ] [ 3 1 ^ 3 3 ^ ] ] AB</u>
+<u>0 1 [ [ 1  1 ] [ 3 2 ^ 3 4 ^ ] ] AC</u>
+<u>1 0 [ [ 2 1 ^ 2 3 ^ ] [ 4 1 ^ 4 3 ^ ] ] AC</u>
+<u>1 1 [ [ 2 2 ^ 2 4 ^ ] [ 4 2 ^ 4 4 ^ ] ] AC</u>
+<u>( gx )</u>
+<u>1 0 1 " 0 1 ROT 0 0 2 ABSCHICKEN " 3 ABSCHICKEN</u>
+<u>( bei GINV nur noch</u>
+<u>4 GINV</u>
+<u>ABWART</u>
+<u>OVER . DUP .</u>
 </DEMO>
 
 <svg_path schnips="1 1 -3 -100"/>
