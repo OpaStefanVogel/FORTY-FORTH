@@ -37,7 +37,7 @@
 
 ok</DEMO>
 
-zu sehen und auch eine Nutzereingabe möglich sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, ob sich da etwas verheddert hat. Sonst bleibt nur, in Terminal_1 und Terminal_2 mit <code>git checkout</code> auf vorherige Versionen umzuschalten, .bit erneut zu generieren und auf den Spartan3 auszugeben. Dabei gilt momentan folgende Zuordnung </p>
+zu sehen und auch eine Nutzereingabe möglich sein. Wenn nicht, erstmal mit Eingabe von Enter und ESCAPE versuchen, ob sich da etwas verheddert hat. Sonst bleibt nur, in Terminal_1 und Terminal_2 mit <code>git checkout</code> auf vorherige Versionen umzuschalten, .bit erneut zu generieren und auf den Spartan3 auszugeben, um eine Fehlerstelle grob zu lokalisieren. Dabei gilt momentan folgende Zuordnung </p>
 
 <table border="1"><tr>
   <th> <i>your-master-repo&amp;</i>   </th>

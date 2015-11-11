@@ -38,6 +38,7 @@
     <polyline points="20,80 5,80" stroke-width="1" marker-end="url(#pfeilspitze)"/>
     </symbol>
   </defs>
+
 <g fill="none" stroke="black" transform="translate(10,10)">
 <use xlink:href="#Kasten" x="40" y="40"/>
 <use xlink:href="#Kasten" x="140" y="40"/>
@@ -51,8 +52,14 @@
 <use xlink:href="#langePfeileoben" transform="translate(180,100) rotate(90)"/>
 <use xlink:href="#langePfeileunten" transform="translate(100,160)"/>
 <use xlink:href="#langePfeileunten" transform="translate(80,100) rotate(90)"/>
-<g transform="translate(280,0)">
-<rect x="0" y="0" width="240" height="240"/>
+<g stroke="green" stroke-dasharray="4,4">
+<polyline id="poly1" points="140,40 280,0"/>
+<polyline id="poly2" points="140,100 280,240"/>
+<polyline id="poly3" points="200,40 520,0"/>
+<polyline id="poly4" points="200,100 520,240"/>
+  </g>
+<g id="Vergrößerung" transform="translate(280,0)"><g id="V2">
+<rect x="0" y="0" width="240" height="240" fill="white" opacity="0.7"/>
 <use xlink:href="#extraPfeile" transform="translate(-10 ,80)"/>
 <use xlink:href="#extraPfeile" transform="translate(230 ,80)"/>
 <use xlink:href="#extraPfeile" transform="translate(160 ,-10) rotate(90)"/>
@@ -88,7 +95,7 @@
 <text x="12" y="135" align="left">27FF @</text>
 <text x="12" y="165" align="left">2807 !</text>
   </g>
-<g transform="translate(240,170) rotate(90)">
+<g transform="translate(240,173) rotate(90)">
 <use xlink:href="#Rahmen" x="10" y="74"/>
 <use xlink:href="#großerRahmen" x="10" y="104"/>
 <use xlink:href="#Rahmen" x="10" y="154"/>
@@ -98,16 +105,17 @@
 <text x="12" y="135" align="left">27FF !</text>
 <text x="12" y="165" align="left">2807 @</text>
   </g>
-<text x="-100" y="173" align="center" transform="translate(0,0) rotate(-45)">ein einzelner Forth-Prozessor</text>
+<text x="-150" y="173" align="center" transform="translate(0,0) rotate(-45)">ein einzelner Forth-Prozessor (klick hier)</text>
   </g>
   </g>
 <g>
-<g stroke="green" stroke-dasharray="4,4">
-<polyline points="140,40 280,0"/>
-<polyline points="140,100 280,240"/>
+  </g></g>
   </g>
-  </g>
-  </g>
-
+<animateTransform id="a1" xlink:href="#V2" attributeName="transform" type="scale" values="1; 0.25; 1" calcMode="spline" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1" begin="Vergrößerung.click; 98s" dur="2s"/>
+<animateTransform xlink:href="#Vergrößerung" attributeName="transform" type="translate" values="280,0; 140,40; 280,0" calcMode="spline" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1" begin="a1.begin" dur="2s"/>
+<animate xlink:href="#poly1" attributeName="points" values="140,40 280,0; 140,40 140,40; 140,40 280,0" calcMode="spline" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1" begin="a1.begin" dur="2s"/>
+<animate xlink:href="#poly2" attributeName="points" values="140,100 280,240; 140,100 140,100; 140,100 280,240" calcMode="spline" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1" begin="a1.begin" dur="2s"/>
+<animate xlink:href="#poly3" attributeName="points" values="200,40 520,0; 200,40 140,40; 200,40 520,0" calcMode="spline" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1" begin="a1.begin" dur="2s"/>
+<animate xlink:href="#poly4" attributeName="points" values="200,100 520,240; 200,100 200,100; 200,100 520,240" calcMode="spline" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1" begin="a1.begin" dur="2s"/>
 
   </svg>

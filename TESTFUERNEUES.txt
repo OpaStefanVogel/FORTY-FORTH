@@ -1,19 +1,18 @@
 HEX ( ist noch als einzigstes zurückzustellen zum Programmieren )
-0 0 JK-PROC HERE .
+0 0 JK-PROC HERE . ( zählt die angeschlossenen Prozessoren )
 
 : AB " 4 N ! 2 NJ ! 2 NK ! DUP . " 1 ABSCHICKEN ;
 : AC " 4 N ! 2 NJ ! 2 NK ! OBJ_STRUCT_COPY " 1 ABSCHICKEN ;
-REPLACE: ADEBUG CR CR ." ADEBUG " OVER . DUP . ;
 
 DECIMAL
-( A
+( A vier Teilmatrizen zu den vier Prozessoren schicken )
 0 0 [ [ 1  1 ] [ 3 1 ^ 3 3 ^ ] ] AB
 0 1 [ [ 1  1 ] [ 3 2 ^ 3 4 ^ ] ] AC
 1 0 [ [ 2 1 ^ 2 3 ^ ] [ 4 1 ^ 4 3 ^ ] ] AC
 1 1 [ [ 2 2 ^ 2 4 ^ ] [ 4 2 ^ 4 4 ^ ] ] AC
-( gx
+( gx dann gemeinsamer Nenner 1 überall )
 1 0 1 " 0 1 ROT 0 0 2 ABSCHICKEN " 3 ABSCHICKEN
-( bei GINV nur noch
+( GINV jetzt das neue Invertieren )
 4 GINV
 ABWART
 OVER . DUP .
