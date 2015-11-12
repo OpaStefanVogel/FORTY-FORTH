@@ -37,6 +37,8 @@
   <tr><td>Gleichheit</td>             <td>= ( a b --> a=b )</td>        <td></td></tr>
   <tr><td>Maximum</td>                <td>MAX ( a b --> max )</td>      <td></td></tr>
   <tr><td>Minimum</td>                <td>MIN ( a b --> min )</td>      <td></td></tr>
+  <tr><td>kleiner als Null</td>       <td>0LT ( a --> a&lt;0 )</td>    <td>0LT ( a --> a&lt;0 )</td></tr>
+  <tr><td>gleich Null</td>            <td>0= ( a --> a=0 )</td>        <td>0= ( a --> a=0 )</td></tr>
   <tr><td>Division mit Rest</td>      <td>M/MOD ( a b --> q r )</td>    <td>/MOD ( m n --> q r )</td></tr>
   <tr><td>Division</td>               <td></td>                         <td>/ ( m n --> q )</td></tr>
   <tr><td>Rest</td>                   <td></td>                         <td>MOD ( m n --> r )</td></tr>
@@ -1628,6 +1630,17 @@ BEFESTIGE O-AUSLES
   ;
 
 : ABWART BEGIN AMERK @ WHILE EXXI REPEAT ; 
+
+: a00+d ( A gx d --> A' gx' )
+  ." a00+d "
+  1 AMERK ! 1 NN ! GXMERK ! ( A gx )
+  0 NK @ 1- 0 ' JLOC! 0 2 ABSCHICKEN
+  NJ @ 1- 0 0 ' KLOC! 0 3 ABSCHICKEN
+  OVER JLOC @ L KLOC @ L DUP . ( A gx b00 )
+  GXMERK @ * OVER + DUP . ( A gx b00*d+gx )
+  0 GXMERK !
+  NJ @ 1- 0 ROT ' XYLOS 0 3 ABSCHICKEN
+  ;
 
 </sekt>
 
