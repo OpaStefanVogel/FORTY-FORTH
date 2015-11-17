@@ -236,7 +236,7 @@ A<hj>=</hj><textarea id="matrix input" cols="40" rows="10" >[ [ 1, 1, 1, 1 ],
 <div id="Probe"><div /></div>
 <hr />
 <hr />
-Jetzt wird in der Ausgangsmatrix a(0,0) um 1 vergrößert: <span id="a00"><span/></span>
+Jetzt wird in der Ausgangsmatrix a(0,0) um 1 vergrößert. Rechne <span id="a00"><span/></span>
 <div id="Ergebnis2"><div /></div>
 <div id="Probe2"><div /></div>
 </body>
