@@ -773,6 +773,13 @@ DUP ZERLEG SWAP M. M.
   ( L0=nr L1=Nj L2=Nk L3=j L4=k L5=Y L6=Z L7=alternenner )
   8 LOCAL NEBENRECHNUNG L0 !
   ADEBUG1
+  OVER OBJ? OVER OBJ? AND NOT IF
+    TLISTENZEIGER @ TLISTE !
+    NJ @ IAMX @ - NK @ IAMY @ - 0
+    " 0ECB ERROR"
+    1 ABSCHICKEN
+    0ECB ERROR  ( vorläufiger Stop )
+    END_IF
   OVER SIZE L1 ! DUP SIZE L2 !
   L6 ! L5 ! SWAP L7 !
   L1 @ L3 ! BEGIN -1 L3 +!
