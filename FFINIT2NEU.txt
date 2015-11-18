@@ -773,13 +773,6 @@ DUP ZERLEG SWAP M. M.
   ( L0=nr L1=Nj L2=Nk L3=j L4=k L5=Y L6=Z L7=alternenner )
   8 LOCAL NEBENRECHNUNG L0 !
   ADEBUG1
-  OVER OBJ? OVER OBJ? AND NOT IF
-    TLISTENZEIGER @ TLISTE !
-    NJ @ IAMX @ - NK @ IAMY @ - 0
-    " 0ECB ERROR"
-    1 ABSCHICKEN
-    0ECB ERROR  ( vorläufiger Stop )
-    END_IF
   OVER SIZE L1 ! DUP SIZE L2 !
   L6 ! L5 ! SWAP L7 !
   L1 @ L3 ! BEGIN -1 L3 +!
@@ -1609,6 +1602,10 @@ BEFESTIGE O-AUSLES
 
 : ZLOS ( A gx x Y --> A' gx' )
   ." ZLOS " 2OVER B. 2DUP B.
+  OVER OBJ? 2OVER DROP OBJ? OR IF ( falls x oder Y noch nicht da )
+    NJ @ IAM1X @ - NK @ IAM1Y @ - 0 " 0ECB ERROR" 1 ABSCHICKEN
+    BEGIN AGAIN ( vorläufiger Stop, nichts geht mehr. )
+    END_IF
   2OVER DROP JLOC @ L OBJ_STRUCT_COPY DUP . ( A gx x Y Z )
   NJ @ 1- 0 ROT  ( A gx x Y NJ@-1 0 Z )
   IAM1X @ IAM1Y @ = IF OBJ_STRUCT_COPY KLOC @ G GXMERK @ - H END_IF OVER . DUP .
@@ -1637,7 +1634,7 @@ BEFESTIGE O-AUSLES
   NN @ 1- IF 1 1 NN @ 1- " GINV " 1 ABSCHICKEN END_IF
   ;
 
-: ABWART BEGIN AMERK @ WHILE EXXI REPEAT ; 
+: ABWART BEGIN AMERK @ WHILE EXXI REPEAT ;
 
 : a00+d ( A gx d --> A' gx' )
   ." a00+d "
