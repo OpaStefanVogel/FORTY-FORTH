@@ -1655,6 +1655,11 @@ BEFESTIGE O-AUSLES
   NJ @ 1- NK @ 1- L1 @ 0 0 4 ABSCHICKEN
   ;
 
+: INVERTIERE_SCHNELL ( A gx --> A' gx' )
+  OVER SIZE N !
+  klMatAuft
+  N @ GINV ;
+
 : a00+d ( A gx d --> A' gx' )
   ." a00+d "
   1 AMERK ! 1 NN ! GXMERK ! ( A gx )
