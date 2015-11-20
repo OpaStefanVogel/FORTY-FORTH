@@ -13,10 +13,7 @@ DECIMAL
 1 0 [ [ 21 1 ^ 2 3 ^ ] [ 4 1 ^ 4 3 ^ ] ] AC
 1 1 [ [ 2 2 ^ 2 4 ^ ] [ 4 2 ^ 2561 ] ] AC
 ( gx
-1 1 1 ' OBJ_STRUCT_COPY 0 4 ABSCHICKEN
-( warten...
-77 88 * .
-OVER . DUP .
+1 0 1 " 0 1 ROT 0 0 2 ABSCHICKEN " 3 ABSCHICKEN
 ( bei GINV nur noch
 4 GINV
 ABWART
@@ -24,5 +21,3 @@ OVER . DUP .
 1 a00+d
 ABWART
 OVER . DUP .
-
-
