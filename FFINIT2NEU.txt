@@ -1530,7 +1530,7 @@ TLISTE VARIABLE TLISTENZEIGER
             OBEN-BYTES 1+ @ 1-
             OBEN-BYTES 2 M+ @
             CR ." :O " 2DUP B. ." O: "
-            OBEN-BYTES 3 M+ @
+            OBEN-BYTES 3 M+ @ OBJ_STRUCT_COPY
             OBEN-BYTES 5 M+
             OBEN-BYTES 4 M+ @ 0= IF @ END_IF
             OBEN-BYTES 4 M+ @ 1 
@@ -1613,7 +1613,7 @@ BEFESTIGE O-AUSLES
   0 NK @ 1- ROT ' A+0 0 2 ABSCHICKEN ( A gx x )
   KLOC @ 2OVER DROP SWAP YCOL DUP . ( A gx x Y )
   0 NK @ 1- ROT ( A gx x 0 NK@-1 Y )
-  IAM1X @ IAM1Y @ = IF OBJ_STRUCT_COPY JLOC @ G GXMERK @ + H ' ZLOS ELSE 0 END_IF
+  IAM1X @ IAM1Y @ = IF OBJ_STRUCT_COPY JLOC @ G GXMERK @ + H ' ZLOS ELSE ' OBJ_STRUCT_COPY END_IF
   OVER . ( A gx x 0 NK@ Y 0 )
   0 2 ABSCHICKEN ( A' gx' )
   ;
