@@ -2,6 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity top is
+  generic ( NJ : integer := 2 ; NK : integer := 2 );
   Port ( 
     CLK: in STD_LOGIC;
     LEDS: out STD_LOGIC_VECTOR (7 downto 0);
@@ -83,88 +84,97 @@ component FortyForthProcessor
     );
   end component;
 
-signal WE      : STD_LOGIC;
-signal ADR,DAT : STD_LOGIC_VECTOR (15 downto 0);
+-- neu fuer generic
+type CON1  is array (0 to NJ*NK-1) of STD_LOGIC;
+type CON8  is array (0 to NJ*NK-1) of STD_LOGIC_VECTOR (7 downto 0);
+type CON16 is array (0 to NJ*NK-1) of STD_LOGIC_VECTOR (15 downto 0);
 
-signal L00_AB, L00_AN, R00_AB, R00_AN, O00_AB, O00_AN, U00_AB, U00_AN:  STD_LOGIC;
-signal L00_DAT,L00_ADR,R00_DAT,R00_ADR,O00_DAT,O00_ADR,U00_DAT,U00_ADR: STD_LOGIC_VECTOR (15 downto 0);
-signal L01_AB, L01_AN, R01_AB, R01_AN, O01_AB, O01_AN, U01_AB, U01_AN:  STD_LOGIC;
-signal L01_DAT,L01_ADR,R01_DAT,R01_ADR,O01_DAT,O01_ADR,U01_DAT,U01_ADR: STD_LOGIC_VECTOR (15 downto 0);
-signal L10_AB, L10_AN, R10_AB, R10_AN, O10_AB, O10_AN, U10_AB, U10_AN:  STD_LOGIC;
-signal L10_DAT,L10_ADR,R10_DAT,R10_ADR,O10_DAT,O10_ADR,U10_DAT,U10_ADR: STD_LOGIC_VECTOR (15 downto 0);
-signal L11_AB, L11_AN, R11_AB, R11_AN, O11_AB, O11_AN, U11_AB, U11_AN:  STD_LOGIC;
-signal L11_DAT,L11_ADR,R11_DAT,R11_ADR,O11_DAT,O11_ADR,U11_DAT,U11_ADR: STD_LOGIC_VECTOR (15 downto 0);
-
-signal NN01,NN10,NN11: STD_LOGIC;
+signal L_AB, L_AN, R_AB, R_AN, O_AB, O_AN, U_AB, U_AN :  CON1  ;
+signal L_DAT,L_ADR,R_DAT,R_ADR,O_DAT,O_ADR,U_DAT,U_ADR : CON16 ;
+signal K_AB, K_AN, E_AB, E_AN : CON1 ;
+signal K_BYTE, E_BYTE : CON8 ;
+signal ADR, DAT_I, DAT_O : CON16 ;
+signal WE : CON1 ;
+signal PC, PD, A, B, C, D, SP : CON16 ;
 
 begin
+
   -- component instantiation
-DUT00: FortyForthProcessor
+LABEL_1: for L in 0 to NJ*NK-1 generate
+DUTL: FortyForthProcessor
   port map (
-    CLK_I => CLK,DAT_I => x"0000",ADR_O => ADR,DAT_O => DAT,WE_O => WE,
-      EMIT_ABGESCHICKT => EMIT_ABGESCHICKT,EMIT_BYTE => EMIT_BYTE,EMIT_ANGEKOMMEN => EMIT_ANGEKOMMEN,-- EMIT --
-       KEY_ABGESCHICKT => KEY_ABGESCHICKT,  KEY_BYTE => KEY_BYTE,  KEY_ANGEKOMMEN => KEY_ANGEKOMMEN, -- KEY --
-     LINKS_ABGESCHICKT => L00_AB, LINKS_DAT => L00_DAT, LINKS_ADR => L00_ADR, LINKS_ANGEKOMMEN => L00_AN,-- LINKS --
-    RECHTS_ABGESCHICKT => R00_AB,RECHTS_DAT => R00_DAT,RECHTS_ADR => R00_ADR,RECHTS_ANGEKOMMEN => R00_AN,-- RECHTS --
-      OBEN_ABGESCHICKT => O00_AB,  OBEN_DAT => O00_DAT,  OBEN_ADR => O00_ADR,  OBEN_ANGEKOMMEN => O00_AN,-- OBEN --
-     UNTEN_ABGESCHICKT => U00_AB, UNTEN_DAT => U00_DAT, UNTEN_ADR => U00_ADR, UNTEN_ANGEKOMMEN => U00_AN,-- UNTEN --
-    PC_SIM => PC_SIM,PD_SIM => PD_SIM,A_SIM => A_SIM,B_SIM => B_SIM,C_SIM => C_SIM,D_SIM => D_SIM,SP_SIM => SP_SIM-- nur fuer Simulation
+    CLK_I => CLK,DAT_I => DAT_I(L),ADR_O => ADR(L),DAT_O => DAT_O(L),WE_O => WE(L),
+      EMIT_ABGESCHICKT => E_AB(L), EMIT_BYTE => E_BYTE(L), EMIT_ANGEKOMMEN => E_AN(L),-- EMIT --
+       KEY_ABGESCHICKT => K_AB(L),  KEY_BYTE => K_BYTE(L),  KEY_ANGEKOMMEN => K_AN(L), -- KEY --
+     LINKS_ABGESCHICKT => L_AB(L), LINKS_DAT => L_DAT(L), LINKS_ADR => L_ADR(L), LINKS_ANGEKOMMEN => L_AN(L),-- LINKS --
+    RECHTS_ABGESCHICKT => R_AB(L),RECHTS_DAT => R_DAT(L),RECHTS_ADR => R_ADR(L),RECHTS_ANGEKOMMEN => R_AN(L),-- RECHTS --
+      OBEN_ABGESCHICKT => O_AB(L),  OBEN_DAT => O_DAT(L),  OBEN_ADR => O_ADR(L),  OBEN_ANGEKOMMEN => O_AN(L),-- OBEN --
+     UNTEN_ABGESCHICKT => U_AB(L), UNTEN_DAT => U_DAT(L), UNTEN_ADR => U_ADR(L), UNTEN_ANGEKOMMEN => U_AN(L),-- UNTEN --
+    PC_SIM => PC(L),PD_SIM => PD(L),A_SIM => A(L),B_SIM => B(L),C_SIM => C(L),D_SIM => D(L),SP_SIM => SP(L) -- nur fuer Simulation
     );
+LABEL_2:  if L>0 generate E_AN(L) <= E_AB(L) ; end generate ;
+  end generate ;
 
-DUT01: FortyForthProcessor
-  port map (
-    CLK_I => CLK,DAT_I => x"0000",ADR_O => open,DAT_O => open,WE_O => open,
-      EMIT_ABGESCHICKT => NN01,EMIT_BYTE => open, EMIT_ANGEKOMMEN => NN01, -- EMIT --
-       KEY_ABGESCHICKT => '0',  KEY_BYTE => x"00", KEY_ANGEKOMMEN => open, -- KEY --
-     LINKS_ABGESCHICKT => L01_AB, LINKS_DAT => L01_DAT, LINKS_ADR => L01_ADR, LINKS_ANGEKOMMEN => L01_AN,-- LINKS --
-    RECHTS_ABGESCHICKT => R01_AB,RECHTS_DAT => R01_DAT,RECHTS_ADR => R01_ADR,RECHTS_ANGEKOMMEN => R01_AN,-- RECHTS --
-      OBEN_ABGESCHICKT => O01_AB,  OBEN_DAT => O01_DAT,  OBEN_ADR => O01_ADR,  OBEN_ANGEKOMMEN => O01_AN,-- OBEN --
-     UNTEN_ABGESCHICKT => U01_AB, UNTEN_DAT => U01_DAT, UNTEN_ADR => U01_ADR, UNTEN_ANGEKOMMEN => U01_AN,-- UNTEN --
-    PC_SIM =>open,PD_SIM=>open,A_SIM=>open,B_SIM=>open,C_SIM=>open,D_SIM =>open,SP_SIM=>open-- nur fuer Simulation
-    );
+LABEL_3: for J in 0 to NJ-1 generate
+LABEL_4:   for K in 0 to NK-1 generate
+LABEL_5:     if K=0 generate
+      L_AB(J*NK)<=R_AB(J*NK+NK-1); L_DAT(J*NK)<=R_DAT(J*NK+NK-1);
+      R_AN(J*NK+NK-1)<=L_AN(J*NK); R_ADR(J*NK+NK-1)<=L_ADR(J*NK);
+      end generate ;
+LABEL_6:     if K>0 generate
+      L_AB(J*NK+K)<=R_AB(J*NK+K-1); L_DAT(J*NK+K)<=R_DAT(J*NK+K-1);
+      R_AN(J*NK+K-1)<=L_AN(J*NK+K); R_ADR(J*NK+K-1)<=L_ADR(J*NK+K);
+      end generate ;
+LABEL_7:     if J=0 generate
+      O_AB(K)<=U_AB((NJ-1)*NK+K); O_DAT(K)<=U_DAT((NJ-1)*NK+K);
+      U_AN((NJ-1)*NK+K)<=O_AN(K); U_ADR((NJ-1)*NK+K)<=O_ADR(K);
+      end generate ;
+LABEL_8:     if J>0 generate
+      O_AB(J*NK+K)<=U_AB((J-1)*NJ+K); O_DAT(J*NK+K)<=U_DAT((J-1)*NJ+K);
+      U_AN((J-1)*NJ+K)<=O_AN(J*NK+K); U_ADR((J-1)*NJ+K)<=O_ADR(J*NK+K);
+      end generate ;
+    end generate ;
+  end generate ;
 
-DUT10: FortyForthProcessor
-  port map (
-    CLK_I => CLK,DAT_I => x"0000",ADR_O => open,DAT_O => open,WE_O => open,
-      EMIT_ABGESCHICKT => NN10,EMIT_BYTE => open, EMIT_ANGEKOMMEN => NN10, -- EMIT --
-       KEY_ABGESCHICKT => '0',  KEY_BYTE => x"00", KEY_ANGEKOMMEN => open, -- KEY --
-     LINKS_ABGESCHICKT => L10_AB, LINKS_DAT => L10_DAT, LINKS_ADR => L10_ADR, LINKS_ANGEKOMMEN => L10_AN,-- LINKS --
-    RECHTS_ABGESCHICKT => R10_AB,RECHTS_DAT => R10_DAT,RECHTS_ADR => R10_ADR,RECHTS_ANGEKOMMEN => R10_AN,-- RECHTS --
-      OBEN_ABGESCHICKT => O10_AB,  OBEN_DAT => O10_DAT,  OBEN_ADR => O10_ADR,  OBEN_ANGEKOMMEN => O10_AN,-- OBEN --
-     UNTEN_ABGESCHICKT => U10_AB, UNTEN_DAT => U10_DAT, UNTEN_ADR => U10_ADR, UNTEN_ANGEKOMMEN => U10_AN,-- UNTEN --
-    PC_SIM =>open,PD_SIM=>open,A_SIM=>open,B_SIM=>open,C_SIM=>open,D_SIM =>open,SP_SIM=>open-- nur fuer Simulation
-    );
+-- L_AB(1)<=R_AB(0); L_DAT(1)<=R_DAT(0); R_ADR(0)<=L_ADR(1); R_AN(0)<=L_AN(1);
+-- L_AB(0)<=R_AB(1); L_DAT(0)<=R_DAT(1); R_ADR(1)<=L_ADR(0); R_AN(1)<=L_AN(0);
+-- L_AB(3)<=R_AB(2); L_DAT(3)<=R_DAT(2); R_ADR(2)<=L_ADR(3); R_AN(2)<=L_AN(3);
+-- L_AB(2)<=R_AB(3); L_DAT(2)<=R_DAT(3); R_ADR(3)<=L_ADR(2); R_AN(3)<=L_AN(2);
 
-DUT11: FortyForthProcessor
-  port map (
-    CLK_I => CLK,DAT_I => x"0000",ADR_O => open,DAT_O => open,WE_O => open,
-      EMIT_ABGESCHICKT => NN11,EMIT_BYTE => open, EMIT_ANGEKOMMEN => NN11, -- EMIT --
-       KEY_ABGESCHICKT => '0',  KEY_BYTE => x"00", KEY_ANGEKOMMEN => open, -- KEY --
-     LINKS_ABGESCHICKT => L11_AB, LINKS_DAT => L11_DAT, LINKS_ADR => L11_ADR, LINKS_ANGEKOMMEN => L11_AN,-- LINKS --
-    RECHTS_ABGESCHICKT => R11_AB,RECHTS_DAT => R11_DAT,RECHTS_ADR => R11_ADR,RECHTS_ANGEKOMMEN => R11_AN,-- RECHTS --
-      OBEN_ABGESCHICKT => O11_AB,  OBEN_DAT => O11_DAT,  OBEN_ADR => O11_ADR,  OBEN_ANGEKOMMEN => O11_AN,-- OBEN --
-     UNTEN_ABGESCHICKT => U11_AB, UNTEN_DAT => U11_DAT, UNTEN_ADR => U11_ADR, UNTEN_ANGEKOMMEN => U11_AN,-- UNTEN --
-    PC_SIM =>open,PD_SIM=>open,A_SIM=>open,B_SIM=>open,C_SIM=>open,D_SIM =>open,SP_SIM=>open-- nur fuer Simulation
-    );
+-- O_AB(2)<=U_AB(0); O_DAT(2)<=U_DAT(0); U_ADR(0)<=O_ADR(2); U_AN(0)<=O_AN(2);
+-- O_AB(0)<=U_AB(2); O_DAT(0)<=U_DAT(2); U_ADR(2)<=O_ADR(0); U_AN(2)<=O_AN(0);
+-- O_AB(3)<=U_AB(1); O_DAT(3)<=U_DAT(1); U_ADR(1)<=O_ADR(3); U_AN(1)<=O_AN(3);
+-- O_AB(1)<=U_AB(3); O_DAT(1)<=U_DAT(3); U_ADR(3)<=O_ADR(1); U_AN(3)<=O_AN(1);
 
+-- E_AN(1) <= E_AB(1) ;
+-- E_AN(2) <= E_AB(2) ;
+-- E_AN(3) <= E_AB(3) ;
 
-L01_AB<=R00_AB; L01_DAT<=R00_DAT; R00_ADR<=L01_ADR; R00_AN<=L01_AN;
-L00_AB<=R01_AB; L00_DAT<=R01_DAT; R01_ADR<=L00_ADR; R01_AN<=L00_AN;
-L11_AB<=R10_AB; L11_DAT<=R10_DAT; R10_ADR<=L11_ADR; R10_AN<=L11_AN;
-L10_AB<=R11_AB; L10_DAT<=R11_DAT; R11_ADR<=L10_ADR; R11_AN<=L10_AN;
+EMIT_ABGESCHICKT <= E_AB(0) ;
+EMIT_BYTE <= E_BYTE(0) ;
+E_AN(0) <= EMIT_ANGEKOMMEN ;
 
-O10_AB<=U00_AB; O10_DAT<=U00_DAT; U00_ADR<=O10_ADR; U00_AN<=O10_AN;
-O00_AB<=U10_AB; O00_DAT<=U10_DAT; U10_ADR<=O00_ADR; U10_AN<=O00_AN;
-O11_AB<=U01_AB; O11_DAT<=U01_DAT; U01_ADR<=O11_ADR; U01_AN<=O11_AN;
-O01_AB<=U11_AB; O01_DAT<=U11_DAT; U11_ADR<=O01_ADR; U11_AN<=O01_AN;
+K_AB(0) <= KEY_ABGESCHICKT ;
+K_BYTE(0) <= KEY_BYTE ;
+KEY_ANGEKOMMEN <= K_AN(0) ;
 
+PC_SIM <= PC(0) ;
+PD_SIM <= PD(0) ;
+A_SIM <= A(0) ;
+B_SIM <= B(0) ;
+C_SIM <= C(0) ;
+D_SIM <= D(0) ;
+SP_SIM <= SP(0) ;
 
-process begin wait until (CLK'event and CLK='1');
-  if WE='1' then
-    if ADR=x"2D04" then LEDS<=DAT(7 downto 0); 
-      end if; 
-    end if;
-  end process;
+--process begin wait until (CLK'event and CLK='1');
+--LABEL_9:   for L in 0 to NJ*NK-1 generate
+--LABEL_10:    if L<8 generate
+--      if WE(L)='1' then
+--        if ADR(L)=x"2D04" then LEDS(L)<=DAT(L)(L); end if; 
+--        end if;
+--      end generate;
+--    end generate;
+--  end process;
 
 end Step_1;
 
