@@ -32,23 +32,22 @@ function invertieren() {
   A=eval(document.getElementById("matrix input").value);
   AMERK=eval(document.getElementById("matrix input").value);
   PRO=eval(document.getElementById("matrix input").value);
-  body=document.getElementsByTagName("body")[0];
-  body.removeChild(body.lastChild);
-  body.removeChild(body.lastChild);
-  Ergebnis=document.createElement("div");body.appendChild(Ergebnis);
-  Probe=document.createElement("div");body.appendChild(Probe);
+  body1=document.getElementById("Ergebnis");
+  body1.removeChild(body1.lastChild);
+  body2=document.getElementById("Probe");
+  body2.removeChild(body2.lastChild);
+  Ergebnis=document.createElement("div");body1.appendChild(Ergebnis);
+  Probe=document.createElement("div");body2.appendChild(Probe);
   Ausgangsmatrix=document.getElementById("Ausgangsmatrix");
   n=A.length;
   NeuerNenner=1;NMERK=NeuerNenner;
   Ausgangsmatrix.removeChild(Ausgangsmatrix.lastChild);
   ha = document.createElement("ha");Ausgangsmatrix.appendChild(ha);
   EDISP(ha,0,true);
-  Probe.appendChild(document.createElement("hr"));
   hap = document.createElement("ha");Probe.appendChild(hap);
   hap.appendChild(document.createTextNode("Probe: "));
   EDISP(hap,0,false);
   hap.appendChild(Rechenzeichen("·"));
-  Probe.appendChild(document.createElement("hr"));
   for (i=0;i<n;i++) {
     //alert("i="+i);
     AlterNenner=NeuerNenner;
@@ -59,7 +58,7 @@ function invertieren() {
       }
     Y[i]=Y[i]+AlterNenner;
     Z[i]=Z[i]-AlterNenner;
-    ADISP(Ergebnis,i);
+    ADISP(Ergebnis,i,0);
     for (j=0;j<n;j++) { for (k=0;k<n;k++) { 
       A[j][k]=(A[j][k]*NeuerNenner-Y[j]*Z[k])/AlterNenner;
       } }
@@ -80,9 +79,47 @@ function invertieren() {
       } 
     PRO[i][j]=PRO[i][j]/NeuerNenner/NMERK;
     } }
-  A=PRO;
+  AMERK=A;A=PRO;
   EDISP(hap,n,2);
+  A=AMERK;
   //alert(A+"#"+AMERK+"#"+PRO);
+
+  Ergehnis2=document.getElementById("Ergebnis2");
+  Ergebnis2.removeChild(Ergebnis2.lastChild);
+  E2=document.createElement("div");Ergebnis2.appendChild(E2);
+  ha2 = document.createElement("ha");Ergebnis2.appendChild(ha2);
+  i=0;
+    AlterNenner=NeuerNenner;
+    NeuerNenner=A[i][i]*1+AlterNenner;
+    Y=[];Z=[];
+    for (j=0;j<n;j++) {
+      Y[j]=A[j][i];
+      Z[j]=A[i][j];
+      }
+    ADISP(ha2,i,1);
+    for (j=0;j<n;j++) { for (k=0;k<n;k++) { 
+      A[j][k]=(A[j][k]*NeuerNenner-Y[j]*Z[k])/AlterNenner;
+      } }
+    EDISP(ha2,i+1,true);
+  a00=document.getElementById("a00");
+  a00.removeChild(a00.lastChild);
+  a2=document.createElement("h0");a00.appendChild(a2);
+  ck = document.createElement("c"+eval((i+1)%4));
+  t = document.createTextNode(BAS(NeuerNenner));ck.appendChild(t);   
+  a2.appendChild(ck);
+  a2.appendChild(Rechenzeichen("="));
+  ck = document.createElement("hh");
+  t = document.createTextNode(BAS(A[0][0]));ck.appendChild(t);   
+  a2.appendChild(ck);
+  a2.appendChild(Rechenzeichen("*"));
+  ck = document.createElement("span");
+  t = document.createTextNode(BAS(1));ck.appendChild(t);   
+  a2.appendChild(ck);
+  a2.appendChild(Rechenzeichen("+"));
+  ck = document.createElement("c"+eval(i%4));
+  t = document.createTextNode(BAS(AlterNenner));ck.appendChild(t);   
+  a2.appendChild(ck);
+
   }
 
 function Rechenzeichen(t) {
@@ -94,7 +131,7 @@ function Rechenzeichen(t) {
 var BASNUM=10;
 function BAS(val) { return val.toString(BASNUM).toUpperCase(); }
 
-function ADISP(Ergebnis,i) {
+function ADISP(Ergebnis,i,Variante) {
   ck = document.createElement("c"+eval((i+1)%4));
     t = document.createTextNode(BAS(NeuerNenner));ck.appendChild(t);   
   cl = document.createElement("c"+eval(i%4));
@@ -112,7 +149,7 @@ function ADISP(Ergebnis,i) {
             if (k==i & j!=i ) {
                hh = document.createElement("hv") }
             hi.appendChild(hh);
-            if (j==i & k==i) {
+            if (j==i & k==i & Variante==0) {
               ci = document.createElement("c"+eval((i+1)%4));
               hh.appendChild(ci);hh=ci; }
             t = document.createTextNode(BAS(A[j][k]));hh.appendChild(t);
@@ -123,7 +160,7 @@ function ADISP(Ergebnis,i) {
       hd = document.createElement("hd");hb.appendChild(hd);
         hi = document.createElement("hi");hd.appendChild(hi);
         for (j=0;j<n;j++) { 
-          if (j==i) {
+          if (j==i & Variante==0) {
             hh = document.createElement("hh");hi.appendChild(hh);
             hh.appendChild(cl.cloneNode(true));
             t = document.createTextNode("+");
@@ -137,7 +174,7 @@ function ADISP(Ergebnis,i) {
       hb.appendChild(Rechenzeichen("·"));
       hd = document.createElement("hd");hb.appendChild(hd);
         for (k=0;k<n;k++) { 
-          if (k==i) {
+          if (k==i & Variante==0) {
             hh = document.createElement("hh");hd.appendChild(hh);
             hh.appendChild(cl.cloneNode(true));
             t = document.createTextNode("-");
@@ -194,7 +231,13 @@ A<hj>=</hj><textarea id="matrix input" cols="40" rows="10" >[ [ 1, 1, 1, 1 ],
   [ 4, 8 ] ]
 </textarea>
 -->
-<div id="Ergebnis" />
-<div id="Probe" />
+<div id="Ergebnis"><div /></div>
+<hr />
+<div id="Probe"><div /></div>
+<hr />
+<hr />
+Jetzt wird in der Ausgangsmatrix a(0,0) um 1 vergrößert. Rechne <span id="a00"><span/></span>
+<div id="Ergebnis2"><div /></div>
+<div id="Probe2"><div /></div>
 </body>
 </html>

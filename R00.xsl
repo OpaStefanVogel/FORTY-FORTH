@@ -134,5 +134,6 @@ weiter mit <span class="zurueck"><a href="index.html#Inhalt">oder zurück zu Inh
 
 <xsl:template match="li"><li><xsl:apply-templates /></li></xsl:template>
 
+<xsl:template match="object"><xsl:copy-of select="." /></xsl:template>
 
 </xsl:stylesheet>
