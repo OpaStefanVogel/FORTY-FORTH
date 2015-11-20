@@ -287,12 +287,8 @@ A 8 DUMP
   OVER IF
     OVER 1 = ( falls lz=1 )
     OVER @ 0C 000 MLIT AND 0= AND ( und az@ kleiner 4000 )
-    IF @ SWAP DROP ELSE
-      1-             ( sz lz az-1 )
-      SWAP OVER !    ( sz az-1 )
-      04 000 MLIT OR ( sz z )
-      END_IF 
-    SWAP IF MINUS END_IF ( z )
+    IF @ SWAP DROP SWAP IF MINUS END_IF 
+      ELSE SLX->ERGEBNIS_KURZ END_IF ( z )
     ELSE 2DROP DROP 0 END_IF ( 0 zum Beispiel bei 1/7 )
   ;
 
