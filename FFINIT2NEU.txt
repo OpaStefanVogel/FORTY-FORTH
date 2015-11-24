@@ -1647,7 +1647,7 @@ BEFESTIGE O-AUSLES
   ( L0=A L1=gx L2=nj L3=nk L4=j L5=k L6=A[j] )
   7 LOCAL
   L1 ! L0 !
-  NJ @ 1- NK @ 1- 0 " DROP [ [ " 4 ABSCHICKEN
+  NJ @ 1- NK @ 1- 0 " DROP [ [ " 3 ABSCHICKEN
   0 L2 ! 0 L4 ! BEGIN
     L0 @ L4 @ L L6 !
     0 L3 ! 0 L5 ! BEGIN
@@ -1655,11 +1655,11 @@ BEFESTIGE O-AUSLES
       1 L3 +! L3 @ NK @ = IF 0 L3 ! END_IF
       1 L5 +! L5 @ N @ = UNTIL
     1 L2 +! L2 @ NJ @ = IF 0 L2 !
-      NJ @ 1- NK @ 1- 0 " DROP ] " 4 ABSCHICKEN
+      NJ @ 1- NK @ 1- 0 " DROP ] [ " 3 ABSCHICKEN
       END_IF
     1 L4 +! L4 @ N @ = UNTIL
-  NJ @ 1- NK @ 1- 0 " DROP ] " 4 ABSCHICKEN
-  NJ @ 1- NK @ 1- L1 @ 0 0 4 ABSCHICKEN
+  NJ @ 1- NK @ 1- 0 " DROP ] ] " 3 ABSCHICKEN
+  NJ @ 1- NK @ 1- L1 @ 0 0 3 ABSCHICKEN
   ;
 
 : INVERTIERE_SCHNELL ( A gx --> A' gx' )
