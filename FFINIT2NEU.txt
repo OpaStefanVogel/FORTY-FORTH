@@ -814,7 +814,7 @@ DUP ZERLEG SWAP M. M.
   ( L0=nr L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
   8 LOCAL NEBENRECHNUNG L0 !
   L1 ! 1 ( mat nenner )
-  L1 @ L2 ! BEGIN -1 L2 +! ( CR L2 M? ERGEBNIS M?
+  0 L2 ! BEGIN ( CR L2 M? ERGEBNIS M?
     L7 ! ( mat ) 0 L5 ! 0 L6 !
     DUP L2 @ L L2 @ L ( mat neuernenner )
     L1 @ L3 ! BEGIN -1 L3 +!
@@ -824,7 +824,7 @@ DUP ZERLEG SWAP M. M.
     L5 @ L2 @ L L7 @ + L5 @ L2 @ ROT H L5 !
     L6 @ L2 @ L L7 @ - L6 @ L2 @ ROT H L6 !
     L7 @ SWAP L5 @ L6 @ [A*x-Y*Z]/gx
-    L2 @ 0= UNTIL
+    1 L2 +! L2 @ L1 @ = UNTIL
   L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0 ( A' x )
   END_LOCAL
   ;
@@ -1634,8 +1634,8 @@ BEFESTIGE O-AUSLES
   ." GINV "
   DUP AMERK ! NN ! DUP GXMERK ! ( A gx )
   N @ NN @ M- NI !
-  0 NK @ 1- NI @ N @ NJ @ M/ M/ ' JLOC! 0 2 ABSCHICKEN
-  NJ @ 1- 0 NI @ N @ NK @ M/ M/ ' KLOC! 0 3 ABSCHICKEN
+  0 NK @ 1- NI @ NJ @ M/ ' JLOC! 0 2 ABSCHICKEN
+  NJ @ 1- 0 NI @ NK @ M/ ' KLOC! 0 3 ABSCHICKEN
   OVER JLOC @ L KLOC @ L DUP . ( A gx x )
   NJ @ 1- 0 ROT ' XYLOS 0 3 ABSCHICKEN
   NN @ 1- IF 1 1 NN @ 1- " GINV " 1 ABSCHICKEN END_IF
