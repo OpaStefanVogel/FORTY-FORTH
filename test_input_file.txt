@@ -1,14 +1,28 @@
-HEX
-0 0 JK-PROC
-HERE .
-0 2D04 !
+HEX ( zum Programmieren besser hexadezimal )
+0 0 JK-PROC ( Prozessoren zählen )
+HERE . ( wie weit programmiert )
+0 2D04 ! ( LED's alle ausschalten )
 
-DECIMAL
-7 VANDERMONDEMATRIX 1
+DECIMAL ( Datenein- und Ausgabe dezimal wenn gewünscht )
+4 VANDERMONDEMATRIX 1 ( vandermondematrix nenner )
 OVER . DUP .
-INVERTIERE_SCHNELL
-ABWART
+INVERTIERE_SCHNELL ( zählermatrix nenner --> zählermatrixinvers neuernenner )
 OVER . DUP .
-1 a00+d
-ABWART
-OVER . DUP .
+
+( Einträge der inversen Matrix einzeln ausgeben )
+0 0 B(j,k)@ .
+0 1 B(j,k)@ .
+0 2 B(j,k)@ .
+0 3 B(j,k)@ .
+1 0 B(j,k)@ .
+1 1 B(j,k)@ .
+1 2 B(j,k)@ .
+1 3 B(j,k)@ .
+2 0 B(j,k)@ .
+2 1 B(j,k)@ .
+2 2 B(j,k)@ .
+2 3 B(j,k)@ .
+3 0 B(j,k)@ .
+3 1 B(j,k)@ .
+3 2 B(j,k)@ .
+3 3 B(j,k)@ .
