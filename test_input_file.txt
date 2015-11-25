@@ -4,10 +4,8 @@ HERE .
 0 2D04 !
 
 DECIMAL
-[ [ 1   1   1    1 ]
-  [ 2   4   8   16 ]
-  [ 3   9  27   81 ]
-  [ 4  16  64  256 ] ] 1
+7 VANDERMONDEMATRIX 1
+OVER . DUP .
 INVERTIERE_SCHNELL
 ABWART
 OVER . DUP .
