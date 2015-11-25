@@ -307,12 +307,19 @@ ok XOFF="0000" setzen innerhalb von DUMPZ
 ok aktuell: bei 6 VANDERMONDEMATRIX 6 INVERTIERE_SCHNELL stimmt ein x nicht...
   ok zu diesem Zweck in INVERTIEREN das L2 von 0 loslaufen lassen
   ok JLOC und KLOC neu berechnet
+nö [A*x-Y*Z]/gx benötigt viel Speicher, nö, es fehlt nur weil jetzt ab 1A00H statt 1400H, auch gut, ist einwas weniger.
+.. C000-FFFFH dazuschalten, jedoch passt das gar nicht so einfach zu SLX->ERGEBNIS
+  .. dabei SPEICHDERENDE noch korrekt einstellen!!!
+  .. nee muss komplett neu aufgeteilt werden und von Anfang an, 1800+C000 geht nicht
+    .. 4000-5FFF 7800-7BFF 7C00-7FFF
+  .. jetzt ist auch noch ISE14.6 kaputt...
+ok immerhin geht B(j,k)@ Matrix auslesen auf Anhieb, das reicht zum Abschließen.
 
-.. paar OBJ_STRUCT_COPY können auch wieder raus
+nö paar OBJ_STRUCT_COPY können auch wieder raus, nö klappt nicht
 ok in MOVE und FILL die >R und R> ersetzen
 .. eine neue Fehlerbehandlung die auf 0 0 zurückwirkt und RESET auch und ROM eventuell.
 
-.. auf vivado -mode tcl umstellen ab Step_12 mit
+ok auf vivado -mode tcl umstellen ab Step_12 mit
     open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr
     launch_simulation
     restart ; run 200 ms

@@ -970,7 +970,7 @@ INIT
   [ 454 33 555 934 655 633 ]
   ] 
 DUP .
-6 INVERTIEREN ( mat dim --> invmat nenner )
+5 INVERTIEREN ( mat dim --> invmat nenner )
 OVER .
 DUP .
 </sekt>
@@ -1610,7 +1610,7 @@ BEFESTIGE O-AUSLES
 : ZLOS ( A gx x Y --> A' gx' )
   ." ZLOS " 2OVER B. 2DUP B.
   OVER OBJ? 2OVER DROP OBJ? OR IF ( falls x oder Y noch nicht da )
-    NJ @ IAM1J @ - NK @ IAM1K @ - 0 " 0ECB ERROR" 1 ABSCHICKEN
+    NJ @ 1- IAM1J @ - NK @ 1- IAM1K @ - 0 " 0ECB ERROR" 1 ABSCHICKEN
     BEGIN AGAIN ( vorläufiger Stop, nichts geht mehr. )
     END_IF
   2OVER DROP JLOC @ L OBJ_STRUCT_COPY DUP . ( A gx x Y Z )
@@ -1670,7 +1670,9 @@ BEFESTIGE O-AUSLES
   NJ @ 1- NK @ 1- NK @ " NK ! " 3 ABSCHICKEN
   NJ @ 1- NK @ 1- N @ " N ! " 3 ABSCHICKEN
   klMatAuft
-  N @ GINV ;
+  N @ GINV 
+  ABWART
+  ;
 
 : a00+d ( A gx d --> A' gx' )
   ." a00+d "
@@ -1681,6 +1683,31 @@ BEFESTIGE O-AUSLES
   GXMERK @ * OVER + DUP . ( A gx b00*d+gx )
   0 GXMERK !
   NJ @ 1- 0 ROT ' XYLOS 0 3 ABSCHICKEN
+  ABWART
+  ;
+
+: 0AMERK! 0 AMERK ! ;
+
+: ZURUECKSCHICKEN ( A gx [ jl kl ] --> bjk )
+  1 LOCAL
+  L0 !
+  OVER
+  L0 @ 0 L L L0 @ 1 L L ( A gx bij )
+  IAM1J @ IF NJ @ IAM1J @ - ELSE 0 END_IF
+  IAM1K @ IF NK @ IAM1K @ - ELSE 0 END_IF
+  ROT ' 0AMERK! 0 1 ABSCHICKEN
+  END_LOCAL
+  ;
+  
+: B(j,k)@ ( j k --> bjk )
+  4 LOCAL
+  L1 ! L0 !
+  L0 @ NJ @ M/MOD L2 !
+  L1 @ NK @ M/MOD L3 !
+  1 AMERK !
+  [ L2 @ L3 @ ] ' ZURUECKSCHICKEN 0 1 ABSCHICKEN
+  ABWART
+  END_LOCAL
   ;
 
 </sekt>
