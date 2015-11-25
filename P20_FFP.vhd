@@ -56,7 +56,7 @@ entity FortyForthProcessor is
     );
 end FortyForthProcessor;
 
-architecture Step_9 of FortyForthProcessor is
+architecture Step_12 of FortyForthProcessor is
 
 constant SHA: STD_LOGIC_VECTOR (10*16-1 downto 0):=
   x"ef1a385e927dc9d015af12052fb86e558f105425";
@@ -606,6 +606,9 @@ shared variable stapR: stapRAMTYPE:=(
   x"02D6",x"0624",x"02D6",x"02D6",x"031F",x"0345",x"01F6",x"029C",x"0809",x"FFFF",x"06EE",x"3B05",x"3B06",x"3B00",x"3B00",x"0738", -- 2FF0-2FFF
   others=>x"0000");
 
+-- Datenspeicher 4000H-5FFFH
+type DATRAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (15 downto 0);
+signal DatRAM: DATRAMTYPE:=(others=>x"0000");
 -- RECHTS,UNTEN
 type RUTYPE is array(0 to 1024-1) of STD_LOGIC_VECTOR (15 downto 0);
 shared variable RechtsRAM: RUTYPE:=(others=>x"0000");
@@ -629,8 +632,8 @@ signal RW: STD_LOGIC;
 -- kompletten Speicher anschliessen
 signal PC_ZUM_ProgRAM,PD_VOM_ProgRAM: STD_LOGIC_VECTOR (15 downto 0);
 signal STORE_ZUM_RAM,EXFET,ADRESSE_ZUM_RAM: STD_LOGIC_VECTOR (15 downto 0);
-signal FETCH_VOM_ProgRAM,FETCH_VOM_ByteRAM,FETCH_VOM_stapR: STD_LOGIC_VECTOR (15 downto 0);
-signal WE_ZUM_RAM,WE_ZUM_ProgRAM,WE_ZUM_ByteRAM,WE_ZUM_stapR: STD_LOGIC;
+signal FETCH_VOM_ProgRAM,FETCH_VOM_ByteRAM,FETCH_VOM_DatRAM,FETCH_VOM_stapR: STD_LOGIC_VECTOR (15 downto 0);
+signal WE_ZUM_RAM,WE_ZUM_ProgRAM,WE_ZUM_ByteRAM,WE_ZUM_DatRAM,WE_ZUM_stapR: STD_LOGIC;
 -- fuer EMIT-Ausgabe
 signal EMIT_ABGESCHICKT_LOCAL,EMIT_ANGEKOMMEN_RUHEND,XOFF_INPUT_L: STD_LOGIC:='0';
 signal KEY_ANGEKOMMEN_LOCAL,KEY_ABGESCHICKT_RUHEND,KEY_ABGESCHICKT_MERK: STD_LOGIC:='0';
@@ -854,17 +857,19 @@ OBEN_ADR<=ADRESSE_ZUM_RAM;
 -- hier werden die Lesedaten der unterschiedlichen Speicher zusammengefuehrt
 EXFET<=FETCH_VOM_ProgRAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else
        FETCH_VOM_stapR when ADRESSE_ZUM_RAM(15 downto 10)="001011" else
-       LINKS_DAT when ADRESSE_ZUM_RAM(15 downto 10)="001000" else
-       OBEN_DAT when ADRESSE_ZUM_RAM(15 downto 10)="001001" else
+       LINKS_DAT when ADRESSE_ZUM_RAM(15 downto 10)="011110" else
+       OBEN_DAT when ADRESSE_ZUM_RAM(15 downto 10)="011111" else
        x"00"&FETCH_VOM_ByteRAM(7 downto 0) when ADRESSE_ZUM_RAM(15 downto 12)="0011" else
+       FETCH_VOM_DatRAM when ADRESSE_ZUM_RAM(15 downto 13)="010" else
        DAT_I;
 
 -- hier wird WE auf die unterschiedlichen Speicher aufgeteilt
 WE_ZUM_ProgRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="000" else '0';
-WE_ZUM_RechtsRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001000" else '0';
-WE_ZUM_UntenRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001001" else '0';
+WE_ZUM_RechtsRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="011110" else '0';
+WE_ZUM_UntenRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="011111" else '0';
 WE_ZUM_stapR  <=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 10)="001011" else '0';
 WE_ZUM_ByteRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 12)="0011" else '0';
+WE_ZUM_DatRAM<=WE_ZUM_RAM when ADRESSE_ZUM_RAM(15 downto 13)="010" else '0';
 
 
 process -- Programmspeicher 0000H-1FFFH,
@@ -902,6 +907,16 @@ process begin wait until (CLK_I'event and CLK_I='1');
      else
       RPCC<=stapR(CONV_INTEGER(RP(9 downto 0)));
     end if;
+  end process;
+
+process -- Datenpeicher 4000H-5FFFH,
+begin wait until (CLK_I'event and CLK_I='1');
+  if WE_ZUM_DatRAM='1' then 
+    DatRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(12 downto 0)))<=STORE_ZUM_RAM; 
+    FETCH_VOM_DatRAM<=STORE_ZUM_RAM; 
+	  else
+      FETCH_VOM_DatRAM<=DatRAM(CONV_INTEGER(ADRESSE_ZUM_RAM(12 downto 0)));
+      end if;
   end process;
 
 --StapelRAM:
@@ -973,4 +988,4 @@ process begin wait until (CLK_I'event and CLK_I='1');
 
 
 
-end Step_9;
+end Step_12;
