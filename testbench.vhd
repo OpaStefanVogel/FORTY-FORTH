@@ -118,6 +118,9 @@ write_output: process -- zusaetzliche Ausgabe von EMIT_BYTE in Datei "test_file.
     wait until EMIT_ABGESCHICKT'event;
     if char_count=0 then 
       file_open(c_file_handle, "../../../../test_output_file.txt", WRITE_MODE);
+      write (output, "----------------------------------------");
+      D(1):=character'val(10);
+      write (output, D);
       write (output, "|  ");
       else
         if EMIT_BYTE=x"13" then XOFF_BIT<='1';
