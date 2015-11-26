@@ -166,15 +166,28 @@ C_SIM <= C(0) ;
 D_SIM <= D(0) ;
 SP_SIM <= SP(0) ;
 
---process begin wait until (CLK'event and CLK='1');
---LABEL_9:   for L in 0 to NJ*NK-1 generate
---LABEL_10:    if L<8 generate
---      if WE(L)='1' then
---        if ADR(L)=x"2D04" then LEDS(L)<=DAT(L)(L); end if; 
---        end if;
---      end generate;
---    end generate;
---  end process;
+process 
+variable L:integer:=0;
+begin wait until (CLK'event and CLK='1');
+  if WE(0)='1' then
+    if ADR(0)=x"2D04" then LEDS(0)<=DAT_O(0)(0); end if;
+    end if;
+  if WE(1)='1' then
+    if ADR(1)=x"2D04" then LEDS(1)<=DAT_O(1)(0); end if;
+    end if;
+  if WE(2)='1' then
+    if ADR(2)=x"2D04" then LEDS(2)<=DAT_O(2)(0); end if;
+    end if;
+  if WE(3)='1' then
+    if ADR(3)=x"2D04" then LEDS(3)<=DAT_O(3)(0); end if;
+    end if;
+--  while L<8 and L<NJ*NK-1 loop -- funktioniert nicht :(
+--    if WE(L)='1' then
+--      if ADR(L)=x"2D04" then LEDS(L)<=DAT_O(L)(0); end if; 
+--      end if;
+--    L:=L+1;
+--    end loop;
+  end process;
 
 end Step_1;
 
