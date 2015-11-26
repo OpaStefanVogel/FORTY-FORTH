@@ -13,7 +13,7 @@ end testbench;
 
 -------------------------------------------------------------------------------
 
-architecture test_Step_11 of testbench is
+architecture test_Step_12 of testbench is
 
 component top
   Port ( 
@@ -110,19 +110,26 @@ read_input: process
    end process;
 
 write_output: process -- zusaetzliche Ausgabe von EMIT_BYTE in Datei "test_file.txt"
-        type char_file is file of character;
-        file c_file_handle: char_file;
-        variable C: character := 'V';
-        variable char_count: integer := 0;
-   begin
-     wait until EMIT_ABGESCHICKT'event;
-     if char_count=0 then  file_open(c_file_handle, "../../../../test_output_file.txt", WRITE_MODE); end if;
-     if EMIT_BYTE=x"13" then XOFF_BIT<='1';
-       elsif EMIT_BYTE=x"11" then XOFF_BIT<='0';
-         else
-          write (c_file_handle, character'val(CONV_INTEGER(EMIT_BYTE)));
-          end if;
-     char_count := char_count + 1;  -- Keep track of the number of
-   end process;
+  type char_file is file of character;
+  file c_file_handle: char_file;
+  variable D: string(1 to 1):= "V";
+  variable char_count: integer := 0;
+  begin
+    wait until EMIT_ABGESCHICKT'event;
+    if char_count=0 then 
+      file_open(c_file_handle, "../../../../test_output_file.txt", WRITE_MODE);
+      write (output, "|  ");
+      else
+        if EMIT_BYTE=x"13" then XOFF_BIT<='1';
+          elsif EMIT_BYTE=x"11" then XOFF_BIT<='0';
+            else
+            write (c_file_handle, character'val(CONV_INTEGER(EMIT_BYTE)));
+            D(1):=character'val(CONV_INTEGER(EMIT_BYTE));
+            write (output, D);
+            if EMIT_BYTE=x"0A" then write (output, "|  "); end if;
+            end if;
+        end if;
+    char_count := char_count + 1;  -- Keep track of the number of
+  end process;
 
-end test_Step_11;
+end test_Step_12;
