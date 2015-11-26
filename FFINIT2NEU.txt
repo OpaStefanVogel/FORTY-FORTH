@@ -1499,7 +1499,7 @@ TLISTE VARIABLE TLISTENZEIGER
       LINKS-BYTES 2 M+ @ 1- IF ( bei k>0 weiterschicken )
         LINKS-BYTES 1+ @
         LINKS-BYTES 2 M+ @ 1- 2DUP 6C ( l ) JK_AUSGEB
-        LINKS-BYTES B_AUSLES 1
+        LINKS-BYTES B_AUSLES LINKS-BYTES @
         IAM2K @ 1 = IF
           LINKS-ABGESCHICKT @ LINKS-MERK !
           LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
@@ -1541,6 +1541,11 @@ TLISTE VARIABLE TLISTENZEIGER
           ELSE
             U-ABSCHICKEN
             OBEN-BYTES @ 3 = IF
+              0 ( OBEN-BYTES 1+ @ 1-
+              OBEN-BYTES 2 M+ @
+              OBEN-BYTES B_AUSLES 
+              ROT OBJ_STRUCT_COPY ROT ROT
+              2 R-ABSCHICKEN
               OBEN-BYTES B_AUSLES 4D ( M ) B_AUSGEB B_INTERP
               END_IF
             OBEN-ABGESCHICKT @ OBEN-MERK !
@@ -1552,10 +1557,10 @@ TLISTE VARIABLE TLISTENZEIGER
             OBEN-BYTES 2 M+ @ 2DUP 4F ( O ) JK_AUSGEB
             OBEN-BYTES B_AUSLES 
             ROT OBJ_STRUCT_COPY ROT ROT
-            1 R-ABSCHICKEN
             OBEN-BYTES @ 3 = IF
+              2 R-ABSCHICKEN
               OBEN-BYTES B_AUSLES 4B ( K ) B_AUSGEB B_INTERP
-              END_IF
+              ELSE 1 R-ABSCHICKEN END_IF
             OBEN-ABGESCHICKT @ OBEN-MERK !
             OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
             ELSE ( schon in j k angekommen )
