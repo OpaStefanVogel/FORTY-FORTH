@@ -313,7 +313,10 @@ nö [A*x-Y*Z]/gx benötigt viel Speicher, nö, es fehlt nur weil jetzt ab 1A00H 
   .. nee muss komplett neu aufgeteilt werden und von Anfang an, 1800+C000 geht nicht
     .. 4000-5FFF 7800-7BFF 7C00-7FFF
   .. jetzt ist auch noch ISE14.6 kaputt...
+    .. 14.6 reinstallieren geht auch nicht, segmentation fault...also unter 14.6...
 ok immerhin geht B(j,k)@ Matrix auslesen auf Anhieb, das reicht zum Abschließen.
+ok Ausgabe von Zwischenergebnissen mit ADBIT ausgeschaltet, wieder ewig wegen 3 Fehler drin, jetzt ok
+.. in testbench noch LEDS wieder anschließen 
 
 nö paar OBJ_STRUCT_COPY können auch wieder raus, nö klappt nicht
 ok in MOVE und FILL die >R und R> ersetzen
