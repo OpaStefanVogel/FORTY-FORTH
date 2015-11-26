@@ -1,7 +1,8 @@
 HEX ( zum Programmieren besser hexadezimal )
 0 0 JK-PROC ( Prozessoren zählen )
-HERE . ( wie weit programmiert )
-0 2D04 ! ( LED's alle ausschalten )
+HERE . BZEIG M? ( wie weit programmiert )
+0 2D04 ! ( LED ausschalten )
+0 ADBIT ! ( -1 für Ausgabe von Zwischenergebnissen )
 
 DECIMAL ( Datenein- und Ausgabe dezimal wenn gewünscht )
 4 VANDERMONDEMATRIX 1 ( vandermondematrix nenner )
