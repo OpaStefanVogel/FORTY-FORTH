@@ -304,6 +304,10 @@ ok XOFF="0000" setzen innerhalb von DUMPZ
 
 .. Matrix Aufteilen auch für größere Matrizen
 .. BEGIN AGAIN wegen fehlendem x Y ist nur vorläufig
+  .. und muss jetzt auch besser gemacht werden weil Z tatsächlich auch vor Y ankommt
+  .. tatsächlich, bei ADBIT=0 passt alles!!!
+  .. bei ADBIT=-1 wirkt ECB ERROR nicht, weil 1x1 Matrix kein OBJ?=-1 ist.
+  .. gut da muss noch was werden, aber Fehlerstelle ist gefunden.
 ok aktuell: bei 6 VANDERMONDEMATRIX 6 INVERTIERE_SCHNELL stimmt ein x nicht...
   ok zu diesem Zweck in INVERTIEREN das L2 von 0 loslaufen lassen
   ok JLOC und KLOC neu berechnet
@@ -321,7 +325,7 @@ nö [A*x-Y*Z]/gx benötigt viel Speicher, nö, es fehlt nur weil jetzt ab 1A00H 
   .. jetzt ist auch noch ISE14.6 kaputt...
     .. 14.6 reinstallieren geht auch nicht, segmentation fault...also unter 14.6 versuchen...
       .. 13.4 mit auch 6 GB geht auch nicht...
-      .. 12.4 mit nur 3 GB
+      .. 12.4 mit nur 3 GB geht auch nicht...
 ok immerhin geht B(j,k)@ Matrix auslesen auf Anhieb, das reicht zum Abschließen.
 ok Ausgabe von Zwischenergebnissen mit ADBIT ausgeschaltet, wieder ewig wegen 3 Fehler drin, jetzt ok
 ok in P01.vhd noch LEDS wieder anschließen
