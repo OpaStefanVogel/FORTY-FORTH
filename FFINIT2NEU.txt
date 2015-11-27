@@ -988,7 +988,7 @@ DUP .
   DROP ;
 
 : WLIST
-  LFA @ BEGIN ( CR ) DUP M.
+  LFA @ BEGIN ( CR ) DUP 4 M+ M.
     DUP 1+ @ OVER 2 M+ @ TYPE 20 EMIT 
     DUP @ WHILE DUP @ M+ REPEAT
   DROP
