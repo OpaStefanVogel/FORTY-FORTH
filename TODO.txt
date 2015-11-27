@@ -210,7 +210,7 @@ ok XOFF="0000" setzen innerhalb von DUMPZ
     OK da brauch ich das SEND-TO selbst
       OK x y relativ, damit auch bei 1x1 alles getestet werden kann 
       OK vorübergehendes INTERPRET später wieder raus
-      .. ggZ später rein ???
+      ok ggZ später rein ???
       OK 1x1 ist insofern extra, weil nicht R-Schreiben vor L-Lesen geht
         .. das ist aber insofern vielleicht eine Möglichkeit ganz ohne ABESCHICKT/ANGEKOMMEN
         OK vorerst muss ich das behelfsmäßig überbrücken
@@ -304,6 +304,14 @@ ok XOFF="0000" setzen innerhalb von DUMPZ
 
 .. Matrix Aufteilen auch für größere Matrizen
 .. BEGIN AGAIN wegen fehlendem x Y ist nur vorläufig
+  .. und muss jetzt auch besser gemacht werden weil Z tatsächlich auch vor Y ankommt
+  .. tatsächlich, bei ADBIT=0 passt alles!!!
+  .. bei ADBIT=-1 wirkt ECB ERROR nicht, weil 1x1 Matrix kein OBJ?=-1 ist.
+  .. gut da muss noch was werden, aber Fehlerstelle ist gefunden.
+    ok eine Variante wäre [ x Y ] schicken statt x und Y, ok geht weiter
+    .. aber jetzt hängt es nach 5 Vand bei 0 1 B(j,k)@ .
+    .. da ist wohl auch Z vor [ x Y ], also alles neu machen...
+    ok ist neu, jetzt ist egal, wann x Y Z eintreffen, jetzt geht B(j,k)@ ok
 ok aktuell: bei 6 VANDERMONDEMATRIX 6 INVERTIERE_SCHNELL stimmt ein x nicht...
   ok zu diesem Zweck in INVERTIEREN das L2 von 0 loslaufen lassen
   ok JLOC und KLOC neu berechnet
@@ -312,15 +320,25 @@ nö [A*x-Y*Z]/gx benötigt viel Speicher, nö, es fehlt nur weil jetzt ab 1A00H 
   .. dabei SPEICHDERENDE noch korrekt einstellen!!!
   .. nee muss komplett neu aufgeteilt werden und von Anfang an, 1800+C000 geht nicht
     .. 4000-5FFF 7800-7BFF 7C00-7FFF
+    .. das muss ich so machen:
+      .. erst in vivado 4000H-47FFH hinzu weil S3 nicht mehr hat oder nur 43FFH.
+      .. dann auf S3 ZAHLENSPEICHER auf 4000H umprogrammieren
+      .. dann in vivado 2000H-27FFH auf 7800H-7FFFH umsetzen
+      .. dann auf S3 auch das neu umprogrammieren
+      .. schließlich in vivado 47FFH bis wie gewünscht 5FFFH raufsetzen
   .. jetzt ist auch noch ISE14.6 kaputt...
-    .. 14.6 reinstallieren geht auch nicht, segmentation fault...also unter 14.6...
+    .. 14.6 reinstallieren geht auch nicht, segmentation fault...also unter 14.6 versuchen...
+      .. 13.4 mit auch 6 GB geht auch nicht...
+      .. 12.4 mit nur 3 GB geht auch nicht...
 ok immerhin geht B(j,k)@ Matrix auslesen auf Anhieb, das reicht zum Abschließen.
 ok Ausgabe von Zwischenergebnissen mit ADBIT ausgeschaltet, wieder ewig wegen 3 Fehler drin, jetzt ok
-.. in testbench noch LEDS wieder anschließen 
+ok in P01.vhd noch LEDS wieder anschließen
+ok und in testbench.vhd Ausgabe auf die tcl-console mit zusätzlich rein endlich mal.
 
 nö paar OBJ_STRUCT_COPY können auch wieder raus, nö klappt nicht
 ok in MOVE und FILL die >R und R> ersetzen
 .. eine neue Fehlerbehandlung die auf 0 0 zurückwirkt und RESET auch und ROM eventuell.
+.. INIT.xml auch mal durch vivado laufen lassen, dazu NJ=NK=1 machen!
 
 ok auf vivado -mode tcl umstellen ab Step_12 mit
     open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr
