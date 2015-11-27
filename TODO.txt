@@ -308,7 +308,10 @@ ok XOFF="0000" setzen innerhalb von DUMPZ
   .. tatsächlich, bei ADBIT=0 passt alles!!!
   .. bei ADBIT=-1 wirkt ECB ERROR nicht, weil 1x1 Matrix kein OBJ?=-1 ist.
   .. gut da muss noch was werden, aber Fehlerstelle ist gefunden.
-    .. eine Variante wäre [ x Y ] schicken statt x und Y 
+    ok eine Variante wäre [ x Y ] schicken statt x und Y, ok geht weiter
+    .. aber jetzt hängt es nach 5 Vand bei 0 1 B(j,k)@ .
+    .. da ist wohl auch Z vor [ x Y ], also alles neu machen...
+    ok ist neu, jetzt ist egal, wann x Y Z eintreffen, jetzt geht B(j,k)@ ok
 ok aktuell: bei 6 VANDERMONDEMATRIX 6 INVERTIERE_SCHNELL stimmt ein x nicht...
   ok zu diesem Zweck in INVERTIEREN das L2 von 0 loslaufen lassen
   ok JLOC und KLOC neu berechnet

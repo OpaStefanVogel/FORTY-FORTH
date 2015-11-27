@@ -1379,7 +1379,7 @@ TLISTE VARIABLE TLISTENZEIGER
 
 : R-ABSCHICKEN ( j k Z adr n op --> )
   RECHTS-ANGEKOMMEN @ RECHTS-MERK @ M- IF ADBIT @ IF CR ." r_wart " END_IF END_IF
-  BEGIN RECHTS-ANGEKOMMEN @ RECHTS-MERK @ M- WHILE ADBIT @ IF 2E ( "." ) EMIT END_IF REPEAT
+  BEGIN RECHTS-ANGEKOMMEN @ RECHTS-MERK @ M- WHILE REPEAT
   RECHTS-BYTES ! ( x y Z adr n
   DUP IF SWAP OVER RECHTS-BYTES 5 M+ SWAP MOVE ( x y Z n
     ELSE SWAP RECHTS-BYTES 5 M+ ! END_IF
@@ -1398,7 +1398,7 @@ TLISTE VARIABLE TLISTENZEIGER
   ;
 : U-ABSCHICKEN ( j k Z adr n op --> )
   UNTEN-ANGEKOMMEN @ UNTEN-MERK @ M- IF ADBIT @ IF CR ." u_wart " END_IF END_IF
-  BEGIN UNTEN-ANGEKOMMEN @ UNTEN-MERK @ M- WHILE ADBIT @ IF 2E ( "." ) EMIT END_IF REPEAT
+  BEGIN UNTEN-ANGEKOMMEN @ UNTEN-MERK @ M- WHILE REPEAT
   UNTEN-BYTES !
   DUP IF SWAP OVER UNTEN-BYTES 5 M+ SWAP MOVE ( j k Z n
     ELSE SWAP UNTEN-BYTES 5 M+ ! END_IF
@@ -1598,7 +1598,7 @@ BEFESTIGE O-AUSLES
 </sekt>
 
 <sekt inhalt="neues Invertieren">
-1A00 ZAHLENSPEICHER ! INIT
+1B00 ZAHLENSPEICHER ! INIT
 
 0 VARIABLE N
 0 VARIABLE NN
@@ -1626,34 +1626,56 @@ BEFESTIGE O-AUSLES
 
 [ [ 1 2 ] [ 3 4 ] ] 1 YCOL . ( [ 2 4 ] )
 
-: AXYZ ( A gx [ x Y ] Z --> A' gx' )
-  SWAP DUP 0 L SWAP 1 L ROT ( A gx x Y Z )
+0 VARIABLE XYBIT
+0 VARIABLE XYMERK
+0 VARIABLE ZBIT
+0 VARIABLE ZMERK
+: AXYZ ( A gx --> A' gx' )
+  XYMERK @ DUP 0 L SWAP 1 L ( A gx x Y )
+  ZMERK @ ( A gx x Y Z )
   [A*x-Y*Z]/gx
   ;
+: XYSPEICH ( [ x Y ] --> )
+  OBJ_STRUCT_COPY XYMERK ! -1 XYBIT !
+  XYBIT @ ZBIT @ AND IF 
+    AXYZ 
+    0 XYBIT ! 0 ZBIT ! 0 XYMERK ! 0 ZMERK !
+    END_IF
+  ;
+: ZSPEICH ( Z --> )
+  OBJ_STRUCT_COPY ZMERK ! -1 ZBIT !
+  XYBIT @ ZBIT @ AND IF 
+    AXYZ 
+    0 XYBIT ! 0 ZBIT ! 0 XYMERK ! 0 ZMERK !
+    END_IF
+  ;
 
-: ZLOS ( A gx [ x Y ] --> A' gx' )
-  ADBIT @ IF ." ZLOS " ROT DUP . ROT ROT 2DUP B. END_IF
+: ZLOS ( A gx --> A' gx' )
+  ADBIT @ IF ." ZLOS " 2DUP B. XYMERK @ . END_IF
 (  OVER OBJ? 2OVER DROP OBJ? OR IF ( falls x oder Y noch nicht da )
 (    NJ @ 1- IAM1J @ - NK @ 1- IAM1K @ - 0 " 0ECB ERROR" 1 ABSCHICKEN
 (    BEGIN AGAIN ( vorläufiger Stop, nichts geht mehr. )
 (    END_IF
-  0 2OVER DROP JLOC @ L SWAP DROP OBJ_STRUCT_COPY ADBIT @ IF DUP . END_IF ( A gx [ x Y ] Z )
-  NJ @ 1- 0 ROT  ( A gx [ x Y ] NJ@-1 0 Z )
+  OVER JLOC @ L OBJ_STRUCT_COPY ADBIT @ IF DUP . END_IF ( A gx Z )
+  NJ @ 1- 0 ROT  ( A gx NJ@-1 0 Z )
   IAM1J @ IAM1K @ = IF OBJ_STRUCT_COPY KLOC @ G GXMERK @ - H END_IF
-  ADBIT @ IF OVER . DUP . END_IF
-  ' AXYZ 0 3 ABSCHICKEN
+  ADBIT @ IF DUP . END_IF
+  ' ZSPEICH 0 3 ABSCHICKEN
   ;
 
 : XYLOS ( A gx x --> A' gx' )
   5 LOCAL
-  ADBIT @ IF ." XYLOS " END_IF
+  ADBIT @ IF ." XYLOS " DUP . END_IF
   KLOC @ 2OVER DROP SWAP YCOL ADBIT @ IF DUP . END_IF ( A gx x Y )
   0 NK @ 1- ROT ( A gx x 0 NK@-1 Y )
-  IAM1J @ IAM1K @ = IF OBJ_STRUCT_COPY JLOC @ G GXMERK @ + H ' ZLOS ELSE ' OBJ_STRUCT_COPY END_IF
-  ADBIT @ IF OVER . END_IF ( A gx x 0 NK@ Y 0 )
+  IAM1J @ IAM1K @ = IF OBJ_STRUCT_COPY JLOC @ G GXMERK @ + H END_IF ( A gx x 0 NK@-1 Y+x )
+  ' XYSPEICH 
+  ADBIT @ IF OVER . END_IF ( A gx x 0 NK@ Y addr )
   L4 ! L3 ! L2 ! L1 ! L0 !
-  L1 @ L2 @ [ L0 @ L3 @ ] L4 @ ( A gx 0 NK@ [ x Y ] 0 )
-  0 2 ABSCHICKEN ( A' gx' )
+  L1 @ L2 @ [ L0 @ L3 @ ] L4 @ ( A gx 0 NK@ [ x Y ] addr )
+  0 2 ABSCHICKEN ( A gx )
+  IAM1J @ IAM1K @ = IF 0 NK @ 1- 0 " DROP ZLOS " 2 ABSCHICKEN END_IF ( A' gx' )
+  END_LOCAL
   ;
 
 ( N, NJ, NK werden vorerst beim Matrix Aufteilen gesetzt
@@ -1687,6 +1709,7 @@ BEFESTIGE O-AUSLES
     1 L4 +! L4 @ N @ = UNTIL
   NJ @ 1- NK @ 1- 0 " DROP ] ] " 3 ABSCHICKEN
   NJ @ 1- NK @ 1- L1 @ 0 0 3 ABSCHICKEN
+  END_LOCAL
   ;
 
 : INVERTIERE_SCHNELL ( A gx --> A' gx' )
