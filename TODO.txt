@@ -321,7 +321,7 @@ ok achso, nach jedem [A*x-Y*Z]/gx noch A' gx' an den Anfang zurückkopieren fehl
   .. wenn A' gx' schon von 1B00H bis 1D00H gehen, braucht Ax-YZ sicherlich noch mehr
 .. größere Eingabematrizen gleich aufteilen
   .. bei NJ=NK=1 geht 3 ABSCHICKEN nicht?
-  .. 
+  .. vor neu Laden erst RESET wenn 0 [ 77 3 4 ] Ajk! dabei ist???
 .. C000-FFFFH dazuschalten, jedoch passt das gar nicht so einfach zu SLX->ERGEBNIS
   .. dabei SPEICHDERENDE noch korrekt einstellen!!!
   .. nee muss komplett neu aufgeteilt werden und von Anfang an, 1800+C000 geht nicht

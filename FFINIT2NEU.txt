@@ -1790,17 +1790,29 @@ REPLACE: ERROR ( n --> )
   L1 @ G L2 @ L0 @ H H
   ;
 
-0 [ 77 3 4 ] Ajk!
+( 0 [ 77 3 4 ] Ajk!
 
 : A(j,k)! ( A ajk j k --> A' )
   ( L0=aij L1=j L2=k L3=nj L4=nk L5=JLOC L6=KLOC )
-  5 LOCAL L2 ! L1 ! L0 !
+  7 LOCAL L2 ! L1 ! L0 !
   L1 @ NJ @ M/MOD L5 ! L3 !
   L2 @ NK @ M/MOD L6 ! L4 !
   L3 @ L4 @ [ L0 @ L5 @ L6 @ ] ' Ajk! 0 1 ABSCHICKEN
   END_LOCAL
   ;
 
+: VANDERMONDEMATRIX_GLEICH_AUFTEILEN ( 0 n --> mat )
+  3 LOCAL
+  L0 ! 
+  L0 @ L1 ! BEGIN L1 @ DUP WHILE 1- L1 !
+    L0 @ L2 ! BEGIN L2 @ DUP WHILE 1- L2 !
+      L1 @ 1+ L2 @ 1+ ^ 
+      ADBIT @ IF CR L1 @ L2 @ B. DUP . END_IF
+      L1 @ L2 @ A(j,k)!
+      REPEAT DROP
+    REPEAT DROP
+  END_LOCAL
+  ;
 
 </sekt>
 
