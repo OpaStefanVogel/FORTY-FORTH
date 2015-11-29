@@ -1785,7 +1785,7 @@ REPLACE: ERROR ( n --> )
 : Ajk! ( A ajk jloc kloc --> A' )
   3 LOCAL
   L2 ! L1 ! L0 !
-  L1 @ G L2 @ L0 @ H H
+  L1 @ G L2 @ L0 @ A+0 H H
   END_LOCAL
   ;
 
@@ -1804,9 +1804,9 @@ REPLACE: ERROR ( n --> )
 
 : VANDERMONDEMATRIX_GLEICH_AUFTEILEN ( 0 n --> mat )
   3 LOCAL
-  L0 ! 
-  L0 @ L1 ! BEGIN L1 @ DUP WHILE 1- L1 !
-    L0 @ L2 ! BEGIN L2 @ DUP WHILE 1- L2 !
+  N ! 
+  N @ L1 ! BEGIN L1 @ DUP WHILE 1- L1 !
+    N @ L2 ! BEGIN L2 @ DUP WHILE 1- L2 !
       L1 @ 1+ L2 @ 1+ ^ 
       ADBIT @ IF CR L1 @ L2 @ B. DUP . END_IF
       L1 @ L2 @ A(j,k)!
