@@ -317,6 +317,8 @@ ok aktuell: bei 6 VANDERMONDEMATRIX 6 INVERTIERE_SCHNELL stimmt ein x nicht...
   ok JLOC und KLOC neu berechnet
 nö [A*x-Y*Z]/gx benötigt viel Speicher, nö, es fehlt nur weil jetzt ab 1A00H statt 1400H, auch gut, ist einwas weniger.
 ok achso, nach jedem [A*x-Y*Z]/gx noch A' gx' an den Anfang zurückkopieren fehlt noch ok geht jetzt
+.. REPLACE: ERROR wird auch allmählich nötig, 
+  .. wenn A' gx' schon von 1B00H bis 1D00H gehen, braucht Ax-YZ sicherlich noch mehr
 .. C000-FFFFH dazuschalten, jedoch passt das gar nicht so einfach zu SLX->ERGEBNIS
   .. dabei SPEICHDERENDE noch korrekt einstellen!!!
   .. nee muss komplett neu aufgeteilt werden und von Anfang an, 1800+C000 geht nicht

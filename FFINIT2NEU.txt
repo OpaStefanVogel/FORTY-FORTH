@@ -1655,6 +1655,23 @@ BEFESTIGE O-AUSLES
     END_IF
   ;
 
+REPLACE: ERROR ( n --> )
+  DUP ERRORNR !
+  INIT 
+  IAM1J @ IAM1K @ OR IF
+    IAM1J @ IF NJ @ 1- IAM1J @ - ELSE 0 END_IF
+    IAM1K @ IF NK @ 1- IAM1K @ - ELSE 0 END_IF
+    ERRORNR @ " M. BANF @ 40 TYPE " 3 ABSCHICKEN
+    BEGIN AGAIN
+    ELSE
+      0 STAT !
+      CR IN1 @ IN3 @ IN1 @ M- 1- TYPE ." ???"
+      " FEHLERTEXT" INTERPRET
+      CR ." ERROR - Fehler Nummer " M. 
+      BEGIN AGAIN
+      END_IF
+  ;
+  
 : ZLOS ( A gx --> A' gx' )
   ADBIT @ IF ." ZLOS " 2DUP B. XYMERK @ . END_IF
 (  OVER OBJ? 2OVER DROP OBJ? OR IF ( falls x oder Y noch nicht da )
