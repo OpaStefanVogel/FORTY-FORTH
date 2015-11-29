@@ -1,8 +1,11 @@
 HEX ( ist noch als einzigstes zurückzustellen zum Programmieren )
 0 0 JK-PROC HERE . ( zählt die angeschlossenen Prozessoren )
 
-: AB " 4 N ! 2 NJ ! 2 NK ! DUP . " 1 ABSCHICKEN ;
-: AC " 4 N ! 2 NJ ! 2 NK ! OBJ_STRUCT_COPY " 1 ABSCHICKEN ;
+AUSGANGSMATRIX_NULLSETZEN
+1 0 0 A(j,k)!   1 0 1 A(j,k)!   1 0 2 A(j,k)!    1 0 3 A(j,k)!  
+2 0 0 A(j,k)!   4 0 1 A(j,k)!   8 0 2 A(j,k)!   16 0 3 A(j,k)!  
+3 0 0 A(j,k)!   9 0 1 A(j,k)!  27 0 2 A(j,k)!   81 0 3 A(j,k)!  
+4 0 0 A(j,k)!  16 0 1 A(j,k)!  64 0 2 A(j,k)!  256 0 3 A(j,k)!  
 
 DECIMAL
 ( A vier Teilmatrizen zu den vier Prozessoren schicken )

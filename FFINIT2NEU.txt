@@ -1778,13 +1778,37 @@ REPLACE: ERROR ( n --> )
   END_LOCAL
   ;
 
+: AUSGANGSMATRIX_NULLSETZEN
+  NJ @ 1- NK @ 1- 0 ' INIT 0 3 ABSCHICKEN
+  ;
+
+: Ajk! ( A [ ajk jloc kloc ] --> A' )
+  3 LOCAL
+  DUP 0 L L0 !
+  DUP 1 L L1 !
+  2 L L2 !
+  L1 @ G L2 @ L0 @ H H
+  ;
+
+0 [ 77 3 4 ] Ajk!
+
+: A(j,k)! ( A ajk j k --> A' )
+  ( L0=aij L1=j L2=k L3=nj L4=nk L5=JLOC L6=KLOC )
+  5 LOCAL L2 ! L1 ! L0 !
+  L1 @ NJ @ M/MOD L5 ! L3 !
+  L2 @ NK @ M/MOD L6 ! L4 !
+  L3 @ L4 @ [ L0 @ L5 @ L6 @ ] ' Ajk! 0 1 ABSCHICKEN
+  END_LOCAL
+  ;
+
+
 </sekt>
 
 <sekt inhalt="in den Zustand für Step_12 bringen und wieder RAM generieren">
 ( allerdings beim Compilieren von großen ganzen Zahlen im Moment noch 1234 ERROR
 
 ( an der Stelle Programm-VHDL-Quelltext für Step_12 ausgeben )
-HEX INIT 
+HEX INIT
 HERE 0 0 DUMPZ           ( generiert progRAM für P20_FFP.vhd Step_12
 BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM für P20_FFP.vhd Step_12
 3000 2C00 0 DUMPZ        ( generiert stapR   für P20_FFP.vhd Step_12
