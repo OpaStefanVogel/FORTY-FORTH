@@ -323,6 +323,8 @@ ok achso, nach jedem [A*x-Y*Z]/gx noch A' gx' an den Anfang zurückkopieren fehl
   .. bei NJ=NK=1 geht 3 ABSCHICKEN nicht?
   ok vor neu Laden erst RESET wenn 0 [ 77 3 4 ] Ajk! dabei ist??? Ja END_LOCAL hat da gefehlt!!!
   ok und auch ein A+0
+.. ABWART auch in JK-PROC
+.. schnelles FIND und Z= und INTERPRET, da sind massig R drin.
 .. C000-FFFFH dazuschalten, jedoch passt das gar nicht so einfach zu SLX->ERGEBNIS
   .. dabei SPEICHDERENDE noch korrekt einstellen!!!
   .. nee muss komplett neu aufgeteilt werden und von Anfang an, 1800+C000 geht nicht
@@ -346,6 +348,7 @@ nö paar OBJ_STRUCT_COPY können auch wieder raus, nö klappt nicht
 ok in MOVE und FILL die >R und R> ersetzen
 .. eine neue Fehlerbehandlung die auf 0 0 zurückwirkt und RESET auch und ROM eventuell.
 .. INIT.xml auch mal durch vivado laufen lassen, dazu NJ=NK=1 machen!
+  .. wenn nicht ganz durch, geht ja auch zwischendrin DUMPZ
 
 ok auf vivado -mode tcl umstellen ab Step_12 mit
     open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr

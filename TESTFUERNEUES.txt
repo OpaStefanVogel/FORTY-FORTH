@@ -1,3 +1,78 @@
+: ZNEU= ( adr1 n1 adr2 n2 --> r )
+  ROT OVER = IF DROP DROP DROP 0 ELSE ( adr1 adr2 n2 )
+    0 BEGIN 2DUP M- WHILE ( adr1 adr2 n2 0 )
+      2SWAP ( n2 0 adr1 adr2 )
+      OVER C@ OVER C@ M- IF DROP DROP 0 0 END_IF
+      DUP IF 1+ SWAP 1+ SWAP END_IF ( n2 0 adr1+1 adr2+1 )
+      2SWAP 1+ REPEAT 2SWAP 2DROP ( adr1+1 adr2+1 )
+    DROP IF -1 ELSE 0 END_IF ( flag )
+    END_IF ;
+    
+( " ABC" " ABCD" ZNEU= .
+( " ABC" " BCD" ZNEU= .
+( " ABC" " ABC" ZNEU= .
+( REPLACE: Z= ZNEU= ;
+
+: FINDNEU ( adr n --> lfa r )
+  0 ( heisst noch nicht gefunden )
+  LFA @ ( adr1 n1 0 lfa )
+  SMUDGEBIT @ IF DUP @ M+ END_IF
+  BEGIN
+    2SWAP ( 0 lfa adr1 n1 )
+    2OVER SWAP DROP 1+ DUP @ ( 0 lfa adr1 n1 nfa adr2 )
+    SWAP 1+ @ ( 0 lfa adr1 n1 adr2 n2 )
+    ( 2DUP CR B. 2DUP TYPE
+    ( BEGIN 2DUP M+ 1 M- C@ 0= WHILE 1 M- REPEAT ( ??? momentan nicht )
+    2OVER Z= IF 2SWAP SWAP 0= SWAP 2SWAP END_IF ( heisst gefunden )
+    2SWAP ( adr1 n1 0 lfa )
+    OVER 0= OVER @ 0= NOT AND 
+    OVER DUP @ M+ LFA @ = NOT AND WHILE ( wegen 2xladen )
+      DUP @ M+ REPEAT  ( adr1 n1 0 lfa' )
+  SWAP 0= IF DROP DROP 0 0 END_IF
+  SWAP ROT DROP
+  ( OVER LFA @ SWAP LT IF M." *" OVER M. LFA @ M. END_IF ( vref wenn gebraucht )
+  ;
+
+( " DUP" FINDNEU B.
+( " DEPP" FINDNEU B.
+( REPLACE: FIND FINDNEU ;
+
+: LCFA ( lfa --> cfa ) 3 M+ ;
+
+: INTERPRETNEU ( adr n --> ... )
+  4 LOCAL
+  IN1 @ L0 ! IN2 @ L1 @ IN3 @ L2 ! IN4 @ L3 !
+  OVER M+ IN4 !
+  DUP IN1 ! DUP IN2 ! IN3 !
+  BEGIN
+  ( ... qstack? Stapelpruefen )
+  20 WORD ( adrw nw )
+  DUP WHILE
+    2DUP FIND ( adrw nw lfa r )
+    DUP IF ( gefunden )
+      2SWAP 2DROP DROP LCFA EXECUTE
+      ELSE ( nicht gefunden )
+        2DROP
+        2DUP NUMBER IF ( keine Zahl )
+          2DROP DROP
+          3 ERROR
+         ( DROP BNUMBER
+         ( DUP IF DUP IN2 ! END_IF
+         ( IF 3 ERROR END_IF
+         ( STAT @ IF SWAP LIT, LIT, END_IF
+          ELSE ( eine Zahl )
+            ROT DROP SWAP DROP
+            STAT @ IF LIT, END_IF
+            END_IF
+        END_IF
+    REPEAT 2DROP
+  L3 @ IN4 ! L2 @ IN3 ! L1 @ IN2 ! L0 @ IN1 !
+  END_LOCAL
+  ;
+
+( " 77 88 * . " INTERPRETNEU
+( : REPLACE: INTERPRET INTERPRETNEU ;
+
 HEX ( ist noch als einzigstes zurückzustellen zum Programmieren )
 0 0 JK-PROC HERE . ( zählt die angeschlossenen Prozessoren )
 
