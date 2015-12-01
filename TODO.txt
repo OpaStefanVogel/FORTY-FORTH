@@ -353,6 +353,8 @@ ok immerhin geht B(j,k)@ Matrix auslesen auf Anhieb, das reicht zum Abschließen
 ok Ausgabe von Zwischenergebnissen mit ADBIT ausgeschaltet, wieder ewig wegen 3 Fehler drin, jetzt ok
 ok in P01.vhd noch LEDS wieder anschließen
 ok und in testbench.vhd Ausgabe auf die tcl-console mit zusätzlich rein endlich mal.
+.. schauen, ob write(DUT0(3)/KEYCODE) direkt zugänglich ist ohne ports
+  .. wenn ja, dann steht einer Bordsimulation nichts im Wege
 
 nö paar OBJ_STRUCT_COPY können auch wieder raus, nö klappt nicht
 ok in MOVE und FILL die >R und R> ersetzen

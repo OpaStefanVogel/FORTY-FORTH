@@ -1471,7 +1471,7 @@ TLISTE VARIABLE TLISTENZEIGER
     OVER OVER 1+ 0 0 0 0 R-ABSCHICKEN
     END_IF
   2DROP 
-  IAM2J @ -1 = IAM2K @ -1 = OR IF ABWART END_IF
+  IAM2J @ -1 = IAM2K @ -1 = OR IF ABWART IAM2J ? IAM2K ? END_IF
   ;
 
 ( empfangene Bytes jetzt auswerten
@@ -1744,8 +1744,6 @@ REPLACE: ERROR ( n --> )
   ;
 
 : INVERTIERE_SCHNELL ( A gx --> A' gx' )
-  OVER SIZE N !
-  klMatAuft
   N @ GINV 
   ABWART
   ;
