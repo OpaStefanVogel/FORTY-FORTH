@@ -335,6 +335,16 @@ ok achso, nach jedem [A*x-Y*Z]/gx noch A' gx' an den Anfang zurückkopieren fehl
       .. dann in vivado 2000H-27FFH auf 7800H-7FFFH umsetzen
       .. dann auf S3 auch das neu umprogrammieren
       .. schließlich in vivado 47FFH bis wie gewünscht 5FFFH raufsetzen
+    .. probehalber versuche
+      .. zuerst ob das neue 2400 SPEICHERENDE ! funktioniert
+      .. in vivado 4000H-47FFH hinzu
+      .. in OPERAND->SLX und ZERLEG das 3FFF AND zu FFFF AND machen
+      .. ZAHLENSPEICHER und ERGEBNIS auf 4000 raufsetzen in INIT
+      .. wenn das ginge
+      .. in vivado auch 7800H-7BffH und 7C00-7FFFH hinzu
+      .. auch alle LINKS RECHTS OBEN UNTEN auf 7800 und 7C00 umsetzen
+      .. und das +400 und +800 anders machen ohne + und -
+      .. das alles als Umschaltbit UBIT machen...!!!
   .. jetzt ist auch noch ISE14.6 kaputt...
     .. 14.6 reinstallieren geht auch nicht, segmentation fault...also unter 14.6 versuchen...
       .. 13.4 mit auch 6 GB geht auch nicht...
