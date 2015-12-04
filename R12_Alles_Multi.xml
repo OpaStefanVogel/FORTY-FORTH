@@ -7,42 +7,45 @@
 
 <pr>Alles Multi
 
-Mehrere Kopien des Forth-Prozessors werden zusammengeschaltet, um gemeinsam eine Matrix zu invertieren. Die Kopien werden ebenfalls in einer Matrixanordnung verbunden, also jeder Prozessor hat einen linken, rechten, oberen und unteren Nachbar. Am linken Rand zählt als linker Nachbar der Prozessor vom gegenüberliegenden rechten Rand in der gleichen Zeile. Entsprechendes gilt auch für die anderen Ränder.
+Jetzt sollen mehrere Kopien des Prozessors gemeinsam eine Matrix invertieren. Zu diesem Zweck werden die Kopien ebenfalls in einer Matrix zusammengeschaltet. Jeder Prozessor erhält einen linken, rechten, oberen und unteren Nachbar. Am linken Rand zählt als linker Nachbar der Prozessor vom gegenüberliegenden rechten Rand in der gleichen Zeile, dementsprechend auch die Zuordnung an den anderen Rändern.
 
 <object id="SVG_1" data="SVG_zu_R12.svg" width="550" height="260" />
 
-Der Datenaustausch erfolgt über die Speicheradressen 2000H…27FFH und 2804H…2807H. <i>Weil sich die übrigen Speicheradressen geändert haben, nochmal eine komplette Übersicht:</i>
+Der Datenaustausch zwischen den einzelnen Prozessoren erfolgt über die Speicheradressen 7800H…7FFFH, gesteuert über die Adressen 2804H…2807H. <i>Weil sich so ziemlich alle Speicheradressen geändert haben, nochmal eine komplette Übersicht:</i>
 
-Adresse   Datenbreite   Verwendung
-<i>0000…1FFFH    16        Programm- und Datenspeicher</i>
-2000…23FFH    16        nach rechts schreiben, von links lesen
-2400…27FFH    16        nach unten schreiben, von oben lesen
-<i>2801H         16        Lesen und Setzen von SP
+Adresse     Bitbreite   Verwendung
+<i>0000…1FFFH    16        Programmspeicher</i>
+<i>2800H         16        Lesen und Bestätigen von KEYADR
+2801H         16        Lesen und Setzen von SP
 2802H         16        Lesen und Setzen von RP
 2803H         16        Lesen und Setzen von PC</i>
 2804H          1        RECHTS-ABGESCHICKT, LINKS-ABGESCHICKT
 2805H          1        RECHTS-ANGEKOMMEN, LINKS-ANGEKOMMEN
 2806H          1        UNTEN-ABGESCHICKT, OBEN-ABGESCHICKT
 2807H          1        UNTEN-ANGEKOMMEN, OBEN-ANGEKOMMEN
-<i>2C00…2FFFH    16        Rückkehrstapel und Daten
+<i>2C00…2FFFH    16        Rückkehrstapel und Variablen
 3000…3FFFH     8        Textspeicher (nur Bytes)</i>
+4000…5FFFH    16        Speicher für große Zahlen und Matrizen
+7800…7BFFH    16        nach rechts schreiben, von links lesen
+7C00…7FFFH    16        nach unten schreiben, von oben lesen
 
-Jeder FORTH-Prozessor kann im Adressbereich 2000H…23FFH Daten zum rechts daneben befindlichen Prozessor schicken und mit 
+Jeder Prozessor kann im Adressbereich 7800H…7BFFH Daten zum rechts daneben befindlichen Prozessor schicken und mit 
 
-RECHTS-ANGEKOMMEN @ NOT RECHTS-ABGESCHICKT !
+<code>RECHTS-ANGEKOMMEN @ NOT RECHTS-ABGESCHICKT !</code>
 
-mitteilen, dass die zu übertragenden Daten komplett in den Adressbereich 2000H…23FFH gespeichert wurden. Der Prozessor rechts davon erkennt an LINKS-ABGESCHICKT ungleich dem zuletzt eingestellten LINKS-ANGEKOMMEN, dass neue Daten vorliegen und signalisiert nach dem Auslesen und Auswerten mit 
+mitteilen, dass die zu übertragenden Daten komplett in den Adressbereich 7800H…7BFFH gespeichert wurden. Der Prozessor rechts davon erkennt an der Änderung von LINKS-ABGESCHICKT, dass neue Daten vorliegen und signalisiert nach dem Auslesen und Auswerten mit 
 
-LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
+<code>LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !</code>
 
-dass das Auslesen beendet ist und die nächsten Daten gesendet werden können. Entsprechendes gilt auch im Adressbereich 2400H-27FFH für die Übertragungsrichtung von oben nach unten.
+dass das Auslesen beendet ist und die nächsten Daten gesendet werden können. Entsprechendes gilt auch im Adressbereich 7800H-7FFFH für die Übertragungsrichtung von oben nach unten.
 
-Zu beachten ist, was in 2000H…27FFH gespeichert wird, kann (um unnötige Verbindungen zu vermeiden) nicht vom gleichen Prozessor zurückgelesen werden sondern nur vom Prozessor rechts oder unterhalb davon. Dieser wiederum kann diese Daten nur von 2000H…27FFH auslesen und nicht durch Zurückspeichern vorher nochmal verändern. Entsprechende Schreibversuche gehen weiter an den nächsten rechten oder unteren Prozessor.
+Zu beachten ist, was in 7800H…7FFFH gespeichert wird, kann (um unnötige Verbindungen zu vermeiden) nicht vom gleichen Prozessor zurückgelesen werden sondern nur vom Prozessor rechts oder unterhalb davon. Dieser wiederum kann diese Daten nur von 7800H…7FFFH auslesen und nicht durch Zurückspeichern vorher nochmal verändern. Entsprechende Schreibversuche gehen weiter an den nächsten rechten oder unteren Prozessor.
 </pr>
 
-<p>Im Beispielprogramm wird wieder die gleiche Matrix invertiert wie in Step_11. Die Matrixein- und -ausgabe erfolgt vorerst noch behelfsmäßig durch vorheriges manuelle Aufteilen der Matrix auf die einzelnen Prozessoren und wieder Zusammensetzen nach dem Invertieren. Es geht erstmal nur darum, dass das mit dem Invertieren funktioniert.</p>
+<p>Im Beispielprogramm wird wieder die gleiche Matrix invertiert wie in Step_11. Allerdings werden die Matrixelemente einzeln mit <code>A(j,k)!</code> ein- und mit <code>B(j,k)@</code> ausgelesen, weil diese als komplette Matrix schnell eine Größe erreichen, für die der Speicher eines einzelnen Prozessors nicht mehr ausreicht.
+</p>
 
-<p>Neu bei der Simulation sind das Eingabefile <i>test_input.txt</i> und das Ausgabefile <i>test_output.txt</i>. Dadurch ist es möglich, <i>vivado</i> auch ohne GUI im Modus <i>vivado -mode tcl</i> laufen zu lassen und das Ergebnis aus dem Ausgabefile zu lesen.</p>
+<p>Neu bei der Simulation sind das Eingabefile <a href="test_input_file.txt">test_input_file.txt</a>, das Ausgabefile <a href="test_output_file.txt">test_output_file.txt</a> und zusätzliche Ausgabe in der TCL Console. Dadurch wird ermöglicht, <i>vivado</i> auch ohne grafische Oberfläche (GUI) im Modus <i>vivado -mode tcl</i> laufen zu lassen, wenn nur die simulierte Programmausgabe als Ergebnis benötigt wird.</p>
  
 <Terminal_1>
   <li> git checkout Step_12 </li>
@@ -58,24 +61,39 @@ Zu beachten ist, was in 2000H…27FFH gespeichert wird, kann (um unnötige Verbi
 <DEMO>FORTY-FORTH
 
 ok
-<u>HEX ( zum Programmieren )</u>
-<u>0 0 JK-PROC HERE . ( zählt die angeschlossenen Prozessoren )</u>
-
-<u>: AB " 4 N ! 2 NJ ! 2 NK ! DUP . " 1 ABSCHICKEN ;</u>
-<u>: AC " 4 N ! 2 NJ ! 2 NK ! OBJ_STRUCT_COPY " 1 ABSCHICKEN ;</u>
-
-<u>DECIMAL</u>
-<u>( A vier Teilmatrizen zu den vier Prozessoren schicken )</u>
-<u>0 0 [ [ 1  1 ] [ 3 1 ^ 3 3 ^ ] ] AB</u>
-<u>0 1 [ [ 1  1 ] [ 3 2 ^ 3 4 ^ ] ] AC</u>
-<u>1 0 [ [ 2 1 ^ 2 3 ^ ] [ 4 1 ^ 4 3 ^ ] ] AC</u>
-<u>1 1 [ [ 2 2 ^ 2 4 ^ ] [ 4 2 ^ 4 4 ^ ] ] AC</u>
-<u>( gx dann gemeinsamer Nenner 1 überall )</u>
-<u>1 0 1 " 0 1 ROT 0 0 2 ABSCHICKEN " 3 ABSCHICKEN</u>
-<u>( GINV jetzt das neue Invertieren )</u>
-<u>4 GINV</u>
-<u>ABWART</u>
-<u>OVER . DUP .</u>
+<u>HEX</u> ok
+<u>0 0 JK-PROC</u> 2 2 ok
+<u>HERE . BZEIG M?</u> 1947 3A2D ok
+<u>0 2D04 !</u> ok
+<u>0 ADBIT ! 0 UBIT ! INIT</u> ok
+<u></u> ok
+<u>DECIMAL</u> ok
+<u>AUSGANGSMATRIX_NULLSETZEN</u> ok
+<u>1 0 0 A(j,k)!  1 0 1 A(j,k)!  1 0 2 A(j,k)!   1 0 3 A(j,k)! </u> ok
+<u>2 1 0 A(j,k)!  4 1 1 A(j,k)!  8 1 2 A(j,k)!  16 1 3 A(j,k)! </u> ok
+<u>3 2 0 A(j,k)!  9 2 1 A(j,k)! 27 2 2 A(j,k)!  81 2 3 A(j,k)! </u> ok
+<u>4 3 0 A(j,k)! 16 3 1 A(j,k)! 64 3 2 A(j,k)! 256 3 3 A(j,k)! </u> ok
+<u>1 HAUPTNENNER</u> ok
+<u></u> ok
+<u>4 N ! INVERTIERE_SCHNELL</u> ok
+<u></u> ok
+<u>0 0 B(j,k)@ .</u> 1152 ok
+<u>0 1 B(j,k)@ .</u> -864 ok
+<u>0 2 B(j,k)@ .</u> 384 ok
+<u>0 3 B(j,k)@ .</u> -72 ok
+<u>1 0 B(j,k)@ .</u> -1248 ok
+<u>1 1 B(j,k)@ .</u> 1368 ok
+<u>1 2 B(j,k)@ .</u> -672 ok
+<u>1 3 B(j,k)@ .</u> 132 ok
+<u>2 0 B(j,k)@ .</u> 432 ok
+<u>2 1 B(j,k)@ .</u> -576 ok
+<u>2 2 B(j,k)@ .</u> 336 ok
+<u>2 3 B(j,k)@ .</u> -72 ok
+<u>3 0 B(j,k)@ .</u> -48 ok
+<u>3 1 B(j,k)@ .</u> 72 ok
+<u>3 2 B(j,k)@ .</u> -48 ok
+<u>3 3 B(j,k)@ .</u> 12 ok
+<u>DUP .</u> 288 ok
 </DEMO>
 
 <svg_path schnips="1 1 -3 -100"/>

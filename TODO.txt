@@ -323,6 +323,8 @@ ok achso, nach jedem [A*x-Y*Z]/gx noch A' gx' an den Anfang zurückkopieren fehl
   .. bei NJ=NK=1 geht 3 ABSCHICKEN nicht?
   ok vor neu Laden erst RESET wenn 0 [ 77 3 4 ] Ajk! dabei ist??? Ja END_LOCAL hat da gefehlt!!!
   ok und auch ein A+0
+.. ABWART auch in JK-PROC
+.. schnelles FIND und Z= und INTERPRET, da sind massig R drin.
 .. C000-FFFFH dazuschalten, jedoch passt das gar nicht so einfach zu SLX->ERGEBNIS
   .. dabei SPEICHDERENDE noch korrekt einstellen!!!
   .. nee muss komplett neu aufgeteilt werden und von Anfang an, 1800+C000 geht nicht
@@ -333,6 +335,16 @@ ok achso, nach jedem [A*x-Y*Z]/gx noch A' gx' an den Anfang zurückkopieren fehl
       .. dann in vivado 2000H-27FFH auf 7800H-7FFFH umsetzen
       .. dann auf S3 auch das neu umprogrammieren
       .. schließlich in vivado 47FFH bis wie gewünscht 5FFFH raufsetzen
+    .. probehalber versuche
+      .. zuerst ob das neue 2400 SPEICHERENDE ! funktioniert
+      .. in vivado 4000H-47FFH hinzu
+      .. in OPERAND->SLX und ZERLEG das 3FFF AND zu FFFF AND machen
+      .. ZAHLENSPEICHER und ERGEBNIS auf 4000 raufsetzen in INIT
+      .. wenn das ginge
+      .. in vivado auch 7800H-7BffH und 7C00-7FFFH hinzu
+      .. auch alle LINKS RECHTS OBEN UNTEN auf 7800 und 7C00 umsetzen
+      .. und das +400 und +800 anders machen ohne + und -
+      .. das alles als Umschaltbit UBIT machen...!!!
   .. jetzt ist auch noch ISE14.6 kaputt...
     .. 14.6 reinstallieren geht auch nicht, segmentation fault...also unter 14.6 versuchen...
       .. 13.4 mit auch 6 GB geht auch nicht...
@@ -341,11 +353,14 @@ ok immerhin geht B(j,k)@ Matrix auslesen auf Anhieb, das reicht zum Abschließen
 ok Ausgabe von Zwischenergebnissen mit ADBIT ausgeschaltet, wieder ewig wegen 3 Fehler drin, jetzt ok
 ok in P01.vhd noch LEDS wieder anschließen
 ok und in testbench.vhd Ausgabe auf die tcl-console mit zusätzlich rein endlich mal.
+.. schauen, ob write(DUT0(3)/KEYCODE) direkt zugänglich ist ohne ports
+  .. wenn ja, dann steht einer Bordsimulation nichts im Wege
 
 nö paar OBJ_STRUCT_COPY können auch wieder raus, nö klappt nicht
 ok in MOVE und FILL die >R und R> ersetzen
 .. eine neue Fehlerbehandlung die auf 0 0 zurückwirkt und RESET auch und ROM eventuell.
 .. INIT.xml auch mal durch vivado laufen lassen, dazu NJ=NK=1 machen!
+  .. wenn nicht ganz durch, geht ja auch zwischendrin DUMPZ
 
 ok auf vivado -mode tcl umstellen ab Step_12 mit
     open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr
