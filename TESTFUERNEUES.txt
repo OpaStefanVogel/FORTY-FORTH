@@ -1,17 +1,22 @@
 : ZNEU= ( adr1 n1 adr2 n2 --> r )
-  ROT OVER = IF DROP DROP DROP 0 ELSE ( adr1 adr2 n2 )
+  ROT OVER = NOT IF DROP DROP DROP 0 ELSE ( adr1 adr2 n2 )
     0 BEGIN 2DUP M- WHILE ( adr1 adr2 n2 0 )
       2SWAP ( n2 0 adr1 adr2 )
-      OVER C@ OVER C@ M- IF DROP DROP 0 0 END_IF
-      DUP IF 1+ SWAP 1+ SWAP END_IF ( n2 0 adr1+1 adr2+1 )
-      2SWAP 1+ REPEAT 2SWAP 2DROP ( adr1+1 adr2+1 )
+      OVER C@ OVER C@ M- IF 2DROP 2DROP 0 0 0 0 ELSE
+        1+ SWAP 1+ SWAP 2SWAP 1+ ( adr1+1 adr2+1 n2 1 )
+        END_IF
+      REPEAT 2SWAP 2DROP ( n2 n2 )
     DROP IF -1 ELSE 0 END_IF ( flag )
     END_IF ;
     
-( " ABC" " ABCD" ZNEU= .
-( " ABC" " BCD" ZNEU= .
-( " ABC" " ABC" ZNEU= .
+" ABC" " ABCD" ZNEU= .
+" ABC" " BCD" ZNEU= .
+" ABC" " ABC" ZNEU= .
+" ABC" " ABCD" Z= .
+" ABC" " BCD" Z= .
+" ABC" " ABC" Z= .
 ( REPLACE: Z= ZNEU= ;
+RETURN ' ZNEU= 04 000 MLIT OR ' Z= 2!
 
 : FINDNEU ( adr n --> lfa r )
   0 ( heisst noch nicht gefunden )
@@ -33,9 +38,15 @@
   ( OVER LFA @ SWAP LT IF M." *" OVER M. LFA @ M. END_IF ( vref wenn gebraucht )
   ;
 
-( " DUP" FINDNEU B.
-( " DEPP" FINDNEU B.
+" DUP" FINDNEU B.
+" DEPP" FINDNEU B.
+" 77" FINDNEU B.
+" DUP" FIND B.
+" DEPP" FIND B.
+" 77" FIND B.
 ( REPLACE: FIND FINDNEU ;
+: T RETURN ' FINDNEU= 04 000 MLIT OR ' FIND 2! ;
+
 
 : LCFA ( lfa --> cfa ) 3 M+ ;
 
