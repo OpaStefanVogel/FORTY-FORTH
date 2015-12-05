@@ -355,7 +355,8 @@ ok in P01.vhd noch LEDS wieder anschließen
 ok und in testbench.vhd Ausgabe auf die tcl-console mit zusätzlich rein endlich mal.
 .. schauen, ob write(DUT0(3)/KEYCODE) direkt zugänglich ist ohne ports
   .. wenn ja, dann steht einer Bordsimulation nichts im Wege
-.. wieso geht jetzt ADBIT=-1 allein in Proc00 nicht? Nur wenn alle Poc ADBIT=-1 haben gehts...
+o wieso geht jetzt ADBIT=-1 allein in Proc00 nicht? Nur wenn alle Poc ADBIT=-1 haben gehts...
+  o. ohne ersichtlichen Grund geht nun überall ADBIT=0. Komisch. Aufheben und nochmal schauen.
 .. 4000-5FFFH und 7800-7FFFH vorerst noch nicht schaltbar
 
 nö paar OBJ_STRUCT_COPY können auch wieder raus, nö klappt nicht

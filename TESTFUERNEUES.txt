@@ -1,3 +1,48 @@
+
+type ram_type is array (C_RAM_DEPTH-1 downto 0) of std_logic_vector (C_RAM_WIDTH-1 downto 0);          -- 2D Array Declaration for RAM signal
+signal <ram_data> : std_logic_vector(C_RAM_WIDTH-1 downto 0) ;
+
+-- The folowing code either initializes the memory values to a specified file or to all zeros to match hardware
+function initramfromfile (ramfilename : in string) return ram_type is
+file ramfile	: text is in ramfilename;
+variable ramfileline : line;
+variable ram_name	: ram_type;
+variable bitvec : bit_vector(C_RAM_WIDTH-1 downto 0);
+begin
+    for i in ram_type'range loop
+        readline (ramfile, ramfileline);
+        read (ramfileline, bitvec);
+        ram_name(i) := to_stdlogicvector(bitvec);
+    end loop;
+    return ram_name;
+end function;
+
+-- Define RAM
+signal <ram_name> : ram_type := initramfromfile(C_INIT_FILE);
+
+################
+type ram_type is array (2 downto 0) of std_logic_vector (7 downto 0);          -- 2D Array Declaration for RAM signal
+
+-- The folowing code either initializes the memory values to a specified file or to all zeros to match hardware
+function initramfromfile (ramfilename : in string) return ram_type is
+file ramfile	: text is in ramfilename;
+variable ramfileline : line;
+variable ram_name	: ram_type;
+variable bitvec : bit_vector(7 downto 0);
+begin
+    for i in ram_type'range loop
+        readline (ramfile, ramfileline);
+      --  read (ramfileline, bitvec);
+        write (output, "#######################################");
+        ram_name(i) := to_stdlogicvector(bitvec);
+    end loop;
+    return ram_name;
+end function;
+
+signal TESTRAM : ram_type := initramfromfile("RAM.txt");
+
+
+
 : ZNEU= ( adr1 n1 adr2 n2 --> r )
   ROT OVER = NOT IF DROP DROP DROP 0 ELSE ( adr1 adr2 n2 )
     0 BEGIN 2DUP M- WHILE ( adr1 adr2 n2 0 )
