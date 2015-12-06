@@ -1485,9 +1485,7 @@ TLISTE VARIABLE TLISTENZEIGER
     OVER OVER 1+ 0 0 0 0 R-ABSCHICKEN
     END_IF
   2DROP 
-  IAM2J @ -1 = IAM2K @ -1 = OR IF ABWART ELSE 
-    AMERK @ IF 0 AMERK ! IAM2J M? IAM2K M? END_IF 
-    END_IF
+  IAM2J @ -1 = IAM2K @ -1 = OR IF ABWART ELSE 0 AMERK ! END_IF
   ;
 
 ( empfangene Bytes jetzt auswerten
@@ -1802,6 +1800,9 @@ REPLACE: ERROR ( n --> )
 
 : AUSGANGSMATRIX_NULLSETZEN
   NJ @ 1- NK @ 1- 0 ' INIT 0 3 ABSCHICKEN
+  ;
+: HAUPTNENNER ( x ==> x )
+  NJ @ 1- NK @ 1- ROT 0 0 3 ABSCHICKEN
   ;
 
 : Ajk! ( A ajk jloc kloc --> A' )
