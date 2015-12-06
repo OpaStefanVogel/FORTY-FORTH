@@ -1,22 +1,19 @@
-HEX HERE M. BZEIG M?
-( -1 ADBIT !
-INIT
-ERGEBNIS M? ZAHLENSPEICHER M? SPEICHERENDE M? UBIT ?
-77 88 * .
-111111111 DUP * .
-0 0 JK-PROC 
-ERGEBNIS M? IAM1J ? IAM1K ? IAM2J ? IAM2K ? NJ ? NK ?
-0 2D04 !
-( NJ @ 1- NK @ 1- 0 " ACBIT ! " 3 ABSCHICKEN
+HEX
+HERE M. BZEIG M?
+0 0 JK-PROC
+NJ ? NK ?
+0 2D04 ! 0 ACBIT ! 0 ADBIT !
 
 DECIMAL
 AUSGANGSMATRIX_NULLSETZEN
-4 VANDERMONDEMATRIX_GLEICH_AUFTEILEN
-NJ @ 1- NK @ 1- 1 0 0 3 ABSCHICKEN ( gx)
+1 0 0 A(j,k)!   1 0 1 A(j,k)!   1 0 2 A(j,k)!    1 0 3 A(j,k)!  
+2 1 0 A(j,k)!   4 1 1 A(j,k)!   8 1 2 A(j,k)!   16 1 3 A(j,k)!  
+3 2 0 A(j,k)!   9 2 1 A(j,k)!  27 2 2 A(j,k)!   81 2 3 A(j,k)!  
+4 3 0 A(j,k)!  16 3 1 A(j,k)!  64 3 2 A(j,k)!  256 3 3 A(j,k)!  
+1 HAUPTNENNER
 OVER . DUP .
-0 ADBIT !
-N ?
-4 N ! N @ GINV ABWART
+
+4 N ! INVERTIERE_SCHNELL
 0 0 B(j,k)@ .
 0 1 B(j,k)@ .
 0 2 B(j,k)@ .
@@ -33,4 +30,4 @@ N ?
 3 1 B(j,k)@ .
 3 2 B(j,k)@ .
 3 3 B(j,k)@ .
-
+DUP .
