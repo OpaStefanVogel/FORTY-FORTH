@@ -3,92 +3,125 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>FORTY-FORTH by OpaStefanVogel</title>
-
+    <title>Forty-forth by OpaStefanVogel</title>
     <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
-
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
     <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-  <style>
-    section { font-family:monospace; }
-    code    { font-family:monospace; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
   </head>
   <body>
-    <div class="wrapper">
+
       <header>
-        <h1>FORTY-FORTH</h1>
+        <h1>Forty-forth</h1>
         <p>Ohne Rundungsfehler Gleichungssysteme lösen</p>
-        <p class="view"><a href="https://github.com/OpaStefanVogel/FORTY-FORTH">View the Project on GitHub <small>OpaStefanVogel/FORTY-FORTH</small></a></p>
-        <ul>
-          <li><a href="https://github.com/OpaStefanVogel/FORTY-FORTH/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/OpaStefanVogel/FORTY-FORTH/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/OpaStefanVogel/FORTY-FORTH">View On <strong>GitHub</strong></a></li>
-        </ul>
       </header>
 
-      <section> 
-<p>Ziel ist die Installation eines solchen Programms auf einem <a href="http://de.wikipedia.org/wiki/Field_Programmable_Gate_Array">FPGA</a> mittels <a href="http://de.wikipedia.org/wiki/Very_High_Speed_Integrated_Circuit_Hardware_Description_Language">VHDL</a> und <a href="http://de.wikipedia.org/wiki/Forth_(Programmiersprache)">FORTH</a>.<a href="index.html#Inhalt" style="float:right">--> sofort weiter</a></p>
+      <div id="banner">
+        <span id="logo"></span>
 
-<p>Ich verwende dabei <a href="http://en.wikipedia.org/wiki/Git_(software)">git</a>, um bei Fehlersuche wirklich schnell auf vorher funktionierende Varianten umschalten zu können, notfalls bis zu einer allereinfachsten Anfangsversion, sowie <a href="http://en.wikipedia.org/wiki/GitHub">GitHub</a>, um von überall aus tüchtig zu <code>clone</code>(n) und <code>push</code>(en).
-</p>
-<p>Erste Eingaben erfolgen in einem <a href="http://de.wikipedia.org/wiki/Linux">Linux</a>-Terminal. Bilde einen eigenen Verzeichnisnamen <i>your-master-repo</i>, erzeuge ein leeres Verzeichnis mit diesem Namen und wechsle in dieses Verzeichnis. Dann klone (den einzelnen Punkt nach .git nicht übersehen, dadurch wird in das schon angelegte Verzeichnis geklont) und starte aus diesem Verzeichnis heraus zusätzlich <a href="http://www.xilinx.com/products/design-tools/vivado/integration/esl-design.html">Vivado 2015.2.1</a>.</p>
+        <a href="https://github.com/OpaStefanVogel/FORTY-FORTH" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/OpaStefanVogel/FORTY-FORTH/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/OpaStefanVogel/FORTY-FORTH/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
 
-<div>Terminal-1: <i>your-master-repo&amp;</i></div>
-<pre><code>git clone https://github.com/OpaStefanVogel/FORTY-FORTH.git .
-vivado &</code></pre>
-<p>Während vivado startet...</p>
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h1>
+<a id="forty-forth" class="anchor" href="#forty-forth" aria-hidden="true"><span class="octicon octicon-link"></span></a>FORTY-FORTH</h1>
 
-<p>"FORTY" steht für englisch <b><u>40</u></b> im verwendeten Datenformat: Hexadezimalzahlen von 0000H bis 3FFFH werden immer als ganze Zahlen interpretiert, von <b><u>40</u></b>00H bis C000H wahlweise als Zeiger auf größere ganze Zahlen oder als Programmcode und von C001H bis FFFFH als negative ganze Zahlen.
-</p>
+<p>Ohne Rundungsfehler Gleichungssysteme lösen</p>
 
-<p>In diesem Sinne steht am Anfang ein erstes, sehr einfaches Programmbeispiel, welches nach und nach erweitert wird. Es soll laufen als <i>vivado - simulation behavioral</i>.
+<p>Siehe <a href="http://OpaStefanVogel.github.io/FORTY-FORTH/">http://OpaStefanVogel.github.io/FORTY-FORTH/</a> </p>
 
-<p>...Nach Erscheinen der Start- und später der Projektseite von vivado kann schließlich mit <a href="http://de.wikipedia.org/wiki/Tcl">tcl</a>-Eingaben fortgesetzt werden im Eingabefeld</p>
+<pre><code>--- Files in branch master:
 
-<div>Tcl Console: <i>"Type a Tcl command here"</i></div>
-<pre><code>create_project -force project_FFP project_FFP
-add_files -norecurse {P01_top.vhd P20_FFP.vhd}
-add_files -fileset sim_1 -norecurse testbench.vhd
+P01.vhd            entity top
+P20_FFP.vhd        compiliert den Forth-Prozessor
+testbench.vhd      Testbench zu P01.vhd+P20_FFP.vhd
+
+INIT.xml           recompiliert den Forth-Interpreter
+screenlog.xml      Logfile dazu, enthält Speicherarrays für P20_FFP.vhd
+
+INIT.xsl           xslt-Templates und
+INIT.css           css-Formatierung und
+INIT.DTD           DOCTYPE zu INIT.xml und screenlog.xml
+
+FFINIT1.txt        ab hier sammelt sich Neues...
+FFINIT1NEU.txt
+FFINIT2NEU.txt
+
+TESTFUERNEUES.txt
+
+README.md
+
+
+--- Files aus Branch gh-pages:
+
+index.html        die in gh-branch erwartete Startseite
+
+R00.xsl           xslt-Templates und
+R00.css           css-Formatierung und
+R00.DTD           DOCTYPE zu nachfolgR...xml
+favicon.ico       ein Icon
+
+R01_Anfang.xml             ein erstes einfaches Programm
+R02_Stapelvariablen.xml    Stapeleinträge benennen
+R03_StapelRAM.xml          Stapel in RAM speichern
+R04_bedingter_Sprung.xml   bedingter Sprung
+R05_Unterprogramm.xml      Unterprogramm
+R06_Umstapeln.xml          Umstapeln
+R07_weitere_Rechenoperationen.xml  weitere Rechenoperationen
+R08_mehr_Speicher.xml      mehr Speicher
+R09_Programmausgabe.xml    Programmausgabe
+R10_Nutzereingabe.xml      Nutzereingabe
+R11_ganze_Zahlen.xml       Rechnen mit großen ganzen Zahlen
+
+Spartan3.xml      Installation auf dem Spartan3 Board
+
+TODO.txt          Notizen
+
+images            alles zum original GitHub-Pages - theme
+javascripts       "
+stylesheets       "
+params.json       "
+
+
+--- Files aus branch Spartan3_master
+
+TopSpartan3fuerGitHub.vhd      schließt top.vhd an die Spartan3 IO-Ports an
+Platine95S3.ucf                zugehöriges .ucf File
+
 </code></pre>
-
-<p>Am einfachsten ist Copy&amp;Paste aller drei Eingabezeilen zusammen hinein in <i>"Type a Tcl command here"</i>, gefolgt von Enter. Jede diese Eingaben braucht ihre Zeit zur Ausführung. Weitere Eingaben dann je nach ausgewählter Programmvariante:</p>
-
-<div id="Inhalt">
-<div><small><small>(öffnen mit: Android Opera Classic, Raspbian Epiphany, Linux Firefox)</small></small><div>
-<p><a href="R01_Anfang.xml">R01 ein erstes einfaches Programm</a></p>
-<p><a href="R02_Stapelvariablen.xml">R02 Stapeleinträge benennen</a></p>
-<p><a href="R03_StapelRAM.xml">R03 Stapel in RAM speichern</a></p>
-<p><a href="R04_bedingter_Sprung.xml">R04 bedingter Sprung</a></p>
-<p><a href="R05_Unterprogramm.xml">R05 Unterprogramm</a></p>
-<p><a href="R06_Umstapeln.xml">R06 Umstapeln</a></p>
-<p><a href="R07_weitere_Rechenoperationen.xml">R07 weitere Rechenoperationen</a></p>
-<p><a href="R08_mehr_Speicher.xml">R08 mehr Speicher</a></p>
-<p><a href="R09_Programmausgabe.xml">R09 Programmausgabe</a></p>
-<p><a href="R10_Nutzereingabe.xml">R10 Nutzereingabe</a></p>
-<p><a href="R11_ganze_Zahlen.xml">R11 Rechnen mit großen ganzen Zahlen</a></p>
-</div>
-
-<p>Falls zufällig ein nicht mehr benötigtes <a href="http://www.digilentinc.com/Products/Detail.cfm?Prod=S3BOARD">Spartan3 Board</a> vorhanden ist, versuche auch eine</p>
-
-<p><a href="Spartan3.xml">Installation auf dem Spartan3 Board</a>.</p>
-
-<p>Danach aber eine wirklich verdiente Pause, auch wenn rein gar nichts funktionieren will. Schließlich noch</p>
-
-<p><a href="R12_Alles_Multi.xml">R12 Alles Multi</a></p>
-
-<p>und damit ist, zumindestens was den vhdl-Anteil betrifft, der beabsichtigte Funktionsumfang erreicht.</p>
       </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/OpaStefanVogel">OpaStefanVogel</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
+      </footer>
     </div>
-    <footer>
-      <p>Project maintained by <a href="https://github.com/OpaStefanVogel">OpaStefanVogel</a></p>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-60025520-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
