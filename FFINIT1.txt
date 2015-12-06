@@ -21,7 +21,8 @@
 <sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
 ( zuerst alles Notwendige wieder auf Ausgangszustand schalten )
 2 2 M* DUP M* BASE !           ( HEX )
-DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG auf Anfangswerte zurücksetzen )
+DPMERK @ DP ! BANF @ BZEIG !   ( DP und BZEIG auf Anfangswerte zurücksetzen )
+' NOOP @ ' KEY !               ( EXXI ausschalten )
 </sekt>
 
 <sekt inhalt="so, mit irgendwas muss das Compilieren losgehen">
@@ -279,7 +280,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
     DUP BASE @ LT NOT IF DROP DROP 0 0 END_IF
     SWAP END_IF ;
 
-: NUMBER ( badr n --> a r )
+: NUMBER ( badr n --> a r ) ( wird später ersetzt durch <h href="#NNUMBER" /> )
   7 LOCAL ( L3 L4 nicht verwendet )
   L1 ! L0 !
   0 L1 @ IF
@@ -445,3 +446,44 @@ START
 </sekt>
 </sekt>
 </AXIOME>
+
+<NACH_DEN_AXIOMEN>
+<sekt inhalt="bis Adresse 0800H passt noch DUMPZ drauf (inzwischen nicht mehr)">
+( erste Forth Erweiterungen )
+( - DUMPZ )
+( RAMB-Inhaltsausgabe erzeugen: )
+: LG. ( n --> )
+  DUBIT @ IF SHL16 DROP SHL16 DROP 
+    ELSE SHL16 DIG EMIT SHL16 DIG EMIT END_IF 
+  SHL16 DIG EMIT SHL16 DIG EMIT DROP ;
+: NG. ( n --> )
+  ." x" 22 EMIT LG. 22 EMIT ." ," ; 
+: DUMPZ ( bis+1 von dubit --> )
+  DUBIT ! XBIT @ >R 0 XBIT !
+  " ' START " INTERPRET 04 000 MLIT OR 10 !
+  CR 3C EMIT ." DUMPZ>"
+  BEGIN
+    CR ."   "
+    0000 BEGIN
+      2DUP M+
+      DUP IRAMADR = IF DROP JRAMADR END_IF
+      DUP LOCALADRESSE = IF DROP 2D00 2F80 ! 2F80 END_IF
+      DUP XOFF = IF DROP XBIT END_IF
+      @ NG. 1+ DUP 10 =
+      UNTIL DROP
+    ."  -- " DUP HG. ." -" DUP 0F M+ HG.
+    10 M+
+    2DUP > NOT UNTIL 2DROP
+  CR 3C EMIT ." /DUMPZ>"
+  R> XBIT !
+  ;
+
+HERE M. BZEIG M?
+</sekt>
+
+<sekt inhalt="ProgRAM und ByteRAM für Step_9 und Step_10 erstellen">
+HERE 0 0 DUMPZ          ( generiert ProgRAM für P20_FFP.vhd Step_10 )
+BZEIG @ 3000 -1 DUMPZ   ( generiert ByteRAM für P20_FFP.vhd Step_10 )
+</sekt>
+
+( -------- zwischen diesen beiden Zeilen ist momentan die Aufteilung: hier endet FFINIT1.txt und

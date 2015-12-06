@@ -21,7 +21,8 @@
 <sekt inhalt="Anfangszustand so herstellen wie zum Recompilieren benötigt">
 ( zuerst alles Notwendige wieder auf Ausgangszustand schalten )
 2 2 M* DUP M* BASE !           ( HEX )
-DPMERK @ DP ! BANF @ BZEIG ! ( DP und BZEIG auf Anfangswerte zurücksetzen )
+DPMERK @ DP ! BANF @ BZEIG !   ( DP und BZEIG auf Anfangswerte zurücksetzen )
+' NOOP @ ' KEY !               ( EXXI ausschalten )
 </sekt>
 
 <sekt inhalt="so, mit irgendwas muss das Compilieren losgehen">
@@ -279,7 +280,7 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
     DUP BASE @ LT NOT IF DROP DROP 0 0 END_IF
     SWAP END_IF ;
 
-: NUMBER ( badr n --> a r )
+: NUMBER ( badr n --> a r ) ( wird später ersetzt durch <h href="#NNUMBER" /> )
   7 LOCAL ( L3 L4 nicht verwendet )
   L1 ! L0 !
   0 L1 @ IF
@@ -446,7 +447,7 @@ START
 </sekt>
 </AXIOME>
 
-<FFINIT2>
+<NACH_DEN_AXIOMEN>
 <sekt inhalt="bis Adresse 0800H passt noch DUMPZ drauf (inzwischen nicht mehr)">
 ( erste Forth Erweiterungen )
 ( - DUMPZ )
@@ -466,7 +467,8 @@ START
     0000 BEGIN
       2DUP M+
       DUP IRAMADR = IF DROP JRAMADR END_IF
-      DUP LOCALADRESSE = IF DROP 2F00 2F80 ! 2F80 END_IF
+      DUP LOCALADRESSE = IF DROP 2D00 2F80 ! 2F80 END_IF
+      DUP XOFF = IF DROP XBIT END_IF
       @ NG. 1+ DUP 10 =
       UNTIL DROP
     ."  -- " DUP HG. ." -" DUP 0F M+ HG.
@@ -484,6 +486,8 @@ HERE 0 0 DUMPZ          ( generiert ProgRAM für P20_FFP.vhd Step_10 )
 BZEIG @ 3000 -1 DUMPZ   ( generiert ByteRAM für P20_FFP.vhd Step_10 )
 </sekt>
 
+( -------- zwischen diesen beiden Zeilen ist momentan die Aufteilung: hier endet FFINIT1.txt und
+( ------------------------------------------------------------- und hier beginnt FFINIT2.txt
 <sekt inhalt="Variablen">
 2F20 CONSTANT RAMP1 RAMP1 1+ RAMP1 ! ( bis 2F17 sind neu BASE TIB ... )
 : VARIABLE RAMP1 @ DUP CONSTANT DUP 1+ RAMP1 ! ! ;
@@ -491,12 +495,12 @@ BZEIG @ 3000 -1 DUMPZ   ( generiert ByteRAM für P20_FFP.vhd Step_10 )
 
 <sekt inhalt="noch paar hilfreiche Funktionen">
 : MOVE ( adr1 adr2 n --> )
-  BEGIN DUP WHILE >R OVER @ OVER ! SWAP 1+ SWAP 1+ R> 1- REPEAT DROP 2DROP ;
+  BEGIN DUP WHILE ROT ROT OVER @ OVER ! SWAP 1+ SWAP 1+ ROT 1- REPEAT DROP 2DROP ;
 : FILL ( adr n b --> )
-  ROT ROT BEGIN DUP WHILE >R 2DUP ! 1+ R> 1- REPEAT DROP 2DROP ;
+  ROT ROT BEGIN DUP WHILE ROT ROT 2DUP ! 1+ ROT 1- REPEAT DROP 2DROP ;
 
 : DUMP ( addr n --> )
-  BEGIN SWAP ( CR DUP M. ) DUP @ M. 1+ SWAP 1- DUP 0= UNTIL DROP ;
+  BEGIN SWAP ( CR DUP M. ) DUP @ M. 1+ SWAP 1- DUP 0= UNTIL 2DROP ;
 
 : MAX ( a b --> c )
   2DUP LT IF SWAP END_IF DROP ;
@@ -513,12 +517,17 @@ BZEIG @ 3000 -1 DUMPZ   ( generiert ByteRAM für P20_FFP.vhd Step_10 )
   <tr><td>Subtraktion</td>            <td>M- ( a b --> a-b ) </td>      <td>- ( m n --> m-n ) </td></tr>
   <tr><td>Stapelspitze ausgeben</td>  <td>M. ( a -->  /string/ )</td>   <td>. ( m -->  /string/ )</td></tr>
   <tr><td>Speicherinhalt ausgeben</td><td>M? ( adr -->  /string/ )</td> <td>? ( adr -->  /string/ )</td></tr>
+  <tr><td>Addition mit Übertrag</td>  <td>U+ ( u a b --> u' a+b+u ) </td><td></td></tr>
+  <tr><td>Multiplikation mit Übertrag</td><td>U* ( u a b --> u' a*b+u ) </td><td></td></tr>
   <tr><td>Inkrementieren</td>         <td>1+ ( a --> a+1 ) </td>        <td></td></tr>
   <tr><td>Dekrementieren</td>         <td>1- ( a --> a+1 ) </td>        <td></td></tr>
   <tr><td>kleiner als "&lt;"</td>     <td>LT ( a b --> a&lt;b )</td>    <td></td></tr>
   <tr><td>größer als</td>             <td>> ( a b --> a>b )</td>        <td></td></tr>
+  <tr><td>Gleichheit</td>             <td>= ( a b --> a=b )</td>        <td></td></tr>
   <tr><td>Maximum</td>                <td>MAX ( a b --> max )</td>      <td></td></tr>
   <tr><td>Minimum</td>                <td>MIN ( a b --> min )</td>      <td></td></tr>
+  <tr><td>kleiner als Null</td>       <td>0LT ( a --> a&lt;0 )</td>    <td>0LT ( a --> a&lt;0 )</td></tr>
+  <tr><td>gleich Null</td>            <td>0= ( a --> a=0 )</td>        <td>0= ( a --> a=0 )</td></tr>
   <tr><td>Division mit Rest</td>      <td>M/MOD ( a b --> q r )</td>    <td>/MOD ( m n --> q r )</td></tr>
   <tr><td>Division</td>               <td></td>                         <td>/ ( m n --> q )</td></tr>
   <tr><td>Rest</td>                   <td></td>                         <td>MOD ( m n --> r )</td></tr>
@@ -526,8 +535,6 @@ BZEIG @ 3000 -1 DUMPZ   ( generiert ByteRAM für P20_FFP.vhd Step_10 )
   <tr><td>größter gemeinsamer Teiler</td><td></td>                      <td>GGT ( m n --> ggt )</td></tr>
   <tr><td>Kürzen</td>                 <td></td>                         <td>BK ( m n --> m/ggt n/ggt )</td></tr>
   <tr><td>Potenzieren</td>            <td></td>                         <td>^ ( m n --> m^n )</td></tr>
-  <tr><td>Addition mit Übertrag</td>  <td>U+ ( u a b --> u' a+b+u ) </td><td></td></tr>
-  <tr><td>Multiplikation mit Übertrag</td><td>U* ( u a b --> u' a*b+u ) </td><td></td></tr>
   </table>
 </sekt>
 
@@ -744,31 +751,41 @@ A 8 DUMP
 <sekt inhalt="Zahlenspeicher">
 0 VARIABLE OPERAND1
 0 VARIABLE OPERAND2
-1400 VARIABLE ERGEBNIS
-1400 VARIABLE ZAHLENSPEICHER
-2000 VARIABLE SPEICHERENDE
+1800 VARIABLE ERGEBNIS
+1800 VARIABLE ZAHLENSPEICHER
+2000 VARIABLE SPEICHERENDE ( wird in INIT aktualisiert )
 0 VARIABLE SCHIEB
+0 VARIABLE UBIT
 
+: TRIM ( sz lz az --> sz lz' az )
+  SWAP 2DUP M+ 1- ( sz az lz ez 
+  BEGIN OVER 0= NOT OVER @ 0= AND WHILE 
+    SWAP 1- SWAP 1- REPEAT ( sz az lz' ez' )
+  DROP SWAP ( sz lz' az )
+  ;
+
+1A01 20 0 FILL
+1A01 11 7 FILL
+0 20 1A01 TRIM ROT M. SWAP M. M.
+
+: SLX->ERGEBNIS_KURZ ( sz lz az --> z )
+  1-             ( sz lz az-1 )
+  SWAP OVER !    ( sz az-1 )
+  04 000 MLIT OR ( sz z ) 
+  SWAP IF MINUS END_IF ( z )
+  ;
 
 : SLX->ERGEBNIS ( sz lz az --> z )
-  OVER 0= IF 2DROP DROP 0 ELSE ( 0 bei 1/7 )
-    2DUP M+ BEGIN 1- DUP @ 0= NOT UNTIL 
-    1+ OVER MAX ( sz lz az ez )
-    ( DUP ERGEBNIS ! ( nicht wegen 0 1 OPERAND1 )
-    2DUP = IF 2DROP 2DROP 0 ELSE
-      OVER M- ( sz lz az lneu )
-      OVER @ 0C 000 MLIT AND 0=
-      OVER 1 = AND IF
-        DROP @ ELSE ( warum war da -1 ERGEBNIS +! )
-          OVER 1- !
-          1- 04 000 MLIT OR
-          END_IF 
-      SWAP DROP 
-      SWAP IF MINUS END_IF
-      END_IF
-    END_IF
+  OVER IF
+    OVER 1 = ( falls lz=1 )
+    OVER @ 0C 000 MLIT AND 0= AND ( und az@ kleiner 4000 )
+    IF @ SWAP DROP SWAP IF MINUS END_IF 
+      ELSE SLX->ERGEBNIS_KURZ END_IF ( z )
+    ELSE 2DROP DROP 0 END_IF ( 0 zum Beispiel bei 1/7 )
   ;
-0 8 C SLX->ERGEBNIS M.
+
+0 11 1A01 SLX->ERGEBNIS M. ( 5A00 )
+1A00 @ M. ( 0011 )
 
 : OPERAND->SLX ( op --> sx lx ax )
   DUP @ ( op x )
@@ -776,7 +793,7 @@ A 8 DUMP
   ROT ROT ( sx op xabs )
   DUP 04 000 MLIT AND IF
     SWAP DROP
-    3FFF AND
+    UBIT @ IF -1 ELSE 3FFF END_IF AND
     DUP @ SWAP 1+
     ELSE
       OVER ! 1 SWAP 
@@ -787,7 +804,7 @@ A 8 DUMP
 OPERAND1 OPERAND->SLX M. M. M.
 -77 OPERAND1 !
 OPERAND1 OPERAND->SLX M. M. M.
-5800 OPERAND1 !
+05 0800 MLIT OPERAND1 !
 OPERAND1 OPERAND->SLX M. M. M.
 
 
@@ -795,16 +812,16 @@ OPERAND1 OPERAND->SLX M. M. M.
 
 
 
-
+: ERGEBNIS_NEU! ( ergneu --> )
+  DUP SPEICHERENDE @ LT NOT IF " INIT" INTERPRET 0369 ERROR END_IF
+  ERGEBNIS ! ;
 
 : SPEICHERHOL ( l --> addr )
   ERGEBNIS @ 2DUP !
-  1+ 2DUP M+ ERGEBNIS !
+  1+ 2DUP M+ ERGEBNIS_NEU!
   2DUP SWAP 0 FILL
   SWAP DROP
-ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
   ;
-
 
 : 2OPERANDEN->2SLX ( op1 op2 --> sx lx ax sy ly ay az )
   OPERAND2 !
@@ -817,16 +834,16 @@ ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF
   ;
 
 77 88 2OPERANDEN->2SLX M. M. M. M. M. M. M.
-77 5800 2OPERANDEN->2SLX M. M. M. M. M. M. M.
+77 05 0800 MLIT 2OPERANDEN->2SLX M. M. M. M. M. M. M.
 </sekt>
 
 <sekt inhalt="+ - * /MOD .">
 : + ( x y --> z )
-  2OPERANDEN->2SLX ADDIER SLX->ERGEBNIS ;
+  2OPERANDEN->2SLX ADDIER TRIM SLX->ERGEBNIS ;
 : - ( x y --> z )
   MINUS + ;
 : * ( x y --> z )
-  2OPERANDEN->2SLX SMUL SLX->ERGEBNIS ;
+  2OPERANDEN->2SLX SMUL TRIM SLX->ERGEBNIS ;
 
 
 IMMEDIATE: RECURSE LFA @ 4 M+ COMPILE, ;
@@ -843,8 +860,8 @@ IMMEDIATE: RECURSE LFA @ 4 M+ COMPILE, ;
     ROT ROT *
     ELSE DROP 1 SCHIEB ! END_IF 
   2OPERANDEN->2SLX SDIV
-  SLX->ERGEBNIS >R 
-  SLX->ERGEBNIS R>
+  TRIM SLX->ERGEBNIS >R 
+  TRIM SLX->ERGEBNIS R>
   SCHIEB @ 1- IF 
     SWAP SCHIEB @ RECURSE SWAP DROP
     SWAP END_IF
@@ -896,26 +913,47 @@ ZAHLENSPEICHER @ VARIABLE BLOCKENDE
 : HAUPTRECHNUNG ( erg --> ) ERGEBNIS ! ;
 : RECHENBLOCK BLOCKENDE @ BLOCKANFANG !
   ERGEBNIS @ BLOCKENDE ! ;
-: INIT ZAHLENSPEICHER @ ERGEBNIS ! RECHENBLOCK RECHENBLOCK ;
+: SPEICHERDA ( adr --> flag )
+  0 OVER ! DUP @ SWAP -1 OVER ! NOOP @ 1+ OR 0= ;
+: INIT
+  0 1C00
+  07 000 MLIT SPEICHERDA IF 2DROP -1 07 000 MLIT END_IF
+  06 000 MLIT SPEICHERDA IF 2DROP -1 06 000 MLIT END_IF
+  04 000 MLIT SPEICHERDA IF 2DROP -1 04 000 MLIT END_IF
+  2000
+  05 FFF MLIT SPEICHERDA IF DROP 06 000 MLIT END_IF
+  06 FFF MLIT SPEICHERDA IF DROP 07 000 MLIT END_IF
+  07 7FF MLIT SPEICHERDA IF DROP 07 800 MLIT END_IF
+  SPEICHERENDE ! ZAHLENSPEICHER ! UBIT !  
+  ZAHLENSPEICHER @ ERGEBNIS ! RECHENBLOCK RECHENBLOCK
+  ;
+
 INIT
 ERGEBNIS M?
+
 : A+0 ( a --> a+0 ) 
   DUP OPERAND1 !
-  OPERAND1 OPERAND->SLX
+  OPERAND1 OPERAND->SLX ( a sz lz az )
   DUP OPERAND1 M- IF
-    OVER ERGEBNIS @ 1+ SWAP MOVE ( SPEICHERHOL will hier nicht gehen )
-    ERGEBNIS @ 1+ OVER 1+ ERGEBNIS +! ( noch nicht ganz )
-    ERGEBNIS @ SPEICHERENDE @ LT NOT IF 0369 ERROR END_IF ( da ist es passiert )
-    SLX->ERGEBNIS SWAP DROP
-    ELSE 2DROP DROP END_IF
+    ERGEBNIS @ 1+ SWAP OVER 2OVER ( a sz lz erg+1 az erg+1 lz erg+1 )
+    OVER M+ ERGEBNIS_NEU!         ( a sz lz erg+1 az erg+1 lz )
+    MOVE SLX->ERGEBNIS_KURZ       ( a a+0 )
+    SWAP DROP                     ( a+0 )
+    ELSE 2DROP DROP END_IF        ( a+0 )
   ;
+
+05 0A00 MLIT A+0 M.
+
 : B+0 ( a b --> a+0 b+0 )
   SWAP A+0 SWAP A+0 ;
 </sekt>
 
 
 
-<sekt inhalt="Anwenden in / MOD GGT BK...">
+<sekt inhalt="Anwenden in + - * / MOD GGT BK...">
+: + ( x y --> z ) NEBENRECHNUNG ROT ROT + SWAP HAUPTRECHNUNG A+0 ;
+: - ( x y --> z ) NEBENRECHNUNG ROT ROT - SWAP HAUPTRECHNUNG A+0 ;
+: * ( x y --> z ) NEBENRECHNUNG ROT ROT * SWAP HAUPTRECHNUNG A+0 ;
 : / ( b d --> q )
   NEBENRECHNUNG ROT ROT 
   /MOD SWAP DROP
@@ -980,11 +1018,8 @@ ERGEBNIS M?
   ROT HAUPTRECHNUNG SWAP A+0 SWAP
   ;
 
+( zum Testen erst nur Zahleneingabe mit N" )
 22 WORD: N" ( /number/  --> n ) NNUMBER DROP ;
-
-
-
-( REPLACE: NUMBER NNUMBER ;
 
 N" 111111111111111" DUP * DUP . DUP M.
 N" 111111111111111" DUP . DUP M.
@@ -1009,6 +1044,19 @@ N" 000002330657FDD698" DUP .
 N" 000002330657FDD698" N" 4C0CF598D3" * .
 N" 000002330657FDD698" N" 4C0CF598D2" * .
 
+
+( wenn alles so geht, kann es richtig losgehen )<id id="NNUMBER"/>
+: REPLACE: ( /name/ ) 
+  CSP! ( oo )
+  20 WORD FIND DUP IF 
+    LCFA DROP 1+ ( pfa
+(    HERE OVER M- 1- JRBIT XSETBT SWAP !
+    HERE SWAP DP ! DUP COMPILE, RETURN , DP !
+    1 STAT !
+    ELSE 2DROP 3 ERROR END_IF ;
+
+REPLACE: NUMBER NNUMBER ;
+111111111111111 DUP * .
 
 
 
@@ -1059,7 +1107,7 @@ N" 000002330657FDD698" N" 4C0CF598D2" * .
     HAUPTRECHNUNG
     END_IF
   ;
-: B. SWAP . . ;
+: B. SWAP . . ; ( muss hier nochmal stehen )
 
 777 99 BK B.
 INIT
@@ -1067,7 +1115,7 @@ INIT
 
 <sekt inhalt="Array-Objekte">
 : ZERLEG ( a --> adr i )
-  3FFF AND DUP 1+ SWAP @ ;
+  UBIT @ IF -1 ELSE 3FFF END_IF AND DUP 1+ SWAP @ ;
 
 N" 111111111111111" DUP * DUP .
 DUP ZERLEG SWAP M. M.
@@ -1078,7 +1126,8 @@ DUP ZERLEG SWAP M. M.
       END_IF END_IF
   ;
 
-: L ( a i -> b ) OVER OBJ? IF
+: L ( a i -> b )
+  OVER OBJ? IF
     SWAP ZERLEG 3FFF AND ( i adr j )
     ROT 2DUP ( adr j i j i )
     > IF SWAP DROP M+ @ ELSE 2DROP DROP 0 END_IF
@@ -1128,7 +1177,7 @@ DUP ZERLEG SWAP M. M.
      ." ] "
     ELSE . END_IF
   ;
-: B. SWAP . . ;
+: B. SWAP . . ; ( und hier nochmal )
 
 7 DUP .
 2 9 H DUP .
@@ -1141,7 +1190,7 @@ DUP ZERLEG SWAP M. M.
 3 0 H DUP .
 2 0 H DUP .
 2 2444 H DUP .
-0 N" 7777777" H DUP .
+0 7777777 H DUP .
 2 0 H DUP .
 
 
@@ -1189,9 +1238,10 @@ DUP ZERLEG SWAP M. M.
   DUP OBJ? IF
     ZERLEG 3FFF AND                ( adr n )
       BEGIN DUP WHILE SWAP         ( n adr )
-        CR OVER M. DUP M. DUP @ 
-        DUP M. DUP ABS 3FFF > NOT IF -1 M. -1 M. ELSE DUP ABS ZERLEG M. M. END_IF
-        DUP . RECURSE             ( n adr )
+        CR OVER M. DUP M. DUP @    ( n adr a )
+        DUP M. DUP ABS 3FFF > NOT IF -1 M. -1 M.
+          ELSE DUP ABS ZERLEG M. M. END_IF
+        DUP . RECURSE              ( n adr )
         1+ SWAP 1-                 ( adr+1 n-1 )
         REPEAT                     ( adr+n 0 )
     2DROP                          ( )
@@ -1201,11 +1251,80 @@ DUP ZERLEG SWAP M. M.
 [ 12 18 1B ] OBJDUMP
 [ [ 12 18 1B ] [ 1E 21 24 ] ] OBJDUMP
 
+: OBJ_STRUCT_COPY ( obj --> copy )
+  DUP OBJ? IF
+    ERGEBNIS @ 04 000 MLIT OR SWAP   ( copy obj )
+    ZERLEG DUP ERGEBNIS @ ! 3FFF AND ( copy adr n )
+    ERGEBNIS @ 1+ SWAP               ( copy adr erg+1 n )
+    2DUP M+ ERGEBNIS_NEU!            ( copy adr erg+1 n )
+    ROT ROT BEGIN                    ( copy n adr erg+1 )
+      OVER @ RECURSE OVER !          ( copy n adr erg+1 )
+      ROT 1- DUP WHILE               ( copy adr erg+1 n-1 )
+        ROT 1+ ROT 1+ REPEAT         ( copy n-1 adr+1 erg+2 )
+    2DROP DROP                       ( copy )
+    ELSE A+0 END_IF
+  ;
+
+[ 111 222 333 ] DUP M. OBJ_STRUCT_COPY M.
+[ [ 1  1 ] [ 3 2 ^ 3 4 ^ ] ] DUP M. OBJ_STRUCT_COPY M.
+
+: SIZE ( obj --> n )
+  DUP OBJ? IF
+    ZERLEG SWAP DROP 3FFF AND 
+    ELSE DROP 1 END_IF 
+  ;
+
+0 VARIABLE AMERK
+0 VARIABLE ACBIT
+0 VARIABLE ADBIT
+: ADEBUG1 ACBIT @ IF CR CR ." ADEBUG1 " ERGEBNIS M? >R 2OVER B. 2DUP B. R> DUP . END_IF -1 2D04 ! ;
+: ADEBUG2 0 2D04 ! ACBIT @ IF CR CR ." ADEBUG2 " ERGEBNIS M? OVER . DUP . END_IF ;
+
+: [A*x-Y*Z]/gx ( A gx x Y Z --> A' x )
+  ( L0=nr L1=Nj L2=Nk L3=j L4=k L5=Y L6=Z L7=alternenner )
+  8 LOCAL NEBENRECHNUNG L0 !
+  ADEBUG1
+  OVER SIZE L1 ! DUP SIZE L2 !
+  L6 ! L5 ! SWAP L7 !
+  L1 @ L3 ! BEGIN -1 L3 +!
+    OVER L3 @ L ( mat nenner mat[L3] )
+    L2 @ L4 ! BEGIN -1 L4 +! ( CR L3 M? L4 M? ERGEBNIS M?
+      NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner )
+      OVER L4 @ L OVER *
+      L5 @ L3 @ L L6 @ L4 @ L * -
+      L7 @ / ( mat erg mat[L3] nenner bijneu )
+      2SWAP SWAP ( mat nenner bijneu mat[L3] erg )
+      HAUPTRECHNUNG SWAP A+0 ( mat nenner mat[L3] bijneu+0 )
+      SWAP L4 @ ROT H ( mat nenner mat[L3]neu )
+      L4 @ 0= UNTIL
+    ROT L3 @ ROT H SWAP ( matneu nenner )
+    L3 @ 0= UNTIL
+  A+0 ( verschiebt nenner hinter matneu )
+  L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0 ( A' x )
+  -1 AMERK +!
+  ADEBUG2
+  END_LOCAL
+  ;
+
+( DECIMAL
+( [ [ 1   1   1    1 ]
+(   [ 2   4   8   16 ]
+(   [ 3   9  27   81 ]
+(   [ 4  16  64  256 ] ] 1 SP ?
+( 1 [ 2 2 3 4 ] [ 0 1 1 1 ] [A*x-Y*Z]/gx OVER . DUP . 
+( [ [ 1 -1 -1 -1 ] [ 2 2 6 14 ] [ 3 6 24 78 ] [ 4 12 60 252 ] ] 1 ok
+( 2 [ -1 3 6 12 ] [ 2 1 6 14 ] [A*x-Y*Z]/gx OVER . DUP . 
+(  [ [ 4 -1 4 12 ] [ -2 1 -6 -14 ] [ -6 6 12 72 ] [ -16 12 48 336 ] ] 2 ok
+( 12 [ 4 -6 14 48 ] [ -6 6 10 72 ] [A*x-Y*Z]/gx OVER . DUP . 
+( [ [ 36 -18 4 -72 ] [ -30 24 -6 132 ] [ 6 -6 2 -72 ] [ 48 -72 48 288 ] ] 12 140 ok
+( 288 [ -72 132 -72 300 ] [ 48 -72 48 276 ] [A*x-Y*Z]/gx OVER . DUP . 
+(  [ [ 1152 -864 384 -72 ] [ -1248 1368 -672 132 ] [ 432 -576 336 -72 ] [ -48 72 -48 12 ] ] 288 ok
+
 : INVERTIEREN ( matrix dim --> invmat nenner ) <h href="INVERTIEREN.xml" />
   ( L0=nr L1=N L2=i L3=j L4=k L5=Y L6=Z L7=alternenner )
   8 LOCAL NEBENRECHNUNG L0 !
   L1 ! 1 ( mat nenner )
-  L1 @ L2 ! BEGIN -1 L2 +! ( CR L2 M? ERGEBNIS M?
+  0 L2 ! BEGIN ( CR L2 M? ERGEBNIS M?
     L7 ! ( mat ) 0 L5 ! 0 L6 !
     DUP L2 @ L L2 @ L ( mat neuernenner )
     L1 @ L3 ! BEGIN -1 L3 +!
@@ -1214,25 +1333,9 @@ DUP ZERLEG SWAP M. M.
       L3 @ 0= UNTIL
     L5 @ L2 @ L L7 @ + L5 @ L2 @ ROT H L5 !
     L6 @ L2 @ L L7 @ - L6 @ L2 @ ROT H L6 !
-    L1 @ L3 ! BEGIN -1 L3 +!
-      OVER L3 @ L ( mat nenner mat[L3] )
-      L1 @ L4 ! BEGIN -1 L4 +! ( CR L3 M? L4 M? ERGEBNIS M?
-        NEBENRECHNUNG ROT ROT SWAP ( mat erg mat[L3] nenner )
-        OVER L4 @ L OVER *
-        L5 @ L3 @ L L6 @ L4 @ L * -
-        L7 @ / ( mat erg mat[L3] nenner bijneu )
-        2SWAP SWAP ( mat nenner bijneu mat[L3] erg )
-        HAUPTRECHNUNG SWAP A+0 ( mat nenner mat[L3] bijneu+0 )
-        SWAP L4 @ ROT H ( mat nenner mat[L3]neu )
-        L4 @ 0= UNTIL
-      ROT L3 @ ROT H SWAP ( matneu nenner )
-      L3 @ 0= UNTIL
-    A+0 ( verschiebt nenner hinter matneu )
-    ( RECHENBLOCK )
-    ( CR ." vor 1. OBJ+0 " ERGEBNIS M? ( OVER OBJDUMP DUP . DUP ABS M.
-    L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0
-    ( ." nach 1. OBJ+0 " ERGEBNIS M? ( OVER OBJDUMP DUP . DUP ABS M.
-    L2 @ 0= UNTIL
+    L7 @ SWAP L5 @ L6 @ [A*x-Y*Z]/gx
+    1 L2 +! L2 @ L1 @ = UNTIL
+  L0 @ HAUPTRECHNUNG SWAP OBJ+0 SWAP A+0 ( A' x )
   END_LOCAL
   ;
 
@@ -1327,7 +1430,7 @@ ERGEBNIS M?
 INIT
 8 VANDERMONDEMATRIX
 ERGEBNIS M?
-8 INVERTIEREN
+( 8 INVERTIEREN ( nicht mehr wegen [A*x-Y*Z]/gx in INVERTIEREN
 OVER . DUP .
 ERGEBNIS M?
 ( herauskommen soll [ [ 8FB77F0C000000 -FB811E55000000 ... 1D33190000 ] ] 11F6EFE1800000
@@ -1336,7 +1439,7 @@ ERGEBNIS M?
 INIT
 9 VANDERMONDEMATRIX
 ERGEBNIS M?
-9 INVERTIEREN
+9 ( INVERTIEREN
 OVER . DUP .
 ERGEBNIS M?
 ( herauskommen soll [ [ 37F3F5B381040000000 ... 11F6EFE1800000 ] ] 6378D13F1E40000000
@@ -1345,7 +1448,7 @@ ERGEBNIS M?
 INIT
 0A VANDERMONDEMATRIX
 ERGEBNIS M?
-0A INVERTIEREN
+0A ( INVERTIEREN
 OVER . DUP .
 ERGEBNIS M?
 ( herauskommen soll [ [ D726B3E61B37C18000000000 ... 6378D13F1E40000000 ] ] 1583DECA35EBF9C000000000
@@ -1354,17 +1457,14 @@ ERGEBNIS M?
 INIT
 0B VANDERMONDEMATRIX
 ERGEBNIS M?
-0B INVERTIEREN
-OVER . DUP .
-ERGEBNIS M?
+( 0B INVERTIEREN OVER . DUP . ERGEBNIS M?
 ( herauskommen soll [ [ 2331530F3797CA8619C400000000000 -57FB4FA60AFB7A4F406A00000000000 ... 1583DECA35EBF9C000000000 ] ] 333078D050DCC97D3CC00000000000
 ( gekürzt [ [ -1A2BE700 416DC180 -82DB8300 ... -14A A5 -37 B -1 ] ] -2611500 ok
 
 INIT
 0C VANDERMONDEMATRIX
 ERGEBNIS M?
-( 0C INVERTIEREN OVER . DUP .
-ERGEBNIS M?
+( 0C INVERTIEREN OVER . DUP . ERGEBNIS M?
 ( herauskommen soll 
 ( OVER . DUP . [ [ 1569BD000 -3AE2C7C00 82DB83000 ... -318 1EF -DC 42 -C 1 ] ] 1C8CFC00 ok
 
@@ -1380,7 +1480,7 @@ INIT
   [ 454 33 555 934 655 633 ]
   ] 
 DUP .
-6 INVERTIEREN ( mat dim --> invmat nenner )
+5 INVERTIEREN ( mat dim --> invmat nenner )
 OVER .
 DUP .
 </sekt>
@@ -1393,20 +1493,11 @@ DUP .
   DROP ;
 
 : WLIST
-  LFA @ BEGIN ( CR ) DUP M.
+  LFA @ BEGIN ( CR ) DUP 4 M+ M.
     DUP 1+ @ OVER 2 M+ @ TYPE 20 EMIT 
     DUP @ WHILE DUP @ M+ REPEAT
   DROP
   ;
-
-: REPLACE: ( /name/ ) 
-  CSP! ( oo )
-  20 WORD FIND DUP IF 
-    LCFA DROP 1+ ( pfa
-(    HERE OVER M- 1- JRBIT XSETBT SWAP !
-    HERE SWAP DP ! DUP COMPILE, RETURN , DP !
-    1 STAT !
-    ELSE 2DROP 3 ERROR END_IF ;
 
 : FORGET ( /name/ )
   20 WORD FIND IF 
@@ -1433,7 +1524,7 @@ DUP .
 STRG: ^G 7 EMIT ." /1xPIEP/" ;
 STRG: ^F 7 EMIT ." QUIT" QUIT ;
 STRG: ^A ." Angehalten für genau eine Eingabezeile: "
-  CR FA00 100 EXPECT INTERPRET ." ok";
+  CR 3A00 100 EXPECT INTERPRET ." ok";
 
 : QUERY ( adr --> n ) TIB @ 100 EXPECT ;
 
@@ -1446,9 +1537,6 @@ IMMEDIATE: (*REM*)
 
 <sekt inhalt="Reste, die schon weggelassen sind">
 (*REM*)
-  RAMP1 VARIABLE RAMP3 ( RAMP3 TIB RAMP1
-: RAMBUF ( /name/  n --> )
-  MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her )
 
 ( - LOOP's - sind aber sehr langsam )
 : I RP @ 1+ @ ;
@@ -1468,11 +1556,6 @@ IMMEDIATE: +LOOP COMPILE (+LOOP) 0BRANCH, ;
 
 IMMEDIATE: () 0 WORD 2DROP ;
 : B. ( a b --> ) SWAP M. M. ;
-: 2@ ( adr --> a b )
-  DUP 1+ @ SWAP @ ;
-: 2! ( a b adr --> )
-  SWAP OVER ! 1+ ! ;
-: 2? 2@ B. ;
 
 : LDUMP LFA @ HERE OVER M- DUMP ;
 
@@ -1485,51 +1568,6 @@ D004 CONSTANT UHR
 D005 CONSTANT SWTI
 D00D CONSTANT UHRL
 2D05 CONSTANT XOFFINPUT
-
-( - "Platinen befestigen und entfernen" )
-20 RAMBUF TLISTE
-TLISTE VARIABLE TLISTENZEIGER
-: TLISTY 
-  TLISTENZEIGER @ TLISTE BEGIN 
-    DUP @ CR DUP M. 3 M- 2@ SWAP TYPE 
-    1+ 2DUP = UNTIL 2DROP ;
-
-0 VARIABLE REMOPFA
-0 VARIABLE STATMERK
-0 VARIABLE EXXIUHR
-: EXXI
-  UHRL @ >R
-  STAT @ STATMERK ! 0 STAT ! ( eigentlich >R )
-  TLISTE
-  BEGIN DUP TLISTENZEIGER @ LT WHILE
-    DUP >R @ EXECUTE R> 1+ REPEAT DROP
-  STATMERK @ STAT ! 
-  UHRL @ R> M- EXXIUHR ! 
-  ;
-( ' EXXI 6 1+ M- 6000 OR 6 !
-' EXXI 4000 M+ 16 ! ( CR geht momentan +F9XX )
-
-: ENTFERNE 
-  20 WORD FIND LCFA DROP 1+
-  ( DUP 0= IF 3 ERROR END_IF )
-  0 REMOPFA !
-  TLISTENZEIGER @ TLISTE > IF
-    TLISTENZEIGER @ TLISTE DO
-      DUP I @ = IF
-        1 REMOPFA !
-        -1 TLISTENZEIGER +!
-        END_IF
-      REMOPFA @ IF
-        I 1+ @ I !
-        END_IF
-      LOOP END_IF
-  REMOPFA !
-  ;
-  
-: BEFESTIGE ENTFERNE
-  REMOPFA @ TLISTENZEIGER @ !
-  1 TLISTENZEIGER +! 
-  ;
 
 
 : DABS ( h l --> h' l' )
@@ -1669,7 +1707,7 @@ WLIST
 
 HERE M.
 
-( erreichte Adresse in Textspeicher E000-FFFF )
+( erreichte Adresse in Textspeicher 3000-3FFF )
 
 BZEIG M?
 
@@ -1720,27 +1758,8 @@ FORGET LEDS
 HERE M. BZEIG M?
 
 
-
-
-
-
-
-
-
-( Also an der Stelle nach FFINIT1SMUL.TXT hab ich jetzt )
-( N" ( /number/  -> n        liest bis " eine grosse ganze Zahl ein
-(                            kleine ganze Zahlen wie bisher eingeben
-( + - * / /MOD MOD ^  und rechnet damit
-( .   a -->                 und gibt sie aus
-( BK  a b --> a' b'         Kürzen
-( GGT a b --> ggt           groesster gemeinsamer Teiler
-( 
-( also direkt eingeben und mit + - * / rechnen geht hier noch nicht
-
-
-( ERGEBNIS ist unpassend gewählter Variablenname, 
-( bezeichnet ab welcher Adresse das nächste Ergebnis gespeichert wird,
-( Platz dafür ist von 1400H bis 1FFFH, aktuell erreicht: )
+( ERGEBNIS bezeichnet, ab welcher Adresse das nächste Ergebnis gespeichert wird,
+( Platz dafür ist von ZAHLENSPEICHER @ bis 1 vor SPEICHERENDE @, aktuell erreicht: )
  
 ERGEBNIS M? ( Zahlenspeicher gefuellt bis ) 
 
@@ -1748,7 +1767,7 @@ ZAHLENSPEICHER @ ERGEBNIS ! ( Zahlenspeicher leeren )
 
 ERGEBNIS M?
 
-N" 111111111111111" DUP * .
+111111111111111 DUP * .
 
 ERGEBNIS M?
 
@@ -1763,20 +1782,18 @@ ERGEBNIS M?
 : HEX 10 BASE ! ;
 : DECIMAL 0A BASE ! ;
 
-HEX N" 10000"
+HEX 10000
 DECIMAL DUP .
 HEX DUP .
 
-HEX N" 100000000"
+HEX 100000000
 DECIMAL DUP .
 HEX DUP .
 </sekt>
 
 <sekt inhalt="Multiproc.">
-REPLACE: NUMBER NNUMBER ; ( kann auch weiter hoch...
 : ? @ . ;
 
-( EXXI reaktivieren, muss dann aus den "nicht mehr verwendeten" noch raus...
 : 2@ ( adr --> a b )
   DUP 1+ @ SWAP @ ;
 : 2! ( a b adr --> )
@@ -1787,6 +1804,7 @@ XBIT VARIABLE RAMP3 ( RAMP3 TIB RAMP1
 : RAMBUF ( /name/  n --> )
   MINUS RAMP3 +! RAMP3 @ CONSTANT ; ( oo INDVAR muss da her )
 
+( - "Platinen befestigen und entfernen" )
 20 RAMBUF TLISTE
 TLISTE VARIABLE TLISTENZEIGER
 : TLISTY 
@@ -1831,21 +1849,8 @@ TLISTE VARIABLE TLISTENZEIGER
   1 TLISTENZEIGER +! 
   ;
 
-( zum Ausprobieren:
-( 0 VARIABLE EMAIL_DA
-( : ZUCK EMAIL_DA @ 2D04 ! ;
-(
-( BEFESTIGE ZUCK TLISTY
-( -1 EMAIL_DA !
-( 0 EMAIL_DA !
-( ENTFERNE ZUCK
-
-
-1800 ERGEBNIS !
-
 
 ( jetzt los mit LINKS-RECHTS-OBEN-UNTEN
-1FF0 10 0 FILL
 2804 CONSTANT LINKS-ABGESCHICKT
 2804 CONSTANT RECHTS-ABGESCHICKT
 2805 CONSTANT LINKS-ANGEKOMMEN
@@ -1854,146 +1859,484 @@ TLISTE VARIABLE TLISTENZEIGER
 2806 CONSTANT UNTEN-ABGESCHICKT
 2807 CONSTANT OBEN-ANGEKOMMEN
 2807 CONSTANT UNTEN-ANGEKOMMEN
-2000 CONSTANT RECHTS-BYTES
-2400 CONSTANT UNTEN-BYTES
-2000 CONSTANT LINKS-BYTES
-2400 CONSTANT OBEN-BYTES
--1 VARIABLE IAM1X
--1 VARIABLE IAM1Y	
--1 VARIABLE IAM2X
--1 VARIABLE IAM2Y
+: RECHTS-BYTES 07 800 MLIT ;
+: UNTEN-BYTES 07 C00 MLIT ;
+: LINKS-BYTES 07 800 MLIT ;
+: OBEN-BYTES 07 C00 MLIT ;
+-1 VARIABLE IAM1J
+-1 VARIABLE IAM1K	
+-1 VARIABLE IAM2J
+-1 VARIABLE IAM2K
+0 VARIABLE NJ
+0 VARIABLE NK
 0 VARIABLE LINKS-MERK
 0 VARIABLE OBEN-MERK
 0 VARIABLE RECHTS-MERK
 0 VARIABLE UNTEN-MERK
 
-: ABSCHICKEN ( x y n op adr --> )
-  CR ." abgeschickt nach " . ." mit " 2DROP SWAP . . ;
-: R-ABSCHICKEN ( x y n op --> )
-  BEGIN RECHTS-ANGEKOMMEN @ RECHTS-MERK @ = UNTIL
-  RECHTS-BYTES @
-  SWAP OVER ! 1+ SWAP >R SWAP >R
-  SWAP OVER ! 1+ R> OVER ! 1+ R> SWAP !
+: JK_AUSGEB ( j k char --> )
+  1 LOCAL L0 !
+  ADBIT @ IF
+    CR
+    3A EMIT L0 @ EMIT 20 EMIT 
+    B.
+    L0 @ EMIT 3A EMIT 20 EMIT
+    ELSE 2DROP END_IF
+  END_LOCAL ; 
+
+: R-ABSCHICKEN ( j k Z adr n op --> )
+  RECHTS-ANGEKOMMEN @ RECHTS-MERK @ M- IF ADBIT @ IF CR ." r_wart " END_IF END_IF
+  BEGIN RECHTS-ANGEKOMMEN @ RECHTS-MERK @ M- WHILE REPEAT
+  RECHTS-BYTES ! ( x y Z adr n
+  DUP IF SWAP OVER RECHTS-BYTES 5 M+ SWAP MOVE ( x y Z n
+    ELSE SWAP RECHTS-BYTES 5 M+ ! END_IF
+  DUP RECHTS-BYTES 4 M+ !
+    NEBENRECHNUNG ROT ROT
+    RECHTS-BYTES 6 M+ M+ ERGEBNIS !
+    SPEICHERENDE @ SWAP
+    UBIT @ IF 07 C00 MLIT ELSE 2400 END_IF SPEICHERENDE !
+    OBJ_STRUCT_COPY
+    SWAP SPEICHERENDE !
+    SWAP HAUPTRECHNUNG
+  RECHTS-BYTES 3 M+ ! 2DUP 72 ( r ) JK_AUSGEB
+  RECHTS-BYTES 2 M+ !
+  RECHTS-BYTES 1 M+ !
   RECHTS-ANGEKOMMEN @ NOT 1 AND RECHTS-MERK !
   RECHTS-ANGEKOMMEN @ NOT RECHTS-ABGESCHICKT !
-  CR ." r-abgeschickt"
   ;
-: U-ABSCHICKEN ( x y n op --> )
-  BEGIN UNTEN-ANGEKOMMEN @ UNTEN-MERK @ = UNTIL
-  UNTEN-BYTES @
-  SWAP OVER ! 1+ SWAP >R SWAP >R
-  SWAP OVER ! 1+ R> OVER ! 1+ R> SWAP !
+: U-ABSCHICKEN ( j k Z adr n op --> )
+  UNTEN-ANGEKOMMEN @ UNTEN-MERK @ M- IF ADBIT @ IF CR ." u_wart " END_IF END_IF
+  BEGIN UNTEN-ANGEKOMMEN @ UNTEN-MERK @ M- WHILE REPEAT
+  UNTEN-BYTES !
+  DUP IF SWAP OVER UNTEN-BYTES 5 M+ SWAP MOVE ( j k Z n
+    ELSE SWAP UNTEN-BYTES 5 M+ ! END_IF
+  DUP UNTEN-BYTES 4 M+ !
+    NEBENRECHNUNG ROT ROT
+    UNTEN-BYTES 6 M+ M+ ERGEBNIS !
+    SPEICHERENDE @ SWAP
+    UBIT @ IF 08 000 MLIT ELSE 2800 END_IF SPEICHERENDE !
+    OBJ_STRUCT_COPY
+    SWAP SPEICHERENDE !
+    SWAP HAUPTRECHNUNG
+  UNTEN-BYTES 3 M+ ! 2DUP 75 ( u ) JK_AUSGEB
+  UNTEN-BYTES 2 M+ !
+  UNTEN-BYTES 1 M+ !
   UNTEN-ANGEKOMMEN @ NOT 1 AND UNTEN-MERK !
   UNTEN-ANGEKOMMEN @ NOT UNTEN-ABGESCHICKT !
-  CR ." u-abgeschickt"
   ;
 
-( 1 2 0 0 R-ABSCHICKEN
+: ABSCHICKEN ( j k Z adr n op --> )
+  6 LOCAL
+  L5 ! L4 ! L3 ! L2 ! L1 ! L0 !
+  L0 @ L1 @ L2 @ L3 @ L4 @ L5 @ L0 @ L1 @  ( j k Z adr n op j k )
+  OVER IF 2DROP U-ABSCHICKEN
+    L5 @ 3 = L1 @ 0= NOT AND IF 0 L1 @ L2 @ L3 @ L4 @ 2 R-ABSCHICKEN END_IF
+    L5 @ 3 = IF L2 @ L3 @ L4 @ ( Z adr n )
+      DUP IF INTERPRET ELSE DROP DUP IF EXECUTE ELSE DROP END_IF END_IF
+      END_IF
+    ELSE DUP IF 2DROP R-ABSCHICKEN
+      L5 @ 2 = L5 @ 3 = OR IF L2 @ L3 @ L4 @ ( Z adr n )
+        DUP IF INTERPRET ELSE DROP DUP IF EXECUTE ELSE DROP END_IF END_IF
+        END_IF
+      ELSE 2DROP 2DROP 2SWAP 2DROP L4 @
+        DUP IF INTERPRET ELSE DROP DUP IF EXECUTE ELSE DROP END_IF END_IF
+        END_IF END_IF
+  END_LOCAL
+  ;
+
+( 5 6 1 " 77 . " 1 ABSCHICKEN
+( 77 88 99 1 0 9 0 0 3 ABSCHICKEN
+( 77 88 99 1 1 9 0 0 3 ABSCHICKEN
+( 77 88 99 2 0 9 0 0 3 ABSCHICKEN
+
+( 1 2 0 0 0 1 R-ABSCHICKEN
 ( RECHTS-BYTES 8 DUMP RECHTS-ABGESCHICKT ? RECHTS-ANGEKOMMEN ?
 ( RECHTS-ANGEKOMMEN @ RECHTS-ABGESCHICKT !
-( 5 6 1 9 U-ABSCHICKEN
+( 5 6 1 " 77 . " 1 U-ABSCHICKEN
 ( UNTEN-BYTES 8 DUMP UNTEN-ABGESCHICKT ? UNTEN-ANGEKOMMEN ?
 ( UNTEN-ANGEKOMMEN @ UNTEN-ABGESCHICKT !
 
-: XY-PROC ( x y --> )
-  CR ." XY " OVER . DUP .
-  OVER IAM2X @ LT OVER IAM2Y @ LT AND IF -1 IAM1X ! -1 IAM1Y ! -1 IAM2X ! -1 IAM2Y ! END_IF
-  OVER IAM1X @ = NOT IAM2X @ -1 = AND IF 
-    IAM1X @ -1 = IF OVER IAM1X ! ELSE OVER IAM2X ! END_IF
-    CR IAM1X ? IAM1Y ? IAM2X ? IAM2Y ?
-    2DUP 0 0 U-ABSCHICKEN
-    END_IF
-  DUP IAM1Y @ = NOT IAM2Y @ -1 = AND IF 
-    IAM1Y @ -1 = IF DUP IAM1Y ! ELSE DUP IAM2Y ! END_IF
-    CR IAM1X ? IAM1Y ? IAM2X ? IAM2Y ?
-    2DUP 0 0 R-ABSCHICKEN
-    END_IF
-  2DROP ;
+: ABWART BEGIN AMERK @ WHILE EXXI REPEAT ;
 
-( -1 IAM1X ! -1 IAM1Y ! -1 IAM2X ! -1 IAM2Y ! 
-( OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-( 0 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-( 0 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-( 0 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-( 0 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-( 5 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-( 5 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-( 0 3 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-( 0 3 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-( 5 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-( 5 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-( 0 3 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-( 0 3 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-( 0A 0 XY-PROC OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-
+: JK-PROC ( j k --> )
+  INIT
+  AMERK @ 0= IF -1 AMERK ! END_IF
+  ADBIT @ IF CR ." :K " 2DUP B. ." K: " END_IF
+  OVER IAM2J @ LT OVER IAM2K @ LT AND IF -1 IAM1J ! -1 IAM1K ! -1 IAM2J ! -1 IAM2K ! END_IF
+  OVER IAM1J @ = NOT IAM2J @ -1 = AND IF 
+    IAM1J @ -1 = IF OVER IAM1J ! ELSE OVER IAM2J ! IAM2J @ IAM1J @ M- NJ ! END_IF
+    ADBIT @ IF CR IAM1J M? IAM1K M? IAM2J M? IAM2K M? END_IF
+    OVER 1+ OVER 0 0 0 0 U-ABSCHICKEN
+    END_IF
+  DUP IAM1K @ = NOT IAM2K @ -1 = AND IF 
+    IAM1K @ -1 = IF DUP IAM1K ! ELSE DUP IAM2K ! IAM2K @ IAM1K @ M- NK ! END_IF
+    ADBIT @ IF CR IAM1J M? IAM1K M? IAM2J M? IAM2K M? END_IF
+    OVER OVER 1+ 0 0 0 0 R-ABSCHICKEN
+    END_IF
+  2DROP 
+  IAM2J @ -1 = IAM2K @ -1 = OR IF ABWART ELSE 0 AMERK ! END_IF
+  ;
 
 ( empfangene Bytes jetzt auswerten
+( ENTFERNE L-AUSLES
+( ENTFERNE O-AUSLES
+
+
+: B_AUSLES ( adr --> z adr n )
+  1 LOCAL L0 !
+  L0 @ 3 M+ @
+  L0 @ 5 M+
+  L0 @ 4 M+ @ 0= IF @ END_IF
+  L0 @ 4 M+ @
+  END_LOCAL ; 
+
+: B_AUSGEB ( z adr n char --> z adr n )
+  1 LOCAL L0 !
+  ADBIT @ IF
+    3A EMIT L0 @ EMIT 20 EMIT 
+    ROT DUP . ROT ROT
+    DUP IF 2DUP TYPE 20 EMIT ELSE OVER M. END_IF
+    L0 @ EMIT 3A EMIT 20 EMIT
+    END_IF
+  END_LOCAL ; 
+
+: B_INTERP ( z adr n --> ... )
+  DUP IF INTERPRET ELSE DROP
+    DUP IF EXECUTE ELSE DROP END_IF END_IF
+  ;
 
 : L-AUSLES
   LINKS-MERK @ LINKS-ABGESCHICKT @ = NOT IF
-    LINKS-BYTES @ 0= IF 
-      LINKS-BYTES @ 1+ DUP @ SWAP 1+ @ 1+ 
+    LINKS-BYTES @ 0= IF
+      LINKS-BYTES 1+ DUP @ SWAP 1+ @
       LINKS-ABGESCHICKT @ LINKS-MERK !
       LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-      XY-PROC END_IF
+      JK-PROC
+      END_IF
+    LINKS-BYTES @ 1 = LINKS-BYTES @ 2 = OR IF
+      LINKS-BYTES 2 M+ @ 1- IF ( bei k>0 weiterschicken )
+        LINKS-BYTES 1+ @
+        LINKS-BYTES 2 M+ @ 1- 2DUP 6C ( l ) JK_AUSGEB
+        LINKS-BYTES B_AUSLES LINKS-BYTES @
+        IAM2K @ 1 = IF
+          LINKS-ABGESCHICKT @ LINKS-MERK !
+          LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
+          R-ABSCHICKEN
+          ELSE
+            R-ABSCHICKEN
+            LINKS-BYTES @ 2 = IF
+              LINKS-BYTES B_AUSLES 6D ( m ) B_AUSGEB B_INTERP
+              END_IF
+            LINKS-ABGESCHICKT @ LINKS-MERK !
+            LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
+            END_IF
+        ELSE ( endlich angekommen )
+          LINKS-BYTES B_AUSLES 6E ( n ) B_AUSGEB B_INTERP
+          LINKS-ABGESCHICKT @ LINKS-MERK !
+          LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
+          END_IF
+      END_IF
     END_IF
   ;
 
 : O-AUSLES
   OBEN-MERK @ OBEN-ABGESCHICKT @ = NOT IF
-    OBEN-BYTES @ 0= IF 
-      OBEN-BYTES @ 1+ DUP @ 1+ SWAP 1+ @ 
+    OBEN-BYTES @ 0= IF
+      OBEN-BYTES 1+ DUP @ SWAP 1+ @
       OBEN-ABGESCHICKT @ OBEN-MERK !
       OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
-      XY-PROC END_IF
+      JK-PROC
+      END_IF
+    OBEN-BYTES @ 1 = OBEN-BYTES @ 3 = OR IF
+      OBEN-BYTES 1+ @ 1- IF ( bei j>0 weiterschicken )
+        OBEN-BYTES 1+ @ 1-
+        OBEN-BYTES 2 M+ @ 2DUP 6F ( o ) JK_AUSGEB
+        OBEN-BYTES B_AUSLES OBEN-BYTES @
+        IAM2J @ 1 = IF
+          OBEN-ABGESCHICKT @ OBEN-MERK !
+          OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
+          U-ABSCHICKEN
+          ELSE
+            U-ABSCHICKEN
+            OBEN-BYTES @ 3 = IF
+              OBEN-BYTES 2 M+ @ IF
+                0 ( OBEN-BYTES 1+ @ 1-
+                OBEN-BYTES 2 M+ @
+                OBEN-BYTES B_AUSLES 
+                ROT OBJ_STRUCT_COPY ROT ROT
+                2 R-ABSCHICKEN
+                END_IF
+              OBEN-BYTES B_AUSLES 4D ( M ) B_AUSGEB B_INTERP
+              END_IF
+            OBEN-ABGESCHICKT @ OBEN-MERK !
+            OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
+            END_IF
+        ELSE ( endlich in j angekommen, jetzt dasselbe noch k )
+          OBEN-BYTES 2 M+ @ IF ( bei k>0 nach rechts weiterschicken )
+            OBEN-BYTES 1+ @ 1-
+            OBEN-BYTES 2 M+ @ 2DUP 4F ( O ) JK_AUSGEB
+            OBEN-BYTES B_AUSLES 
+            ROT OBJ_STRUCT_COPY ROT ROT
+            OBEN-BYTES @ 3 = IF
+              2 R-ABSCHICKEN
+              OBEN-BYTES B_AUSLES 4B ( K ) B_AUSGEB B_INTERP
+              ELSE 1 R-ABSCHICKEN END_IF
+            OBEN-ABGESCHICKT @ OBEN-MERK !
+            OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
+            ELSE ( schon in j k angekommen )
+              OBEN-BYTES B_AUSLES 4E ( N ) B_AUSGEB B_INTERP
+              OBEN-ABGESCHICKT @ OBEN-MERK !
+              OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
+              END_IF
+          END_IF
+      END_IF
     END_IF
   ;
 
-( -1 IAM1X ! -1 IAM1Y ! -1 IAM2X ! -1 IAM2Y ! 
-( OBEN-ABGESCHICKT @ OBEN-MERK ! 
-( OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN ! 
-( LINKS-ABGESCHICKT @ LINKS-MERK !
-( LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
-( UNTEN-ANGEKOMMEN @ UNTEN-MERK ! 
-( RECHTS-ANGEKOMMEN @ RECHTS-MERK !
-( LINKS-ABGESCHICKT ? LINKS-MERK ? OBEN-ABGESCHICKT ? OBEN-MERK ? RECHTS-ANGEKOMMEN ? RECHTS-MERK ? UNTEN-ANGEKOMMEN ? UNTEN-MERK ?
-( 0 0 XY-PROC
-( LINKS-ABGESCHICKT ? LINKS-ANGEKOMMEN ?
-( L-AUSLES
-( LINKS-ABGESCHICKT ? LINKS-ANGEKOMMEN ?
-( L-AUSLES
-( LINKS-ABGESCHICKT ? LINKS-ANGEKOMMEN ?
-( L-AUSLES
-( LINKS-ABGESCHICKT ? LINKS-ANGEKOMMEN ?
- 
-( OBEN-ABGESCHICKT ? OBEN-ANGEKOMMEN ?
-( O-AUSLES
-( OBEN-ABGESCHICKT ? OBEN-ANGEKOMMEN ?
-( O-AUSLES
-( OBEN-ABGESCHICKT ? OBEN-ANGEKOMMEN ?
-( O-AUSLES
-( OBEN-ABGESCHICKT ? OBEN-ANGEKOMMEN ?
-
+( vor BEFESTIGE die verwendeten Eingänge rücksetzen
+LINKS-ABGESCHICKT @ LINKS-MERK !
+LINKS-ABGESCHICKT @ LINKS-ANGEKOMMEN !
+OBEN-ABGESCHICKT @ OBEN-MERK !
+OBEN-ABGESCHICKT @ OBEN-ANGEKOMMEN !
+RECHTS-ANGEKOMMEN @ RECHTS-MERK !
+UNTEN-ANGEKOMMEN @ UNTEN-MERK !
 
 BEFESTIGE L-AUSLES
 BEFESTIGE O-AUSLES
 
-( 0 0 XY-PROC 
-( IAM1X ? IAM1Y ? IAM2X ? IAM2Y ?
+( HEX 0 0 JK-PROC 
+( IAM1J ? IAM1K ? IAM2J ? IAM2K ?
+( 9 9 77 "  ." 1 ABSCHICKEN
+( 9 9 77 ' M. 0 1 ABSCHICKEN
+( 9 9 77 0 0 1 ABSCHICKEN ( anschliessend .
+( 9 9 [ [ 1 2 3 ] [ 4 5 6 ] ] ' . 0 1 ABSCHICKEN
+</sekt>
+
+<sekt inhalt="neues Invertieren">
+1C00 ZAHLENSPEICHER ! INIT
+
+0 VARIABLE N
+0 VARIABLE NN
+0 VARIABLE NI
+0 VARIABLE JLOC
+0 VARIABLE KLOC
+0 VARIABLE GXMERK
+
+: M/ ( b d --> r q ) M/MOD SWAP DROP ;
+
+: JLOC! JLOC ! ;
+: KLOC! KLOC ! ;
+: YCOL ( A k --> Y )
+  3 LOCAL
+  OVER SIZE L1 ! L2 ! L0 ! ( L0=A L1=jsize L2=k )
+  0 L1 @ BEGIN 1- DUP L1 ! ( 0 jsize-1 )
+    L0 @ OVER L L2 @ L ( 0 jsize-1 a_jk )
+    H ( Y )
+    L1 @ DUP 0= UNTIL ( Y jsize-1 )
+  DROP ( Y )
+  END_LOCAL
+  ;
+
+[ [ 1 2 ] [ 3 4 ] ] 1 YCOL . ( [ 2 4 ] )
+
+0 VARIABLE XYBIT
+0 VARIABLE XYMERK
+0 VARIABLE ZBIT
+0 VARIABLE ZMERK
+: AXYZ ( A gx --> A' gx' )
+  XYMERK @ DUP 0 L SWAP 1 L ( A gx x Y )
+  ZMERK @ ( A gx x Y Z )
+  [A*x-Y*Z]/gx ( A' gx' )
+  SWAP OBJ_STRUCT_COPY
+  SWAP A+0
+  INIT
+  SWAP OBJ_STRUCT_COPY
+  SWAP A+0
+  ;
+: XYSPEICH ( [ x Y ] --> )
+  OBJ_STRUCT_COPY XYMERK ! -1 XYBIT !
+  XYBIT @ ZBIT @ AND IF 
+    AXYZ 
+    0 XYBIT ! 0 ZBIT ! 0 XYMERK ! 0 ZMERK !
+    END_IF
+  ;
+: ZSPEICH ( Z --> )
+  OBJ_STRUCT_COPY ZMERK ! -1 ZBIT !
+  XYBIT @ ZBIT @ AND IF 
+    AXYZ 
+    0 XYBIT ! 0 ZBIT ! 0 XYMERK ! 0 ZMERK !
+    END_IF
+  ;
+
+REPLACE: ERROR ( n --> )
+  DUP ERRORNR !
+  INIT 
+  IAM1J @ IAM1K @ OR IF
+    IAM1J @ IF NJ @ 1- IAM1J @ - ELSE 0 END_IF
+    IAM1K @ IF NK @ 1- IAM1K @ - ELSE 0 END_IF
+    ERRORNR @ " M. BANF @ 40 TYPE " 3 ABSCHICKEN
+    BEGIN AGAIN
+    ELSE
+      0 STAT !
+      CR IN1 @ IN3 @ IN1 @ M- 1- TYPE ." ???"
+      " FEHLERTEXT" INTERPRET
+      CR ." ERROR - Fehler Nummer " M. 
+      BEGIN AGAIN
+      END_IF
+  ;
+  
+: ZLOS ( A gx --> A' gx' )
+  ADBIT @ IF ." ZLOS " 2DUP B. XYMERK @ . END_IF
+(  OVER OBJ? 2OVER DROP OBJ? OR IF ( falls x oder Y noch nicht da )
+(    NJ @ 1- IAM1J @ - NK @ 1- IAM1K @ - 0 " 0ECB ERROR" 1 ABSCHICKEN
+(    BEGIN AGAIN ( vorläufiger Stop, nichts geht mehr. )
+(    END_IF
+  OVER JLOC @ L OBJ_STRUCT_COPY ADBIT @ IF DUP . END_IF ( A gx Z )
+  NJ @ 1- 0 ROT  ( A gx NJ@-1 0 Z )
+  IAM1J @ IAM1K @ = IF OBJ_STRUCT_COPY KLOC @ G GXMERK @ - H END_IF
+  ADBIT @ IF DUP . END_IF
+  ' ZSPEICH 0 3 ABSCHICKEN
+  ;
+
+: XYLOS ( A gx x --> A' gx' )
+  5 LOCAL
+  ADBIT @ IF ." XYLOS " DUP . END_IF
+  KLOC @ 2OVER DROP SWAP YCOL ADBIT @ IF DUP . END_IF ( A gx x Y )
+  0 NK @ 1- ROT ( A gx x 0 NK@-1 Y )
+  IAM1J @ IAM1K @ = IF OBJ_STRUCT_COPY JLOC @ G GXMERK @ + H END_IF ( A gx x 0 NK@-1 Y+x )
+  ' XYSPEICH 
+  ADBIT @ IF OVER . END_IF ( A gx x 0 NK@ Y addr )
+  L4 ! L3 ! L2 ! L1 ! L0 !
+  L1 @ L2 @ [ L0 @ L3 @ ] L4 @ ( A gx 0 NK@ [ x Y ] addr )
+  0 2 ABSCHICKEN ( A gx )
+  IAM1J @ IAM1K @ = IF 0 NK @ 1- 0 " DROP ZLOS " 2 ABSCHICKEN END_IF ( A' gx' )
+  END_LOCAL
+  ;
+
+( N, NJ, NK werden vorerst beim Matrix Aufteilen gesetzt
+: GINV ( A gx n --> A' gx' )
+  ADBIT @ IF ." GINV " END_IF
+  DUP AMERK ! NN ! DUP GXMERK ! ( A gx )
+  N @ NN @ M- NI !
+  0 NK @ 1- NI @ NJ @ M/ ' JLOC! 0 2 ABSCHICKEN
+  NJ @ 1- 0 NI @ NK @ M/ ' KLOC! 0 3 ABSCHICKEN
+  OVER JLOC @ L KLOC @ L ADBIT @ IF DUP . END_IF ( A gx x )
+  NJ @ 1- 0 ROT ' XYLOS 0 3 ABSCHICKEN
+  NN @ 1- IF 1 1 N @ " N ! " 1 ABSCHICKEN END_IF
+  NN @ 1- IF 1 1 NN @ 1- " GINV " 1 ABSCHICKEN END_IF
+  ;
+
+: klMatAuft ( A gx --> ) ( = kleine Matrix aufteilen )
+  ( L0=A L1=gx L2=nj L3=nk L4=j L5=k L6=A[j] )
+  7 LOCAL
+  L1 ! L0 !
+  NJ @ 1- NK @ 1- 0 " DROP [ [ " 3 ABSCHICKEN
+  0 L2 ! 0 L4 ! BEGIN
+    L0 @ L4 @ L L6 !
+    0 L3 ! 0 L5 ! BEGIN
+      L2 @ L3 @ L6 @ L5 @ L ' A+0 0 1 ABSCHICKEN
+      1 L3 +! L3 @ NK @ = IF 0 L3 ! END_IF
+      1 L5 +! L5 @ N @ = UNTIL
+    1 L2 +! L2 @ NJ @ = IF 0 L2 !
+      NJ @ 1- NK @ 1- 0 " DROP ] [ " 3 ABSCHICKEN
+      END_IF
+    1 L4 +! L4 @ N @ = UNTIL
+  NJ @ 1- NK @ 1- 0 " DROP ] ] " 3 ABSCHICKEN
+  NJ @ 1- NK @ 1- L1 @ 0 0 3 ABSCHICKEN
+  END_LOCAL
+  ;
+
+: INVERTIERE_SCHNELL ( A gx --> A' gx' )
+  N @ GINV 
+  ABWART
+  ;
+
+: a00+d ( A gx d --> A' gx' )
+  ADBIT @ IF ." a00+d " END_IF
+  1 AMERK ! 1 NN ! GXMERK ! ( A gx )
+  0 NK @ 1- 0 ' JLOC! 0 2 ABSCHICKEN
+  NJ @ 1- 0 0 ' KLOC! 0 3 ABSCHICKEN
+  OVER JLOC @ L KLOC @ L DUP . ( A gx b00 )
+  GXMERK @ * OVER + DUP . ( A gx b00*d+gx )
+  0 GXMERK !
+  NJ @ 1- 0 ROT ' XYLOS 0 3 ABSCHICKEN
+  ABWART
+  ;
+
+: 0AMERK! 0 AMERK ! ;
+
+: ZURUECKSCHICKEN ( A gx [ jl kl ] --> bjk )
+  1 LOCAL
+  L0 !
+  OVER
+  L0 @ 0 L L L0 @ 1 L L ( A gx bij )
+  IAM1J @ IF NJ @ IAM1J @ - ELSE 0 END_IF
+  IAM1K @ IF NK @ IAM1K @ - ELSE 0 END_IF
+  ROT ' 0AMERK! 0 1 ABSCHICKEN
+  END_LOCAL
+  ;
+  
+: B(j,k)@ ( j k --> bjk )
+  4 LOCAL
+  L1 ! L0 !
+  L0 @ NJ @ M/MOD L2 !
+  L1 @ NK @ M/MOD L3 !
+  1 AMERK !
+  [ L2 @ L3 @ ] ' ZURUECKSCHICKEN 0 1 ABSCHICKEN
+  ABWART
+  END_LOCAL
+  ;
+
+: AUSGANGSMATRIX_NULLSETZEN
+  NJ @ 1- NK @ 1- 0 ' INIT 0 3 ABSCHICKEN
+  ;
+: HAUPTNENNER ( x ==> x )
+  NJ @ 1- NK @ 1- ROT 0 0 3 ABSCHICKEN
+  ;
+
+: Ajk! ( A ajk jloc kloc --> A' )
+  3 LOCAL
+  L2 ! L1 ! L0 !
+  L1 @ G L2 @ L0 @ A+0 H H
+  END_LOCAL
+  ;
+
+( 0 [ 77 3 4 ] Ajk!
+
+: A(j,k)! ( A ajk j k --> A' )
+  ( L0=aij L1=j L2=k L3=nj L4=nk L5=JLOC L6=KLOC )
+  7 LOCAL L2 ! L1 ! L0 !
+  L1 @ NJ @ M/MOD L5 ! L3 !
+  L2 @ NK @ M/MOD L6 ! L4 !
+  L3 @ L4 @ L0 @ 0 0 1 ABSCHICKEN
+  L3 @ L4 @ L5 @ 0 0 1 ABSCHICKEN
+  L3 @ L4 @ L6 @ ' Ajk! 0 1 ABSCHICKEN
+  END_LOCAL
+  ;
+
+: VANDERMONDEMATRIX_GLEICH_AUFTEILEN ( 0 n --> mat )
+  3 LOCAL
+  N ! 
+  N @ L1 ! BEGIN L1 @ DUP WHILE 1- L1 !
+    N @ L2 ! BEGIN L2 @ DUP WHILE 1- L2 !
+      L1 @ 1+ L2 @ 1+ ^ 
+      ADBIT @ IF CR L1 @ L2 @ B. DUP . END_IF
+      L1 @ L2 @ A(j,k)!
+      REPEAT DROP
+    REPEAT DROP
+  END_LOCAL
+  ;
+
 </sekt>
 
 <sekt inhalt="in den Zustand für Step_12 bringen und wieder RAM generieren">
-
 ( allerdings beim Compilieren von großen ganzen Zahlen im Moment noch 1234 ERROR
 
-
-111111111111111 DUP * .
-
 ( an der Stelle Programm-VHDL-Quelltext für Step_12 ausgeben )
-HEX INIT 
-HERE 0 0 DUMPZ           ( generiert progRAM für P20_FFP.vhd Step_11
-BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM für P20_FFP.vhd Step_11
-3000 2C00 0 DUMPZ        ( generiert stapR   für P20_FFP.vhd Step_11
+HEX INIT
+HERE 0 0 DUMPZ           ( generiert progRAM für P20_FFP.vhd Step_12
+BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM für P20_FFP.vhd Step_12
+3000 2C00 0 DUMPZ        ( generiert stapR   für P20_FFP.vhd Step_12
 </sekt>
 
 <sekt inhalt="noch ein wenig DEMO">
@@ -2003,7 +2346,7 @@ BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM für P20_FFP.vhd Step_11
 
 DECIMAL
 
-[ [ 1 1 ^ 1 2 ^ 1 3 ^ 1 1 ^ ]
+[ [ 1 1 ^ 1 2 ^ 1 3 ^ 1 4 ^ ]
   [ 2 1 ^ 2 2 ^ 2 3 ^ 2 4 ^ ]
   [ 3 1 ^ 3 2 ^ 3 3 ^ 3 4 ^ ]
   [ 4 1 ^ 4 2 ^ 4 3 ^ 4 4 ^ ]
@@ -2018,7 +2361,9 @@ DUP .
 (        [ 432 -576 336 -72 ]       )
 (        [ -48 72 -48 12 ] ] ok     )
 ( und gemeinsamer Nenner: DUP . 288 )
+
+HEX HERE . BZEIG M?
 </sekt>
 
-</FFINIT2>
+</NACH_DEN_AXIOMEN>
 </INIT>
