@@ -49,11 +49,12 @@ Zu beachten ist, was in 7800H…7FFFH gespeichert wird, kann (um unnötige Verbi
  
 <Terminal_1>
   <li> git checkout Step_12 </li>
-  <li> git diff <diff>Step_12...Step_11</diff> </li>
+  <li> git diff Step_12...Step_11 </li>
   </Terminal_1>
 
 <Tcl_Console>
   <li> close_sim -force -quiet </li>
+  <li> source <a>RamINIT.tcl</a> # RAM neu initialisieren </li>
   <li> launch_simulation </li>
   <li> run 200 ms </li>
   </Tcl_Console>
@@ -62,10 +63,10 @@ Zu beachten ist, was in 7800H…7FFFH gespeichert wird, kann (um unnötige Verbi
 
 ok
 <u>HEX</u> ok
-<u>0 0 JK-PROC</u> 2 2 ok
-<u>HERE . BZEIG M?</u> 1947 3A2D ok
-<u>0 2D04 !</u> ok
-<u>0 ADBIT ! 0 UBIT ! INIT</u> ok
+<u>HERE . BZEIG M?</u> 1B5D 3AF4 ok
+<u>0 0 JK-PROC</u> ok
+<u>NJ M? NK M?</u> 2 2 ok
+<u>0 2D04 ! 0 ACBIT ! 0 ADBIT !</u> ok
 <u></u> ok
 <u>DECIMAL</u> ok
 <u>AUSGANGSMATRIX_NULLSETZEN</u> ok
