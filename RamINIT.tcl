@@ -15,14 +15,19 @@ proc kopiere { fh par1 par2 endline } {
       }
 #    puts -nonewline .
     }
-  puts $line
+#  puts $line
   if { $par2 == true } { puts $::write_file $line }
   return true
+  }
+
+proc Hinweis { file } {
+  puts $file "  -- folgender HEX-Code wurde mit RamINIT.tcl eingefügt:"
   }
 
 #3#
 kopiere $read_file_1 true  true  {signal ProgRAM: RAMTYPE:=(}
 puts $write_file ""
+Hinweis $write_file
 kopiere $read_file_2 false false {<DUMPZ>}
 kopiere $read_file_2 false false {<DUMPZ>}
 kopiere $read_file_2 false false {<DUMPZ>}
@@ -31,12 +36,14 @@ puts $write_file ""
 kopiere $read_file_1 false true  {  SHA(10*16-1 downto 9*16),}
 kopiere $read_file_1 true  true  {signal ByteRAM: ByteRAMTYPE:=(}
 puts $write_file ""
+Hinweis $write_file
 kopiere $read_file_2 false false {<DUMPZ>}
 kopiere $read_file_2 true  false {</DUMPZ></ok>}
 puts $write_file ""
 kopiere $read_file_1 false true  {  others=>x"00");}
 kopiere $read_file_1 true  true  {shared variable stapR: stapRAMTYPE:=(}
 puts $write_file ""
+Hinweis $write_file
 kopiere $read_file_2 false false {<DUMPZ>}
 kopiere $read_file_2 true  false {</DUMPZ></ok>}
 puts $write_file ""

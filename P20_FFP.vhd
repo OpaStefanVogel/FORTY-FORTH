@@ -65,6 +65,7 @@ type RAMTYPE is array(0 to 8*1024-1) of STD_LOGIC_VECTOR (15 downto 0);
 -- Programmspeicher 0000H-1FFFH
 signal ProgRAM: RAMTYPE:=(
 
+  -- folgender HEX-Code wurde mit RamINIT.tcl eingefügt:
   x"4010",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 0000-000F
   x"4760",x"A003",x"447D",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"4000",x"A003",x"0010",x"A003", -- 0010-001F
   x"0000",x"3000",x"0001",x"4773",x"0029",x"45E4",x"B200",x"A003",x"FFF8",x"3002",x"0001",x"4773",x"0000",x"2F10",x"A009",x"A003", -- 0020-002F
@@ -520,6 +521,7 @@ signal ProgRAM: RAMTYPE:=(
 type ByteRAMTYPE is array(0 to 4*1024-1) of STD_LOGIC_VECTOR (7 downto 0);
 signal ByteRAM: ByteRAMTYPE:=(
 
+  -- folgender HEX-Code wurde mit RamINIT.tcl eingefügt:
   x"28",x"20",x"7B",x"20",x"7D",x"20",x"43",x"4F",x"4D",x"50",x"49",x"4C",x"45",x"20",x"4D",x"4C", -- 3000-300F
   x"49",x"54",x"20",x"41",x"42",x"53",x"20",x"4C",x"49",x"54",x"2C",x"20",x"28",x"43",x"4F",x"4E", -- 3010-301F
   x"53",x"54",x"41",x"4E",x"54",x"3A",x"29",x"20",x"43",x"4F",x"4E",x"53",x"54",x"41",x"4E",x"54", -- 3020-302F
@@ -703,6 +705,7 @@ signal ByteRAM: ByteRAMTYPE:=(
 type stapRAMTYPE is array(0 to 1024-1) of STD_LOGIC_VECTOR (15 downto 0);
 shared variable stapR: stapRAMTYPE:=(
 
+  -- folgender HEX-Code wurde mit RamINIT.tcl eingefügt:
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C00-2C0F
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C10-2C1F
   x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000", -- 2C20-2C2F
