@@ -9,7 +9,9 @@
 
 Jetzt sollen mehrere Kopien des Prozessors gemeinsam eine Matrix invertieren. Zu diesem Zweck werden die Kopien ebenfalls in einer Matrix zusammengeschaltet. Jeder Prozessor erhält einen linken, rechten, oberen und unteren Nachbar. Am linken Rand zählt als linker Nachbar der Prozessor vom gegenüberliegenden rechten Rand in der gleichen Zeile, dementsprechend auch die Zuordnung an den anderen Rändern.
 
-<object id="SVG_1" data="SVG_zu_R12.svg" width="550" height="260" />
+<object id="SVG_1" data="SVG_zu_R12.svg" width="550" height="260" >
+  --hier sollte <a href="SVG_zu_R12.svg">SVG_zu_R12.svg</a> angezeigt werden--
+  </object>
 
 Der Datenaustausch zwischen den einzelnen Prozessoren erfolgt über die Speicheradressen 7800H…7FFFH, gesteuert über die Adressen 2804H…2807H. <i>Weil sich so ziemlich alle Speicheradressen geändert haben, nochmal eine komplette Übersicht:</i>
 
