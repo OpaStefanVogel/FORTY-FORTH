@@ -16,6 +16,7 @@ end testbench;
 architecture test_Step_12 of testbench is
 
 component top
+  generic ( NJ : integer := 2 ; NK : integer := 2 );
   Port ( 
     CLK: in STD_LOGIC;
     LEDS: out STD_LOGIC_VECTOR (7 downto 0);
