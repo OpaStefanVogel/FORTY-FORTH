@@ -42,7 +42,8 @@ end function;
 signal TESTRAM : ram_type := initramfromfile("RAM.txt");
 
 
-
+############
+1800 ERGEBNIS ! TLISTE TLISTENZEIGER !
 : ZNEU= ( adr1 n1 adr2 n2 --> r )
   ROT OVER = NOT IF DROP DROP DROP 0 ELSE ( adr1 adr2 n2 )
     0 BEGIN 2DUP M- WHILE ( adr1 adr2 n2 0 )
@@ -83,6 +84,28 @@ RETURN ' ZNEU= 04 000 MLIT OR ' Z= 2!
   ( OVER LFA @ SWAP LT IF M." *" OVER M. LFA @ M. END_IF ( vref wenn gebraucht )
   ;
 
+: FINDNEU ( adr n --> lfa r )
+  2 LOCAL
+  L1 ! L0 !
+  0 ( heisst noch nicht gefunden )
+  LFA @ 
+  SMUDGEBIT @ IF DUP @ M+ END_IF
+  BEGIN
+    DUP 1+ DUP @ ( lfa nfa adr )
+    SWAP 1+ @ ( lfa adr n1 )
+    ( 2DUP CR B. 2DUP TYPE
+    ( BEGIN 2DUP M+ 1 M- C@ 0= WHILE 1 M- REPEAT ( ??? momentan nicht )
+    L0 @ L1 @ ( 0 lfa adr1 n1 adr2 n2 )
+    Z= IF SWAP 0= SWAP END_IF ( heisst gefunden )
+    OVER 0= OVER @ 0= NOT AND 
+    OVER DUP @ M+ LFA @ = NOT AND WHILE ( wegen 2xladen )
+      DUP @ M+ REPEAT
+  L1 @
+  ROT 0= IF DROP DROP 0 0 END_IF
+  ( OVER LFA @ SWAP LT IF M." *" OVER M. LFA @ M. END_IF ( vref wenn gebraucht )
+  END_LOCAL
+  ;
+
 " DUP" FINDNEU B.
 " DEPP" FINDNEU B.
 " 77" FINDNEU B.
@@ -90,14 +113,14 @@ RETURN ' ZNEU= 04 000 MLIT OR ' Z= 2!
 " DEPP" FIND B.
 " 77" FIND B.
 ( REPLACE: FIND FINDNEU ;
-: T RETURN ' FINDNEU= 04 000 MLIT OR ' FIND 2! ;
+RETURN ' FINDNEU 04 000 MLIT OR ' FIND 2!
 
 
 : LCFA ( lfa --> cfa ) 3 M+ ;
 
 : INTERPRETNEU ( adr n --> ... )
   4 LOCAL
-  IN1 @ L0 ! IN2 @ L1 @ IN3 @ L2 ! IN4 @ L3 !
+  IN1 @ L0 ! IN2 @ L1 ! IN3 @ L2 ! IN4 @ L3 !
   OVER M+ IN4 !
   DUP IN1 ! DUP IN2 ! IN3 !
   BEGIN
@@ -128,7 +151,9 @@ RETURN ' ZNEU= 04 000 MLIT OR ' Z= 2!
 
 ( " 77 88 * . " INTERPRETNEU
 ( : REPLACE: INTERPRET INTERPRETNEU ;
+RETURN ' INTERPRETNEU 04 000 MLIT OR ' INTERPRET 2!
 
+#####################
 HEX ( ist noch als einzigstes zurückzustellen zum Programmieren )
 0 0 JK-PROC HERE . ( zählt die angeschlossenen Prozessoren )
 
