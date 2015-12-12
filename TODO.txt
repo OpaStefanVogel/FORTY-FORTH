@@ -362,8 +362,13 @@ o wieso geht jetzt ADBIT=-1 allein in Proc00 nicht? Nur wenn alle Poc ADBIT=-1 h
 nö paar OBJ_STRUCT_COPY können auch wieder raus, nö klappt nicht
 ok in MOVE und FILL die >R und R> ersetzen
 .. eine neue Fehlerbehandlung die auf 0 0 zurückwirkt und RESET auch und ROM eventuell.
-.. INIT.xml auch mal durch vivado laufen lassen, dazu NJ=NK=1 machen!
-  .. wenn nicht ganz durch, geht ja auch zwischendrin DUMPZ
+o. INIT.xml auch mal durch vivado laufen lassen, dazu NJ=NK=1 machen!
+  OK wenn nicht ganz durch, geht ja auch zwischendrin DUMPZ
+  OK natürlich nur mit neuem Z= FIND INTERPRET, gute Aussicht damit auch ohne DUMPZ durchzukommen
+  OK jedoch noch ein Fehler drin bei MCODE U+
+  ok aha, weil das neue LCFA schon in IMMEDIATE: COMPILE verwendet wird ok Fehler gefunden
+  .. damit muss ich das LFANEU später mal machen mit
+  .. und auch ob jetzt ohne S3 weiter, also erstmal gründlich Pause
 
 ok auf vivado -mode tcl umstellen ab Step_12 mit
     open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr
@@ -410,5 +415,23 @@ cp ../../../screenlog.0 screenlog.xml
 #dann auch P20_FFP.vhd commit
 #dann Spartan3 .mcs neu programmieren, mit SHA von P20
 #und dann FFINIT1NEU in FFINIT.txt packen.
+
+#(9)nur kurzes screenlog.xml
+rm ~/screenlog.0
+echo '-1 XBIT !' >/dev/ttyAMA0
+#screenlog starten ^AH
+( an der Stelle Programm-VHDL-Quelltext für Step_12 ausgeben )
+HEX INIT
+100 0 0 DUMPZ           ( generiert progRAM für P20_FFP.vhd Step_12
+BANF @ 100 M+ BANF @ -1 DUMPZ  ( generiert byteRAM für P20_FFP.vhd Step_12
+HERE 0 0 DUMPZ           ( generiert progRAM für P20_FFP.vhd Step_12
+BZEIG @ BANF @ -1 DUMPZ  ( generiert byteRAM für P20_FFP.vhd Step_12
+3000 2C00 0 DUMPZ        ( generiert stapR   für P20_FFP.vhd Step_12
+#screenlog anhalten ^AH
+echo '0 XBIT !' >/dev/ttyAMA0
+scp ~/screenlog.0 stefan@192.168.1.5:~/CLONE_GITHUB/FORTY-FORTH/screenlog.xml
+scp INIT.xml stefan@192.168.1.5:~/CLONE_GITHUB/FORTY-FORTH/test_input_file.txt
+#in vivado:
+set_property xsim.view { } [get_filesets sim_1]
 
 #cp TESTFUERNEUES.TXT /dev/ttyAMA0

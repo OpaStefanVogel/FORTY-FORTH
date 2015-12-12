@@ -43,7 +43,7 @@ signal TESTRAM : ram_type := initramfromfile("RAM.txt");
 
 
 ############
-1800 ERGEBNIS ! TLISTE TLISTENZEIGER !
+1800 ERGEBNIS ! 1800 ZAHLENSPEICHER ! TLISTE TLISTENZEIGER ! 2D00 LOCALADRESSE !
 : ZNEU= ( adr1 n1 adr2 n2 --> r )
   ROT OVER = NOT IF DROP DROP DROP 0 ELSE ( adr1 adr2 n2 )
     0 BEGIN 2DUP M- WHILE ( adr1 adr2 n2 0 )
@@ -115,9 +115,6 @@ RETURN ' ZNEU= 04 000 MLIT OR ' Z= 2!
 ( REPLACE: FIND FINDNEU ;
 RETURN ' FINDNEU 04 000 MLIT OR ' FIND 2!
 
-
-: LCFA ( lfa --> cfa ) 3 M+ ;
-
 : INTERPRETNEU ( adr n --> ... )
   4 LOCAL
   IN1 @ L0 ! IN2 @ L1 ! IN3 @ L2 ! IN4 @ L3 !
@@ -129,7 +126,7 @@ RETURN ' FINDNEU 04 000 MLIT OR ' FIND 2!
   DUP WHILE
     2DUP FIND ( adrw nw lfa r )
     DUP IF ( gefunden )
-      2SWAP 2DROP DROP LCFA EXECUTE
+      2SWAP 2DROP LCFA DROP EXECUTE
       ELSE ( nicht gefunden )
         2DROP
         2DUP NUMBER IF ( keine Zahl )
