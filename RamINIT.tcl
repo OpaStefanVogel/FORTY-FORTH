@@ -21,7 +21,7 @@ proc kopiere { fh par1 par2 endline } {
   }
 
 proc Hinweis { file } {
-  puts $file "  -- folgender HEX-Code wurde mit RamINIT.tcl eingefügt:"
+  puts $file "  -- folgender HEX-Code wurde [ exec date ] mit RamINIT.tcl eingefügt:"
   }
 
 #3#
