@@ -362,13 +362,13 @@ o wieso geht jetzt ADBIT=-1 allein in Proc00 nicht? Nur wenn alle Poc ADBIT=-1 h
 nö paar OBJ_STRUCT_COPY können auch wieder raus, nö klappt nicht
 ok in MOVE und FILL die >R und R> ersetzen
 .. eine neue Fehlerbehandlung die auf 0 0 zurückwirkt und RESET auch und ROM eventuell.
-o. INIT.xml auch mal durch vivado laufen lassen, dazu NJ=NK=1 machen!
+ok INIT.xml auch mal durch vivado laufen lassen, dazu NJ=NK=1 machen! ok geht jetzt in 3000 ms
   OK wenn nicht ganz durch, geht ja auch zwischendrin DUMPZ
   OK natürlich nur mit neuem Z= FIND INTERPRET, gute Aussicht damit auch ohne DUMPZ durchzukommen
   OK jedoch noch ein Fehler drin bei MCODE U+
   ok aha, weil das neue LCFA schon in IMMEDIATE: COMPILE verwendet wird ok Fehler gefunden
-  .. damit muss ich das LFANEU später mal machen mit
-  .. und auch ob jetzt ohne S3 weiter, also erstmal gründlich Pause
+  ok damit muss ich das LFANEU später mal machen mit
+  ok und auch ob jetzt ohne S3 weiter, also erstmal gründlich Pause ok ich lass FFINIT.txt stehen
 
 ok auf vivado -mode tcl umstellen ab Step_12 mit
     open_project /home/stefan/CLONE_GITHUB/FORTY-FORTH/project_FFP/project_FFP.xpr
@@ -395,6 +395,7 @@ echo 'HERE 100 M+ DPMERK ! 3400 BANF !' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 echo '020 DPMERK ! 3000 BANF !' >/dev/ttyAMA0
+echo '2D00 LOCALADRESSE !' >/dev/ttyAMA0
 cp FFINIT1NEU.txt /dev/ttyAMA0
 ### wenn einmal bis hierher durchgeĺaufen, dann reicht auch ab jetzt
 cp FFINIT1NEU.txt /dev/ttyAMA0

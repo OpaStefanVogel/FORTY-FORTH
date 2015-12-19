@@ -329,17 +329,20 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
   ;
 
 : Z= ( adr1 n1 adr2 n2 --> r )
-  >R OVER R M- IF R> DROP DROP DROP DROP 0 ELSE
-    R> DROP SWAP 0 BEGIN 2DUP M- WHILE >R >R
-      OVER C@ OVER C@ M- IF DROP DROP 0 0 END_IF
-      DUP IF 1+ SWAP 1+ SWAP END_IF
-      R> R> 1+ REPEAT 2DROP ( neu bei 16 BIT ohne DO LOOP )
-    DROP IF -1 ELSE 0 END_IF
+  ROT OVER = NOT IF DROP DROP DROP 0 ELSE ( adr1 adr2 n2 )
+    0 BEGIN 2DUP M- WHILE ( adr1 adr2 n2 0 )
+      2SWAP ( n2 0 adr1 adr2 )
+      OVER C@ OVER C@ M- IF 2DROP 2DROP 0 0 0 0 ELSE
+        1+ SWAP 1+ SWAP 2SWAP 1+ ( adr1+1 adr2+1 n2 1 )
+        END_IF
+      REPEAT 2SWAP 2DROP ( n2 n2 )
+    DROP IF -1 ELSE 0 END_IF ( flag )
     END_IF ;
-( : Z= DROP SWAP DROP SWAP @ SWAP @ = ;
 
 : FIND ( adr n --> lfa r )
-  >R >R 0 ( heisst noch nicht gefunden )
+  2 LOCAL
+  L1 ! L0 !
+  0 ( heisst noch nicht gefunden )
   LFA @ 
   SMUDGEBIT @ IF DUP @ M+ END_IF
   BEGIN
@@ -347,14 +350,15 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
     SWAP 1+ @ ( lfa adr n1 )
     ( 2DUP CR B. 2DUP TYPE
     ( BEGIN 2DUP M+ 1 M- C@ 0= WHILE 1 M- REPEAT ( ??? momentan nicht )
-    R> R> 2DUP >R >R ( 0 lfa adr1 n1 adr2 n2 )
+    L0 @ L1 @ ( 0 lfa adr1 n1 adr2 n2 )
     Z= IF SWAP 0= SWAP END_IF ( heisst gefunden )
     OVER 0= OVER @ 0= NOT AND 
     OVER DUP @ M+ LFA @ = NOT AND WHILE ( wegen 2xladen )
       DUP @ M+ REPEAT
-  R> DROP R>
+  L1 @
   ROT 0= IF DROP DROP 0 0 END_IF
   ( OVER LFA @ SWAP LT IF M." *" OVER M. LFA @ M. END_IF ( vref wenn gebraucht )
+  END_LOCAL
   ;
 
 : LCFA ( lfa r --> cfa r ) SWAP 3 M+ SWAP ;
@@ -369,16 +373,17 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
   ;
 
 : INTERPRET ( adr n --> ... )
-  IN1 @ >R IN2 @ >R IN3 @ >R IN4 @ >R
+  4 LOCAL
+  IN1 @ L0 ! IN2 @ L1 ! IN3 @ L2 ! IN4 @ L3 !
   OVER M+ IN4 !
   DUP IN1 ! DUP IN2 ! IN3 !
   BEGIN
   ( ... qstack? Stapelpruefen )
-  20 WORD
+  20 WORD ( adrw nw )
   DUP WHILE
-    2DUP FIND 
+    2DUP FIND ( adrw nw lfa r )
     DUP IF ( gefunden )
-      >R >R 2DROP R> R> LCFA DROP EXECUTE
+      2SWAP 2DROP LCFA DROP EXECUTE
       ELSE ( nicht gefunden )
         2DROP
         2DUP NUMBER IF ( keine Zahl )
@@ -390,11 +395,12 @@ IMMEDIATE: ' ( /name/ --> --> pfa )
          ( STAT @ IF SWAP LIT, LIT, END_IF
           ELSE ( eine Zahl )
             ROT DROP SWAP DROP
-            STAT @ IF LIT, END_IF ( oo LIT, fuer gr )
+            STAT @ IF LIT, END_IF
             END_IF
         END_IF
     REPEAT 2DROP
-  R> IN4 ! R> IN3 ! R> IN2 ! R> IN1 !
+  L3 @ IN4 ! L2 @ IN3 ! L1 @ IN2 ! L0 @ IN1 !
+  END_LOCAL
   ;
 
 : QUIT
