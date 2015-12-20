@@ -548,13 +548,9 @@ BZEIG @ 3000 -1 DUMPZ   ( generiert ByteRAM für P20_FFP.vhd Step_10 )
 A017 MCODE MULT_I
 A018 MCODE MULT_II
 : SUPERMULT ( a u adrc adrb n --> a u' adrc' adrb' )
-  >R
+  RP @ -1 M+ DUP RP ! ! NOOP
   BEGIN MULT_I MULT_II UNTIL
-  R> DROP ; ( /;> )
-
-
-
-
+  RP @ 1 M+ RP ! NOOP ; ( /;> )
 
 1401 CONSTANT A
 1601 CONSTANT B
@@ -684,14 +680,17 @@ C 8 DUMP
 <sekt inhalt="Division">
 A014 MCODE DI32 
 : DIV32 ( a b d --> r q )
-  10 BEGIN >R DI32 R> 1- DUP 0= UNTIL 2DROP ;
+  1 LOCAL 10 L0 !
+  BEGIN DI32 L0 @ 1- DUP L0 ! 0= UNTIL DROP
+  END_LOCAL
+  ;
 : M/MOD ( b d --> r q ) 0 ROT ROT DIV32 ;
 
 
 
 : SDIV ( s1 l1 x1 s2 l2 x2 x3 --> s3 l3 x3 s4 l4 r4 )
        ( L0 L1 L2 L3 L4 L5 L6 )
-  7 LOCAL
+  8 LOCAL
   L6 ! L5 ! L4 ! L3 ! L2 ! L1 ! L0 !
 L1 @ L4 @ LT IF L0 @ L1 @ L2 @ 0 0 0 ELSE
   L1 @ 0 BEGIN
@@ -714,7 +713,7 @@ BEGIN WHILE
  1 L4 @ 0 BEGIN ROT
    OVER L2 @ OVER M+ @
    SWAP L5 @ M+ @ NOT
-   U+ SWAP >R OVER L2 @ M+ ! R>
+   U+ SWAP L7 ! OVER L2 @ M+ ! L7 @
    ROT ROT 1+ 2DUP M- 0= UNTIL 2DROP
 (   0 L2 @ L4 @ M+ @ U+ L2 @ L4 @ M+ !
 (   DUP M. 7 EMIT
@@ -830,13 +829,15 @@ OPERAND1 OPERAND->SLX M. M. M.
   ;
 
 : 2OPERANDEN->2SLX ( op1 op2 --> sx lx ax sy ly ay az )
+  1 LOCAL
   OPERAND2 !
   OPERAND1 !
   OPERAND1 OPERAND->SLX
-  OVER >R
+  OVER L0 !
   OPERAND2 OPERAND->SLX
-  OVER R> M+ 1+
+  OVER L0 @ M+ 1+
   SPEICHERHOL
+  END_LOCAL
   ;
 
 77 88 2OPERANDEN->2SLX M. M. M. M. M. M. M.
@@ -854,6 +855,7 @@ OPERAND1 OPERAND->SLX M. M. M.
 
 IMMEDIATE: RECURSE LFA @ 4 M+ COMPILE, ;
 : /MOD ( x y --> r q )
+  1 LOCAL
   DUP 0= IF 0 ERROR END_IF
   DUP OPERAND1 !
   OPERAND1 OPERAND->SLX 
@@ -866,11 +868,12 @@ IMMEDIATE: RECURSE LFA @ 4 M+ COMPILE, ;
     ROT ROT *
     ELSE DROP 1 SCHIEB ! END_IF 
   2OPERANDEN->2SLX SDIV
-  TRIM SLX->ERGEBNIS >R 
-  TRIM SLX->ERGEBNIS R>
+  TRIM SLX->ERGEBNIS L0 ! 
+  TRIM SLX->ERGEBNIS L0 @
   SCHIEB @ 1- IF 
     SWAP SCHIEB @ RECURSE SWAP DROP
     SWAP END_IF
+  END_LOCAL
   ;
 
 : HG0. ( n -->  /hexstring/ )
@@ -1142,27 +1145,28 @@ DUP ZERLEG SWAP M. M.
 : G ( a i -> a i b ) 2DUP L ;
 
 : H ( a i b --> a' )
-  DUP >R
+  2 LOCAL
+  DUP L0 !
   ROT ROT ( b a i )
-  OVER OBJ? 0= OVER 0= AND R> OBJ? 0= AND IF 2DROP ELSE
+  OVER OBJ? 0= OVER 0= AND L0 @ OBJ? 0= AND IF 2DROP ELSE
     OVER OBJ? 0= IF 
       DUP 1+ SPEICHERHOL ( b a i addrneu )
       ROT OVER ! ( b i addrneu )
 (      OVER 1+ OVER 1- ! ( b i addrneu ( aha, macht schon SPEICHERHOL )
       04 000 MLIT OVER 1- +! ( das ist jetzt neu fuer OBJ? )
-      DUP >R M+ ! R> ( addrneu )
+      DUP L0 ! M+ ! L0 @ ( addrneu )
       1- 04 000 MLIT OR
       ELSE
         OVER                 ( b a i a )
         ZERLEG 3FFF AND      ( b a i addr j )
         ROT                  ( b a addr j i )
-        2DUP > IF SWAP DROP ROT >R M+ ! R> ELSE
+        2DUP > IF SWAP DROP ROT L0 ! M+ ! L0 @ ELSE
           DUP 1+ SPEICHERHOL ( b a addr j i addrneu )
-          SWAP >R DUP >R     ( b a addr j addrneu      addrneu i )
-          SWAP MOVE DROP R>  ( b addrneu            i )
+          SWAP L1 ! DUP L0 !     ( b a addr j addrneu      addrneu i )
+          SWAP MOVE DROP L0 @  ( b addrneu            i )
 (          R 1+ OVER 1- !    ( b addrneu                i )
           04 000 MLIT OVER 1- @ OR OVER 1- !   ( das ist jetzt neu fuer OBJ? )
-          SWAP OVER R> M+ !  ( addrneu )
+          SWAP OVER L1 @ M+ !  ( addrneu )
           1- 04 000 MLIT OR  ( a' )
           END_IF
         ZERLEG 3FFF AND      ( adr l )
@@ -1173,6 +1177,7 @@ DUP ZERLEG SWAP M. M.
           END_IF  
         END_IF
     END_IF
+  END_LOCAL
   ;
   
 : . ( obj --> )
@@ -1227,15 +1232,17 @@ DUP ZERLEG SWAP M. M.
 
 <sekt inhalt="Matrix invertieren">
 : OBJ+0 ( obj --> obj+0 )
-  DUP OBJ? IF DUP >R
+  1 LOCAL
+  DUP OBJ? IF DUP L0 !
     ZERLEG 3FFF AND          ( adr n )
     SWAP OVER M+ 1- SWAP     ( eadr-1 n )
       BEGIN DUP WHILE SWAP   ( n eadr-1 )
         DUP @ RECURSE OVER ! ( n eadr-1 )
         1- SWAP 1-           ( eadr-1 n-1 )
         REPEAT               ( adr-1 0 )
-    2DROP R>                 ( obj )
+    2DROP L0 @               ( obj )
     ELSE A+0 END_IF
+  END_LOCAL
   ;
 
 [ 12 18 1B ] OBJ+0 .
@@ -1822,13 +1829,15 @@ TLISTE VARIABLE TLISTENZEIGER
 0 VARIABLE STATMERK
 0 VARIABLE EXXIUHR
 : EXXI
+  1 LOCAL
   ( UHRL @ >R
   STAT @ STATMERK ! 0 STAT ! ( eigentlich >R )
-  TLISTE
-  BEGIN DUP TLISTENZEIGER @ LT WHILE
-    DUP >R @ EXECUTE R> 1+ REPEAT DROP
-  STATMERK @ STAT ! 
-  ( UHRL @ R> M- EXXIUHR ! 
+  TLISTE L0 !
+  BEGIN L0 @ TLISTENZEIGER @ LT WHILE
+    L0 @ @ EXECUTE 1 L0 +! REPEAT
+  STATMERK @ STAT !
+  ( UHRL @ R> M- EXXIUHR !
+  END_LOCAL
   ;
 
 ( EXXI in KEY einbauen
