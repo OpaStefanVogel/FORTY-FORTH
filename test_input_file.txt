@@ -1,19 +1,18 @@
 HEX
 HERE M. BZEIG M?
-0 0 JK-PROC
-NJ ? NK ?
+0 0 JK-PROC NJ M? NK M?
+INIT ZAHLENSPEICHER M? ERGEBNIS M? SPEICHERENDE M?
 0 2D04 ! 0 ACBIT ! 0 ADBIT !
+REPLACE: ADEBUG2 CR ERGEBNIS M? OVER 0 L 0 L . DUP . ;
 
-DECIMAL
+
+10 N !
 AUSGANGSMATRIX_NULLSETZEN
-1 0 0 A(j,k)!   1 0 1 A(j,k)!   1 0 2 A(j,k)!    1 0 3 A(j,k)!  
-2 1 0 A(j,k)!   4 1 1 A(j,k)!   8 1 2 A(j,k)!   16 1 3 A(j,k)!  
-3 2 0 A(j,k)!   9 2 1 A(j,k)!  27 2 2 A(j,k)!   81 2 3 A(j,k)!  
-4 3 0 A(j,k)!  16 3 1 A(j,k)!  64 3 2 A(j,k)!  256 3 3 A(j,k)!  
+N @ VANDERMONDEMATRIX_GLEICH_AUFTEILEN
 1 HAUPTNENNER
 OVER . DUP .
 
-4 N ! INVERTIERE_SCHNELL
+INVERTIERE_SCHNELL
 0 0 B(j,k)@ .
 0 1 B(j,k)@ .
 0 2 B(j,k)@ .
