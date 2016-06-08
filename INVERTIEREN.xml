@@ -150,14 +150,14 @@ function invertieren() {
   Ergebnis3.removeChild(Ergebnis3.lastChild);
   E2=document.createElement("div");Ergebnis3.appendChild(E2);
   ha2 = document.createElement("ha");Ergebnis3.appendChild(ha2);
-  i=0;j=0;k1=0;l1=0;k2=1;l2=1;B=[];
+  i=0;j=0;k1=0;l1=0;k2=1;l2=1;B=[];VAR=1;
     AMERK[k1][l1]=AMERK[k1][l1]-1;
-    AMERK[k1][l2]=AMERK[k1][l2]+1;
+    AMERK[k1][l2]=AMERK[k1][l2]+VAR;
     AMERK[k2][l2]=AMERK[k2][l2]-1;
     AlterNenner=NeuerNenner;
     A11=A[l1][k1]-AlterNenner;
     A22=A[l2][k2]-AlterNenner;
-    A12=A[l1][k2]-AlterNenner;
+    A12=A[l1][k2]-VAR*AlterNenner;
     A21=A[l2][k1]+0;
     NeuerNenner=(A11*A22-A21*A12)/AlterNenner;
     //alert(NeuerNenner);
