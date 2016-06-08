@@ -79,16 +79,16 @@ function invertieren() {
       } 
     PRO[i][j]=PRO[i][j]/NeuerNenner/NMERK;
     } }
-  AMERK=A;A=PRO;
+  AMERK2=A;A=PRO;
   EDISP(hap,n,2);
-  A=AMERK;
+  A=AMERK2;
   //alert(A+"#"+AMERK+"#"+PRO);
 
   Ergehnis2=document.getElementById("Ergebnis2");
   Ergebnis2.removeChild(Ergebnis2.lastChild);
   E2=document.createElement("div");Ergebnis2.appendChild(E2);
   ha2 = document.createElement("ha");Ergebnis2.appendChild(ha2);
-  i=0;
+  i=0;AMERK[i][i]=AMERK[i][i]+1;
     AlterNenner=NeuerNenner;
     NeuerNenner=A[i][i]*1+AlterNenner;
     Y=[];Z=[];
@@ -119,6 +119,88 @@ function invertieren() {
   ck = document.createElement("c"+eval(i%4));
   t = document.createTextNode(BAS(AlterNenner));ck.appendChild(t);   
   a2.appendChild(ck);
+
+  body2=document.getElementById("Probe2");
+  body2.removeChild(body2.lastChild);
+  Probe=document.createElement("div");body2.appendChild(Probe);
+  Ausgangsmatrix=document.getElementById("Ausgangsmatrix");
+  hap = document.createElement("ha");Probe.appendChild(hap);
+  hap.appendChild(document.createTextNode("Probe: "));
+  AMERK2=A;NeuerNenner2=NeuerNenner;
+  A=AMERK;NeuerNenner=1;
+  EDISP(hap,0,0);
+  A=AMERK2;NeuerNenner=NeuerNenner2;
+  hap.appendChild(Rechenzeichen("·"));
+  EDISP(hap,0,0);
+  hap.appendChild(Rechenzeichen("="));
+  //alert(A+"#"+AMERK+"#"+PRO);
+  for (i=0;i<n;i++) { for (j=0;j<n;j++) { 
+    PRO[i][j]=0;
+    for (k=0;k<n;k++) { 
+      PRO[i][j]=PRO[i][j]+A[i][k]*AMERK[k][j];
+      } 
+    PRO[i][j]=PRO[i][j]/NeuerNenner/NMERK;
+    } }
+  AMERK2=A;A=PRO;
+  EDISP(hap,n,2);
+  A=AMERK2;
+
+
+  Ergehnis3=document.getElementById("Ergebnis3");
+  Ergebnis3.removeChild(Ergebnis3.lastChild);
+  E2=document.createElement("div");Ergebnis3.appendChild(E2);
+  ha2 = document.createElement("ha");Ergebnis3.appendChild(ha2);
+  i=0;j=0;k1=0;l1=0;k2=1;l2=1;B=[];
+    AMERK[k1][l1]=AMERK[k1][l1]-1;
+    AMERK[k1][l2]=AMERK[k1][l2]+1;
+    AMERK[k2][l2]=AMERK[k2][l2]-1;
+    AlterNenner=NeuerNenner;
+    A11=A[l1][k1]-AlterNenner;
+    A22=A[l2][k2]-AlterNenner;
+    A12=A[l1][k2]-AlterNenner;
+    A21=A[l2][k1]+0;
+    NeuerNenner=(A11*A22-A21*A12)/AlterNenner;
+    //alert(NeuerNenner);
+    //for (j=0;j<n;j++) {
+    //  Y[j]=A[j][i];
+    //  Z[j]=A[i][j];
+    //  }
+    //ADISP(ha2,i,1);
+    for (j=0;j<n;j++) { B[j]=[]; for (k=0;k<n;k++) { 
+      B[j][k]=(
+      A[j][k]*A11*A22+A[j][k1]*A12*A[l2][k]+A[j][k2]*A21*A[l1][k]-
+      A[j][k]*A12*A21-A[j][k1]*A22*A[l1][k]-A[j][k2]*A11*A[l2][k]
+      )/AlterNenner/AlterNenner;
+      //alert(j+" "+k+" "+B[j][k]);
+      } }
+    A=B;
+    EDISP(ha2,i+1,true);
+
+  body2=document.getElementById("Probe3");
+  body2.removeChild(body2.lastChild);
+  Probe=document.createElement("div");body2.appendChild(Probe);
+  Ausgangsmatrix=document.getElementById("Ausgangsmatrix");
+  hap = document.createElement("ha");Probe.appendChild(hap);
+  hap.appendChild(document.createTextNode("Probe: "));
+  AMERK2=A;NeuerNenner2=NeuerNenner;
+  A=AMERK;NeuerNenner=1;
+  EDISP(hap,0,0);
+  A=AMERK2;NeuerNenner=NeuerNenner2;
+  hap.appendChild(Rechenzeichen("·"));
+  EDISP(hap,0,0);
+  hap.appendChild(Rechenzeichen("="));
+  //alert(A+"#"+AMERK+"#"+PRO);
+  for (i=0;i<n;i++) { for (j=0;j<n;j++) { 
+    PRO[i][j]=0;
+    for (k=0;k<n;k++) { 
+      PRO[i][j]=PRO[i][j]+A[i][k]*AMERK[k][j];
+      } 
+    PRO[i][j]=PRO[i][j]/NeuerNenner/NMERK;
+    } }
+  AMERK2=A;A=PRO;
+  EDISP(hap,n,2);
+  A=AMERK2;
+
 
   }
 
@@ -239,5 +321,9 @@ A<hj>=</hj><textarea id="matrix input" cols="40" rows="10" >[ [ 1, 1, 1, 1 ],
 Jetzt wird in der Ausgangsmatrix a(0,0) um 1 vergrößert. Rechne <span id="a00"><span/></span>
 <div id="Ergebnis2"><div /></div>
 <div id="Probe2"><div /></div>
+<hr/>
+Jetzt wird in der schon geänderten Ausgangsmatrix a(0,0)-1, a(0,1)+1, a(1,1)-1 gerechnet.
+<div id="Ergebnis3"><div /></div>
+<div id="Probe3"><div /></div>
 </body>
 </html>
