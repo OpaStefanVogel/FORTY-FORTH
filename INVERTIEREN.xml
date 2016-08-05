@@ -14,7 +14,7 @@ hb { display: flex; align-items: center; border-left:solid; border-right:solid; 
 hd { display: flex; border-left:solid; border-right:solid; border-radius: 10px; padding: 4px; border-color: dimgrey; background-color: WhiteSmoke; }
 hi { display: flex; flex-direction: column; align-items: stretch; }
 hj { display: flex; padding: 4px; }
-hh, hv, hw { display: flex; flex-direction: row-reverse; margin: 2px; border-radius: 4px; min-width: 1.5em; }
+hh, hv, hw { text-align: right; margin: 2px; border-radius: 4px; min-width: 1.5em; }
 hh { background-color: lightgrey; }
 hv { background-color: Bisque; }
 hw { background-color: Thistle; }
