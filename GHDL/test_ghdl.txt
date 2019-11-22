@@ -1,0 +1,11 @@
+Die Dateien in diesem Verzeichnis habe ich angefertigt mit
+
+git checkout Step_1
+ghdl -i --workdir=ghdl --mb-comments --ieee=synopsys -fexplicit -O3 *.vhd
+ghdl -m --workdir=ghdl --mb-comments --ieee=synopsys -fexplicit -O3 testbench
+./testbench --stop-time=1000ns --unbuffered --disp-time --wave=tb_Step1.ghw
+gtkwave tb_Step1.ghw tb_format_Step1.gtkw &
+
+und so weiter mit Step_2 ... Step_7 (jeweils 4 Ersetzungen und --stop-time neu eingestellt)
+
+und am Ende die angefertigten .ghw und .gtkw Dateien in dieses Verzeichnis verschoben.
