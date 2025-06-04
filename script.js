@@ -1,13 +1,12 @@
 //Quelle: https://developer.chrome.com/docs/capabilities/web-apis/gpu-compute
-alert(8);
-let console={log:function(arg) {alert(arg)}};
-console.log(7);
+let console={log:function(arg) {Log1.innerHTML=Log1.innerHTML+'\n'+arg}};
+console.log('script');
 
 (async () => {
   if (!("gpu" in navigator)) {
     alert( "WebGPU is not supported. Enable chrome://flags/#enable-unsafe-webgpu flag." );
     return;
-  } else alert('drin');
+  } else console.log('drin');
 
   const adapter = await navigator.gpu.requestAdapter();
   if (!adapter) {
@@ -24,11 +23,21 @@ console.log('device ist da');
     size: 4,
     usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC
   });
-console.log('gpuWriteBuffer ist da');
-console.log(gpuWriteBuffer.getMappedRange);
-  const arrayBuffer = gpuWriteBuffer.getMappedRange();
-​
-console.log('arrayBuffer ist da');//funktioniert aber nicht
+
+console.log('gpuWriteBuffer ist erzeugt: '+gpuWriteBuffer);
+
+  const arrayBuffer=gpuWriteBuffer.getMappedRange();
+
+console.log('arrayBuffer ist erzeugt: '+arrayBuffer);
+
+  new Uint8Array(arrayBuffer).set([0, 1, 2, 3]);
+  
+console.log('arrayBuffer ist gefüllt.');
+
+  gpuWriteBuffer.unmap();
+
+console.log('gpuWriteBuffer.unmap()');
+
 
 })();
-alert(9);
+console.log('/script')
