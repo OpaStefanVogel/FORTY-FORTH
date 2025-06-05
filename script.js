@@ -30,13 +30,46 @@ console.log('gpuWriteBuffer ist erzeugt: '+gpuWriteBuffer);
 
 console.log('arrayBuffer ist erzeugt: '+arrayBuffer);
 
-  new Uint8Array(arrayBuffer).set([0, 1, 2, 3]);
+  new Uint8Array(arrayBuffer).set([0, 1, 2, 4]);
   
 console.log('arrayBuffer ist gefüllt.');
 
   gpuWriteBuffer.unmap();
 
 console.log('gpuWriteBuffer.unmap()');
+
+  const gpuReadBuffer=device.createBuffer({
+    mappedAtCreation: false,
+    size: 4,
+    usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ
+  });
+
+console.log('gpuReadBuffer ist erzeugt: '+gpuReadBuffer);
+
+  const copyEncoder = device . createCommandEncoder();
+  copyEncoder . copyBufferToBuffer(
+    gpuWriteBuffer /* source buffer */,
+    0 /* source offset */,
+    gpuReadBuffer /* destination buffer */,
+    0 /* destination offset */,
+    4 /* size */
+    );
+    
+console.log('copyEncoder ist erzeugt und gefüllt: '+copyEncoder);
+
+  const copyCommands = copyEncoder . finish();
+  device . queue . submit ( [ copyCommands ] ) ;
+console.log('copyCommands ist erzeugt und ausgeführt: '+copyCommands);
+
+  await gpuReadBuffer . mapAsync ( GPUMapMode . READ ) ;
+
+console.log('await gpuReadBuffer . mapAsync ');
+
+  const copyArrayBuffer = gpuReadBuffer . getMappedRange ( ) ;
+
+console.log('copyArrayBuffer ist erzeugt: '+copyArrayBuffer);
+
+console.log('Ergebnis: '+(new Uint8Array ( copyArrayBuffer) ) ) ;
 
 
 })();
