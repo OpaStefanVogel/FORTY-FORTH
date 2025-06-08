@@ -3,19 +3,17 @@ let console={log:function(arg) {Log1.innerHTML=Log1.innerHTML+'\n'+arg}};
 console.log('script');
 
 window.onerror=function(message, file, line, col, error) {console.log('<span style="color:red">ERROR</span> message '+message+'\nfile: '+file+'\nline: '+line+'\ncol: '+col+'\nerror: '+error+'\n\n')};
-window.addEventListener('error',function(event) {console.log('<span style="color:red">ERROR ERROR</span> aha '+event+'\n'+event.error.name+'\n'+event.error.cause+'\n'+event.error.stack+'\n'+event.error.columnNumber+'\n'+event.error.fileName+'\n'+event.error.lineNumber+'\n'+event.error.message+'\n\n')});
 
-(async () => {
   if (!("gpu" in navigator)) {
     alert( "WebGPU is not supported. Enable chrome://flags/#enable-unsafe-webgpu flag." );
-    return;
   } else console.log('drin');
 
   const adapter = await navigator.gpu.requestAdapter();
+
   if (!adapter) {
     console.log("Failed to get GPU adapter.");
-    return;
   }
+
   const device = await adapter.requestDevice();
 
 console.log('device ist da');
@@ -83,7 +81,7 @@ console.log('jetzt das Beispiel 2');
 // First Matrix
 
 const firstMatrix = new Float32Array([
-  2 /* rows */, 4 /* columns */,
+  2 , 4, //Anzahl Zeilen, Anzahl Spalten
   1, 2, 3, 4,
   5, 6, 7, 8
 ]);
@@ -107,7 +105,7 @@ console.log('arrayBufferFirstMatfix ist erzeugt und gefüllt und .ummap(): '+arr
 // Second Matrix
 
 const secondMatrix = new Float32Array([
-  4 /* rows */, 2 /* columns */,
+  4, 2, //Anzahl Zeilen, Anzahl Spalten
   1, 2,
   3, 4,
   5, 6,
@@ -264,11 +262,11 @@ const gpuReadBuffer = device.createBuffer({
 
 // Encode commands for copying buffer to buffer.
 commandEncoder.copyBufferToBuffer(
-  resultMatrixBuffer /* source buffer */,
-  0 /* source offset */,
-  gpuReadBuffer /* destination buffer */,
-  0 /* destination offset */,
-  resultMatrixBufferSize /* size */
+  resultMatrixBuffer,
+  0,
+  gpuReadBuffer,
+  0,
+  resultMatrixBufferSize
 );
 
 // Submit GPU commands.
@@ -284,5 +282,4 @@ console.log(new Float32Array(arrayBuffer));
 
 
 
-})().catch(function(message) {console.log('<span style="color:red">ERROR ERROR ERROR</span> '+message)});
 console.log('/script');
