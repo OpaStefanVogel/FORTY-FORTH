@@ -121,15 +121,26 @@ const arrayBufferSecondMatrix = gpuBufferSecondMatrix.getMappedRange();
 new Float32Array(arrayBufferSecondMatrix).set(secondMatrix);
 gpuBufferSecondMatrix.unmap();
 
-console.log('arrayBufferSecondMatfix ist erzeugt und gefüllt und .ummap(): '+arrayBufferFirstMatrix);
+console.log('arrayBufferSecondMatrix ist erzeugt und gefüllt und .ummap(): '+arrayBufferFirstMatrix);
 
 // Result Matrix
 
+const resultMatrix = new Float32Array([
+  2, 2, //Anzahl Zeilen, Anzahl Spalten
+  100000, 100000,
+  100000, 100000
+]);
+
+
 const resultMatrixBufferSize = Float32Array.BYTES_PER_ELEMENT * (2 + firstMatrix[0] * secondMatrix[1]);
 const resultMatrixBuffer = device.createBuffer({
+  mappedAtCreation: true,
   size: resultMatrixBufferSize,
   usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC
 });
+const arrayBufferResultMatrix = resultMatrixBuffer.getMappedRange();
+new Float32Array(arrayBufferResultMatrix).set(resultMatrix);
+resultMatrixBuffer.unmap();
 
 console.log('resultMatrixBuffer ist erzeugt:'+resultMatrixBuffer);
 
@@ -210,14 +221,13 @@ const shaderModule = device.createShaderModule({
       resultMatrix.size = vec2(firstMatrix.size.x, secondMatrix.size.y);
 
       let resultCell = vec2(global_id.x, global_id.y);
-      var result = 0.0;
+      let index = resultCell.y + resultCell.x * u32(secondMatrix.size.y);
+      var result = resultMatrix.numbers[index];
       for (var i = 0u; i < u32(firstMatrix.size.y); i = i + 1u) {
         let a = i + resultCell.x * u32(firstMatrix.size.y);
         let b = resultCell.y + i * u32(secondMatrix.size.y);
         result = result + firstMatrix.numbers[a] * secondMatrix.numbers[b];
       }
-      result=result*10.0;
-      let index = resultCell.y + resultCell.x * u32(secondMatrix.size.y);
       resultMatrix.numbers[index] = result;
     }
   `
