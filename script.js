@@ -2,6 +2,9 @@
 let console={log:function(arg) {Log1.innerHTML=Log1.innerHTML+'\n'+arg}};
 console.log('script');
 
+window.onerror=function(message, file, line, col, error) {console.log('<span style="color:red">ERROR</span> message '+message+'\nfile: '+file+'\nline: '+line+'\ncol: '+col+'\nerror: '+error+'\n\n')};
+window.addEventListener('error',function(event) {console.log('<span style="color:red">ERROR ERROR</span> aha '+event+'\n'+event.error.name+'\n'+event.error.cause+'\n'+event.error.stack+'\n'+event.error.columnNumber+'\n'+event.error.fileName+'\n'+event.error.lineNumber+'\n'+event.error.message+'\n\n')});
+
 (async () => {
   if (!("gpu" in navigator)) {
     alert( "WebGPU is not supported. Enable chrome://flags/#enable-unsafe-webgpu flag." );
@@ -281,5 +284,5 @@ console.log(new Float32Array(arrayBuffer));
 
 
 
-})();
-console.log('/script')
+})().catch(function(message) {console.log('<span style="color:red">ERROR ERROR ERROR</span> '+message)});
+console.log('/script');
