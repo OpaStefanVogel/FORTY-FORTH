@@ -81,15 +81,17 @@ console.log('jetzt das Beispiel 2');
 // First Matrix
 
 const firstMatrix = new Float32Array([
-  2 , 4, //Anzahl Zeilen, Anzahl Spalten
-  1, 2, 3, 4,
-  5, 6, 7, 8
+  4 , 2, //Anzahl Zeilen, Anzahl Spalten
+  1, 2,
+  3, 4,
+  5, 6,
+  7, 8
 ]);
 
-const gpuBufferFirstMatrix = device.createBuffer({
+let gpuBufferFirstMatrix = device.createBuffer({
   mappedAtCreation: true,
   size: firstMatrix.byteLength,
-  usage: GPUBufferUsage.STORAGE,
+  usage: GPUBufferUsage.STORAGE
 });
 
 console.log('gpuBufferFirstMatrix ist erzeugt: '+gpuBufferFirstMatrix);
@@ -105,11 +107,9 @@ console.log('arrayBufferFirstMatfix ist erzeugt und gefüllt und .ummap(): '+arr
 // Second Matrix
 
 const secondMatrix = new Float32Array([
-  4, 2, //Anzahl Zeilen, Anzahl Spalten
-  1, 2,
-  3, 4,
-  5, 6,
-  7, 8
+  2, 4, //Anzahl Zeilen, Anzahl Spalten
+  1, 2, 3, 4,
+  5, 6, 7, 8
 ]);
 
 const gpuBufferSecondMatrix = device.createBuffer({
@@ -126,9 +126,11 @@ console.log('arrayBufferSecondMatrix ist erzeugt und gefüllt und .ummap(): '+ar
 // Result Matrix
 
 const resultMatrix = new Float32Array([
-  2, 2, //Anzahl Zeilen, Anzahl Spalten
-  100000, 100000,
-  100000, 100000
+  4, 4, //Anzahl Zeilen, Anzahl Spalten
+  100000, 100000, 100000, 100000,
+  100000, 100000, 100000, 100000,
+  100000, 100000, 100000, 100000,
+  100000, 100000, 100000, 100000
 ]);
 
 
@@ -236,7 +238,7 @@ const shaderModule = device.createShaderModule({
 console.log('shaderModule ist erzeugt wofür auch immer:'+shaderModule);
 
 
-const computePipeline = device.createComputePipeline({
+let computePipeline = device.createComputePipeline({
   layout: device.createPipelineLayout({
     bindGroupLayouts: [bindGroupLayout]
   }),
@@ -250,9 +252,9 @@ console.log('computePipeline ist erzeugt wofür auch immer:'+computePipeline);
 
 
 
-const commandEncoder = device.createCommandEncoder();
+let commandEncoder = device.createCommandEncoder();
 
-const passEncoder = commandEncoder.beginComputePass();
+let passEncoder = commandEncoder.beginComputePass();
 passEncoder.setPipeline(computePipeline);
 passEncoder.setBindGroup(0, bindGroup);
 const workgroupCountX = Math.ceil(firstMatrix[0] / 8);
@@ -280,16 +282,50 @@ commandEncoder.copyBufferToBuffer(
 );
 
 // Submit GPU commands.
-const gpuCommands = commandEncoder.finish();
+let gpuCommands = commandEncoder.finish();
 device.queue.submit([gpuCommands]);
 
 console.log('device.queue.submit([gpuCommands]); ist auch durch');
 
 // Read buffer.
 await gpuReadBuffer.mapAsync(GPUMapMode.READ);
-const arrayBuffer = gpuReadBuffer.getMappedRange();
+let arrayBuffer = gpuReadBuffer.getMappedRange();
 console.log(new Float32Array(arrayBuffer));
+gpuReadBuffer.unmap();
+console.log('gpuReadBuffer.unmap()');
 
+console.log('♦ erneuter Durchlauf ab commandEncoder = device.createCommandEncoder()');
+
+commandEncoder = device.createCommandEncoder();
+
+passEncoder = commandEncoder.beginComputePass();
+passEncoder.setPipeline(computePipeline);
+passEncoder.setBindGroup(0, bindGroup);
+passEncoder.dispatchWorkgroups(workgroupCountX, workgroupCountY);
+passEncoder.end();
+
+console.log('passEncoder.end wie auch immer:'+passEncoder);
+
+
+// Encode commands for copying buffer to buffer.
+commandEncoder.copyBufferToBuffer(
+  resultMatrixBuffer,
+  0,
+  gpuReadBuffer,
+  0,
+  resultMatrixBufferSize
+);
+
+// Submit GPU commands.
+gpuCommands = commandEncoder.finish();
+device.queue.submit([gpuCommands]);
+
+console.log('device.queue.submit([gpuCommands2]); ist auch durch');
+
+// Read buffer.
+await gpuReadBuffer.mapAsync(GPUMapMode.READ);
+arrayBuffer = gpuReadBuffer.getMappedRange();
+console.log(new Float32Array(arrayBuffer));
 
 
 console.log('/script');
