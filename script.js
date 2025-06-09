@@ -97,7 +97,7 @@ let gpuBufferFirstMatrix = device.createBuffer({
 console.log('gpuBufferFirstMatrix ist erzeugt: '+gpuBufferFirstMatrix);
 
 
-const arrayBufferFirstMatrix = gpuBufferFirstMatrix.getMappedRange();
+let arrayBufferFirstMatrix = gpuBufferFirstMatrix.getMappedRange();
 new Float32Array(arrayBufferFirstMatrix).set(firstMatrix);
 gpuBufferFirstMatrix.unmap();
 
@@ -173,7 +173,7 @@ const bindGroupLayout = device.createBindGroupLayout({
   ]
 });
 
-const bindGroup = device.createBindGroup({
+let bindGroup = device.createBindGroup({
   layout: bindGroupLayout,
   entries: [
     {
@@ -293,6 +293,50 @@ let arrayBuffer = gpuReadBuffer.getMappedRange();
 console.log(new Float32Array(arrayBuffer));
 gpuReadBuffer.unmap();
 console.log('gpuReadBuffer.unmap()');
+
+
+
+//erste Matrix modifizieren
+gpuBufferFirstMatrix = device.createBuffer({
+  mappedAtCreation: true,
+  size: firstMatrix.byteLength,
+  usage: GPUBufferUsage.STORAGE
+});
+
+firstMatrix[2]=-10;
+console.log('firstMatrix[2]='+firstMatrix[2]);
+arrayBufferFirstMatrix = gpuBufferFirstMatrix.getMappedRange();
+new Float32Array(arrayBufferFirstMatrix).set(firstMatrix);
+gpuBufferFirstMatrix.unmap();
+
+console.log('arrayBufferFirstMatfix ist neu erzeugt und gefüllt und .ummap(): '+arrayBufferFirstMatrix);
+
+bindGroup = device.createBindGroup({
+  layout: bindGroupLayout,
+  entries: [
+    {
+      binding: 0,
+      resource: {
+        buffer: gpuBufferFirstMatrix
+      }
+    },
+    {
+      binding: 1,
+      resource: {
+        buffer: gpuBufferSecondMatrix
+      }
+    },
+    {
+      binding: 2,
+      resource: {
+        buffer: resultMatrixBuffer
+      }
+    }
+  ]
+});
+
+console.log('und neu in bindGroup eingetragen');
+
 
 console.log('♦ erneuter Durchlauf ab commandEncoder = device.createCommandEncoder()');
 
