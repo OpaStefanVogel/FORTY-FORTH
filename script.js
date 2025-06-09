@@ -75,7 +75,7 @@ console.log('Ergebnis: '+(new Uint8Array ( copyArrayBuffer) +'------------------
 
 */
 
-console.log('jetzt das Beispiel 2');
+console.log('jetzt das Beispiel 2, erweitert von m=a*b auf m=m+a*b');
 
 
 // First Matrix
@@ -88,20 +88,28 @@ const firstMatrix = new Float32Array([
   7, 8
 ]);
 
-let gpuBufferFirstMatrix = device.createBuffer({
+let gpuWriteFirstMatrix = device.createBuffer({
   mappedAtCreation: true,
   size: firstMatrix.byteLength,
-  usage: GPUBufferUsage.STORAGE
+  usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC
+});
+
+console.log('gpuWriteFirstMatrix ist erzeugt: '+gpuWriteFirstMatrix);
+
+
+let arrayBufferFirstMatrix = gpuWriteFirstMatrix.getMappedRange();
+new Float32Array(arrayBufferFirstMatrix).set(firstMatrix);
+gpuWriteFirstMatrix.unmap();
+
+console.log('arrayBufferFirstMatfix ist erzeugt und gefüllt und .ummap(): '+arrayBufferFirstMatrix);
+
+
+let gpuBufferFirstMatrix = device.createBuffer({
+  size: firstMatrix.byteLength,
+  usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST
 });
 
 console.log('gpuBufferFirstMatrix ist erzeugt: '+gpuBufferFirstMatrix);
-
-
-let arrayBufferFirstMatrix = gpuBufferFirstMatrix.getMappedRange();
-new Float32Array(arrayBufferFirstMatrix).set(firstMatrix);
-gpuBufferFirstMatrix.unmap();
-
-console.log('arrayBufferFirstMatfix ist erzeugt und gefüllt und .ummap(): '+arrayBufferFirstMatrix);
 
 
 // Second Matrix
@@ -253,6 +261,15 @@ console.log('computePipeline ist erzeugt wofür auch immer:'+computePipeline);
 
 
 let commandEncoder = device.createCommandEncoder();
+
+// Encode commands for copying buffer to buffer.
+commandEncoder.copyBufferToBuffer(
+  gpuWriteFirstMatrix,
+  0,
+  gpuBufferFirstMatrix,
+  0,
+  firstMatrix.byteLength
+);
 
 let passEncoder = commandEncoder.beginComputePass();
 passEncoder.setPipeline(computePipeline);
