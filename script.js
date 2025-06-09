@@ -312,52 +312,32 @@ gpuReadBuffer.unmap();
 console.log('gpuReadBuffer.unmap()');
 
 
-
-//erste Matrix modifizieren
-gpuBufferFirstMatrix = device.createBuffer({
-  mappedAtCreation: true,
-  size: firstMatrix.byteLength,
-  usage: GPUBufferUsage.STORAGE
-});
-
+//♦erste Matrix direkt modifizieren
 firstMatrix[2]=-10;
 console.log('firstMatrix[2]='+firstMatrix[2]);
-arrayBufferFirstMatrix = gpuBufferFirstMatrix.getMappedRange();
+
+await gpuWriteFirstMatrix.mapAsync(GPUMapMode.WRITE);
+console.log('Versuch await gpuWriteFirstMatrix.mapAsync(GPUMapMode.WRITE);');
+arrayBufferFirstMatrix = gpuWriteFirstMatrix.getMappedRange();
 new Float32Array(arrayBufferFirstMatrix).set(firstMatrix);
-gpuBufferFirstMatrix.unmap();
+gpuWriteFirstMatrix.unmap();
+console.log('dann .set(firstMatrix) und .unmap()');
 
-console.log('arrayBufferFirstMatfix ist neu erzeugt und gefüllt und .ummap(): '+arrayBufferFirstMatrix);
 
-bindGroup = device.createBindGroup({
-  layout: bindGroupLayout,
-  entries: [
-    {
-      binding: 0,
-      resource: {
-        buffer: gpuBufferFirstMatrix
-      }
-    },
-    {
-      binding: 1,
-      resource: {
-        buffer: gpuBufferSecondMatrix
-      }
-    },
-    {
-      binding: 2,
-      resource: {
-        buffer: resultMatrixBuffer
-      }
-    }
-  ]
-});
-
-console.log('und neu in bindGroup eingetragen');
 
 
 console.log('♦ erneuter Durchlauf ab commandEncoder = device.createCommandEncoder()');
 
 commandEncoder = device.createCommandEncoder();
+
+// Encode commands for copying buffer to buffer.
+commandEncoder.copyBufferToBuffer(
+  gpuWriteFirstMatrix,
+  0,
+  gpuBufferFirstMatrix,
+  0,
+  firstMatrix.byteLength
+);
 
 passEncoder = commandEncoder.beginComputePass();
 passEncoder.setPipeline(computePipeline);
