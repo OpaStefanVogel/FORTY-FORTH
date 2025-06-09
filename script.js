@@ -120,14 +120,19 @@ const secondMatrix = new Float32Array([
   5, 6, 7, 8
 ]);
 
-const gpuBufferSecondMatrix = device.createBuffer({
+const gpuWriteSecondMatrix = device.createBuffer({
   mappedAtCreation: true,
   size: secondMatrix.byteLength,
-  usage: GPUBufferUsage.STORAGE,
+  usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
 });
-const arrayBufferSecondMatrix = gpuBufferSecondMatrix.getMappedRange();
+const arrayBufferSecondMatrix = gpuWriteSecondMatrix.getMappedRange();
 new Float32Array(arrayBufferSecondMatrix).set(secondMatrix);
-gpuBufferSecondMatrix.unmap();
+gpuWriteSecondMatrix.unmap();
+
+const gpuBufferSecondMatrix = device.createBuffer({
+  size: secondMatrix.byteLength,
+  usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+});
 
 console.log('arrayBufferSecondMatrix ist erzeugt und gefüllt und .ummap(): '+arrayBufferFirstMatrix);
 
@@ -271,6 +276,15 @@ commandEncoder.copyBufferToBuffer(
   firstMatrix.byteLength
 );
 
+// Encode commands for copying buffer to buffer.
+commandEncoder.copyBufferToBuffer(
+  gpuWriteSecondMatrix,
+  0,
+  gpuBufferSecondMatrix,
+  0,
+  secondMatrix.byteLength
+);
+
 let passEncoder = commandEncoder.beginComputePass();
 passEncoder.setPipeline(computePipeline);
 passEncoder.setBindGroup(0, bindGroup);
@@ -323,6 +337,17 @@ new Float32Array(arrayBufferFirstMatrix).set(firstMatrix);
 gpuWriteFirstMatrix.unmap();
 console.log('dann .set(firstMatrix) und .unmap()');
 
+//zweite Matrix direkt modifizieren
+secondMatrix[9]=88888;
+console.log('secondMatrix[9]='+secondMatrix[0]);
+
+await gpuWriteSecondMatrix.mapAsync(GPUMapMode.WRITE);
+console.log('Versuch await gpuWriteSecondMatrix.mapAsync(GPUMapMode.WRITE);');
+arrayBufferFirstMatrix = gpuWriteSecondMatrix.getMappedRange();
+new Float32Array(arrayBufferFirstMatrix).set(secondMatrix);
+gpuWriteSecondMatrix.unmap();
+console.log('dann .set(secondMatrix) und .unmap()');
+
 
 
 
@@ -337,6 +362,15 @@ commandEncoder.copyBufferToBuffer(
   gpuBufferFirstMatrix,
   0,
   firstMatrix.byteLength
+);
+
+// Encode commands for copying buffer to buffer.
+commandEncoder.copyBufferToBuffer(
+  gpuWriteSecondMatrix,
+  0,
+  gpuBufferSecondMatrix,
+  0,
+  secondMatrix.byteLength
 );
 
 passEncoder = commandEncoder.beginComputePass();
