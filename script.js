@@ -40,8 +40,9 @@ const resultMatrix = new Float32Array([
 
 
 
+let DEV={firstMatrix:firstMatrix, secondMatrix:secondMatrix,resultMatrix:resultMatrix};
 
-async function gpu_init(firstMatrix,secondMatrix,resultMatrix) { 
+async function gpu_init(RET) { 
   if (!("gpu" in navigator)) {
     alert( "WebGPU is not supported. Enable chrome://flags/#enable-unsafe-webgpu flag." );
   } else console.log('drin');
@@ -57,69 +58,12 @@ async function gpu_init(firstMatrix,secondMatrix,resultMatrix) {
 
 console.log('device ist da');
 
-/*
-  // Get a GPU buffer in a mapped state and an arrayBuffer for writing.
-  const gpuWriteBuffer = device.createBuffer({
-    mappedAtCreation: true,
-    size: 4,
-    usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC
-  });
-
-console.log('gpuWriteBuffer ist erzeugt: '+gpuWriteBuffer);
-
-  const arrayBuffer=gpuWriteBuffer.getMappedRange();
-
-console.log('arrayBuffer ist erzeugt: '+arrayBuffer);
-
-  new Uint8Array(arrayBuffer).set([0, 1, 2, 4]);
-  
-console.log('arrayBuffer ist gefüllt.');
-
-  gpuWriteBuffer.unmap();
-
-console.log('gpuWriteBuffer.unmap()');
-
-  const gpuReadBuffer=device.createBuffer({
-    mappedAtCreation: false,
-    size: 4,
-    usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ
-  });
-
-console.log('gpuReadBuffer ist erzeugt: '+gpuReadBuffer);
-
-  const copyEncoder = device . createCommandEncoder();
-  copyEncoder . copyBufferToBuffer(
-    gpuWriteBuffer,
-    0,
-    gpuReadBuffer,
-    0,
-    4
-    );
-    
-console.log('copyEncoder ist erzeugt und gefüllt: '+copyEncoder);
-
-  const copyCommands = copyEncoder . finish();
-  device . queue . submit ( [ copyCommands ] ) ;
-console.log('copyCommands ist erzeugt und ausgeführt: '+copyCommands);
-
-  await gpuReadBuffer . mapAsync ( GPUMapMode . READ ) ;
-
-console.log('await gpuReadBuffer . mapAsync ');
-
-  const copyArrayBuffer = gpuReadBuffer . getMappedRange ( ) ;
-
-console.log('copyArrayBuffer ist erzeugt: '+copyArrayBuffer);
-
-console.log('Ergebnis: '+(new Uint8Array ( copyArrayBuffer) +'--------------------------------------') ) ;
-
-*/
-
 console.log('jetzt das Beispiel 2, erweitert von m=a*b auf m=m+a*b');
 
 
 let gpuWriteFirstMatrix = device.createBuffer({
   mappedAtCreation: true,
-  size: firstMatrix.byteLength,
+  size: RET.firstMatrix.byteLength,
   usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC
 });
 
@@ -127,14 +71,14 @@ console.log('gpuWriteFirstMatrix ist erzeugt: '+gpuWriteFirstMatrix);
 
 
 let arrayBufferFirstMatrix = gpuWriteFirstMatrix.getMappedRange();
-new Float32Array(arrayBufferFirstMatrix).set(firstMatrix);
+new Float32Array(arrayBufferFirstMatrix).set(RET.firstMatrix);
 gpuWriteFirstMatrix.unmap();
 
 console.log('arrayBufferFirstMatfix ist erzeugt und gefüllt und .unmap(): '+arrayBufferFirstMatrix);
 
 
 let gpuBufferFirstMatrix = device.createBuffer({
-  size: firstMatrix.byteLength,
+  size: RET.firstMatrix.byteLength,
   usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST
 });
 
@@ -143,15 +87,15 @@ console.log('gpuBufferFirstMatrix ist erzeugt: '+gpuBufferFirstMatrix);
 
 const gpuWriteSecondMatrix = device.createBuffer({
   mappedAtCreation: true,
-  size: secondMatrix.byteLength,
+  size: RET.secondMatrix.byteLength,
   usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
 });
 const arrayBufferSecondMatrix = gpuWriteSecondMatrix.getMappedRange();
-new Float32Array(arrayBufferSecondMatrix).set(secondMatrix);
+new Float32Array(arrayBufferSecondMatrix).set(RET.secondMatrix);
 gpuWriteSecondMatrix.unmap();
 
 const gpuBufferSecondMatrix = device.createBuffer({
-  size: secondMatrix.byteLength,
+  size: RET.secondMatrix.byteLength,
   usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
 });
 
@@ -159,21 +103,21 @@ console.log('arrayBufferSecondMatrix ist erzeugt und gefüllt und .unmap(): '+ar
 
 
 
-//const resultMatrixBufferSize = Float32Array.BYTES_PER_ELEMENT * (2 + firstMatrix[0] * secondMatrix[1]);
+//const resultMatrixBufferSize = Float32Array.BYTES_PER_ELEMENT * (2 + RET.firstMatrix[0] * RET.secondMatrix[1]);
 const resultMatrixBuffer = device.createBuffer({
   mappedAtCreation: true,
-  size: resultMatrix.byteLength,
+  size: RET.resultMatrix.byteLength,
   usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC
 });
 const arrayBufferResultMatrix = resultMatrixBuffer.getMappedRange();
-new Float32Array(arrayBufferResultMatrix).set(resultMatrix);
+new Float32Array(arrayBufferResultMatrix).set(RET.resultMatrix);
 resultMatrixBuffer.unmap();
 
 console.log('resultMatrixBuffer ist erzeugt:'+resultMatrixBuffer);
 
 // Get a GPU buffer for reading in an unmapped state.
 const gpuReadBuffer = device.createBuffer({
-  size: resultMatrix.byteLength,
+  size: RET.resultMatrix.byteLength,
   usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ
 });
 
@@ -268,7 +212,6 @@ const shaderModule = device.createShaderModule({
 
 console.log('shaderModule ist erzeugt wofür auch immer:'+shaderModule);
 
-let RET={};
 RET.device=device;
 RET.bindGroupLayout=bindGroupLayout;
 RET.bindGroup=bindGroup;
@@ -280,15 +223,32 @@ RET.gpuBufferSecondMatrix=gpuBufferSecondMatrix;
 RET.resultMatrixBuffer=resultMatrixBuffer;
 RET.gpuReadBuffer=gpuReadBuffer;
 
-return [RET,device,bindGroupLayout,bindGroup,shaderModule,gpuWriteFirstMatrix,gpuBufferFirstMatrix,gpuWriteSecondMatrix,gpuBufferSecondMatrix,resultMatrixBuffer,gpuReadBuffer];
+return [device,bindGroupLayout,bindGroup,shaderModule,gpuWriteFirstMatrix,gpuBufferFirstMatrix,gpuWriteSecondMatrix,gpuBufferSecondMatrix,resultMatrixBuffer,gpuReadBuffer];
 }
 
-let [DEV,device,bindGroupLayout,bindGroup,shaderModule,gpuWriteFirstMatrix,gpuBufferFirstMatrix,gpuWriteSecondMatrix,gpuBufferSecondMatrix,resultMatrixBuffer,gpuReadBuffer]=await gpu_init(firstMatrix,secondMatrix,resultMatrix);
+let [device,bindGroupLayout,bindGroup,shaderModule,gpuWriteFirstMatrix,gpuBufferFirstMatrix,gpuWriteSecondMatrix,gpuBufferSecondMatrix,resultMatrixBuffer,gpuReadBuffer]=await gpu_init(DEV);
 console.log(device);
 
 
 
-function gpu_run(DEV,device,bindGroupLayout,bindGroup,shaderModule,gpuWriteFirstMatrix,gpuBufferFirstMatrix,gpuWriteSecondMatrix,gpuBufferSecondMatrix,resultMatrixBuffer,gpuReadBuffer) {
+async function gpu_run(DEV,device,bindGroupLayout,bindGroup,shaderModule,gpuWriteFirstMatrix,gpuBufferFirstMatrix,gpuWriteSecondMatrix,gpuBufferSecondMatrix,resultMatrixBuffer,gpuReadBuffer) {
+console.log('DEV.firstMatrix=['+DEV.firstMatrix);
+console.log('DEV.secondMatrix=['+DEV.secondMatrix);
+
+await gpuWriteFirstMatrix.mapAsync(GPUMapMode.WRITE);
+console.log('Versuch await gpuWriteFirstMatrix.mapAsync(GPUMapMode.WRITE);');
+let arrayBufferFirstMatrix = gpuWriteFirstMatrix.getMappedRange();
+new Float32Array(arrayBufferFirstMatrix).set(DEV.firstMatrix);
+gpuWriteFirstMatrix.unmap();
+console.log('dann .set(firstMatrix) und .unmap()');
+
+await gpuWriteSecondMatrix.mapAsync(GPUMapMode.WRITE);
+console.log('Versuch await gpuWriteSecondMatrix.mapAsync(GPUMapMode.WRITE);');
+arrayBufferFirstMatrix = gpuWriteSecondMatrix.getMappedRange();
+new Float32Array(arrayBufferFirstMatrix).set(DEV.secondMatrix);
+gpuWriteSecondMatrix.unmap();
+console.log('dann .set(secondMatrix) und .unmap()');
+
 
 
 
@@ -349,87 +309,50 @@ commandEncoder.copyBufferToBuffer(
 // Submit GPU commands.
 let gpuCommands = commandEncoder.finish();
 device.queue.submit([gpuCommands]);
-};
 
-gpu_run(DEV,device,bindGroupLayout,bindGroup,shaderModule,gpuWriteFirstMatrix,gpuBufferFirstMatrix,gpuWriteSecondMatrix,gpuBufferSecondMatrix,resultMatrixBuffer,gpuReadBuffer);
-
-console.log('device.queue.submit([gpuCommands]); ist auch durch');
-
-// Read buffer.
 await gpuReadBuffer.mapAsync(GPUMapMode.READ);
 let arrayBuffer = gpuReadBuffer.getMappedRange();
 console.log(new Float32Array(arrayBuffer));
 gpuReadBuffer.unmap();
 console.log('gpuReadBuffer.unmap()');
+};
+
+await gpu_run(DEV,device,bindGroupLayout,bindGroup,shaderModule,gpuWriteFirstMatrix,gpuBufferFirstMatrix,gpuWriteSecondMatrix,gpuBufferSecondMatrix,resultMatrixBuffer,gpuReadBuffer);
+
+console.log('erstes gpu_run ist durch');
 console.log('');
-console.log('');
+
+// Read buffer.
 
 
 //♦erste Matrix direkt modifizieren
 firstMatrix[2]=-100;
 console.log('firstMatrix[2]='+firstMatrix[2]);
 
-await gpuWriteFirstMatrix.mapAsync(GPUMapMode.WRITE);
-console.log('Versuch await gpuWriteFirstMatrix.mapAsync(GPUMapMode.WRITE);');
-let arrayBufferFirstMatrix = gpuWriteFirstMatrix.getMappedRange();
-new Float32Array(arrayBufferFirstMatrix).set(firstMatrix);
-gpuWriteFirstMatrix.unmap();
-console.log('dann .set(firstMatrix) und .unmap()');
-
 //zweite Matrix direkt modifizieren
 secondMatrix[9]=88888;
 console.log('secondMatrix[9]='+secondMatrix[9]);
 
-await gpuWriteSecondMatrix.mapAsync(GPUMapMode.WRITE);
-console.log('Versuch await gpuWriteSecondMatrix.mapAsync(GPUMapMode.WRITE);');
-arrayBufferFirstMatrix = gpuWriteSecondMatrix.getMappedRange();
-new Float32Array(arrayBufferFirstMatrix).set(secondMatrix);
-gpuWriteSecondMatrix.unmap();
-console.log('dann .set(secondMatrix) und .unmap()');
+await gpu_run(DEV,device,bindGroupLayout,bindGroup,shaderModule,gpuWriteFirstMatrix,gpuBufferFirstMatrix,gpuWriteSecondMatrix,gpuBufferSecondMatrix,resultMatrixBuffer,gpuReadBuffer);
 
-
-gpu_run(DEV,device,bindGroupLayout,bindGroup,shaderModule,gpuWriteFirstMatrix,gpuBufferFirstMatrix,gpuWriteSecondMatrix,gpuBufferSecondMatrix,resultMatrixBuffer,gpuReadBuffer);
+console.log('zweites gpu_run ist durch');
+console.log('');
 
 // Read buffer.
-await gpuReadBuffer.mapAsync(GPUMapMode.READ);
-arrayBuffer = gpuReadBuffer.getMappedRange();
-console.log(new Float32Array(arrayBuffer));
-gpuReadBuffer.unmap();
-console.log('');
-console.log('');
-
 
 //♦erste Matrix nochmal modifizieren
 for (let i=2;i<firstMatrix.length;i++) firstMatrix[i]=firstMatrix[i]*-1.0;
 console.log('firstMatrix[2]='+firstMatrix[2]);
 
-await gpuWriteFirstMatrix.mapAsync(GPUMapMode.WRITE);
-console.log('Versuch await gpuWriteFirstMatrix.mapAsync(GPUMapMode.WRITE);');
-arrayBufferFirstMatrix = gpuWriteFirstMatrix.getMappedRange();
-new Float32Array(arrayBufferFirstMatrix).set(firstMatrix);
-gpuWriteFirstMatrix.unmap();
-console.log('dann .set(firstMatrix) und .unmap()');
-
 //zweite Matrix nochmal modifizieren
 //secondMatrix[9]=-88888;
 console.log('secondMatrix[9]='+secondMatrix[9]);
 
-await gpuWriteSecondMatrix.mapAsync(GPUMapMode.WRITE);
-console.log('Versuch await gpuWriteSecondMatrix.mapAsync(GPUMapMode.WRITE);');
-arrayBufferFirstMatrix = gpuWriteSecondMatrix.getMappedRange();
-new Float32Array(arrayBufferFirstMatrix).set(secondMatrix);
-gpuWriteSecondMatrix.unmap();
-console.log('dann .set(secondMatrix) und .unmap()');
+await gpu_run(DEV,device,bindGroupLayout,bindGroup,shaderModule,gpuWriteFirstMatrix,gpuBufferFirstMatrix,gpuWriteSecondMatrix,gpuBufferSecondMatrix,resultMatrixBuffer,gpuReadBuffer);
 
-
-gpu_run(DEV,device,bindGroupLayout,bindGroup,shaderModule,gpuWriteFirstMatrix,gpuBufferFirstMatrix,gpuWriteSecondMatrix,gpuBufferSecondMatrix,resultMatrixBuffer,gpuReadBuffer);
+console.log('drittes gpu_run ist durch');
+console.log('');
 
 // Read buffer.
-await gpuReadBuffer.mapAsync(GPUMapMode.READ);
-arrayBuffer = gpuReadBuffer.getMappedRange();
-console.log(new Float32Array(arrayBuffer));
-gpuReadBuffer.unmap();
-
-
 
 console.log('/script');
