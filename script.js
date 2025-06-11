@@ -1,6 +1,10 @@
 //Quelle: https://developer.chrome.com/docs/capabilities/web-apis/gpu-compute
 let Logbit_gpu=false;
-let console={log:function(arg) {if (Logbit_gpu) Log_gpu.innerHTML=Log_gpu.innerHTML+'\n'+arg},info:function(arg) {Log_gpu.innerHTML=Log_gpu.innerHTML+'\n'+arg}};
+let console={
+  log:function(arg) {if (Logbit_gpu) Log_gpu.innerHTML=Log_gpu.innerHTML+'\n'+arg},
+  info:function(arg) {Log_gpu.innerHTML=Log_gpu.innerHTML+'\n'+arg},
+  error:function(arg) {Log_gpu.innerHTML=Log_gpu.innerHTML+'\n'+'<span style="color:aqua">ERROR ERROR ERROR ERROR</span> '+arg}
+  };
 console.log('script');
 
 window.onerror=function(message, file, line, col, error) {console.info('<span style="color:red">ERROR</span> message '+message+'\nfile: '+file+'\nline: '+line+'\ncol: '+col+'\nerror: '+error+'\n\n')};
@@ -55,7 +59,10 @@ async function gpu_init(DEV) {
   }
 
   const device = await adapter.requestDevice();
-  
+  device.addEventListener('uncapturederror', (event) => {//Example 39 in https://gpuweb.github.io/gpuweb/#telemetry
+    // Re-surface the error, because adding an event listener may silence console logs.
+    console.error('A WebGPU error was not captured: '+event.error.constructor.name+' '+event.error.message);
+    });  
 
 console.log('device ist da');
 
@@ -224,11 +231,6 @@ DEV.gpuReadBuffer=gpuReadBuffer;
 
 }
 
-await gpu_init(DEV);
-console.log(DEV.device);
-
-
-
 async function gpu_run(DEV) {
 console.log('DEV.firstMatrix=['+DEV.firstMatrix+'];');
 console.log('DEV.secondMatrix=['+DEV.secondMatrix+'];');
@@ -304,6 +306,18 @@ console.log('Versuch await DEV.gpuWriteSecondMatrix.mapAsync(GPUMapMode.WRITE);'
 await DEV.gpuWriteSecondMatrix.mapAsync(GPUMapMode.WRITE);
 };
 
+async function gpu_end(DEV) {
+  DEV.device.destroy();
+  }
+
+await gpu_init(DEV);
+console.info(DEV.device);
+
+
+
+
+
+
 await gpu_run(DEV);
 
 // Read buffer.
@@ -339,5 +353,11 @@ await gpu_run(DEV);
 // Read buffer.
 console.info('drittes gpu_run ist durch: '+DEV.Ergebnis);
 console.log('');
+
+
+await gpu_end(DEV);
+console.info(await DEV.device.lost);
+
+
 
 console.log('/script');
