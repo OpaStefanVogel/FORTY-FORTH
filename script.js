@@ -174,22 +174,24 @@ const shaderModule = device.createShaderModule({
       // Guard against out-of-bounds work group sizes
       if (global_id.x >= u32(firstMatrix.size.x) || global_id.y >= u32(secondMatrix.size.y)) {
         return;
-      }
+        }
 
-//      resultMatrix.size = vec2(firstMatrix.size.x, secondMatrix.size.y);
+      //resultMatrix.size = vec2(firstMatrix.size.x, secondMatrix.size.y);
 
       let resultCell = vec2(global_id.x, global_id.y);
       let index = resultCell.y + resultCell.x * u32(secondMatrix.size.y);
+      var a = resultCell.x * u32(firstMatrix.size.y);
+      var b = resultCell.y;
       var result = resultMatrix.numbers[index];
       for (var i = 0u; i < u32(firstMatrix.size.y); i = i + 1u) {
-        let a = i + resultCell.x * u32(firstMatrix.size.y);
-        let b = resultCell.y + i * u32(secondMatrix.size.y);
         result = result + firstMatrix.numbers[a] * secondMatrix.numbers[b];
-      }
+        a = a + 1u;
+        b = b + u32(secondMatrix.size.y);
+        }
       resultMatrix.numbers[index] = result;
-    }
-  `
-});
+      }
+    `
+  });
 
 console.log('shaderModule ist erzeugt wofür auch immer:'+shaderModule);
 
