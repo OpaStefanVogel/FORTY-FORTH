@@ -1,7 +1,7 @@
 //Quelle: https://developer.chrome.com/docs/capabilities/web-apis/gpu-compute
-let Logbit_gpu=false;
+let Logbit_gpu=[false];
 let console={
-  log:function(arg) {if (Logbit_gpu) Log_gpu.innerHTML=Log_gpu.innerHTML+'\n'+arg},
+  log:function(arg) {if (Logbit_gpu[0]) Log_gpu.innerHTML=Log_gpu.innerHTML+'\n'+arg},
   info:function(arg) {Log_gpu.innerHTML=Log_gpu.innerHTML+'\n'+arg},
   error:function(arg) {Log_gpu.innerHTML=Log_gpu.innerHTML+'\n'+'<span style="color:aqua">ERROR ERROR ERROR ERROR</span> '+arg}
   };
@@ -11,41 +11,6 @@ window.onerror=function(message, file, line, col, error) {console.info('<span st
 window.addEventListener('error',function(arg) {console.info('<span style="color:red">ERROR ERROR</span> message '+arg.error.message+' '+arg.error.name); for (let i of arg.error) console.log(i)});
 //throw Error('Testerror');
 
-// First Matrix
-
-const firstMatrix = new Float32Array([
-  4 , 2, //Anzahl Zeilen, Anzahl Spalten
-  1, 2,		
-  3, 4,
-  5, 6,
-  7, 8
-]);
-
-// Second Matrix
-
-const secondMatrix = new Float32Array([
-  2, 4, //Anzahl Zeilen, Anzahl Spalten
-  1, 2, 3, 4,
-  5, 6, 7, 8
-]);
-
-// Result Matrix
-
-const resultMatrix = new Float32Array([
-  4, 4, //Anzahl Zeilen, Anzahl Spalten
-  100000, 100000, 100000, 100000,
-  100000, 100000, 100000, 100000,
-  100000, 100000, 100000, 100000,
-  100000, 100000, 100000, 100000
-]);
-
-
-
-
-
-
-
-let DEV={firstMatrix:firstMatrix, secondMatrix:secondMatrix,resultMatrix:resultMatrix};
 
 async function gpu_init(DEV) { 
   if (!("gpu" in navigator)) {
@@ -176,7 +141,7 @@ const shaderModule = device.createShaderModule({
     @group(0) @binding(1) var<storage, read> secondMatrix : Matrix;
     @group(0) @binding(2) var<storage, read_write> resultMatrix : Matrix;
 
-    @compute @workgroup_size(8, 8)
+    @compute @workgroup_size(16, 16)
     fn main(@builtin(global_invocation_id) global_id : vec3u) {
       // Guard against out-of-bounds work group sizes
       if (global_id.x >= u32(firstMatrix.size.x) || global_id.y >= u32(secondMatrix.size.y)) {
@@ -231,6 +196,7 @@ DEV.gpuReadBuffer=gpuReadBuffer;
 
 }
 
+
 async function gpu_run(DEV) {
 console.log('DEV.firstMatrix=['+DEV.firstMatrix+'];');
 console.log('DEV.secondMatrix=['+DEV.secondMatrix+'];');
@@ -258,7 +224,7 @@ commandEncoder.copyBufferToBuffer(
   0,
   DEV.gpuBufferFirstMatrix,
   0,
-  firstMatrix.byteLength
+  DEV.firstMatrix.byteLength
 );
 
 // Encode commands for copying buffer to buffer.
@@ -267,19 +233,19 @@ commandEncoder.copyBufferToBuffer(
   0,
   DEV.gpuBufferSecondMatrix,
   0,
-  secondMatrix.byteLength
+  DEV.secondMatrix.byteLength
 );
 
 let passEncoder = commandEncoder.beginComputePass();
 passEncoder.setPipeline(DEV.computePipeline);
 passEncoder.setBindGroup(0, DEV.bindGroup);
-const workgroupCountX = Math.ceil(firstMatrix[0] / 8);
-const workgroupCountY = Math.ceil(secondMatrix[1] / 8);
+const workgroupCountX = Math.ceil(DEV.firstMatrix[0] / 16);
+const workgroupCountY = Math.ceil(DEV.secondMatrix[1] / 16);
 passEncoder.dispatchWorkgroups(workgroupCountX, workgroupCountY);
 passEncoder.end();
 
-console.log('passEncoder.end wie auch immer:'+passEncoder);
-console.log('mit Math.ceil(firstMatrix[0] / 8)='+Math.ceil(firstMatrix[0] / 8));
+console.log('passEncoder.end() wie auch immer:'+passEncoder);
+console.log('mit Math.ceil(firstMatrix[0] / 8)='+Math.ceil(DEV.firstMatrix[0] / 8));
 
 
 // Encode commands for copying buffer to buffer.
@@ -288,7 +254,7 @@ commandEncoder.copyBufferToBuffer(
   0,
   DEV.gpuReadBuffer,
   0,
-  resultMatrix.byteLength
+  DEV.resultMatrix.byteLength
 );
 
 // Submit GPU commands.
@@ -310,54 +276,85 @@ async function gpu_end(DEV) {
   DEV.device.destroy();
   }
 
-await gpu_init(DEV);
-console.info(DEV.device);
+async function gpu_Test(DEF) {
+  Logbit_gpu.unshift(true);
+
+  // First Matrix
+  const firstMatrix = new Float32Array([
+    4 , 2, //Anzahl Zeilen, Anzahl Spalten
+    1, 2,		
+    3, 4,
+    5, 6,
+    7, 8
+    ]);
+
+  // Second Matrix
+  const secondMatrix = new Float32Array([
+    2, 4, //Anzahl Zeilen, Anzahl Spalten
+    1, 2, 3, 4,
+    5, 6, 7, 8
+    ]);
+
+  // Result Matrix
+  const resultMatrix = new Float32Array([
+    4, 4, //Anzahl Zeilen, Anzahl Spalten
+    100000, 100000, 100000, 100000,
+    100000, 100000, 100000, 100000,
+    100000, 100000, 100000, 100000,
+    100000, 100000, 100000, 100000
+    ]);
+
+  DEV.firstMatrix=firstMatrix;
+  DEV.secondMatrix=secondMatrix;
+  DEV.resultMatrix=resultMatrix;
+
+  await gpu_init(DEV);
+  console.info(DEV.device);
+
+  await gpu_run(DEV);
+
+  // Read buffer.
+  console.info('erstes gpu_run ist durch: '+DEV.Ergebnis);
+  console.log('');
 
 
+  //erste Matrix direkt modifizieren
+  DEV.firstMatrix[2]=-100;
+  console.log('DEV.firstMatrix[2]='+DEV.firstMatrix[2]);
+
+  //zweite Matrix direkt modifizieren
+  DEV.secondMatrix[9]=88888;
+  console.log('DEV.secondMatrix[9]='+DEV.secondMatrix[9]);
+
+  await gpu_run(DEV);
+
+  // Read buffer.
+  console.info('zweites gpu_run ist durch: '+DEV.Ergebnis);
+  console.log('');
 
 
+  //erste Matrix nochmal modifizieren
+  for (let i=2;i<DEV.firstMatrix.length;i++) DEV.firstMatrix[i]=-DEV.firstMatrix[i];
+  console.log('DEV.firstMatrix[2]='+DEV.firstMatrix[2]);
+
+  //zweite Matrix nicht nochmal modifizieren
+  //secondMatrix[9]=-88888;
+  //console.log('secondMatrix[9]='+secondMatrix[9]);
+
+  await gpu_run(DEV);
+
+  // Read buffer.
+  console.info('drittes gpu_run ist durch: '+DEV.Ergebnis);
+  console.log('');
 
 
-await gpu_run(DEV);
+  console.info(JSON.stringify(DEV.device.limits.maxComputeWorkgroupSizeX));
+  await gpu_end(DEV);
+  console.info(await DEV.device.lost);
+  Logbit_gpu.shift();
+  }
 
-// Read buffer.
-console.info('erstes gpu_run ist durch: '+DEV.Ergebnis);
-console.log('');
-
-
-//♦erste Matrix direkt modifizieren
-DEV.firstMatrix[2]=-100;
-console.log('DEV.firstMatrix[2]='+DEV.firstMatrix[2]);
-
-//zweite Matrix direkt modifizieren
-DEV.secondMatrix[9]=88888;
-console.log('DEV.secondMatrix[9]='+DEV.secondMatrix[9]);
-
-await gpu_run(DEV);
-
-// Read buffer.
-console.info('zweites gpu_run ist durch: '+DEV.Ergebnis);
-console.log('');
-
-
-//♦erste Matrix nochmal modifizieren
-for (let i=2;i<DEV.firstMatrix.length;i++) DEV.firstMatrix[i]=-DEV.firstMatrix[i];
-console.log('DEV.firstMatrix[2]='+DEV.firstMatrix[2]);
-
-//zweite Matrix nochmal modifizieren
-//secondMatrix[9]=-88888;
-//console.log('secondMatrix[9]='+secondMatrix[9]);
-
-await gpu_run(DEV);
-
-// Read buffer.
-console.info('drittes gpu_run ist durch: '+DEV.Ergebnis);
-console.log('');
-
-
-await gpu_end(DEV);
-console.info(await DEV.device.lost);
-
-
+let DEV={};
+await gpu_Test(DEV);
 
 console.log('/script');
